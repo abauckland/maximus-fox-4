@@ -1,0 +1,80 @@
+// Place all the styles related to the Faqs controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+/* FAQs */
+@import "core";
+
+.faq_extra_questions{
+  float: left;
+  padding: 0px 0px 0px 10px;
+  margin: 0px 0px 10px 0px;
+  width: 100%;
+  font-size: 1.4rem;  
+}
+  @media screen and (max-width: $small_menu) {
+    .faq_extra_questions {      
+      font-size: 1.3rem;
+      }
+  }
+  @media screen and (max-width: $small_menu) {
+    .faq_extra_questions {      
+      font-size: 1.2rem; 
+      }
+  }
+
+.faq_extra_questions_link{
+  a{
+    color: #66aa00;
+    &:hover{text-decoration: underline;} 
+  } 
+}
+
+.web_faq_box{
+  float: left;
+  width: 100%;  
+}
+
+.faq_menu_head {
+  padding: 10px 10px 10px 10px;
+  cursor: pointer;
+  position: relative;
+  margin: 0px;
+  border: solid 1px #fff;
+  font-weight: bold;
+  font-size: 1.4rem;
+  color: #66aa00;
+  background-color: rgb(246, 246, 246); 
+  &:hover{text-decoration: underline;} 
+}
+  @media screen and (max-width: $small_menu) {
+    .faq_menu_head {      
+      font-size: 1.3rem;
+      }
+  }
+  @media screen and (max-width: $small_menu) {
+    .faq_menu_head {      
+      font-size: 1.2rem; 
+      }
+  }
+
+.faq_menu_body {
+  display:none;
+}
+
+.faq_menu_body div {
+  display:block;
+  color:#000;
+  background: #fff;
+  padding: 5px 5px 10px 10px;
+  font-size: 1.4rem;
+}
+  @media screen and (max-width: $small_menu) {
+    .faq_menu_body div {      
+      font-size: 1.3rem;
+      }
+  }
+  @media screen and (max-width: $small_menu) {
+    .faq_menu_body div {      
+      font-size: 1.2rem; 
+      }
+  }

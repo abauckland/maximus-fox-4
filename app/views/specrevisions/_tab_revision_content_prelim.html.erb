@@ -1,0 +1,60 @@
+    <% if !@deleted_prelim_subsections.empty? %>
+      <table class='rev_deleted_subsection_title' width ='100%'><tr><td class='rev_title'>Deleted Subsections:</td></tr></table>
+        <% @deleted_prelim_subsections.each do |prelim_subsection|%>
+        <%= changed_prelim_subsection_text(prelim_subsection) %>
+        <% end%>
+    <% end%>
+    
+    <% if !@added_prelim_subsections.empty? %>
+      <table class='rev_deleted_subsection_title' width ='100%'><tr><td class='rev_title'>Added Subsections:</td></tr></table>
+        <% @added_prelim_subsections.each do |prelim_subsection|%>
+        <%= changed_prelim_subsection_text(prelim_subsection) %>
+        <% end%>
+    <% end%>
+    
+    <% if !@changed_prelim_subsections.empty? %>
+      <table class='rev_deleted_subsection_title' width ='100%'><tr><td class='rev_title'>Changed Subsections:</td></tr></table>
+        
+        <% @changed_prelim_subsections.each do |subsection|%>
+
+		  <%= changed_prelim_subsection_text(subsection) %>
+          <%= deleted_prelim_clauses_text(subsection) %>
+         
+          <%= deleted_prelim_clauses_text(subsection) %> 
+          <% @deleted_clauses = @deleted_prelim_clauses[subsection.id].compact %>
+          <% @deleted_clauses.each do |clause| %>          
+            <%= changed_clause_titles(clause, 'deleted') %>
+          <% end %>         
+         
+          <%= new_prelim_clauses_text(subsection) %> 
+          <% @added_clauses = @added_prelim_clauses[subsection.id].compact %>
+          <% @added_clauses.each do |clause| %>          
+            <%= changed_clause_titles(clause, 'added') %>
+          <% end %>
+
+          
+          <%= changed_prelim_clauses_text(subsection) %>
+ 
+          <% @changed_clauses = @changed_prelim_clauses[subsection.id].compact %>
+          <% @changed_clauses.each do |clause| %>
+            
+        	<%= changed_clause_titles(clause, 'changed') %>
+          
+      		<%= clause_line_text_altered(clause, 'new') %>
+        	<% @altered_lines.each do |line| %>
+          		<%= original_line_text(line) %>
+        	<% end %>
+    
+      		<%= clause_line_text_altered(clause, 'deleted') %>
+        	<% @altered_lines.each do |line| %>
+          		<%= original_line_text(line) %>
+        	<% end %>
+    
+      		<%= clause_line_text_altered(clause, 'changed') %>
+            <% @altered_lines.each do |line| %>
+              <%=changed_line_text(line, @revision, @project)%>
+            <% end %> 
+                    
+          <% end%>
+        <% end%>
+    <% end%>

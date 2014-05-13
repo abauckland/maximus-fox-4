@@ -1,0 +1,140 @@
+<div class="project_info">
+	<div class="project_title">
+		<div class="project_code">   
+    		Project: <%= @project.code%>
+		</div>
+		<div class="project_code_title">   
+    		<%= @project.title %>
+		</div>
+	</div>	
+	<div class="project_status">
+		Status: <%= @project.project_status %>
+	</div>
+	<div class="project_rev">
+    	Rev: <%= @project.revision.last.rev %>
+  	</div>
+</div>
+
+<div class="option_band_single">	
+	<div class="project_select">
+		<div class="project_label_select">Revision:</div>
+      	<%= revision_select(@project_revisions, @revision, @project, @revision_subsections) %>
+	</div>
+</div>
+
+
+<% if @revision_subsections.blank? %>
+<div class="content">
+    <div class="column_1">
+		<div class="column_content">
+      		<div class="column_title">Revisions</div>   
+      
+    		<div class="column_sub_content">
+
+				<div class="column_guide">
+					<%= revision_help(@revision_subsections, @revision, @project) %>
+				</div>	
+      		</div>
+      	</div>   
+	</div>
+
+	<div class="column_2 column_blank"></div>
+    <div class="column_3 column_blank"></div>
+  
+</div> 						
+
+<% else %>
+
+
+<div class="revision_tabs">
+	<ul class='tabs'>
+  <% if @revision_project_status_changed %>
+    <li class="prelim"><a href='#prelim_rev_view'>Status</a></li>
+  <% end%>
+
+  <% if @prelim_subsections %>
+    <%= if @project.ref_system.caws? %> 
+        <li class="prelim"><a href='#prelim_rev_view'><%= @prelim_subsections.first.cawssection.ref%>--</a></li>
+    <% else %>
+        <li class="prelim"><a href='#prelim_rev_view'><%= @prelim_subsections.first.unisection.ref%>--</a></li>    
+    <% end %>        
+  <% end%>
+  
+  <% @non_prelim_subsections.each do |subsection|%>
+    <%= if @project.ref_system.caws? %> 
+        <li id="<%= subsection.id %>" class="non_prelim"><a href='#<%= subsection.id%>rev_view'><%= subsection.cawssection.ref%><%= subsection.ref%></a></li>
+    <% else %>
+        <li id="<%= subsection.id %>" class="non_prelim"><a href='#<%= subsection.id%>rev_view'><%= subsection.unisection.ref%><%= subsection.ref%></a></li>    
+    <% end %>  
+  <% end %>
+</ul>
+
+
+  <% if @revision_project_status_changed %>
+  	<div id="prelim_rev_view" class="tab_content">
+		Project Status changed from <%= @previous_revision_project_status %> to <%= @project.revision.project_status %>
+    </div>  
+    
+  	<% if @prelim_subsections %>  
+  		<div id="prelim_rev_view" class="tab_content <%= @prelim_subsections.first.id %>">
+  			<p>Loading...</p>
+   		</div>
+
+  		<% @non_prelim_subsections.each do |subsection|%>
+    		<div id="<%= subsection.id%>rev_view" class="tab_content <%= subsection.id%>">
+    			<p>Loading...</p>
+			</div>
+		<% end%> 	
+	<%else%>
+  		<% @non_prelim_subsections.each do |subsection|%>
+    		<div id="<%= subsection.id%>rev_view" class="tab_content <%= subsection.id%>">
+    			<p>Loading...</p>
+			</div>
+		<% end%> 				
+	<% end%>  
+    
+  <% else %>
+
+  	<% if @prelim_subsections %>
+
+  		<div id="prelim_rev_view" class="tab_content <%= @prelim_susbsection.first.id %>">
+			<%= render "tab_revision_content_prelim", locals: {deleted_prelim_subsections: @deleted_prelim_subsections, added_prelim_subsections: @added_prelim_subsections, changed_prelim_subsections: @changed_prelim_subsections, deleted_prelim_clauses: @deleted_prelim_clauses, added_prelim_clauses: @added_prelim_clauses, changed_prelim_clauses: @changed_prelim_clauses, revision: @revision, project: @project} %>
+    	</div>
+
+  		<% @none_prelim_subsections.each do |revision_subsection|%>
+    		<div id="<%= revision_subsection.id%>rev_view" class="tab_content <%= revision_subsection.id%>">
+    			<p>Loading...</p>
+			</div>
+		<% end%>
+
+  	<% else %>
+
+  		<% @revision_subsections.each do |revision_subsection|%>
+    		<div id="<%= revision_subsection.id%>rev_view" class="tab_content <%= revision_subsection.id%>">
+    			<p>Loading...</p>
+			</div>
+		<% end%>
+  
+    	<div id="<%= @revision_subsection.id%>rev_view" class="tab_content <%= @revision_subsection.id%>">
+	    	<%= render "tab_revision_content", locals: {revision_subsection: @revision_subsection, added_subsections: @added_subsections, deleted_subsections: @deleted_subsections, deleted_clauses: @deleted_clauses, changed_subsections: @changed_subsections, added_clauses: @added_clauses, changed_clauses: @changed_clauses, revision: @revision, project: @project} %>
+    	</div>
+
+  	<%end%>
+  <%end%>
+</div>
+</div>
+
+<% end %>
+
+
+<!-- jquery to load tab content -->
+	<script>
+		$('li.prelim').children('a').click(function(){
+			jQuery.get('/revisions/<%= @project.id%>/show_prelim_tab_content?revision_id=<%= @revision.id %>');
+		});
+
+		$('ul.tabs').children('li.non_prelim').click(function(){
+			var subsection_id = $(this).attr('id');
+			jQuery.get('/revisions/<%= @project.id%>/show_rev_tab_content?revision_id=<%= @revision.id %>&subsection_id=' + subsection_id);
+		});
+	</script>

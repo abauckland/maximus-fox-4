@@ -1,0 +1,104 @@
+<div class="page_title">Add/Delete Sections</div>
+
+
+<div class="content">
+    <div class="column_1">
+		<div class="column_content">       
+			<div class="column_title">Add Sections</div>   
+    			
+    		<div class="column_sub_content">
+
+				<div class="column_guide">
+					<p>Select the template you would like to copy subsections from. This can either be a standard empty template or an existing project</p>
+      			</div>
+
+				<div class="column_form">				
+						<table>
+						<tr><td>
+							<div class="section_form_label form_input_label">Project Template:</div>
+							<div class="form_input">
+      							<%= select_tag "selected_template_id", options_from_collection_for_select(@templates, "id", "project_code_and_title", @template.id), {:onchange => "window.location='/specsubsections/#{@current_project.id}/manage?template_id='+this.value;"} %>
+							</div>				
+						</td></tr>										
+						</table>				
+      		    </div>		
+
+				<div class="column_sub_guide">
+						<p>Select Work Sections that you would like to add to your project.</p>
+						<p>Only subsections that are not currently included within your current project are listed.</p>
+						<p>This does not mean that the contents of these Works Sections within the current project are similar to those in the template project.</p>
+						<p>To compare the contents of individual Work Sections go to add/delete clauses page.</p>
+      			</div>
+				
+				<div class="column_form">				
+						<%= form_tag(:controller => "specsubsections", :action => "add") do %>
+						<%= hidden_field_tag "id", @project.id%>
+          				<%= hidden_field_tag "template_id", @template.id%>
+						<table>
+						<tr><td>
+							<div class="section_form_label form_input_label">Work Sections in Template:</div>
+							<% if @template_subsections %>
+								<div class="form_input">
+              						<%= select_tag "template_sections", options_from_collection_for_select(@template_subsections, :id, :full_code_and_title), multiple: true%>
+								</div>
+							<% else %>
+								<div class="form_input_blank_note">
+              						All clauses in the template already exist in the current projectdd
+								</div>
+							<% end %>				
+						</td></tr>										
+						</table>				
+      		    </div>    		    	
+    		</div>
+    	
+      		<div class="column_footer">
+        		<div>
+        			<div class="column_submit"><%= submit_tag "Add Sections"%></div>
+					<% end %> 
+        			<div class="column_cancel"><%= link_to "Cancel", project_path(@project) %></div>              
+        		</div>   
+      		</div>        		      		
+      	</div>   
+	</div>
+	
+	<div class="column_2">
+		<div class="column_content">       
+			<div class="column_title">Delete Sections</div>   
+    			
+    		<div class="column_sub_content">		
+
+				<div class="column_guide">
+					<p>Select Work Sections that you would like to add to your project.</p>
+					<p>Only subsections that are currently included within your current project are listed.</p>
+					<p>This does not mean that the contents of these Works Sections within the current project are similar to those in the template project.</p>
+					<p>To compare the contents of individual Work Sections go to add/delete clauses page.</p>
+      			</div>
+				
+				<div class="column_form">				
+						<%= form_tag(:controller => "specsubsections", :action => "delete") do %>
+						<%= hidden_field_tag "id", @project.id%>
+          				<%= hidden_field_tag "template_id", @template.id%>
+						<table>
+						<tr><td>
+							<div class="section_form_label form_input_label">Work Sections in Project:</div>
+							<div class="form_input">          
+          						<%= select_tag "project_sections", options_from_collection_for_select(@project_subsections, :id, :full_code_and_title), multiple: true%>    
+							</div>				
+						</td></tr>										
+						</table>				
+      		    </div>
+    		</div>
+    	
+      		<div class="column_footer">
+        		<div>
+					<div class="column_submit"><%= submit_tag "Delete Sections", :confirm => "Subsections moved from the Project will be deleted premanently, they are not copied to the template project. Do you wish to continue?" %></div>
+					<% end %>  
+        			<div class="column_cancel"><%= link_to "Cancel", project_path(@project) %></div>              
+        		</div>   
+      		</div>        		     		
+      	</div>				
+	</div>
+	 
+    <div class="column_3 column_blank"></div>
+     
+</div>

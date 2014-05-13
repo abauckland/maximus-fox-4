@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ref: MyString
+  description: MyString
+  example: MyString
+  txt1: 1
+  txt2: 1
+  txt3: 1
+  txt4: 1
+  txt5: 1
+  txt6: 1
+  identity: 1
+  perform: 1
+
+two:
+  ref: MyString
+  description: MyString
+  example: MyString
+  txt1: 1
+  txt2: 1
+  txt3: 1
+  txt4: 1
+  txt5: 1
+  txt6: 1
+  identity: 1
+  perform: 1

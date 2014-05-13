@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ref: 1
+  text: MyString
+  unisection_id: 1
+  guidepdf_id: 1
+
+two:
+  ref: 1
+  text: MyString
+  unisection_id: 1
+  guidepdf_id: 1

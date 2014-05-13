@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  company_id: 1
+  first_name: MyString
+  surname: MyString
+  email: MyString
+  role: 1
+  api_key: MyString
+  password_hash: MyString
+  password_salt: MyString
+  password_reset_token: MyString
+  password_reset_sent_at: 2014-05-04 21:16:24
+
+two:
+  company_id: 1
+  first_name: MyString
+  surname: MyString
+  email: MyString
+  role: 1
+  api_key: MyString
+  password_hash: MyString
+  password_salt: MyString
+  password_reset_token: MyString
+  password_reset_sent_at: 2014-05-04 21:16:24

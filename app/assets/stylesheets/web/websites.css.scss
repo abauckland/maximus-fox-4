@@ -1,0 +1,447 @@
+// Place all the styles related to the Projects controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+//core-ui
+@import "core";
+
+.web_page_header {@extend .app_page_header}
+
+.web_logo{
+  position: absolute;
+  top: 6px;
+  left: 7px;
+  height: 30px;
+  width: 100px;
+  border: inset 1px #555;
+  background: image-url('specright_logo.png') no-repeat;
+  background-size:100px 30px;
+  }
+  @media screen and (max-width: $medium_menu) {
+    .web_logo{
+      height: 24px;
+      width: 80px;
+      background: image-url('specright_logo.png') no-repeat;
+      background-size:80px 24px; 
+    }  
+  }
+
+
+.web_menu {  
+  position: absolute;
+  top: 0px;
+  left: 115px;
+  width: 500px; 
+  }
+  @media screen and (max-width: $medium_menu) {
+    .web_menu {
+      left: 95px;
+      }
+  }
+
+.main_menu_item a {
+  float: left;
+  height: 21px;
+  font-family: $heading_font;
+  font-weight: bold;
+  font-size: 1.4rem;
+  padding: 15px 9px 0px 9px;
+  color: #fff;
+  &:hover {text-decoration: underline;
+    }
+  }
+  @media screen and (max-width: $medium_menu) {
+    .main_menu_item a {
+      font-size: 1.2rem;
+      padding: 12px 8px 0px 8px;
+      }
+  }
+  @media screen and (max-width: $small_menu) {
+    .main_menu_item a {
+        display: none;
+      }
+  }
+
+.web_menu_mob{
+  display: none;
+  }
+  @media screen and (max-width: $small_menu) {
+  .web_menu_mob{
+       display: block;
+       position: absolute;
+       top: 9px; //how is this set so logo is centered on header?
+       left: 100px;
+       font-family: $heading_font;
+       @include small-button;
+       @include dark-grey-button;
+       @include shadow-all(0px 0px 5px #aeaeae);
+       border: 1px solid #000;
+    }  
+  } 
+
+
+.web_mob_menu{
+  display: none; 
+  position: absolute;
+  top: 45px;
+  left: 110px;
+  width: 110px;
+  background: #000;
+  padding:0px 5px 0px 10px;
+  z-index: 1000;
+  ul{
+    list-style-type: none; 
+    -webkit-padding-start: 0px;
+    margin: 0px; //require so displays properly in firefox, ie
+    padding: 0px; //require so displays properly in firefox, ie
+    li{
+      padding: 2px 0px 2px 0px;     
+    }
+  }
+  a{
+    text-align: left;
+    font-size: 1.4rem;
+    line-height: 2.4rem;
+    color: #fff;
+    text-decoration: none;
+    &:hover{    
+      text-decoration: underline; 
+    }
+  }
+}
+
+
+ 
+
+.web_password_reminder{
+  display: block;
+  position: absolute;
+  top: 11px; //how is this set so logo is centered on header?
+  right: 327px;
+  font-family: $heading_font;
+
+  @include small-button;
+  @include orange-button;
+  @include shadow-all(0px 0px 5px #aeaeae);
+  border: 1px solid #000;     
+  }
+  @media screen and (max-width: $medium_menu) {
+    .web_password_reminder {
+       display: none;
+    }  
+  } 
+
+.web_login{
+  display: block;
+  position: absolute;
+  right: 49px;
+  padding: 0px 10px 0px 10px;
+  font: bold 12px verdana;
+  color: #fff;
+  }
+  @media screen and (max-width: $medium_menu) {
+    .web_login {
+       display: none;
+    }  
+  } 
+
+
+#password {
+    @include border-radius(0.5rem);
+    color: white;
+    font: bold;
+    background: #999;
+    border: none;
+    padding: 3px 0px 2px 5px;
+    width: 100px;
+  }
+#login_email {
+    @include border-radius(0.5rem);
+    color: white;
+    font: bold;
+    background: #999;
+    border: none;
+    padding: 3px 0px 2px 5px;
+    width: 150px;
+    }
+
+
+.web_login_submit input[type=submit]{
+  display: block;
+  position: absolute;
+  top: 9px; //how is this set so logo is centered on header?
+  right: 8px;
+  font-family: $heading_font;
+  @include small-button;
+  @include green-button;
+  @include shadow-all(0px 0px 5px #aeaeae);
+  border: 1px solid #000;
+  }
+  @media screen and (max-width: $medium_menu) {
+    .web_login_submit {
+       display: none;
+    }  
+  }
+
+
+.web_login_link{
+  display: none;
+  }
+  @media screen and (max-width: $medium_menu) {
+  .web_login_link{
+       display: block;
+       position: absolute;
+       top: 9px; //how is this set so logo is centered on header?
+       right: 8px;
+       font-family: $heading_font;
+       @include small-button;
+       @include green-button;
+       @include shadow-all(0px 0px 5px #aeaeae);
+       border: 1px solid #000;
+      a{
+        color: #fff;
+        text-decoration: none;
+        cursor: pointer;
+      }    
+    }  
+  }
+
+#password_reset{
+  position: absolute;
+  top: 140px;
+  left: 20px;  
+}
+
+
+
+.web_page_body{
+  position: absolute;
+  top: 60px;
+  left: 10px;
+  right: 10px;  
+}
+  @media screen and (max-width: $medium_menu) {
+    .web_page_body{
+      top: 40px;
+      }
+  }
+
+.web_title_band {
+  float: left;
+  width: 100%;
+  height: 30px;
+  padding: 10px 0px 10px 0px;
+  margin: 0px 0px 15px 0px;
+  font-family: $heading_font;
+  font-size: 3rem;
+  color: #555;
+  border-bottom: 2px solid #dddddd;
+  }
+  @media screen and (max-width: $medium_menu) {
+    .web_title_band  {
+      height: 24px;
+      padding: 14px 0px 6px 0px;
+      font-size: 2.2rem;
+      text-overflow:ellipsis;
+      overflow: hidden;
+      white-space:nowrap;
+      min-width:285px
+      }
+  }
+
+.web_title{
+  float: left;
+  padding: 0px 0px 0px 10px;  
+}
+
+.web_title_signup_link {
+  display: block;
+  position: absolute;
+  top: 16px;
+  right: 10px;  
+  font-family: $heading_font;
+  @include small-button;
+  @include green-button;
+  @include shadow-all(0px 0px 5px #aeaeae);
+  border: 2px solid #77a809;
+  a{
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  }
+  @media screen and (max-width: $medium_menu) {
+    .web_title_signup_link {
+      display: block;
+      top: 12px;
+      }
+  }
+  @media screen and (max-width: $small_menu) {
+    .web_title_signup_link {
+      display: none;
+      }
+  }
+
+.web_main_content{
+  float: left;
+  width: 100%;
+  padding: 5px 0px 40px 0px;
+  border-bottom: 2px solid #dddddd;  
+}
+
+.web_main_column_1{
+  float: left;
+  width: 100px;
+  min-height: 280px;
+  padding: 0px 20px 0px 20px;
+  img{
+    padding: 0px 0px 20px 0px;
+  }
+}
+
+.web_main_column_2{
+  float: left;
+  padding: 0px 20px 0px 20px;
+}
+
+.web_home_image_prtrt{
+}
+
+
+
+
+.web_tagline_text{
+  max-width:500px;
+  padding: 15px 0px 10px 0px;
+  font-size: 2.8rem;
+  font-weight: bold;
+  color: #555;
+  line-height: 3.2rem; 
+}
+  @media screen and (max-width: $medium_menu) {
+    .web_tagline_text {
+      max-width: 350px;
+      font-size: 2.3rem;
+      line-height: 2.7rem;  
+      }
+  }
+  @media screen and (max-width: $small_menu) {
+    .web_tagline_text {      
+      max-width: 250px;
+      font-size: 1.8rem;
+      line-height: 2rem;  
+      }
+  }
+  
+.web_tagline_text_left{
+  float: left;
+  width: 100%;
+  text-align: left;  
+}
+
+.web_tagline_text_right{
+  float: right;
+  width: 100%;
+  text-align: right;  
+}  
+  
+
+.web_main_text{
+  float: left;
+  font-size: 1.4rem;
+  line-height: 1.8rem;
+  text-align: justify;
+  padding: 15px 0px 10px 0px;
+  a{
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;    
+  }  
+}
+ 
+
+.web_signup_link{
+  @include medium-button;
+  @include green-button;
+  @include shadow-all(0px 0px 5px #aeaeae);
+  border: 1px solid #000;
+  font-family: $heading_font;
+  border: 2px solid #77a809;
+  a{
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;    
+  }
+}
+
+
+
+
+
+
+
+/* login error screens */
+.web_password_reset{
+  float: left;
+  width: 100%;  
+}
+
+
+
+/* create account form */
+
+.account_title {
+  position: absolute;
+  top: 50px;
+  left: 10px;
+  right: 10px;
+  height: 30px;
+  padding: 20px 0px 10px 0px;
+  margin: 0px 0px 15px 0px;
+  font-family: $heading_font;
+  font-size: 3rem;
+  color: #333333;
+  border-bottom: 2px solid #dddddd;
+  }
+  @media screen and (max-width: $small_menu) {
+    .account_title  {
+  top: 38px;
+      height: 24px;
+      padding: 20px 0px 0px 0px;
+      font-size: 2rem;
+      text-overflow:ellipsis;
+      overflow: hidden;
+      white-space:nowrap;
+      min-width:285px
+      }
+  }
+
+.account_content {
+  position: absolute;
+  top:110px;
+  left:10px;
+  right:10px;
+  padding: 0px 0px 0px 0px;
+  }
+  @media screen and (max-width: $medium_menu) {
+    .content {
+      top:125px;
+      }
+  }
+  @media screen and (max-width: $small_menu) {
+    .content {
+      top: 80px;
+      }
+  }
+  
+.company_form_label{
+  float:left;
+  width: 120px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: $bold_text_color;   
+}
+
+
+

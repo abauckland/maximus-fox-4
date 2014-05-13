@@ -1,0 +1,121 @@
+<div class="page_title">Add/Delete Clauses</div>
+
+
+<div class="content">
+    <div class="column_1">
+		<div class="column_content">       
+			<div class="column_title">Copy Clauses into <%= @subsection.subsection_code %></div>   
+    			
+    		<div class="column_sub_content">
+
+				<div class="column_guide">
+					<p>Select the template you would like to copy clauses from. This can either be a standard empty template or an existing project</p>
+      			</div>
+
+				<div class="column_form">				
+						<table>
+						<tr><td>
+							<div class="section_form_label form_input_label">Project Template:</div>
+							<div class="form_input">
+      							<%= select_tag "selected_template_id", options_from_collection_for_select(@selectable_templates, "id", "project_code_and_title", @template.id), {:onchange => "window.location='/speclines/#{@project.id}/manage_clauses?project_id=#{@project.id}&subsection_id=#{@subsection.id}&selected_template_id='+this.value;"} %>
+							</div>				
+						</td></tr>										
+						</table>				
+      		    </div>		
+
+				<div class="column_sub_guide">
+						<p>Select clauses to add to the project (Note: only clauses without the same reference and title as those already within the project are listed).</p>
+      			</div>
+				
+				<div class="column_form">				
+						<%= form_tag(:controller => "speclines", :action => "add_clauses") do %>
+						<%= hidden_field_tag "project_id", @project.id%>
+            			<%= hidden_field_tag "template_id", @project_template.id%>
+            			<%= hidden_field_tag "subsection_id", @subsection.id %>						
+						<table>
+						<tr><td>
+							<div class="section_form_label form_input_label">Clauses in Template:</div>
+							<% if @template_project_clauses %>
+								<div class="form_input">
+              						<%= select_tag "template_clauses", options_from_collection_for_select(@template_project_clauses, :id, :clause_full_title), multiple: true, size: 8  %>
+								</div>
+							<% else %>
+								<div class="form_input_blank_note">
+              						All clauses in the template already exist in the current projectdd
+								</div>							
+							<% end %>				
+						</td></tr>										
+						</table>				
+      		    </div>     			      		    	
+    		</div>
+    	
+      		<div class="column_footer">
+        		<div>
+        			<div class="column_submit"><%= submit_tag "Add Clauses"%></div>
+					<% end %> 
+        			<div class="column_cancel"><%= link_to "Cancel", {:controller => "projects", :action => "show", :id => @project.id, :subsection => @subsection.id} %></div>              
+        		</div>   
+      		</div>        		      		
+      	</div>   
+	</div>
+	
+	<div class="column_2">
+		<div class="column_content">       
+			<div class="column_title">Delete Clauses from <%= @subsection.subsection_code %></div>   
+    			
+    		<div class="column_sub_content">		
+
+				<div class="column_guide">
+					<p>Select Clauses that you would like to remove from your project.</p>
+					<p>Only clauses that are currently included within your current project subsection are listed (Note: this does not indicate that the contents of these clause are similar to those in the template).</p>
+      			</div>
+				
+				<div class="column_form">				
+						<%= form_tag(:controller => "speclines", :action => "delete_clauses") do %>
+						<%= hidden_field_tag "project_id", @project.id%>
+            			<%= hidden_field_tag "template_id", @template.id%>
+            			<%= hidden_field_tag "subsection_id", @subsection.id %>
+						<table>
+						<tr><td>
+							<div class="section_form_label form_input_label">Clauses in Project:</div>
+							<div class="form_input">          
+          						<%= select_tag "project_clauses", options_from_collection_for_select(@current_project_clauses, :id, :clause_full_title), multiple: true, size: 13  %>    
+							</div>				
+						</td></tr>										
+						</table>				
+      		    </div>	
+    		</div>
+    	
+      		<div class="column_footer">
+        		<div>
+					<div class="column_submit"><%= submit_tag "Delete Clauses", :confirm => "Clauses moved from the Project will be deleted premanently, they are not copied to the template project. Do you wish to continue?" %></div>
+					<% end %>  
+        			<div class="column_cancel"><%= link_to "Cancel", {:controller => "projects", :action => "show", :id => @project.id, :subsection => @subsection.id} %></div>              
+        		</div>   
+      		</div>        		     		
+      	</div>				
+	</div>
+	 
+    <div class="column_3">
+    	<div class="column_content">       
+			<div class="column_title">Create new Clause in <%= @subsection.subsection_code %></div>
+			
+			<div class="column_sub_content">
+
+				<div class="column_guide">
+					<p>To create a new clause click on the link below</p>
+      			</div>
+      		</div>
+	
+      		<div class="column_footer">
+				<div>
+          			<div class="column_add">
+        				<%= link_to "Create New Clause", {:controller => "clauses", :action => "new", :id => @project.id, :subsection => @subsection.id} %>
+        			</div>
+				</div>    
+      		</div>      			
+				
+    	</div>
+    </div>
+     
+</div>

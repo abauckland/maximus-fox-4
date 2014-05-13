@@ -1,0 +1,17 @@
+<div class="inline_guide_header">
+		<div class="guide_title">Guidance for: <%=@selected_specline.clause.clause_section_full_title%></div>
+		<div class="guide_title_mob">Guidance for: <%=@selected_specline.clause.clause_code%></div>
+		<div class="guide_close">close</div>
+	</div>
+<div class="guide_text"><%= @guidenote.text.html_safe %></div>
+
+<% if !@guide_sponsors.blank? %>
+<div class="guide_sponsor">
+	<div class="guide_logo_text">Guidance notes sponsored by:</div>
+	<div class="guide_logos">
+	<% @guide_sponsors.each do |sponsor| %>
+		<div class="guide_logo"><%= link_to image_tag(sponsor.supplier.photo.url, :height => '40'), sponsor.supplier.www%></div>
+	<% end %>
+	</div>
+</div>
+<% end %>

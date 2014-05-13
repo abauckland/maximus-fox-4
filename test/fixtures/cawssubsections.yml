@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cawssection_id: 1
+  ref: 1
+  text: MyString
+  guidepdf_id: 1
+
+two:
+  cawssection_id: 1
+  ref: 1
+  text: MyString
+  guidepdf_id: 1

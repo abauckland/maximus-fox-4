@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  feature_id: 1
+  order: MyString
+  title: MyString
+  text: MyText
+  image: MyString
+
+two:
+  feature_id: 1
+  order: MyString
+  title: MyString
+  text: MyText
+  image: MyString

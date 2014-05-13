@@ -1,0 +1,122 @@
+
+
+$('table#<%=@specline_update.id%>').replaceWith('<%= escape_javascript(render :partial => 'specline_update', :locals => {:specline_update => @specline_update}) %>');
+
+
+$('table#<%=@specline_update.id%> a.delete').deleteWithAjax();
+$('table#<%=@specline_update.id%> a.put').putWithAjax();
+$('table#<%=@specline_update.id%> a.get').getWithAjax();
+$('table#<%=@specline_update.id%> a.post').postWithAjax();
+
+
+	$('.suffixed_line_menu_mob').off('hover');
+	$('.specline_table').hover(function(){
+		$(this).css('background-color', '#efefef');
+		$(this).find('td.prefixed_line_menu').css('visibility', 'visible');
+		$(this).find('td.suffixed_line_menu').css('visibility', 'visible');
+		$(this).find('td.suffixed_line_menu_mob').css('visibility', 'visible');
+	},
+	function (){
+  		$(this).css('background-color', '#fff');
+		$(this).find('td.prefixed_line_menu').css('visibility', 'hidden');
+		$(this).find('td.suffixed_line_menu').css('visibility', 'hidden');
+		$(this).find('td.suffixed_line_menu_mob').css('visibility', 'hidden')
+  	});
+
+
+	$('.suffixed_line_menu_mob').off('click');
+	$('.suffixed_line_menu_mob').click(function (){
+		$(this).closest('table').find('.specline_mob_menu_popup').show();
+	});
+ 
+	$('tr.specline_mob_menu_popup').mouseleave(function (){
+		$(this).hide();
+	});
+
+
+//jeditbale functions
+$.editable.addInputType('autogrow', {
+                element : function(settings, original) {
+                    var textarea = $('<textarea />');
+                    if (settings.rows) {
+                        textarea.attr('rows', settings.rows);
+                    } else if (settings.height != "none") {
+                        textarea.height(settings.height);
+                    }
+
+                   	textarea.width(settings.width);	                       	                       	
+
+                    textarea.css("font", "normal 12px arial").css("padding-top", "0px");
+                    $(this).append(textarea);
+                    return(textarea);
+                },
+    			plugin : function(settings, original) {
+        			$('textarea', this).symbols();
+        			$('textarea', this).autogrow();
+    			},
+});
+
+$('.editable_text3').mouseover(function(){
+var spec_id = $(this).attr('id');
+$(this).editable('/speclines/'+spec_id+'/update_specline_3', {id: spec_id, width: ($(this).width() + 10)+'px', type: 'text', onblur: 'submit', method: 'PUT', indicator: 'Saving..', submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}});    
+}); 
+$('.editable_text4').mouseover(function(){
+var spec_id = $(this).attr('id');
+var text_width = $(this).width();
+$(this).editable('/speclines/'+spec_id+'/update_specline_4', {id: spec_id, width: $(this).width()+'px', type: 'autogrow', onblur: 'submit', method: 'PUT', indicator: 'Saving..', autogrow : {lineHeight : 16, maxHeight  : 512}, submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}});    
+}); 
+$('.editable_text5').mouseover(function(){
+var spec_id = $(this).attr('id');
+$(this).editable('/speclines/'+spec_id+'/update_specline_5', {id: spec_id, width: $(this).width()+'px', type: 'autogrow', onblur: 'submit', method: 'PUT', indicator: 'Saving..', autogrow : {lineHeight : 16, maxHeight  : 512}, submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}});    
+});    
+$('.editable_text6').mouseover(function(){
+var spec_id = $(this).attr('id');
+$(this).editable('/speclines/'+spec_id+'/update_specline_6', {id: spec_id, width: $(this).width()+'px', type: 'text', onblur: 'submit', method: 'PUT', indicator: 'Saving..', submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}});    
+}); 
+  
+$('.editable_xref').mouseover(function(){
+var spec_id = $(this).attr('id');
+	$(this).editable('/speclines/'+spec_id+'/update_specline_5', {
+		id: spec_id, width: ($(this).width() +10)+'px',
+		loadurl : 'http://www.specright.co.uk/speclines/'+spec_id+'/xref_data',
+		type: 'select',
+		onblur: 'submit',
+		method: 'PUT',
+		indicator: 'Saving..',
+		submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}
+	});    
+});
+
+$('.editable_product_key').mouseover(function(){
+var spec_id = $(this).attr('id');
+	$(this).editable('/speclines/'+spec_id+'/update_product_key', {
+		id: spec_id, width: ($(this).width() +10)+'px',
+		loadurl : 'http://localhost:3000/products/'+spec_id+'/product_keys',
+		type: 'select',
+		onblur: 'submit',
+		method: 'PUT',
+		indicator: 'Saving..',
+		ajaxoptions: {dataType: 'script'},
+		submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}
+	});    
+});
+
+$('.editable_product_value').mouseover(function(){
+var spec_id = $(this).attr('id');
+	$(this).editable('/speclines/'+spec_id+'/update_product_value', {
+		id: spec_id, width: ($(this).width() +10)+'px',
+		loadurl : 'http://localhost:3000/products/'+spec_id+'/product_values',
+		type: 'select',
+		onblur: 'submit',
+		method: 'PUT',
+		indicator: 'Saving..',
+		submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}
+	});    
+});
+
+
+<% if @subsequent_prefixes %>
+	<% @subsequent_prefixes.each_with_index do |sub_prefix, i|	%>
+		$('table#<%=sub_prefix[0]%> tr td.text_prefix').html('<%=sub_prefix[1]%>');
+	<% end %>
+<% end %>

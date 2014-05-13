@@ -1,0 +1,103 @@
+<div class="account_title">Create Account</div>
+
+<div class="content">
+	<div class="column_1">
+		<div class="column_content">
+			<div class="column_title">Account details</div>   
+      
+			<div class="column_sub_content">
+			
+				<% if @company.errors.any? %>  
+					<div class="column_error">      		    
+        				<div class="column_error_text">
+        					<p><%= pluralize(@company.errors.count, "error") %> prohibited this account from being created, please refer to items highlighted below.</p>
+        				</div>
+					</div>
+				<% end %>      		
+
+				<div class="column_guide">
+ 					<p>Complete this form to create a free single user account. If you would like more informatiion or have any questions regarding the application, account creation or anything else for that matter please contact us.</p>    			
+      				<p>Please note passwords must be a miniumum of 8 characters long and all fields must be complete.</p>
+      			</div>
+
+				<div class="column_form">
+				<%= form_for @company do |f| %>
+					
+					<%= f.fields_for :users do |builder| %>
+						<div class="form_check"><%= f.text_field :check_field%></div>
+						<%= builder.hidden_field(:role, {:value => 'admin'})%>
+						<table>
+						<tr><td>
+							<div class="company_form_label form_input_label">First Name:*</div>
+							<div class="form_input"><%= builder.text_field :first_name, :size => 20  %>
+								<div class="form_error_note"><%= error_check(@company, :'users.first_name')%> </div>
+							</div>						
+						</td></tr>
+						<tr><td>
+							<div class="company_form_label form_input_label">Surname:*</div>
+							<div class="form_input"><%= builder.text_field :surname, :size => 20  %>
+								<div class="form_error_note"> <%= error_check(@company, :'users.surname')%> </div>
+							</div>				
+						</td></tr>
+						<tr><td>
+							<div class="company_form_label form_input_label">Email Address:*</div>
+							<div class="form_input"><%= builder.text_field :email, :size => 20  %>
+								<div class="form_error_note"> <%= error_check(@company, :'users.email')%> </div>
+							</div>				
+						</td></tr>						
+						<tr><td>
+							<div class="company_form_label form_input_label">Password:*</div>
+							<div class="form_input"><%= builder.password_field :password, :size => 20  %>
+								<div class="form_error_note"> <%= error_check(@company, :'users.password')%> </div>
+							</div>				
+						</td></tr>
+						<tr><td>
+							<div class="company_form_label form_input_label">Confirm Password:*</div>
+							<div class="form_input"><%= builder.password_field :password_confirmation, :size => 20  %>
+								<div class="form_error_note"> <%= error_check(@company, :'users.password')%> </div>
+							</div>				
+						</td></tr>
+						<% end %>
+						<tr><td>
+							<div class="company_form_label form_input_label">Company Name:*</div>
+							<div class="form_input"><%= f.text_field :name, :size => 20 %>
+								<div class="form_error_note"> <%= error_check(@company, :name)%>  </div>
+							</div>				
+						</td></tr>
+						<tr><td>
+							<div class="company_form_label form_input_label">Telephone No:*</div>
+							<div class="form_input"><%= f.text_field :tel, :size => 20 %>
+								<div class="form_error_note"> <%= error_check(@company, :tel)%> </div>
+							</div>				
+						</td></tr>	
+						<tr><td>
+							<div class="company_form_label form_input_label">Accept Terms of Use:*</div>
+							<div class="form_input"><%= f.check_box :read_term %>
+								<div class="form_error_note"> <%= error_check(@company, :read_term)%></div>
+							</div>				
+						</td></tr>																																																								
+						</table>					
+      			</div>   
+			</div>
+			
+			<div class="column_footer">
+        		<div>
+        			<div class="column_submit"><%= f.submit "Create Free Account"%></div>              
+        		<% end %>       		             
+        		</div>   
+      		</div>			    	
+      	</div>   
+	</div>
+
+	<div class="column_2 column_blank"></div>	
+		 
+    <div class="column_3 column_blank"></div>
+
+	<%= render :partial => "websites/web_footer" %>
+  
+</div>
+
+
+  
+
+

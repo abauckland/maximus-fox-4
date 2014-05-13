@@ -1,0 +1,1 @@
+Rails.application.config.assets.precompile += %w( application-main.css application-main.js application-product.css application-product.js application-web.css application-web.js)

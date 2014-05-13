@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  tel: 1
+  www: MyString
+  reg_address: MyString
+  reg_number: 1
+  reg_name: MyString
+  reg_location: MyString
+  read_term: 1
+  category: 1
+  photo_file_name: MyString
+  photo_content_type: MyString
+  photo_file_size: MyString
+  photo_updated_at: MyString
+  no_licence: 1
+
+two:
+  name: MyString
+  tel: 1
+  www: MyString
+  reg_address: MyString
+  reg_number: 1
+  reg_name: MyString
+  reg_location: MyString
+  read_term: 1
+  category: 1
+  photo_file_name: MyString
+  photo_content_type: MyString
+  photo_file_size: MyString
+  photo_updated_at: MyString
+  no_licence: 1

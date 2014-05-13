@@ -1,0 +1,26 @@
+$('div#<%= @revision_subsection.id %>rev_view').empty();
+$('div#<%= @revision_subsection.id %>rev_view').html('<%= escape_javascript(render "tab_revision_content", locals: {revision_subsection: @revision_subsection, added_subsections: @added_subsections, deleted_subsections: @deleted_subsections, deleted_clauses: @deleted_clauses, changed_subsections: @changed_subsections, added_clauses: @added_clauses, changed_clauses: @changed_clauses, revision: @revision, project: @project}) %>');
+
+//show/hide functions for rev lines
+	$('.rev_table').hover(function (){
+		$(this).css('background-color', '#efefef');
+		$(this).find('td.rev_line_menu').css('visibility', 'visible');
+		$(this).find('td.rev_line_menu_mob').css('visibility', 'visible');
+  	},
+  	function (){
+		$(this).css('background-color', '#fff');
+		$(this).find('td.rev_line_menu').css('visibility', 'hidden');
+		$(this).find('td.rev_line_menu_mob').css('visibility', 'hidden');
+  	});
+
+//show/hide rev mob menu
+	$('.rev_line_menu_mob').click(function (){
+		$(this).closest('table').find('.rev_mob_menu_popup').toggle();
+	});
+ 
+	$('tr.rev_mob_menu_popup').mouseleave(function (){
+		$(this).hide();
+	});
+
+$('td.suffixed_line_menu').children('a').tipsy();
+$('td.prefixed_line_menu').children('img').tipsy();

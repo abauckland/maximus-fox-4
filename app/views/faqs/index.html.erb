@@ -1,0 +1,26 @@
+<div class="web_page_body">
+	<div class="web_title_band">
+		<div class="web_title">Frequenty Asked Questions</div>
+	</div>	
+	<div class="web_title_signup_link"><%= link_to "create free account", sign_up_path %></div>
+
+	<div class="faq_extra_questions">
+		If your question is not in the list below please 
+		<span class="faq_extra_questions_link"><%= mail_to "info@specright.co.uk", "contact us", :subject => "Web Enquiry" %></span>:
+	</div>
+
+	<!-- faq accordain --> 
+	<div class="web_faq_box">
+  		<div class="firstpane">  
+    		<% @faqs.each do |faq|%>
+      		<p class="faq_menu_head"><%= faq.id %>. <%= faq.question%></p>
+        	<div class="faq_menu_body">
+          		<div><%= faq.answer %></div>
+        	</div>
+    		<% end %>
+  		</div>
+	</div>
+	
+	<%= render :partial => "websites/web_footer" %>
+
+</div>

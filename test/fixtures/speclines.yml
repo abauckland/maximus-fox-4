@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  project_id: 1
+  clause_id: 1
+  clause_line: 1
+  txt1_id: 1
+  txt2_id: 1
+  txt3_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  txt6_id: 1
+  identity_id: 1
+  perform_id: 1
+  linetype_id: 1
+
+two:
+  project_id: 1
+  clause_id: 1
+  clause_line: 1
+  txt1_id: 1
+  txt2_id: 1
+  txt3_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  txt6_id: 1
+  identity_id: 1
+  perform_id: 1
+  linetype_id: 1

@@ -1,0 +1,85 @@
+<div class="page_title"><%=@company.company_name%></div>
+
+<div class="content">
+    <div class="column_1">
+		<div class="column_content">       
+			<div class="column_title">Update details</div>   
+    			
+    		<div class="column_sub_content">  
+  
+				<% if @company.errors.any? %> 
+				<div class="column_error">      		    
+        			<div class="column_error_heading">
+        				<p><%= pluralize(@company.errors.count, "error") %> prohibited this account from being updated :</p>
+        			</div>
+        			<div class="column_error_content">
+        				<ul>
+    					<% @company.each_with_index do |error, i| %> 
+							<li><%= error %></li>
+    					<% end %>  
+        				</ul>
+					</div>  
+  				</div>
+  				<% end %>
+  				
+				<div class="column_guide">
+					<p>Company details are printed on the cover of specification documents.</p>
+					<p>The uploaded compmany logo will be scaled proportionally to maximum 9mm high x 90mm wide.</p>
+					<p>Image files must be either png or jpeg format and files must be no bigger than 1Mb in size.</p>
+      			</div>  				  
+  
+				<div class="column_form">
+				<%= form_for @company, :html => { :multipart => true } do |f| %>
+	
+						<table>
+						<tr><td>
+							<div class="company_form_label form_input_label">Registered Name:</div>
+							<div class="form_input"><%= f.text_field :reg_name %></div>					
+						</td></tr>
+						<tr><td>
+							<div class="company_form_label form_input_label">Company Number:</div>
+							<div class="form_input"><%= f.text_field :reg_number %></div>				
+						</td></tr>
+						<tr><td>
+							<div class="company_form_label form_input_label">Registered Address:</div>
+							<div class="form_input"><%= f.text_field :reg_address %></div>				
+						</td></tr>
+						<tr><td>
+							<div class="company_form_label form_input_label">Registered Location:</div>
+							<div class="form_input"><%= f.text_field :reg_location %></div>					
+						</td></tr>
+						<tr><td>
+							<div class="company_form_label form_input_label">Telephone No:</div>
+							<div class="form_input"><%= f.text_field :tel %>
+								<div class="form_input_error"><%= error_check(@company, :tel)%></div>
+							</div>					
+						</td></tr>												
+						<tr><td>
+							<div class="company_form_label form_input_label">Website Address:</div>
+							<div class="form_input"><%= f.text_field :www %></div>					
+						</td></tr>
+						<tr><td>
+							<div class="company_form_label form_input_label">Company Logo:</div>
+							<div class="form_input"><%= show_image(@company, 30)%></div>					
+						</td></tr>
+						<tr><td>
+							<div class="company_form_label form_input_label">Change Logo:<span class="form_label_note"> (1Mb max)</span></div>
+							<div class="form_input"><%= f.file_field :photo %></div>			
+						</td></tr>	
+						</table>	      	
+      			</div>
+    		</div>
+    	
+      		<div class="column_footer">
+        		<div>
+        		<div class="column_submit"><%= f.submit "update"%></div>
+        			<% end %>               
+        		</div>   
+      		</div>
+      	</div>   
+	</div>
+	
+	<div class="column_2 column_blank"></div> 
+    <div class="column_3 column_blank"></div>
+     
+</div>
