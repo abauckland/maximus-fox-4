@@ -247,4 +247,119 @@ end
 
 #page numbers
 
+document_revisions_title
+section_revision_subtitle
+prelim_cover
+section_cover
+section_revisions_title_1
+section_revisions_title_2
+section_specification_title_1
+section_specification_title_2
+prelim_revision_subtitle
+prelim_specification_subtitle
+
+
+if rev.document?
+  document_revisions_title(@project, @revision)
+  
+  status_or_format_change
+  
+  sections.each do |section|
+    section_revision_subtitle
+    revisions(@project, @section, @revision) 
+  end
+end
+
+#preliminaries
+if prelim.combined?
+  if cover.cover?
+    prelim_cover
+  end
+
+  if rev.section?
+    if cover.cover
+      section_revisions_title_1
+    else
+      section_revisions_title_2
+    end
+    prelim_sections.each do |section|
+      prelim_revision_subtitle    
+      revisions(@project, @section, @revision)
+    end
+  end
+
+  if rev.section?
+    if cover.cover
+      section_specification_title_1
+    else
+      section_specification_title_2
+    end
+    prelim_sections.each do |section|
+      prelim_specification_subtitle    
+      specification(@project, @section, @revision)
+    end
+  end 
+
+else
+
+  if cover.cover?
+    prelim_cover
+  end
+
+  prelim_sections.each do |section|
+    if rev.section?
+      if cover.cover
+        section_revisions_title_1
+      else
+        section_revisions_title_2
+      end         
+      revisions(@project, @section, @revision)
+
+      if cover.cover
+        section_specification_title_1
+      else
+        section_specification_title_2
+      end  
+      specification(@project, @section, @revision)
+    end
+  end     
+end
+
+#specification sections
+sections.each do |section|
+  if cover.cover?
+    section_cover
+  end  
+
+  if rev.section?  
+    if cover.cover
+      section_revisions_title_1
+    else
+      section_revisions_title_2
+    end
+    revisions(@project, @section, @revision)
+  end  
+   
+  if cover.cover
+    section_specification_title_1
+  else
+    section_specification_title_2
+  end   
+  specification(@project, @section, @revision)
+end 
+
+
+contents page(@project, @revision, @pages)
+
+
+
+
+
+
+
+
+
+
+
+
 
