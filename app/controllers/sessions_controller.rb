@@ -22,40 +22,37 @@ layout "mobiles"
       redirect_to home_path, notice: 'show forgotten password link'       
     else
       
-    user = User.authenticate(params[:email], params[:password]) 
-    if user  
-      session[:user_id] = user.id  
-
-      user = User.where('email=?', params[:email]).first
-      @licence = Licence.where('user_id = ?', user.id).first      
-      if @licence.locked_at == 1
+    @user = User.authenticate(params[:email], params[:password]) 
+    if @user  
+      session[:user_id] = @user.id  
+      
+      if @user.locked_at == true
         #redirect to locked page        
-        redirect_to(:controller => 'password_resets', :action => 'locked', :id => @licence.id)
+        redirect_to(:controller => 'password_resets', :action => 'locked', :id => @user.id)
       else
-        if @licence.active_licence == 0
+        if @user.active == false
           #redirect to inactive licence page 
-          redirect_to(:controller => 'password_resets', :action => 'deactivated', :id => @licence.id)         
+          redirect_to(:controller => 'password_resets', :action => 'deactivated', :id => @user.id)         
         else    
-        @licence.last_sign_in = Time.now
-        @licence.number_times_logged_in = @licence.number_times_logged_in += 1
-        @licence.ip = request.remote_ip
-        @licence.failed_attempts = 0
-        @licence.save
+        @user.last_sign_in = Time.now
+        @user.number_times_logged_in = @user.number_times_logged_in += 1
+        @user.ip = request.remote_ip
+        @user.failed_attempts = 0
+        @user.save
             
         redirect_to projects_path
         end
       end      
     else
     
-      user = User.where('email=?', params[:email]).first
-      @licence = Licence.where('user_id = ?', user.id).first 
-      @licence.failed_attempts = @licence.failed_attempts += 1
-      if @licence.failed_attempts == 3
+      @user = User.where('email=?', params[:email]).first
+      @user.failed_attempts = @user.failed_attempts += 1
+      if @user.failed_attempts == 3
         #if user.role != 'admin'
-          @licence.locked_at = 1
+          @user.locked_at = true
         #end
       end      
-      @licence.save 
+      @user.save 
       redirect_to new_session_path, notice: 'show forgotten password link' 
     end      
   end
@@ -74,40 +71,37 @@ layout "mobiles"
       redirect_to home_path, notice: 'show forgotten password link'       
     else
       
-    user = User.authenticate(params[:email], params[:password]) 
-    if user  
-      session[:user_id] = user.id  
-
-      user = User.where('email=?', params[:email]).first
-      @licence = Licence.where('user_id = ?', user.id).first      
-      if @licence.locked_at == 1
+    @user = User.authenticate(params[:email], params[:password]) 
+    if @user  
+      session[:user_id] = @user.id  
+    
+      if @user.locked_at == true
         #redirect to locked page        
-        redirect_to(:controller => 'password_resets', :action => 'locked', :id => @licence.id)
+        redirect_to(:controller => 'password_resets', :action => 'locked', :id => @user.id)
       else
-        if @licence.active_licence == 0
+        if @user.active == false
           #redirect to inactive licence page 
-          redirect_to(:controller => 'password_resets', :action => 'deactivated', :id => @licence.id)         
+          redirect_to(:controller => 'password_resets', :action => 'deactivated', :id => @user.id)         
         else    
-        @licence.last_sign_in = Time.now
-        @licence.number_times_logged_in = @licence.number_times_logged_in += 1
-        @licence.ip = request.remote_ip
-        @licence.failed_attempts = 0
-        @licence.save
+        @user.last_sign_in = Time.now
+        @user.number_times_logged_in = @licence.number_times_logged_in += 1
+        @user.ip = request.remote_ip
+        @user.failed_attempts = 0
+        @user.save
             
         redirect_to projects_path
         end
       end      
     else
     
-      user = User.where('email=?', params[:email]).first
-      @licence = Licence.where('user_id = ?', user.id).first 
-      @licence.failed_attempts = @licence.failed_attempts += 1
-      if @licence.failed_attempts == 3
+      @user = User.where('email=?', params[:email]).first
+      @user.failed_attempts = @user.failed_attempts += 1
+      if @user.failed_attempts == 3
         #if user.role != 'admin'
-          @licence.locked_at = 1
+          @user.locked_at = true
         #end
       end      
-      @licence.save 
+      @user.save 
       redirect_to home_path, notice: 'show forgotten password link' 
     end  
   end

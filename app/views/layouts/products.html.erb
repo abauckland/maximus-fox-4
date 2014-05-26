@@ -30,7 +30,7 @@
   		</nav>
 
   		<!-- show icon only in mob version -->
-  		<nav class="app_user_name"><%= current_user.first_name.capitalize %> <%= current_user.surname.capitalize %></nav>  
+  		<nav class="app_user_name"><%= current_user.name %></nav>  
 		<nav class="app_logout"><%= link_to "logout", log_out_path %></nav> 
 	</header>
 

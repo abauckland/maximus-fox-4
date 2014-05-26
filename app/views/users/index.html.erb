@@ -1,43 +1,109 @@
-<h1>Listing users</h1>
+<div class="page_title"><%= @user.company.name %></div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Company</th>
-      <th>First name</th>
-      <th>Surname</th>
-      <th>Email</th>
-      <th>Role</th>
-      <th>Api key</th>
-      <th>Password hash</th>
-      <th>Password salt</th>
-      <th>Password reset token</th>
-      <th>Password reset sent at</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div class="content">
+    <div class="column_1_2">
+		<div class="column_content">       
+			    			
+			<table class="users">
+				<tr>
+					<th>Name</th>
+					<th class="mob_cell">Email</th>
+					<th class="mob_cell">Created</th>
+					<th class="s_tab">Log-ins</th>
+					<th class="s_tab">Last Log-in</th>
+					<th width="60px">Status</th>
+					<th width="60px"></th>
+				</tr>
+				<% @users.each do |user|%>
+				<tr>
+					<td><%= user.name %></td>
+					<td class="mob_cell"><%= user.email %></td>
+					<td class="mob_cell"><%= created(user) %></td>
+					<td class="s_tab"><%= user.number_times_logged_in %></td>
+					<td class="s_tab"><%= last_seen(user) %></td>
+					<td class="active_licence"><%= check_active(user) %></td> 
+					<td id="<%= user.id%>-unlock"><%= locked_at(user) %></td>    
+				</tr>
+				<%end%>  
+			</table>           
+    	</div>
+	</div>
 
-  <tbody>
-    <% @users.each do |user| %>
-      <tr>
-        <td><%= user.company_id %></td>
-        <td><%= user.first_name %></td>
-        <td><%= user.surname %></td>
-        <td><%= user.email %></td>
-        <td><%= user.role %></td>
-        <td><%= user.api_key %></td>
-        <td><%= user.password_hash %></td>
-        <td><%= user.password_salt %></td>
-        <td><%= user.password_reset_token %></td>
-        <td><%= user.password_reset_sent_at %></td>
-        <td><%= link_to 'Show', user %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
-<br>
+    <div class="column_3">
+		<div class="column_content">       
+			<div class="column_title">Add new user</div>   
+    			<div class="column_sub_content">
+    				
+    				<div class="column_guide">
+						<p><%= licence_status(@active_users.count, @user.company.no_licence) %></p>
+      				</div>
+					
+					<% if @user.errors.any? %> 
+					<div class="column_error">      		    
+        				<div class="column_error_heading">
+        					<p>A number of errors prohibited this user from being created:</p>
+        				</div>
+        				<div class="column_error_content">
+        					<ul>
+        						<%@user.errors.each do |attribute, message|%>
+								<li><%= "#{attribute}: #{message}" %></li>
+								<%end%>
+        					</ul>
+        				</div>
+					</div>
+					<% end %>
+					
+					<% if @user.company.no_licence > @active_users.count %>
+					<div class="column_guide">   			
+      					<p>Please note passwords must be a miniumum of 8 characters long and all fields must be complete.</p>
+      				</div>					
+										
+					<div class="column_form">
+						<%= form_for @user do |f| %>   
+    						<%= f.hidden_field(:role, {:value => 'user'})%>
+  							<%= f.hidden_field(:company_id, {:value => current_user.company_id})%> 			
+						<table>
+						<tr><td>
+							<div class="user_form_label form_input_label"><%= label_error_check(@user, 'first_name', 'First Name')%></div>
+							<div class="new_user_form form_input"><%= f.text_field :first_name %></div>					
+						</td></tr>
+						<tr><td>
+							<div class="user_form_label form_input_label"><%= label_error_check(@user, 'surname', 'Surname')%></div>
+							<div class="new_user_form form_input"><%= f.text_field :surname %></div>				
+						</td></tr>
+						<tr><td>
+							<div class="user_form_label form_input_label"><%= label_error_check(@user, 'email', 'Email')%></div>
+							<div class="new_user_form form_input"><%= f.email_field :email %></div>					
+						</td></tr>
+						<tr><td>
+							<div class="user_form_label form_input_label"><%= label_error_check(@user, 'password', 'Password')%></div>
+							<div class="new_user_form form_input"><%= f.password_field :password %></div>				
+						</td></tr>
+						</td></tr>
+						<tr><td>
+							<div class="user_form_label form_input_label"><%= label_error_check(@user, 'password', 'Confirm Password')%></div>
+							<div class="new_user_form form_input"><%= f.password_field :password_confirmation %></div>				
+						</td></tr>												
+						</table>    			
+    				</div>
+				</div>    		      				
+      			<div class="column_footer">
+        			<div>
+        				<div class="column_submit"><%= f.submit "add new user"%></div>              
+        			</div>
+        			<% end %>   
+      			</div>
+        		<% end %>       		      		
+      		</div> 
+		</div> 
+	</div>	
+</div>
 
-<%= link_to 'New User', new_user_path %>
+
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-<div class="page_title"><%=@company.company_name%></div>
+<div class="page_title"><%=@company.name%></div>
 
 <div class="content">
     <div class="column_1">
@@ -50,7 +50,7 @@
 						</td></tr>
 						<tr><td>
 							<div class="company_form_label form_input_label">Telephone No:</div>
-							<div class="form_input"><%= f.text_field :tel %>
+							<div class="form_input"><%= f.telephone_field :tel %>
 								<div class="form_input_error"><%= error_check(@company, :tel)%></div>
 							</div>					
 						</td></tr>												

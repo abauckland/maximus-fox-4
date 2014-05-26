@@ -22,8 +22,6 @@
 				<div class="column_form">
 				<%= form_for @project, :html => { :multipart => true } do |f| %>
 						<%= f.hidden_field :project_status, :value =>'Draft' %>
-        				<%= f.hidden_field :rev_method, :value =>'Project' %>
-        				<%= f.hidden_field :parent_id, :value => 13 %>
 						<table>
 						<tr><td>
 							<div class="project_form_label form_input_label">Project Code:*</div>
@@ -70,8 +68,7 @@
 					<p>The following are default settings which can be changed once the project has been created:</p>
 					<ul>
 						<li>Project Status: Draft</li>
-						<li>Project Template: Specright Standard Template</li>
-						<li>Revision Method: Project</li>						
+						<li>Project Template: Specright Standard Template</li>						
 					</ul>
 					<p>The Template Project is the default template/project from which subsections and clauses will be copied to form the new project.</p>   			
       			</div>

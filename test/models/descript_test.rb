@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class DescriptTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+#associations
+   test "should have associations" do
+     descript = Descript.new
+     assert_respond_to(descript, :product)
+     assert_respond_to(descript, :identity)
+   end
 end

@@ -21,7 +21,7 @@
 
 		<nav class="app_menu">
 			<div class="menu_item_container">  			    			
-    			<% if current_user.company.type == 'manufacturer'%>    
+    			<% if current_user.company.category == 'manufacturer'%>    
     				<div class="app_menu_item"><%= link_to "DASHBOARD", nil %></div>
     			<% end %>
     			<div class="app_menu_item"><%= link_to "SPECIFICATIONS", projects_path %></div>
@@ -30,10 +30,10 @@
 
 		<nav class="app_mob_menu">menu</nav>	
 		<!-- drop general menu for mobile-->
-		<%= render :partial => "mob_user_menu", :current_project => @current_project %>
+		<%= render :partial => "mob_user_menu", :project => @project %>
 		
   		<!-- show icon only in mob version -->
-  		<nav class="app_user_name"><%= current_user.first_name.capitalize %> <%= current_user.surname.capitalize %></nav>  
+  		<nav class="app_user_name"><%= current_user.name %></nav>  
 		<nav class="app_logout"><%= link_to "logout", log_out_path %></nav> 
 	</header>
 

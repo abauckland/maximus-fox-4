@@ -239,7 +239,7 @@ def clause_help_link(specline)
      @check = specline.clause.guidenote.text
 
     if !@check.blank?
-     link_to image_tag("help.png", :mouseover =>"help_rollover.png", :border=>0), {:controller => "speclines", :action => "guidance", :id => specline.clause_id, :spec_id => specline.id}, :class => "get", :title => "clause guidance"
+     link_to image_tag("help.png", :mouseover =>"help_rollover.png", :border=>0), {:controller => "speclines", :action => "guidance", :id => specline.id}, :class => "get", :title => "clause guidance"
     end
   end
 end

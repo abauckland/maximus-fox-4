@@ -185,7 +185,8 @@ end
     existing_perform_keys = Performkey.joins(:performs => :speclines
                                       ).where('speclines.project_id' => specline.project_id, 'speclines.clause_id' => specline.clause_id, 'speclines.linetype_id' => 11
                                       ).where.not('speclines.id' => params[:id]
-                                      ).pluck('performkeys.text')  
+                                      ).pluck('performkeys.text')
+                                        
     #get list of perform keys not in use within selected clause
     perform_key_options = performkey_option_texts - existing_perform_keys
    

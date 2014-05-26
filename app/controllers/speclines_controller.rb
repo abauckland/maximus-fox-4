@@ -1,13 +1,10 @@
 class SpeclinesController < ApplicationController
   before_action :set_specline
-
-
+  before_action :set_project, only: [:delete_clause]
+  before_action :set_revision, only: [:delete_clause]
 
   # GET
-  def new_specline
-    
-    authorize @specline 
-     
+  def new_specline     
     #call to protected method in application controller that changes the clause_line ref in any subsequent speclines    
     existing_subsequent_specline_lines = Specline.where('clause_id = ? AND project_id = ? AND clause_line > ?', @specline.clause_id, @specline.project_id, @specline.clause_line).order('clause_line')    
     update_subsequent_specline_clause_line_ref(existing_subsequent_specline_lines, 'new', @specline)
@@ -50,7 +47,7 @@ class SpeclinesController < ApplicationController
       end
                
     #call to private method that records addition of line in Changes table
-    record_new    
+    record_new(@specline, @clause_change_record)  
     #change prefixs to clauselines in clause
     txt1_insert_line(@new_specline, @specline, existing_subsequent_specline_lines)
       if !@subsequent_prefixes.blank?
@@ -65,7 +62,6 @@ class SpeclinesController < ApplicationController
 
 def move_specline
     
-    authorize @specline
 
     @selected_specline = @specline #obtained in before filter
     
@@ -262,11 +258,11 @@ end
       if !previous_change_to_clause.blank?  
         @clause_change_record = previous_change_to_clause.clause_add_delete      
       end
-    record_new  
+    record_new(@specline, @clause_change_record)  
     
     @specline = @selected_specline
     @specline.destroy
-    record_delete
+    record_delete(@specline, @clause_change_record)
       @old_specline_ref = @selected_specline.id
       @updated_specline = Specline.where(:id => @new_specline.id).first
   else
@@ -286,12 +282,10 @@ end
 
   
   # GET /speclines/1/edit
-  def edit     
-    authorize @specline
-    #before filter establishes @specline
-
+  def edit
     #check if products exist for clause
     product_check = Clauseproduct.where(:clause_id => @specline.clause_id).first
+    
     if product_check
       #show linetype option for product data    
       @linetypes = Linetype.joins(:lineclausetypes).where('lineclausetypes.clausetype_id'=> @specline.clause.clauseref.clausetype_id).order('id')
@@ -302,18 +296,15 @@ end
     
     respond_to do |format|
       format.js   { render :edit, :layout => false } 
-    end    
-              
+    end                  
   end
   
   
 
   # PUT /projects/update_specline_3/id
   def update_specline_3
-    authorize @specline    
-    #before filter establishes @specline
+   
     @specline_update = @specline
-    #existing_text = @specline.txt3.text
     
     #application controller
     #removes white space and punctuation from end of text
@@ -334,7 +325,7 @@ end
       @specline_update.txt3_id = new_txt3_text.id 
       if @specline.txt3.text.casecmp(@value) != 0
         #if new text is not similar to old text save change to text and create change record
-          record_change         
+          record_change(@specline, @specline_update)         
       end
       @specline_update.save
     end
@@ -344,7 +335,7 @@ end
   
   # PUT /projects/update_specline_4/id
   def update_specline_4
-    authorize @specline
+
     @specline_update = @specline
 
     #application controller
@@ -368,7 +359,7 @@ end
       @specline_update.txt4_id = new_txt4_text.id
       if txt4_check.blank?
         #if new text is not similar to old text save change to text and create change record
-          record_change         
+          record_change(@specline, @specline_update)          
       end
       @specline_update.save
     end
@@ -378,7 +369,7 @@ end
   
   # PUT /projects/update_specline_5/id
   def update_specline_5
-    authorize @specline    
+   
     @specline_update = @specline
     
     #application controller
@@ -398,7 +389,7 @@ end
       @specline_update.txt5_id = new_txt5_text.id 
       if @specline.txt5.text.casecmp(@value) != 0
         #if new text is not similar to old text save change to text and create change record
-          record_change         
+          record_change(@specline, @specline_update)         
       end
       @specline_update.save
     end
@@ -408,8 +399,7 @@ end
 
   
   def xref_data
-    authorize @specline
-
+    
     #determin which clauses can be selected depending on clausetype of current specline    
     case @specline.clause.clauseref.clausetype_id
       when 4 ;  permissible_clausetypes = [5]
@@ -446,7 +436,7 @@ end
 
 
 def update_product_key
-    authorize @specline
+
   #key text returned
   @specline_update = @specline  
   key = params[:value]
@@ -482,7 +472,7 @@ def update_product_key
           'charcs.perform_id'=> product_perform_pairs)     
       end        
     end
-    #possible_product_ids = possible_products.collect{|x| x.id}.uniq    
+    possible_product_ids = possible_products.collect{|x| x.id}.uniq    
   
   #establish type of key - identity or perform key
   #check possible identity keys possible products
@@ -492,9 +482,10 @@ def update_product_key
   if check_identkey_exist
     #update linetype
     if @specline_update.linetype_id != 10
-      @specline_update.linetype_id = 10
-      @specline_update.save
-#insert change record event - because linetype has been changed?      
+      @specline_update.update(:linetype_id => 10)
+     # @specline_update.linetype_id = 10
+      #@specline_update.save
+      record_change(@specline, @specline_update)     
     end
     
     #if only one value option auto complete otherwise set value to 1 ('not specified')
@@ -512,15 +503,17 @@ def update_product_key
       check_identity = Identity.where(:identvalue_id => 1, :identkey_id => check_identkey_exist.id).first_or_create 
       update_identity_id = check_identity.id     
     end
-    @specline_update.identity_id = update_identity_id
-    @specline_update.save
-#insert change record event?
+    @specline_update.update(:identity_id => update_identity_id)
+    #@specline_update.identity_id = update_identity_id
+    #@specline_update.save
+    record_change(@specline, @specline_update) 
     
   else
     if @specline_update.linetype_id != 11
-      @specline_update.linetype_id = 11
-      @specline_update.save
-#insert change record event - because linetype has been changed?      
+      @specline_update.update(:linetype_id => 11)
+      #@specline_update.linetype_id = 11
+      #@specline_update.save
+      record_change(@specline, @specline_update)      
     end
     
     #if only one value option auto complete otherwise set value to 1 ('not specified')
@@ -541,9 +534,10 @@ def update_product_key
       check_perform = Perform.where(:performvalue_id => 1, :performkey_id => check_performkey_exist.id).first_or_create 
       update_perform_id = check_perform.id     
     end
-    @specline_update.perform_id = update_perform_id
-    @specline_update.save
-#insert change record event?    
+    #@specline_update.perform_id = update_perform_id
+    #@specline_update.save
+    @specline_update.update(:perform_id => update_perform_id)
+    record_change(@specline, @specline_update)     
   end
     #render :text=> params[:value]  
     render :update, :layout => false 
@@ -551,7 +545,7 @@ end
 
 
 def update_product_value
-    authorize @specline
+
   #value text returned
   @specline_update = @specline  
 
@@ -569,16 +563,18 @@ def update_product_value
       new_identity_pair = Identity.joins(:identvalue).where(:identkey_id => @specline.identity.identkey_id, 'identvalues.identtxt_id' => identtxt_id).first
       render_value_text = new_identity_pair.identvalue.identtxt.text
     end
-    @specline_update.identity_id = new_identity_pair.id
-    @specline_update.save
-    #record change      
+    @specline_update.update(:identity_id => new_identity_pair.id)
+    #@specline_update.identity_id = new_identity_pair.id
+    #@specline_update.save
+    record_change(@specline, @specline_update)       
   else
       performvalue_id = params[:value]    
       new_perform_pair = Perform.where(:performkey_id => @specline.perform.performkey_id, :performvalue_id  => performvalue_id).first
       render_value_text = new_perform_pair.performvalue.full_perform_value
-      @specline_update.perform_id = new_perform_pair.id
-      @specline_update.save
-      #record change    
+      @specline_update.update(:perform_id => new_perform_pair.id)
+      #@specline_update.perform_id = new_perform_pair.id
+     # @specline_update.save
+      record_change(@specline, @specline_update)     
   end  
         
   render :text => render_value_text
@@ -589,7 +585,7 @@ end
   # PUT /speclines/1
   # PUT /speclines/1.xml
   def update
-    authorize @specline
+
     @specline_update = @specline
     #private method to update txt1 values following change to specline_line linetype
     
@@ -608,7 +604,7 @@ end
     old_linetype_array = [old_linetype.txt3, old_linetype.txt4, old_linetype.txt5, old_linetype.txt6]    
     new_linetype_array = [new_linetype.txt3, new_linetype.txt4, new_linetype.txt5, new_linetype.txt6]    
     if new_linetype_array != old_linetype_array
-      record_change 
+      record_change(@specline, @specline_update)  
     end
         #if new linetype is for product data set identity and perform value pairs to 'not specified'
     if [10,11].include?(params[:specline][:linetype_id])
@@ -620,17 +616,11 @@ end
   end
 
   def delete_clause
-    authorize @specline
-         
-    @array_of_lines_deleted = []
-    
 
-    @current_project = Project.where('id = ? AND company_id =?', @specline.project_id, current_user.company_id).first
-    @current_revision = Revision.where('project_id = ?', @current_project.id).last
-    
+    @array_of_lines_deleted = []
         
-    selected_clause_title = @specline
-    @clause_title_to_delete = @specline.id    
+#    selected_clause_title = @specline
+#    @clause_title_to_delete = @specline.id    
     #selected_clause_title.destroy
     
     #clause = Clause.find(@specline.clause_id)
@@ -657,13 +647,13 @@ end
         #call to private method that record deletion of line in Changes table
         @clause_change_record = 2
                 
-        record_delete    
+        record_delete(@specline, @clause_change_record)   
         clause_line.destroy   
       end
       
       @array_of_lines_deleted.compact
       
-    previous_changes_to_clause = Change.where(:project_id => @current_project.id, :clause_id => @specline.clause_id, :revision_id => @current_revision.id)
+    previous_changes_to_clause = Alteration.where(:project_id => @project.id, :clause_id => @specline.clause_id, :revision_id => @revision.id)
     if !previous_changes_to_clause.blank?
       previous_changes_to_clause.each do |previous_change|
         previous_change.clause_add_delete = 2
@@ -681,8 +671,7 @@ end
   # DELETE /speclines/1.xml
   def delete_specline
        
-        authorize @specline 
-    
+
    # check_specline = Specline.where('clause_id = ? AND project_id = ? AND clause_line > ?',  @specline.clause_id, @specline.project_id, 0).order('clause_line')  
   
         @spec_line_div = @specline.id
@@ -694,7 +683,7 @@ end
         end                  
         @specline.destroy
         #call to private method that record deletion of line in Changes table
-        record_delete
+        record_delete(@specline, @clause_change_record)
         
         #call to protected method in application controller that changes the clause_line ref in any subsequent speclines
         subsequent_specline_lines = Specline.where('clause_id = ? AND project_id = ? AND clause_line > ?', @specline.clause_id, @specline.project_id, @specline.clause_line).order('clause_line')        
@@ -707,18 +696,16 @@ end
   end
 
 
-def guidance
-      @selected_specline = Specline.where('id =?', params[:spec_id]).first
-      #clause = Clause.includes(:clauseref).where('id =?', params[:id]).first
-
-      clause = Clause.where(:id => params[:id]).first
-      @guidenote = Guidenote.where(:id => clause.guidenote_id).first
-      @guide_sponsors = Sponsor.includes(:supplier).where(:subsection_id => clause.clauseref.subsection_id)
-
+  def guidance
+    
+    @guidenote = Guidenote.joins(:clause => :speclines).where('speclines.id' => @specline.id).first
+    #@guide_sponsors = Sponsor.includes(:supplier).where(:subsection_id => clause.clauseref.subsection_id)
+    @guide_sponsors = Sponsor.all
+    
     respond_to do |format|
         format.js   { render :guidance, :layout => false}
     end
-end
+  end
 
 
 
@@ -728,6 +715,15 @@ end
     def set_specline
       @specline = Specline.find(params[:id])
     end
+
+    def set_project
+      @project = Project.joins(:speclines).where('speclines.id' => params[:id]).first
+    end
+
+    def set_revision
+      @revision = Revision.joins(:project => :speclines).where('speclines.id' => params[:id]).last
+    end
+
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def specline_params
@@ -740,7 +736,7 @@ end
     @specline_update = @specline
     @specline_update.txt5_id = 1
     #create change record
-    record_change         
+    record_change(@specline, @specline_update)        
     @specline_update.save
 
   end

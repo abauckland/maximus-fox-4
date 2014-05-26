@@ -2,7 +2,7 @@ require 'test_helper'
 
 class FeaturesControllerTest < ActionController::TestCase
   setup do
-    @feature = features(:one)
+    @feature = FactoryGirl.create(:feature)
   end
 
   test "should get index" do

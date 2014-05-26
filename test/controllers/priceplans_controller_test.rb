@@ -2,7 +2,7 @@ require 'test_helper'
 
 class PriceplansControllerTest < ActionController::TestCase
   setup do
-    @priceplan = priceplans(:one)
+    @priceplan = FactoryGirl.create(:priceplan)
   end
 
   test "should get index" do

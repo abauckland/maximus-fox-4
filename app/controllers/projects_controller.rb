@@ -1,35 +1,40 @@
 class ProjectsController < ApplicationController
-  before_filter :require_user
-  before_action :set_project, only: [:index, :show, :empty_project, :edit, :update]
+  before_filter :authenticate
+  before_filter :authorise_project_manager, only: [:edit, :update]
+  before_action :set_project, only: [:empty_project, :edit, :update]
 
   # GET /projects
   # GET /projects.json
   def index
-    
-    authorise_project_action(@project.id, "all")
-    
-    @projects = Project.user_projects    
-    if @projects.length == 1
-      check_speclines = Specline.where(:project_id => @project.id).first
-      if check_speclines.blank?
-        @not_used = true
-      end
-    end 
+  #authenticate that there is a logged in user
+  #user is only shown projects they have access to   
   
+    #list projects user is assigned to
+    @projects = Project.user_projects(current_user)    
+    @project = @projects.first
+    #if user is not assigned to any project
+    #show intro page and option to create a project
+    #render partial 1
+    
+    #if user is assigned to projects
+      #if only one project which does not have content - intro page and option to create a project
+      if @projects
+        @check_has_content = Specline.where(:project_id => @projects.first.id).first
+      end 
+      #render partial 1 
+    
+      #if more than one project or single project has content
+      #render partion 2      
   end
 
-
   def show
-    authorise_project_action(@project.id, "all")
-          
+    @projects = Project.user_projects(current_user)     
   end
 
   def empty_project
-    
-    authorise_project_action(@project.id, "all")        
-    
-    projects = Project.user_projects
-    if projects.length == 1
+          
+    @projects = Project.user_projects
+    if @projects.length == 1
       @not_used = true
     end 
 
@@ -37,8 +42,7 @@ class ProjectsController < ApplicationController
 
 
   # GET /projects/new
-  def new
-    authorise_project_action(@project.id, "all")        
+  def new     
     @project = Project.new    
   end
 
@@ -47,13 +51,18 @@ class ProjectsController < ApplicationController
   # POST /projects
   # POST /projects.json
   def create
-    authorise_project_action(@project.id, "all")
     @project = Project.new(project_params)
 
     respond_to do |format|
       if @project.save
-        set_current_revision = Revision.create(:project_id => @project.id, :user_id => current_user.id, :date => Date.today)
-        set_project_user = Projectuser.create(:project_id => @project.id, :user_id => current_user.id, :role => "manager")
+        Revision.create(:project_id => @project.id, :user_id => current_user.id, :date => Date.today)
+        Projectuser.create(:project_id => @project.id, :user_id => current_user.id, :role => "manager")
+        Printsetting.create(:project_id => @project.id)
+        
+        #set defuault project template
+        project_template = Project.where(:id => [1..10], :ref_system => @project.ref_system).first
+        @project.update(:parent_id => project_template.id)
+        
         #format.html { redirect_to(:controller => "projects", :action => "manage_subsections", :id => @project.id) }
         format.html { redirect_to @project, notice: 'Project was successfully created.' }
         format.json { render :show, status: :created, location: @project }
@@ -69,14 +78,16 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1/edit
   def edit
-    authorise_project_action(@project.id, ["manage"])
-
-    @projects = Project.user_projects
+    @projects = Project.user_projects(current_user)  
     @template = Project.project_template(@project)
-    @templates = Project.project_templates(@project)
+    
+    user_templates = Project.project_templates(@project, current_user)
+    standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system)
+    
+    @templates = user_templates + standard_templates
         
     project_status_array = ['Draft', 'Preliminary', 'Tender', 'Contract', 'As Built']
-    current_status_index = project_status_array.index(@project.pluck(:project_status))
+    current_status_index = project_status_array.index(@project.project_status)
     project_status_array_last_index = project_status_array.length
 #update in view to make sure select box works correctly
     @available_status_array = project_status_array[current_status_index..project_status_array_last_index]
@@ -86,9 +97,7 @@ class ProjectsController < ApplicationController
 
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
-  def update
-    authorise_project_action(@project.id, ["manage"]) 
-                
+  def update                
     @project.update(project_params)
     #after new project status set, check if status is 'draft' 
     if @project.project_status != 'Draft'
@@ -119,6 +128,14 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:code, :title, :parent_id, :company_id, :project_status, :ref_system, :rev_method, :logo_path, :photo_file_name, :photo_content_type, :photo_file_size, :photo_updated_at)
+      params.require(:project).permit(:code, :title, :parent_id, :company_id, :project_status, :ref_system, :logo_path, :photo_file_name, :photo_content_type, :photo_file_size, :photo_updated_at)
     end
+    
+    def authorise_project_manager
+      project_user = Projectuser.where(:user_id => current_user.id, :project_id => params[:id], :role => "manage").first    
+      if project_user.blank?
+        redirect_to log_out_path
+      end 
+    end
+
 end

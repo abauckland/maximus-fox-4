@@ -23,23 +23,19 @@ class SpecrevisionsController < ApplicationController
       authorised_subsection_ids(project)
 
       #tab menu - estabished list of subsections with revisions    
-      @subsections = Cawssubsection.joins(:subsections => [:clauserefs => [:clause => :alterations]]
-                                        ).where('alterations.project_id' => @project.id, 'alterations.revision_id' => @revision.id
-                                        ).where('subsections.id' => @authorised_subsection_ids
-                                        ).group(:id)
+      
+      #filtered by users role and subsectionusers for projectusers
+      project_subsection = Subsectionusers.joins(:projectuers).where('projectusers.user_id' => current_user.id).first   
+      if project_subsection      
+        @subsections = Cawssubsection.all_subsection_revisions(@project, @revision).filter_user(current_user)
+        @prelim_subsections = Cawssubsection.prelim_subsection_revisions(@project, @revision).filter_user(current_user)   
+        @non_prelim_subsections = Cawssubsection.subsection_revisions(@project, @revision).filter_user(current_user)
+      else
+        @subsections = Cawssubsection.all_subsection_revisions(@project, @revision)
+        @prelim_subsections = Cawssubsection.prelim_subsection_revisions(@project, @revision)    
+        @non_prelim_subsections = Cawssubsection.subsection_revisions(@project, @revision)               
+      end  
 
-
-      @prelim_subsections = Cawssubsection.joins(:subsections => [:clauserefs => [:clause => :alterations]]
-                                        ).where('alterations.project_id' => @project.id, 'alterations.revision_id' => @revision.id
-                                        ).where('subsections.id' => @authorised_subsection_ids
-                                        ).where(:cawssection_id => 1
-                                        ).group(:id)
-    
-      @non_prelim_subsections = Cawssubsection.joins(:subsections => [:clauserefs => [:clause => :alterations]]
-                                        ).where('alterations.project_id' => @project.id, 'alterations.revision_id' => @revision.id
-                                        ).where('subsections.id' => @authorised_subsection_ids
-                                        ).where.not(:cawssection_id => 1
-                                        ).group(:id)
      
       ##prelim subsections
       if @prelim_subsections

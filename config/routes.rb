@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  resources :performkeys
+
+  resources :performkeys
+
+  resources :printsettings
+
   resources :companies
 
   resources :abouts
@@ -11,6 +17,8 @@ Rails.application.routes.draw do
   resources :priceplans
   
   resources :helps
+  
+  resources :prints
 
   root :to => "homes#index"  
 
@@ -21,6 +29,8 @@ Rails.application.routes.draw do
   get "terms" => "termcats#index", :as => "terms"
   get "about_us" => "abouts#index", :as => "about_us"
   get "pricing" => "priceplans#index", :as => "pricing"
+  
+  get "log_out" => "sessions#destroy", :as => "log_out"
   
   resources :helps
 
@@ -35,18 +45,21 @@ Rails.application.routes.draw do
   end
 
   resources :users do
-    get :new_users, :on => :member
-    get :edit_user_details, :on => :member
-    get :update_licence_status, :on => :member
-    get :unlock_user, :on => :member
-    get :unlocked, :on => :member
-    member do
-      put :update_licence_status
-      put :update_user_details
-    end
+ #   get :new_users, :on => :member
+ #   get :edit_user_details, :on => :member
+    get :update_status, :on => :member
+    get :unlock, :on => :member
+#    get :unlocked, :on => :member
+ #   member do
+ #     put :update_status
+ #     put :update_user_details
+ #   end
   end
 
-  resources :projectusers
+  resources :password_resets do
+    get :locked, :on => :member
+    get :deactivated, :on => :member
+  end
 
   resources :projects do
     get :empty_project, :on => :member  
@@ -54,6 +67,8 @@ Rails.application.routes.draw do
       put :update_project, :as => 'change'    
     end   
   end
+
+  resources :projectusers
   
   resources :specifications do
     get :show_tab_content, :on => :member  

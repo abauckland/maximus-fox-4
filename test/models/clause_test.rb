@@ -1,7 +1,16 @@
 require 'test_helper'
 
 class ClauseTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+#associations
+   test "should have associations" do
+     clause = Clause.new
+     assert_respond_to(clause, :speclines)
+     assert_respond_to(clause, :projects)
+     assert_respond_to(clause, :alterations)
+     assert_respond_to(clause, :clauseproducts)
+     assert_respond_to(clause, :products)
+     assert_respond_to(clause, :clauseref)
+     assert_respond_to(clause, :clausetitle)
+     assert_respond_to(clause, :guidenote)                              
+   end
 end

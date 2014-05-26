@@ -17,7 +17,12 @@ class SpecificationsController < ApplicationController
 
       #list of all subsections that can be selected - for small screen
       #filtered by users role and subsectionusers for projectusers
-      @project_subsections = Cawssubsection.project_subsections(@project)
+      project_subsection = Subsectionusers.joins(:projectuers).where('projectusers.user_id' => current_user.id).first   
+      if project_subsection
+        @project_subsections = Cawssubsection.project_user_subsections(@project, current_user)
+      else
+        @project_subsections = Cawssubsection.project_subsections(@project)
+      end
     
       #if no contents redirect to manage_subsection page
       if @project_subsections.blank?
@@ -54,6 +59,7 @@ class SpecificationsController < ApplicationController
     else    
 ###uniclass code to go here - same as above       
     end 
+
     
     if params[:clausetype].blank?
       @current_clausetype = @clausetypes.first 
@@ -66,6 +72,7 @@ class SpecificationsController < ApplicationController
       format.xml  { render :xml => @project }
     end      
   end
+
 
 
   def show_tab_content

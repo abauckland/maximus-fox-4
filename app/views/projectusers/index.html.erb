@@ -1,27 +1,92 @@
-<h1>Listing projectusers</h1>
+<div class="page_title"><%= @project.code_and_title %></div>
 
-<table>
-  <thead>
-    <tr>
-      <th>User</th>
-      <th>Project</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div class="content">
+    <div class="column_1_2">
+        <div class="column_content">       
+                            
+            <table class="users">
+                <tr>
+                    <th class="mob_cell">Name</th>
+                    <th class="s_tab">Access</th>
+                    <th class="s_tab">Subsections</th>
+                    <th width="s_tab">Last Logged In</th>
+                    <th width="60px"></th>
+                    <th width="60px"></th>
+                </tr>
+                <% @projectusers.each do |projectuser| %>
+                <tr>
+                    <td class="mob_cell"><%= projectuser.user.name %></td>
+                    <td class="s_tab"><%= projectuser.role %></td>
+                    <td class="s_tab"><%= project_access(projectuser) %></td>
+                    <td class="s_tab"><%= last_seen(projectuser.user) %></td>    
+                    <td><%= link_to 'Edit', edit_projectuser_path(projectuser) %></td>
+                    <td><%= link_to 'Destroy', projectuser, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                </tr>
+                <%end%>  
+            </table>           
+        </div>
+    </div>
+    
+    <div class="column_3">
+        <div class="column_content">       
+            <div class="column_title">Add project user</div>   
+                <div class="column_sub_content">
+                    
+                    
+                    <% if @projectuser.errors.any? %> 
+                    <div class="column_error">                  
+                        <div class="column_error_heading">
+                            <p>A number of errors prohibited this user from being created:</p>
+                        </div>
+                        <div class="column_error_content">
+                            <ul>
+                                <%@projectuser.errors.each do |attribute, message|%>
+                                <li><%= "#{attribute}: #{message}" %></li>
+                                <%end%>
+                            </ul>
+                        </div>
+                    </div>
+                    <% end %>
+                    
+                    <div class="column_guide">              
+                        <p>Each new user can be afforded one of the following levels of access, this can be changed at anytime</p>
+                            <ul>
+                                <li>edit: user can edit the whole document and publish it</li>
+                                <li>write: user can edit speclines and clauses, not add/delete subsections or publish the document</li>
+                                <li>read: user can only read the last published version of the document</li>
+                            </ul>    
+                    </div>                                             
+                                        
+                    <div class="column_form">
+                        <%= form_for @projectuser do |f| %>   
+                            <%= f.hidden_field(:project_id, {:value => @projectusers.first.project_id})%>         
+                        <table>
+                        <tr><td>
+                            <div class="user_form_label form_input_label"><%= label_error_check(@projectuser, 'email', 'email')%></div>
+                            <div class="new_user_form form_input"><%= f.email_field :email %></div>                 
+                        </td></tr>
+                        <tr><td>
+                            <div class="user_form_label form_input_label"><%= label_error_check(@projectuser, 'role', 'role')%></div>
+                            <div class="new_user_form form_input"><%= f.select :role, ["edit", "write", "read"], {:default => "edit"} %></div>                
+                        </td></tr>                                             
+                        <tr><td>
+                            <div class="user_form_label form_input_label"><%= label_error_check(@projectuser, 'subsections', 'subsections')%></div>
+                            <div class="new_user_form form_input"><%= f.collection_select :subsections, @subsections, :id, full_code, {:prompt => 'All', :default => nil}, { :multiple => true, :size => 5 }%></div>                
+                        </td></tr> 
+                        </table>                
+                    </div>
+                </div>                              
+                <div class="column_footer">
+                    <div>
+                        <div class="column_submit"><%= f.submit "add proect user"%></div>              
+                    </div>
+                    <% end %>   
+                </div>
+                <% end %>                           
+            </div> 
+        </div> 
+    </div>      
+    
+    
+</div>
 
-  <tbody>
-    <% @projectusers.each do |projectuser| %>
-      <tr>
-        <td><%= projectuser.user_id %></td>
-        <td><%= projectuser.project_id %></td>
-        <td><%= link_to 'Show', projectuser %></td>
-        <td><%= link_to 'Edit', edit_projectuser_path(projectuser) %></td>
-        <td><%= link_to 'Destroy', projectuser, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Projectuser', new_projectuser_path %>

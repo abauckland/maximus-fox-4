@@ -10,10 +10,10 @@ def show
   #call to protected method that establishes text to be shown for project revision status
   current_revision_render(@project)
 
-  if params[:selected_template_id].blank? == true    
+  if params[:template_id].blank? == true    
     @template = Project.where(:id => @project.parent_id).first
   else
-    @template = Project.where(:id => params[:selected_template_id]).first     
+    @template = Project.where(:id => params[:template_id]).first     
   end
 
   if @project.ref_system.caws?
@@ -52,10 +52,11 @@ def add_clauses
       @new_specline = Specline.new(line_to_add.attributes.merge(:project_id => @project.id))
       @new_specline.save
       @clause_change_record = 2
-      record_new
+      record_new(@specline, @clause_change_record)
     end                   
 
-    redirect_to(:controller => "speclines", :action => "manage_clauses", :id => @project.id, :selected_template_id => params[:template_id], :subsection_id => params[:subsection_id])
+    redirect_to manage_speclause_path(:id => @project.id, :template_id => params[:template_id], :subsection_id => params[:subsection_id])
+    #redirect_to(:controller => "speclauses", :action => "manage", :id => @project.id, :template_id => params[:template_id], :subsection_id => params[:subsection_id])
  
   #end
 end
@@ -69,7 +70,7 @@ def delete_clauses
     specline_lines_to_deleted.each do |existing_specline_line|
       @specline = existing_specline_line
       @clause_change_record = 2
-      record_delete  
+      record_delete(@specline, @clause_change_record)  
       existing_specline_line.destroy
     end
       
@@ -92,9 +93,11 @@ def delete_clauses
   
     #if no clauses in subsection redirect to subsection manager
     if get_valid_spline_ref.blank?
-      redirect_to(:controller => "projects", :action => "manage_subsections", :id => @project.id, :selected_template_id => params[:template_id])
+      redirect_to manage_specsubsection_path(:id => @project.id, :template_id => params[:template_id])
+      #redirect_to(:controller => "specsubsections", :action => "manage", :id => @project.id, :template_id => params[:template_id])
     else
-      redirect_to(:controller => "speclines", :action => "manage_clauses", :id => @project.id, :selected_template_id => params[:template_id], :subsection_id => params[:subsection_id])
+      redirect_to manage_speclause_path(:id => @project.id, :template_id => params[:template_id], :subsection_id => params[:subsection_id])
+      #redirect_to(:controller => "speclauses", :action => "manage", :id => @project.id, :template_id => params[:template_id], :subsection_id => params[:subsection_id])
     end 
   #end
 end

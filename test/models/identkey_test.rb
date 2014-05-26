@@ -1,7 +1,9 @@
 require 'test_helper'
 
 class IdentkeyTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+#associations
+   test "should have associations" do
+     identkey = Identkey.new
+     assert_respond_to(identkey, :identities)
+   end
 end

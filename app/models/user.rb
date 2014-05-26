@@ -1,26 +1,34 @@
 class User < ActiveRecord::Base
 
+  has_many :projectusers
   has_many :projects, :through => :projectusers
   belongs_to :company
   
   #declare an enum attribute where the values map to integers in the database, but can be queried by name
   enum role: [:admin, :owner, :employee]
 
+  attr_accessor :password, :password_confirmation
  
   before_save :encrypt_password  
 #  after_create :add_user_to_mailchimp
   
+  validates :first_name,   
+            :presence => {:message => "First name cannot be blank"}
+
+  validates :surname,   
+           :presence => {:message => "Surname cannot be blank"}
 
   validates :password,   
-            :presence => {:message => "can't be black"},
+            :presence => {:message => "Password cannot be blank"},
             on: :create,   
-            :length => {:minimum => 8, :message => "must be minimum 8 characters long"}   
+            :length => {:minimum => 8, :message => "Password must be minimum 8 characters long"}   
 
   validates :email,   
             :presence => true,
-            on: :create,   
-            :uniqueness => {:message => "A user with this email address already exists"},
-            :format => {:with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, }  
+            on: :create,
+            :format => {:with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, },    
+            :uniqueness => {:message => "A user with this email address already exists"}
+             
 
   
   def encrypt_password  
@@ -54,7 +62,7 @@ class User < ActiveRecord::Base
    
   
   def name
-    return first_name+' '+surname
+    return first_name.capitalize+' '+surname.capitalize
   end
   
 end

@@ -1,7 +1,9 @@
 require 'test_helper'
 
 class IdenttxtTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+#associations
+   test "should have associations" do
+     identtxt =Identtxt.new
+     assert_respond_to(identtxt, :identvalues)
+   end
 end

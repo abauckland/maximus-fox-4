@@ -1,4 +1,4 @@
-module SpecvisionsHelper
+module SpecrevisionsHelper
 #revision select menu
   def revision_select(revisions, revision, project, subsections)
 

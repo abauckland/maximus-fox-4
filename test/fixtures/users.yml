@@ -11,6 +11,12 @@ one:
   password_salt: MyString
   password_reset_token: MyString
   password_reset_sent_at: 2014-05-04 21:16:24
+  failed_attempts: 1
+  locked_at: 1
+  number_times_logged_in: 1
+  active: 1
+  last_sign_in: 2014-05-04 21:16:24
+  ip: MyString
 
 two:
   company_id: 1
@@ -23,3 +29,9 @@ two:
   password_salt: MyString
   password_reset_token: MyString
   password_reset_sent_at: 2014-05-04 21:16:24
+  failed_attempts: 1
+  locked_at: 1
+  number_times_logged_in: 1
+  active: 1
+  last_sign_in: 2014-05-04 21:16:24
+  ip: MyString

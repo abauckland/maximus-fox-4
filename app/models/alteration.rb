@@ -18,9 +18,24 @@ belongs_to :perform
 belongs_to :user
 
 
+  scope :changed_caws_all_sections, ->(project, revision) { where(:project_id => project.id, :revision_id => revision.id
+                                    ).group(:id
+                                    ) }
+
+  scope :changed_caws_prelim_sections, ->(project, revision) { joins(:clause => [:clauseref => [:subsection => :cawssubsection]]
+                                    ).where(:project_id => project.id, :revision_id => revision.id, 'cawssubsections.cawssection_id' => 1
+                                    ).group(:id
+                                    ) }
+
+  scope :changed_caws_sections, ->(project, revision) { joins(:clause => [:clauseref => [:subsection => :cawssubsection]]
+                                    ).where(:project_id => project.id, :revision_id => revision.id
+                                    ).where.not('cawssubsections.cawssection_id' => 1
+                                    ).group(:id
+                                    ) }
+  
   scope :changed_caws_subsections, ->(project, revision, subsection) { joins(:clause => [:clauseref => :subsection]
                                     ).where(:clause_add_delete => 3, :project_id => project.id, 'subsections.cawssubsection_id' => subsection.id, :revision_id => revision.id
                                     ).first }
-  
+
   
 end

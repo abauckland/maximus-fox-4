@@ -2,7 +2,7 @@ require 'test_helper'
 
 class TermcatsControllerTest < ActionController::TestCase
   setup do
-    @termcat = termcats(:one)
+    @termcat = FactoryGirl.build_stubbed(:termcat)
   end
 
   test "should get index" do

@@ -6,7 +6,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery.ui.all
-//= require turbolinks
+//= require jquery.ui.accordion
 //= require core
 //= require websites

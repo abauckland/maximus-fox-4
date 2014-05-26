@@ -30,7 +30,12 @@ before_save :assign_title
     ).group(:id
     )}
 
-
+  scope :subsection_clauses, ->(project, subsection) { joins(:speclines
+                              ).includes(:clausetitle, :clauseref => [:subsection => [:cawssubsection => :cawssection]]
+                              ).where('speclines.project_id' => project.id, 'subsections.cawssubsection_id' => subsection.id, 'clauserefs.clausetype_id' => [2..4]
+                              ).order('clauserefs.subsection_id, clauserefs.clausetype_id, clauserefs.clause, clauserefs.subclause'
+                              ).uniq
+                              } 
 
 
 def clause_section_full_title

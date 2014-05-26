@@ -2,7 +2,7 @@ require 'test_helper'
 
 class FaqsControllerTest < ActionController::TestCase
   setup do
-    @faq = faqs(:one)
+    @faq = FactoryGirl.build_stubbed(:faq)
   end
 
   test "should get index" do

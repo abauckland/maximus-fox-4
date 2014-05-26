@@ -1,20 +1,15 @@
 class ApplicationController < ActionController::Base
-  include Pundit
-  
+
   helper :all # include all helpers, all the time
   helper_method :current_user 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  
-
-  # Globally rescue Authorization Errors in controller.
-  # Returning 403 Forbidden if permission is denied  
-  rescue_from Pundit::NotAuthorizedError, with: :permission_denied
-
+ 
 
  protected 
 
+#called from specline controller
   def clean_text(value)
     @value = value 
     @value.strip
@@ -438,20 +433,17 @@ end
     @current_user ||= User.find(session[:user_id]) if session[:user_id]  
   end
 
-  def authentize_user
-    @current_user ||= User.find(session[:user_id]) if session[:user_id]
-    if @current_user.role == 'user'
-       redirect_to log_out_path
-    end
+  def authenticate
+    #@current_user ||= User.find(session[:user_id]) if session[:user_id]
+    #if @current_user.role == 'user'
+    #   redirect_to log_out_path
+    #end    
+    redirect_to log_out_path unless current_user
   end
 
-  def require_user
-    unless current_user
-      redirect_to log_out_path
-      return false
-    end
+  def authenticate_owner
+    redirect_to log_out_path unless current_user.role == "owner"
   end
-
 
 
 #user_role(["admin", "owner", "employee"])
@@ -463,34 +455,17 @@ end
     end      
   end
 
-  def authorise_user_action(permissible_roles)
-    if permissible_roles.include?(@current_user.role)
-      redirect_to log_out_path
-    end      
-  end
-
 
   def authorise_project_view(project_id, permissible_roles)
     if permissible_roles == "all"
       return true
     else
-      project_user = Projectuser.where(:user_id => @current_user.id, :project_id => project_id, :role => permissible_roles).first    
+      project_user = Projectuser.where(:user_id => current_user.id, :project_id => project_id, :role => permissible_roles).first    
       if project_user
         return true
       end
     end    
   end
-
-  def authorise_project_action(project_id, permissible_roles)
-    if permissible_roles == "all"
-      permissible_roles = ["manage", "edit", "write", "read"]
-    end
-    project_user = Projectuser.where(:user_id => @current_user.id, :project_id => project_id, :role => permissible_roles).first    
-    if project_user.blank?
-      redirect_to log_out_path
-    end     
-  end
-
 
   def authorised_subsection_ids(project)
     permitted_subsections = Subsectionuser.joins(:projectusers).where('projectusers.user_id' => @current_user.id, 'projectusers.project_id' => project.id)  
@@ -575,75 +550,5 @@ end
       prior_change.save
     end  
   end
-
-
-def get_sub_clause_ids(clause_id)
-
-  clause = Clause.where(:id => clause_id).first
-  if clause.clauseref.subclause != 0
-    @sub_clause_ids = [clause.id]
-  else
-    if clause.clauseref.clause != 0 
-      if clause.clauseref.clause.multiple_of?(10)
-        low_ref = clause.clauseref.clause
-        high_ref = clause.clauseref.clause + 9
-        @sub_clause_ids = Clause.joins(:clauseref
-                                ).where('clauserefs.clausetype_id' => clause.clauseref.clausetype_id, 'clauserefs.clause' => [low_ref..high_ref]
-                                ).pluck('clauses.id')
-      else
-        @sub_clause_ids = Clause.joins(:clauseref
-                                ).where('clauserefs.clausetype_id' => clause.clauseref.clausetype_id, 'clauserefs.clause' => clause.clauseref.clause
-                                ).pluck('clauses.id')
-      end
-    else
-      @sub_clause_ids = Clause.joins(:clauseref
-                              ).where('clauserefs.clausetype_id' => clause.clauseref.clausetype_id
-                              ).pluck('clauses.id')
-    end
-  end
-end
-
-def possible_products(specline)
-    #get product identity pairs in clause which have been completed, not including current line
-    product_identity_pairs = Specline.product_identity_pairs(specline)
-   
-    #get product perform pairs in clause which have been completed, not including current line
-    product_perform_pairs = Specline.product_perform_pairs(specline)
-    #get cpossible products for line
-    #if specline linetype == 10 (identity pair)
-    #get possible products for identity and perform pairs
-    if product_identity_pairs.empty?
-      if product_perform_pairs.empty?
-        possible_products = Product.joins(:clauseproducts
-                                  ).where('clauseproducts.clause_id' => @sub_clause_ids)  
-      else
-        possible_products = Product.joins(:clauseproducts, :instances => :charcs
-                                  ).where('clauseproducts.clause_id' => @sub_clause_ids, 'charcs.perform_id'=>  product_perform_pairs
-                                  ).group('products.id)'
-                                  ).having('count(products.id) == product_perform_pairs.count'                                 
-                                  )        
-      end
-    else
-      if product_perform_pairs.empty?
-        possible_products = Product.joins(:clauseproducts, :descripts
-                                  ).where('clauseproducts.clause_id' => @sub_clause_ids, 'descripts.identity_id'=> product_identity_pairs
-                                  ).group('products.id)'
-                                  ).having('count(products.id) == product_identity_pairs.count'
-                                  ) 
-      else
-        possible_ident_product_ids = Product.joins(:clauseproducts, :descripts
-                                  ).where('clauseproducts.clause_id' => @sub_clause_ids, 'descripts.identity_id'=> product_identity_pairs
-                                  ).group('products.id)'
-                                  ).having('count(products.id) == product_identity_pairs.count'
-                                  ).collect{|x | x.id}.uniq        
-        possible_products = Product.joins(:clauseproducts, :descripts, :instances => :charcs
-                                  ).where('clauseproducts.clause_id' => @sub_clause_ids, 'descripts.identity_id'=> product_identity_pairs, 'product.id'=> possible_ident_product_ids
-                                  ).group('products.id)'
-                                  ).having('count(products.id) > product_perform_pairs.count'
-                                  )     
-      end        
-    end
-    possible_product_ids = possible_products.collect{|x| x.id}.uniq
-end
   
 end

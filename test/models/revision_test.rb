@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class RevisionTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+#associations
+   test "should be associated with project, alterations" do
+     revision = Revision.new
+     assert_respond_to(revision, :project)
+     assert_respond_to(revision, :alterations)
+   end
 end

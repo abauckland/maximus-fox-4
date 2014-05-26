@@ -1,17 +1,17 @@
 class Project < ActiveRecord::Base
 #associations
+  has_many :projectusers
   has_many :users, :through => :projectusers
   has_many :speclines
   has_many :clauses, :through => :speclines
   has_many :revisions
   has_many :alterations
+  has_many :printsettings
   has_attached_file :photo 
 
 
   enum project_status: [:Draft, :Preliminary, :Tender, :Contract, :As_Built]
   enum ref_system: [:caws, :uniclass]
-  enum rev_method: [:document, :subsection]
-
 
   validates_presence_of :code
   validates_presence_of :title
@@ -24,17 +24,17 @@ class Project < ActiveRecord::Base
 
   
 
-  scope :user_projects, -> { joins(:projectusers).where('projectusers.user_id' => current_user.id).order("code")} 
+  scope :user_projects, ->(current_user) { joins(:projectusers).where('projectusers.user_id' => current_user.id).order("code")} 
    
   scope :project_template, ->(project) { where(:id => project.id).first }
 
-  scope :project_templates, ->(project) { joins(:projectusers
-                              ).where('projectusers.user_id' => current_user.id
+  scope :project_templates, ->(project, current_user) { joins(:projectusers
+                              ).where('projectusers.user_id' => current_user.id, :ref_system => project.ref_system
                               ).where.not(:id => project.id
                               ).order("code")}
   
-  scope :cawssubsection_project_templates, ->(project, subsection) { joins(:projectusers, :speclines => [:clauses => [:clauserefs => :subsections]]
-                              ).where('projectusers.user_id' => current_user.id
+  scope :cawssubsection_project_templates, ->(project, subsection, current_user) { joins(:projectusers, :speclines => [:clauses => [:clauserefs => :subsections]]
+                              ).where('projectusers.user_id' => current_user.id, :ref_system => project.ref_system
                               ).where('subsections.cawssubsection_id' => subsection.id
                               ).where.not(:id => project.id
                               ).order("code")}

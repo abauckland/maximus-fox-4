@@ -51,7 +51,7 @@
 		<div class="select_2">
 			<div class="label_select_1">Subsection:</div>
 			<div class="option_select_2">
-      			<%= select_tag "subsection", options_from_collection_for_select(@selectable_subsections, :id, :subsection_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_2', :onchange => "window.location='/projects/#{@project.id}?subsection='+this.value;"}  %>	
+      			<%= select_tag "subsection", options_from_collection_for_select(@selected_section_subsections, :id, :subsection_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_2', :onchange => "window.location='/projects/#{@project.id}?subsection='+this.value;"}  %>	
 			</div>
 		</div>
 		<% if authorise_project_view(project_id, ["manage", "edit"])%>

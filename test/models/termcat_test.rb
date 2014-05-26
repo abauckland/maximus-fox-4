@@ -1,7 +1,8 @@
 require 'test_helper'
 
 class TermcatTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+   test "should have associations" do
+     termcat = Termcat.new
+     assert_respond_to(termcat, :terms)
+   end
 end

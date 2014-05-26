@@ -7,20 +7,33 @@ class SpecsubsectionsController < ApplicationController
   def manage
     authorise_project_action(@project.id, ["manage", "edit"])
       
-    @templates = Project.project_templates(@project)
+    user_templates = Project.project_templates(@project, current_user)
+    standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system)    
+    @templates = user_templates + standard_templates
   
     #call to protected method that restablishes text to be shown for project revision status
     current_revision_render(@project)
-   
+
+##if user does not have access to default template?
+#whet is template is not that same ref_system?  
     if params[:template_id].blank? == true    
-      @template = Project.find(@project.parent_id)
+      @template = @templates.first
     else
       @template = Project.find(params[:template_id])     
     end
 
     if @project.ref_system.caws?
-      @project_subsections = Cawssubsection.project_subsections(@project)
-      @template_subsections = Cawssubsection.template_subsections(@project, @template)
+
+      #filtered by users role and subsectionusers for projectusers
+      project_subsection = Subsectionusers.joins(:projectuers).where('projectusers.user_id' => current_user.id).first   
+      if project_subsection
+        @project_subsections = Cawssubsection.project_subsections(@project).filter_user(current_user)
+        @template_subsections = Cawssubsection.template_subsections(@project, @template).filter_user(current_user)
+      else
+        @project_subsections = Cawssubsection.project_subsections(@project).filter_user(current_user)
+        @template_subsections = Cawssubsection.template_subsections(@project, @template)
+      end
+
     else  
 #      @project_subsections = Unisubsection.project_subsections(@project)    
 #      @template_subsections = Unisubsection.template_subsections(@project, @template)
@@ -43,7 +56,7 @@ class SpecsubsectionsController < ApplicationController
       new_specline = Specline.new(line_to_add.attributes.merge(:project_id => params[:id]))
       new_specline.save
       clause_change_record = 3
-      record_new(new_specline, clause_change_record)
+      record_new(@new_specline, @clause_change_record)
     end                   
 
      redirect_to manage_specsubsection_path(:id => @project.id, :template_id => @template.id)     
@@ -66,7 +79,7 @@ class SpecsubsectionsController < ApplicationController
       if line_to_delete.clause_line != 0       
         specline = line_to_delete
         clause_change_record = 3
-        record_delete(specline, clause_change_record)             
+        record_delete(@specline, @clause_change_record)             
       end
     line_to_delete.destroy
     end

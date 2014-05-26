@@ -1,7 +1,9 @@
 require 'test_helper'
 
 class FeaturecontentTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+#associations
+   test "should have associations" do
+     featurecontent = FactoryGirl.build_stubbed(:featurecontent)
+     assert_respond_to(featurecontent, :feature)
+   end
 end

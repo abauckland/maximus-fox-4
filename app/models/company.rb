@@ -4,7 +4,7 @@ class Company < ActiveRecord::Base
   has_many :identvalues
 
   has_attached_file :photo
-  accepts_nested_attributes_for :users
+  accepts_nested_attributes_for :users, allow_destroy: true
 
   attr_accessor :check_field 
   
@@ -21,7 +21,9 @@ class Company < ActiveRecord::Base
             on: :create,    
             :presence => true,   
             :length => {:minimum => 3, :maximum => 254},
-            :uniqueness => {:message => "An account for the company already exists, please contact your administrator"} 
+            :uniqueness => {:message => "An account for the company already exists, please contact us for details"} 
+
+
 
   validates_attachment :photo,
             :attachment_content_type => { :content_type => ["image/png", "image/jpg"] },
@@ -31,14 +33,15 @@ class Company < ActiveRecord::Base
   
   def custom_validation_check_field
     if @check_field !=''
-      errors.add(:field_check, "Cannot be blank")
+      errors.add(:check_field, "Cannot be blank")
     end     
   end
 
   def details
   #this needs to be sorted, unclear what is going on
-    return name+', Tel: '+tel.to_s+', Web: '+www+'.'
+    return name+', Tel: 0'+tel.to_s[0..2]+' '+tel.to_s[3..5]+' '+tel.to_s[6..9]+', Web: '+www+'.'
   end
+
 
 
   Paperclip.interpolates :normalized_video_file_name do |attachment, style|

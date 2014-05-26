@@ -7,7 +7,6 @@ one:
   company_id: 1
   project_status: 1
   ref_system: 1
-  rev_method: 1
   logo_path: MyString
   photo_file_name: MyString
   photo_content_type: MyString
@@ -21,7 +20,6 @@ two:
   company_id: 1
   project_status: 1
   ref_system: 1
-  rev_method: 1
   logo_path: MyString
   photo_file_name: MyString
   photo_content_type: MyString

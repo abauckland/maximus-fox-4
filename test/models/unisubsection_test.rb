@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class UnisubsectionTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+#associations
+   test "should have associations" do
+     unisubsection = Unisubsection.new
+     assert_respond_to(unisubsection, :subsections)
+     assert_respond_to(unisubsection, :unisection)
+   end
 end

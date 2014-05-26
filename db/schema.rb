@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140511203320) do
+ActiveRecord::Schema.define(version: 20140521200326) do
 
   create_table "abouts", force: true do |t|
     t.string   "title"
@@ -204,7 +204,7 @@ ActiveRecord::Schema.define(version: 20140511203320) do
     t.datetime "updated_at"
   end
 
-  create_table "lineclaustypes", force: true do |t|
+  create_table "lineclausetypes", force: true do |t|
     t.integer  "clausetype_id"
     t.integer  "linetype_id"
     t.datetime "created_at"
@@ -234,7 +234,7 @@ ActiveRecord::Schema.define(version: 20140511203320) do
   end
 
   create_table "performs", force: true do |t|
-    t.integer  "performkey_id"
+    t.integer  "perkey_id"
     t.integer  "performvalue_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -253,6 +253,7 @@ ActiveRecord::Schema.define(version: 20140511203320) do
     t.datetime "updated_at"
   end
 
+
   create_table "planfeatures", force: true do |t|
     t.integer  "priceplan_id"
     t.string   "text"
@@ -264,6 +265,28 @@ ActiveRecord::Schema.define(version: 20140511203320) do
     t.string   "name"
     t.string   "plan"
     t.integer  "sign_up"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "printsettings", force: true do |t|
+    t.integer  "font_style"
+    t.integer  "font_size"
+    t.integer  "structure"
+    t.integer  "prelim"
+    t.integer  "page_number"
+    t.integer  "client_detail"
+    t.integer  "client_logo"
+    t.integer  "project_detail"
+    t.integer  "project_image"
+    t.integer  "company_detail"
+    t.integer  "header_project"
+    t.integer  "header_client"
+    t.integer  "header_document"
+    t.integer  "header_logo"
+    t.integer  "footer_detail"
+    t.integer  "footer_author"
+    t.integer  "footer_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -280,8 +303,7 @@ ActiveRecord::Schema.define(version: 20140511203320) do
     t.integer  "parent_id"
     t.integer  "company_id"
     t.integer  "project_status"
-    t.integer  "rev_method"
-    t.integer  "ref_system"    
+    t.integer  "ref_system"
     t.string   "logo_path"
     t.string   "photo_file_name"
     t.string   "photo_content_type"
@@ -294,9 +316,9 @@ ActiveRecord::Schema.define(version: 20140511203320) do
   create_table "projectusers", force: true do |t|
     t.integer  "user_id"
     t.integer  "project_id"
-    t.integer  "role"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "role"
   end
 
   create_table "revisions", force: true do |t|
@@ -419,18 +441,24 @@ ActiveRecord::Schema.define(version: 20140511203320) do
   end
 
   create_table "users", force: true do |t|
-    t.integer  "company_id"
-    t.string   "first_name"
-    t.string   "surname"
-    t.string   "email"
-    t.integer  "role"
-    t.string   "api_key"
-    t.string   "password_hash"
-    t.string   "password_salt"
-    t.string   "password_reset_token"
-    t.datetime "password_reset_sent_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "company_id"
+    t.string    "first_name"
+    t.string    "surname"
+    t.string    "email"
+    t.integer   "role"
+    t.string    "api_key"
+    t.string    "password_hash"
+    t.string    "password_salt"
+    t.string    "password_reset_token"
+    t.datetime  "password_reset_sent_at"
+    t.integer   "failed_attempts"
+    t.integer   "locked_at"
+    t.integer   "number_times_logged_in"
+    t.integer   "active"
+    t.timestamp "last_sign_in"
+    t.string    "ip",                     limit: 50
+    t.datetime  "created_at"
+    t.datetime  "updated_at"
   end
 
   create_table "valuetypes", force: true do |t|
