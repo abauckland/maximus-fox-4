@@ -1,0 +1,11 @@
+<nav class="app_user_menu">
+    <ul>
+      <li><%= link_to "Tutorials", helps_path %></li>
+      <li><%= link_to "My Details", edit_user_path(current_user.id)%></li>
+      <% if current_user.role == 'owner'%>
+      	<li><%= link_to "Company Details", edit_company_path(current_user.company_id)%></li>
+      	<li><%= link_to "User Licences", users_path %></li> 
+      <% end %>    
+    </ul>
+</nav>
+

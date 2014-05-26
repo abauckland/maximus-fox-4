@@ -1,0 +1,37 @@
+$(function (){
+if (<%= @user.active%> == 1)
+{
+$('#<%=@user.id%>').children('#active_button').hide();
+$('#<%=@user.id%>').children('#deactive_button').show();
+}
+else
+{
+$('#<%=@user.id%>').children('#deactive_button').hide();
+$('#<%=@user.id%>').children('#active_button').show();
+}
+});
+
+$('#unlock-<%=@user.id%>').children('#unlock_button').hide();
+
+
+$(function (){
+if (<%= @available_licences %> == 0)
+{
+$('#information').css('color', '#ff0000').html("All the company's licences (<%= @user.company.no_licence %>) are allocated.");
+$('#bottom_form_title, #bottom_form, #bottom_button').hide();
+}
+else
+{
+$('#information').css('color', '#000').html("<%= @available_licences %> licence(s) are currently active out of an available <%= @user.company.no_licence %> licence(s).");
+}
+});
+
+
+
+$(function (){
+if (<%= @available_licences %> == 1)
+{
+$('#bottom_form_title, #bottom_form, #bottom_button').show();
+}
+
+});
