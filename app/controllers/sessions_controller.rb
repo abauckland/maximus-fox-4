@@ -84,7 +84,7 @@ layout "mobiles"
           redirect_to(:controller => 'password_resets', :action => 'deactivated', :id => @user.id)         
         else    
         @user.last_sign_in = Time.now
-        @user.number_times_logged_in = @licence.number_times_logged_in += 1
+        @user.number_times_logged_in = @user.number_times_logged_in.to_i + 1
         @user.ip = request.remote_ip
         @user.failed_attempts = 0
         @user.save

@@ -24,31 +24,33 @@ class ApplicationController < ActionController::Base
 #project action => manage_subsections  
   def current_revision_render(project)
 
-    project_revisions = Revision.where('project_id = ?', project.id).order('created_at')         
-    last_rev_check = Alteration.where(:project_id => project.id, :revision_id => project_revision_ids.last).first
+    project_revisions = Revision.where(:project_id => project.id).order('created_at')         
+    last_rev_check = Alteration.where(:project_id => project.id, :revision_id => project_revisions.ids.last).first
     if last_rev_check.blank?
       #remove last revision reference from id array if no changes recorded for that revision
-      project_revisions.pop
+      project_revisions.delete(project_revisions.last)
     end  
     
-    if project_revisions.last.rev == '-'
-      @current_revision_rev = '-'
-    else    
-      @current_revision_rev = project_revisions.last.rev.capitalize
-    end
-    
-    if project_revisions.last.rev.nil?
+    if project_revisions.blank?
       @current_revision_rev = 'n/a'
+    else  
+      if project_revisions.last.rev == '-'
+        @current_revision_rev = '-'
+      else    
+        @current_revision_rev = project_revisions.last.rev.capitalize
+      end
     end
-    
   end  
 
 
   def check_project_status_change(project, revision)
     previous_statuses = Revision.where(:project_id => project.id).pluck(:project_status)
-    @previous_revision_project_status = previous_statuses[previous_statuses.length - 2]                        
-    if revision.project_status != @previous_revision_project_status
-      @project_status_changed = true
+    
+    if previous_statuses.length >= 3 
+      @previous_revision_project_status = previous_statuses[previous_statuses.length - 2]                        
+      if revision.project_status != @previous_revision_project_status
+        @project_status_changed = true
+      end
     end
   end
 
@@ -456,29 +458,7 @@ end
   end
 
 
-  def authorise_project_view(project_id, permissible_roles)
-    if permissible_roles == "all"
-      return true
-    else
-      project_user = Projectuser.where(:user_id => current_user.id, :project_id => project_id, :role => permissible_roles).first    
-      if project_user
-        return true
-      end
-    end    
-  end
-
-  def authorised_subsection_ids(project)
-    permitted_subsections = Subsectionuser.joins(:projectusers).where('projectusers.user_id' => @current_user.id, 'projectusers.project_id' => project.id)  
-    if permitted_subsections.blank?
-      @authorised_subsection_ids = Subsection.joins(:clauseref => [:clause => :specline]
-                                       ).where('speclines.project_id' =>project.id
-                                       ).group(:id)
-   else
-     @authorised_subsection_ids = Subsection.joins(:subsectionusers => :projectusers
-                                       ).where('projectusers.user_id' => @current_user.id, 'projectusers.project_id' => project.id
-                                       ).group('subsectionusers.subsection_id')
-    end                                   
-  end
+ 
 
 
 

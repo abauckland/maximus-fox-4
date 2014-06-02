@@ -2,6 +2,7 @@ class ProjectsController < ApplicationController
   before_filter :authenticate
   before_filter :authorise_project_manager, only: [:edit, :update]
   before_action :set_project, only: [:empty_project, :edit, :update]
+  before_action :set_project_user, only: [:index]
 
   # GET /projects
   # GET /projects.json
@@ -10,8 +11,12 @@ class ProjectsController < ApplicationController
   #user is only shown projects they have access to   
   
     #list projects user is assigned to
-    @projects = Project.user_projects(current_user)    
-    @project = @projects.first
+#changes this to create hash of projects with user access in brackets
+    @projects = Project.user_projects_access(current_user)
+    @project = @projects.first  
+    
+    #@project_user = Projectuser.where(:user_id => current_user.id, :project_id => @project.id).first    
+    
     #if user is not assigned to any project
     #show intro page and option to create a project
     #render partial 1
@@ -33,7 +38,7 @@ class ProjectsController < ApplicationController
 
   def empty_project
           
-    @projects = Project.user_projects
+    @projects = Project.user_projects(current_user)
     if @projects.length == 1
       @not_used = true
     end 
@@ -43,7 +48,8 @@ class ProjectsController < ApplicationController
 
   # GET /projects/new
   def new     
-    @project = Project.new    
+    @project = Project.new
+    client = @project.clients.build    
   end
 
 
@@ -78,7 +84,8 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1/edit
   def edit
-    @projects = Project.user_projects(current_user)  
+    @projects = Project.user_projects(current_user)
+    @client = @project.clients.build  
     @template = Project.project_template(@project)
     
     user_templates = Project.project_templates(@project, current_user)
@@ -126,15 +133,21 @@ class ProjectsController < ApplicationController
       @project = Project.find(params[:id])
     end
 
+    def set_project_user
+      @project_user = Projectuser.where(:user_id => current_user.id, :project_id => params[:id]).first 
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:code, :title, :parent_id, :company_id, :project_status, :ref_system, :logo_path, :photo_file_name, :photo_content_type, :photo_file_size, :photo_updated_at)
+      params.require(:project).permit({:clients_attributes => [:name, :attachment]}, :code, :title, :parent_id, :company_id, :project_status, :ref_system, :logo_path, :photo_file_name, :photo_content_type, :photo_file_size, :photo_updated_at)
     end
     
     def authorise_project_manager
-      project_user = Projectuser.where(:user_id => current_user.id, :project_id => params[:id], :role => "manage").first    
-      if project_user.blank?
-        redirect_to log_out_path
+      set_project_user    
+      if @project_user.role == "manage"
+        return @project_user
+      else        
+        redirect_to log_out_path  
       end 
     end
 

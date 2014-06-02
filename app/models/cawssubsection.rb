@@ -4,8 +4,8 @@ class Cawssubsection < ActiveRecord::Base
 
   scope :project_subsections, ->(project) { joins(:subsections => [:clauserefs => [:clauses => :speclines]]
                                            ).where('speclines.project_id' => project.id
-                                           ).group(:id
-                                           ).order(:id
+                                           ).group('cawssubsections.id'
+                                           ).order('cawssubsections.id'
                                            )} 
 
 #  scope :project_user_subsections, ->(project, current_user) { joins(:subsections => [:susbectionusers => [:projectusers], :clauserefs => [:clauses => :speclines]]
@@ -18,8 +18,8 @@ class Cawssubsection < ActiveRecord::Base
   scope :template_subsections, ->(project, template) { joins(:subsections => [:clauserefs => [:clauses => :speclines]]
                                                       ).where('speclines.project_id' => template.id
                                                       ).where.not('speclines.project_id' => project.id
-                                                      ).group(:id
-                                                      ).order(:id
+                                                      ).group('cawssubsections.id'
+                                                      ).order('cawssubsections.id'
                                                       )}
 
 #  scope :template_user_subsections, ->(project, template, current_user) { joins(:subsections => [:susbectionusers => [:projectusers], :clauserefs => [:clauses => :speclines]]
@@ -35,21 +35,21 @@ class Cawssubsection < ActiveRecord::Base
 
 
   scope :all_subsections, ->(project) { joins(:subsections => [:clauserefs => [:clauses => :speclines]]
-                                         ).where('speclines.project_id' => @project.id
+                                         ).where('speclines.project_id' => project.id
                                          ).group(:id
                                          ).order(:id
                                          )}
 
 
   scope :prelim_subsections, ->(project) { joins(:subsections => [:clauserefs => [:clauses => :speclines]]
-                                         ).where('speclines.project_id' => @project.id
+                                         ).where('speclines.project_id' => project.id
                                          ).where(:cawssection_id => 1
                                          ).group(:id
                                          ).order(:id
                                          )}
 
   scope :subsections, ->(project) { joins(:subsections => [:clauserefs => [:clauses => :speclines]]
-                                         ).where('speclines.project_id' => @project.id
+                                         ).where('speclines.project_id' => project.id
                                          ).where.not(:cawssection_id => 1
                                          ).group(:id
                                          ).order(:id
@@ -57,18 +57,18 @@ class Cawssubsection < ActiveRecord::Base
 
 #revisions view
   scope :all_subsection_revisions, ->(project, revision) { joins(:subsections => [:clauserefs => [:clause => :alterations]]
-                                         ).where('alterations.project_id' => @project.id, 'alterations.revision_id' => @revision.id
+                                         ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id
                                          ).group(:id
                                          )}
 
   scope :prelim_subsection_revisions, ->(project, revision) { joins(:subsections => [:clauserefs => [:clause => :alterations]]
-                                         ).where('alterations.project_id' => @project.id, 'alterations.revision_id' => @revision.id
+                                         ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id
                                          ).where(:cawssection_id => 1
                                          ).group(:id
                                          )}
 
   scope :subsection_revisions, ->(project, revision) { joins(:subsections => [:clauserefs => [:clause => :alterations]]
-                                         ).where('alterations.project_id' => @project.id, 'alterations.revision_id' => @revision.id
+                                         ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id
                                          ).where.not(:cawssection_id => 1
                                          ).group(:id
                                          )}

@@ -1,6 +1,7 @@
 class CreatePrintsettings < ActiveRecord::Migration
   def change
     create_table :printsettings do |t|
+      t.integer :project_id
       t.integer :font_style
       t.integer :font_size
       t.integer :structure

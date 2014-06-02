@@ -13,17 +13,16 @@ class Projectuser < ActiveRecord::Base
   #write - can edit speclines and clauses but not add subsections, publish or manager access
   #read - can read document only 
 
-
-  before_validation :custom_validation, on: :create  
-
-
-  def custom_validation
-    user = User.where(:email => :email).first
+#validate that entered email does equal a registered user
+#does not work with create first user for project
+  #before_validation :custom_validation, on: :create  
+#  def custom_validation
+#    user = User.where(:email => :email).first
     
-    if user.blank?
-      errors.add(:email, "No matching user found")
-    end     
-  end
+#    if user.blank?
+#      errors.add(:email, "No matching user found")
+#    end     
+#  end
 
        
 end

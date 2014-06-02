@@ -9,12 +9,12 @@ class ProjectusersController < ApplicationController
   #authenticate that there is a logged in user
   #only user with project manager role can access view
   
-    @projectusers = Projectuser.include(:users, :projects).where(:project_id => params[:id]).order('projectusers.role, users.name')    
+    @projectusers = Projectuser.includes(:users, :projects).where(:project_id => params[:id]).order('projectusers.role, users.name')    
 
     @projectuser = Projectuser.new 
     
     if @project.ref_system == "caws"
-       @subsections = Cawssubsections.joins(:subsection => [:clauserefs => [:clauses => :speclines]]
+       @subsections = Cawssubsection.joins(:subsection => [:clauserefs => [:clauses => :speclines]]
                                     ).where('speclines.projects_id' => @project.id
                                     )
     else

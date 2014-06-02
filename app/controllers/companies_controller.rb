@@ -81,13 +81,13 @@ class CompaniesController < ApplicationController
     
     def create_project_user(project, user)
         #set project_user for project
-        Projectuser.create(:project_id => @project.id, :user_id => user.id, :role => "manage") 
-        Printsetting.create(:project_id => @project.id)      
+        Projectuser.create(:project_id => project.id, :user_id => user.id, :role => "manage") 
+        Printsetting.create(:project_id => project.id)      
     end
     
     def set_current_revision(project, user)        
         #set current revision reference for demo project
-        Revision.create(:project_id => @project.id, :user_id => user.id, :date => Date.today)
+        Revision.create(:project_id => project.id, :user_id => user.id, :date => Date.today)
     end
     
 end

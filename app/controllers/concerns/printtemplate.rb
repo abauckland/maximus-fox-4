@@ -21,7 +21,7 @@ def print_caws_document(project, revision, pdf)
 
   
 #set common document settings  
-  pdf.font "#{settings.font_style}";
+  pdf.font "#{settings.font_style}"
 
 
   

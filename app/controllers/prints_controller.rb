@@ -1,4 +1,5 @@
 class PrintsController < ApplicationController
+  before_filter :authenticate
   before_action :set_project, only: [:show, :print_project]
   before_action :set_revision, only: [:show, :print_project]
 
@@ -16,14 +17,13 @@ class PrintsController < ApplicationController
     #call to protected method that restablishes text to be shown for project revision status
     current_revision_render(@project)
     
-    #establish selected revision for project    
-    check_changes = Alteration.where(:project_id => @project.id, :revision_id => @revision.id).first    
-    if check_changes.blank?
-      revision_ids = Revision.where(:project_id => @project.id).order('created_at').ids
-      revision_ids.pop
-      @revision = Revision.find(:id => revision_ids.last).first
-    end
-      
+      #establish selected revision for project    
+      check_changes = Alteration.where(:project_id => @project.id, :revision_id => @revision.id).first    
+      if check_changes.blank?
+        revision_ids = Revision.where(:project_id => @project.id).order('created_at').ids
+        revision_ids.delete(revision_ids.last)
+        @revision = Revision.find(:id => revision_ids.last).first
+      end 
     #show if print with superseded
     #check if selected revision has been superseded, i.e. nest revision has been published        
     if @project.project_status == 'Draft'      
@@ -50,10 +50,41 @@ class PrintsController < ApplicationController
   end
   
 
+
+
+  def print_download
+  
+    current_revision Revision.where(:project_id => @project.id).order('created_at').last 
+#current verision equals current unplublihsed version
+#if current verision has no new revisions do not apply superseded watermark    
+    if @revision == current_revision
+      print_project
+    else
+      pdf_document = Print.where(:project_id => @project.id, :revision_id => @revision.id).first
+      #open document and apply superseded water mark to all pages
+      
+      
+      filename = pdf_document.attachment
+      Prawn::Document.generate("#{@project.code}_rev_#{@revision.rev.capitalize}.pdf", :template => filename) do
+        
+        settings = Printsetting.where(:project_id => project.id).first
+        pdf.font "#{settings.font_style}"
+        
+        watermark_style = {:width => 250.mm, :size => 108, :style => :bold, :at => [20.mm,55.mm], :rotate => 60}
+        
+        pdf.transparent(0.15) do
+          pdf.text_box "superseded", watermark_style
+        end
+        
+      end
+    end
+    
+  end
+
   
   def print_project
         
-    Prawn::Document.generate("#{@project.code}_rev_#{@revision.rev.capitalize}.pdf",
+   document = Prawn::Document.new(
       :page_size => "A4",
       :margin => [20.mm, 14.mm, 5.mm, 20.mm],
       :info => {:title => @project.title}
@@ -70,7 +101,15 @@ class PrintsController < ApplicationController
     #update revision status of project if document is not if draft status
     update_revision(@project, @revision)
 
-    redirect_to print_path(@project.id)
+    
+    filename = "#{@project.code}_rev_#{@revision.rev.capitalize}.pdf"
+    document.render_file "tmp/#{filename}"
+
+    print_file = Print.create(:attachment => LocalFile.new(RAILS_ROOT + "/tmp/#{filename}"), :project_id => @project.id, :revision_id => @revision, :user_id => current_user.id)
+
+    return filename
+
+  #  redirect_to print_path(@project.id)
 
   end
 

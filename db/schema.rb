@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140521200326) do
+ActiveRecord::Schema.define(version: 20140527201109) do
 
   create_table "abouts", force: true do |t|
     t.string   "title"
@@ -100,6 +100,16 @@ ActiveRecord::Schema.define(version: 20140521200326) do
 
   create_table "clausetypes", force: true do |t|
     t.string   "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "clientimages", force: true do |t|
+    t.integer  "project_id"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.string   "photo_file_size"
+    t.string   "photo_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -253,6 +263,11 @@ ActiveRecord::Schema.define(version: 20140521200326) do
     t.datetime "updated_at"
   end
 
+  create_table "perkeys", force: true do |t|
+    t.string   "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "planfeatures", force: true do |t|
     t.integer  "priceplan_id"
@@ -269,7 +284,20 @@ ActiveRecord::Schema.define(version: 20140521200326) do
     t.datetime "updated_at"
   end
 
+  create_table "prints", force: true do |t|
+    t.integer  "project_id"
+    t.integer  "revision_id"
+    t.integer  "user_id"
+    t.string   "attachment_file_name"
+    t.string   "attachment_content_type"
+    t.string   "attachment_file_size"
+    t.string   "attachment_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "printsettings", force: true do |t|
+    t.integer  "project_id"    
     t.integer  "font_style"
     t.integer  "font_size"
     t.integer  "structure"
@@ -362,7 +390,7 @@ ActiveRecord::Schema.define(version: 20140521200326) do
     t.datetime "updated_at"
   end
 
-  create_table "subsectons", force: true do |t|
+  create_table "subsections", force: true do |t|
     t.integer  "cawssubsection_id"
     t.integer  "unisubsection_id"
     t.datetime "created_at"

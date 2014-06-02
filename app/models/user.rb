@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
 
   has_many :projectusers
   has_many :projects, :through => :projectusers
+  has_many :prints
   belongs_to :company
   
   #declare an enum attribute where the values map to integers in the database, but can be queried by name

@@ -5,8 +5,7 @@
     <% else %>     
       <li><%= link_to "Project", project_path(@project.id), :class => check_current('project')%></li>
     <% end %>
-      <li><%= link_to "Project", edit_project_path(@project.id), :class => check_current('project')%></li>
-      <li><%= link_to "Document", project_path(@project.id), :class => check_current('document') %></li>
+      <li><%= link_to "Document", specification_path(@project.id), :class => check_current('document') %></li>
       <li><%= link_to "Revisions", specrevision_path(@project.id), :class => check_current('revision')%></li>
       <li><%= link_to "Publish", print_path(@project.id), :class => check_current('publish')%></li>
     <% if current_user.company.category == 'manufacturer'%>    

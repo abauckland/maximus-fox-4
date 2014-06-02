@@ -7,6 +7,11 @@ class Project < ActiveRecord::Base
   has_many :revisions
   has_many :alterations
   has_many :printsettings
+  has_many :prints
+  has_many :clients
+  
+  accepts_nested_attributes_for :clients
+  
   has_attached_file :photo 
 
 
@@ -26,6 +31,12 @@ class Project < ActiveRecord::Base
 
   scope :user_projects, ->(current_user) { joins(:projectusers).where('projectusers.user_id' => current_user.id).order("code")} 
    
+  scope :user_projects_access, ->(current_user) { joins(:projectusers
+                                ).where('projectusers.user_id' => current_user.id).order('code'
+                                )#.each_with_object({ }){ |c, hsh| hsh[c.id] = '#{c.projectcode_and_title} +' '+#{c.projectusers.role}'}
+                                }
+
+
   scope :project_template, ->(project) { where(:id => project.id).first }
 
   scope :project_templates, ->(project, current_user) { joins(:projectusers
@@ -43,6 +54,11 @@ class Project < ActiveRecord::Base
   def code_and_title
     return code+' '+title
   end
+
+  def code_and_title_access
+    return code+' '+title
+  end
+
 
   Paperclip.interpolates :normalized_video_file_name do |attachment, style|
     attachment.instance.normalized_image_file_name

@@ -1,4 +1,4 @@
-<div class="page_title"><%= @user.company.name %></div>
+<div class="page_title"><%= current_user.company.name %></div>
 
 <div class="content">
     <div class="column_1_2">
@@ -36,7 +36,7 @@
     			<div class="column_sub_content">
     				
     				<div class="column_guide">
-						<p><%= licence_status(@active_users.count, @user.company.no_licence) %></p>
+						<p><%= licence_status(@active_users.count, current_user.company.no_licence) %></p>
       				</div>
 					
 					<% if @user.errors.any? %> 
@@ -54,7 +54,7 @@
 					</div>
 					<% end %>
 					
-					<% if @user.company.no_licence > @active_users.count %>
+					<% if current_user.company.no_licence > @active_users.count %>
 					<div class="column_guide">   			
       					<p>Please note passwords must be a miniumum of 8 characters long and all fields must be complete.</p>
       				</div>					

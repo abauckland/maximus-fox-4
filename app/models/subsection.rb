@@ -1,4 +1,4 @@
-class Subsecton < ActiveRecord::Base
+class Subsection < ActiveRecord::Base
   
   has_many :subsectionusers
   has_many :clauserefs

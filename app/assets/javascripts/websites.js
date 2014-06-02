@@ -70,18 +70,6 @@ $(document).ready(function(){
 
 
 //NEW JQUERY
-	//responsive layout of content
-	var tile_frame = '.content_tile';
-	var tile = ".content_tile_item";
-	var tile_container = '.content_tile_container';
-	var tile_id = '#content_tile_';	
-	content_tiling(tile_frame, tile_container, tile, tile_id);
-
-	$(window).resize(function(){
-		content_tiling(tile_frame, tile_container, tile, tile_id);
-	});
-
-
 	//responsive layout of large tile menu
 	var lrg_menu_tile_frame = '.lrg_menu_tile';
 	var lrg_menu_tile = ".lrg_menu_tile_item";
@@ -94,6 +82,16 @@ $(document).ready(function(){
 	});
 
 
+	//responsive layout of content
+	var tile_frame = '.feature_tile';
+	var tile = '.feature_tile_item';
+	var tile_container = '.feature_tile_container';
+	var tile_id = '#feature_tile_';	
+	content_tiling(tile_frame, tile_container, tile, tile_id);
+
+	$(window).resize(function(){
+		content_tiling(tile_frame, tile_container, tile, tile_id);
+	});
 
 	//responsive layout of small tile menu
 	var sml_menu_tile_frame = '.sml_menu_tile';

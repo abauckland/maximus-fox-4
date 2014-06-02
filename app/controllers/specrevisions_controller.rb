@@ -1,11 +1,11 @@
 class SpecrevisionsController < ApplicationController
+  before_filter :authenticate
   before_action :set_project, only: [:show, :show_prelim_tab_content, :show_rev_tab_content]
   before_action :set_revision, only: [:show, :show_prelim_tab_content, :show_rev_tab_content]
 
   layout "projects"
 
-  def show    
-    authorize @project 
+  def show     
         
     #call to protected method that restablishes text to be shown for project revision status
     current_revision_render(@project)  
@@ -14,18 +14,19 @@ class SpecrevisionsController < ApplicationController
     check_project_status_change(@project, @revision)
 
 
-    if @project.ref_system.caws?
+
+    if @project.ref_system == "caws"
 #list of tabs that can be seen should depend on the scope of the user
 
       #get list of susbections that can be access by user
       #governed by the level of access given to them in subsectionusers table
       #if user not list against any subsections they will be able to see all subsection in project
-      authorised_subsection_ids(project)
+      authorised_subsection_ids(@project)
 
       #tab menu - estabished list of subsections with revisions    
       
       #filtered by users role and subsectionusers for projectusers
-      project_subsection = Subsectionusers.joins(:projectuers).where('projectusers.user_id' => current_user.id).first   
+      project_subsection = Subsectionuser.joins(:projectuser).where('projectusers.user_id' => current_user.id).first   
       if project_subsection      
         @subsections = Cawssubsection.all_subsection_revisions(@project, @revision).filter_user(current_user)
         @prelim_subsections = Cawssubsection.prelim_subsection_revisions(@project, @revision).filter_user(current_user)   
@@ -60,7 +61,6 @@ class SpecrevisionsController < ApplicationController
 
 
   def show_prelim_tab_content
-    authorize @project 
 
     if @project.ref_system.caws?        
       prelim_subsections = Cawssubsection.joins(:subsections => [:clauserefs => [:clause => :alterations]]
@@ -79,7 +79,6 @@ class SpecrevisionsController < ApplicationController
 
 
   def show_rev_tab_content    
-    authorize @project  
     
     if @project.ref_system.caws?    
       subsection = Cawssubsection.find(params[:subsection_id])             
@@ -162,4 +161,19 @@ class SpecrevisionsController < ApplicationController
         @changed_clauses = Clause.changed_caws_clauses('changed', project, revision, subsection)
       end  
     end
+ 
+    
+    def authorised_subsection_ids(project)
+      permitted_subsections = Subsectionuser.joins(:projectuser).where('projectusers.user_id' => current_user.id, 'projectusers.project_id' => project.id)  
+      if permitted_subsections.blank?
+        @authorised_subsection_ids = Subsection.joins(:clauseref => [:clause => :specline]
+                                       ).where('speclines.project_id' =>project.id
+                                       ).group(:id)
+    else
+      @authorised_subsection_ids = Subsection.joins(:subsectionusers => :projectusers
+                                       ).where('projectusers.user_id' => @current_user.id, 'projectusers.project_id' => project.id
+                                       ).group('subsectionusers.subsection_id')
+      end                                   
+    end    
+    
 end

@@ -22,14 +22,17 @@
     <% if authorise_project_view(@project.id, ["manage", "edit"]) %>
 	   <div class="small_hide project_create_button"><%= link_to "create new project", new_project_path %> </div>
 	   <div class="small_show project_create_button"><%= link_to "+ project", new_project_path %> </div>   
-    <% if @projects %>
+    <% end %>
 </div>
 
 
 <div class="content">
     
-    <%= index_help_text(@projects, @check_has_content) %>
-    
+    <% if @project_user %>    
+        <%= index_help_text(@project_user)%>
+    <% else %>
+
+    <% end %>    
 
 </div> 
 
