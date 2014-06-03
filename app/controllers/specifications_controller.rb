@@ -26,7 +26,8 @@ class SpecificationsController < ApplicationController
       #if no contents redirect to manage_subsection page
 #why does this not work checking project subsections?????????????
       check_lines = Specline.where(:project_id => @project.id).first
-      if check_lines.blank?
+      if @project_subsections.blank?
+      #if check_lines.blank?
         redirect_to empty_project_project_path(@project.id)
       end
 

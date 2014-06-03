@@ -2,7 +2,7 @@ module Printnumbers
 
 def page_numbers(subsection_pages, settings, pdf)
   
-    if settings.page_number.by_document?
+    if settings.page_number == "by document"
         document_page_numbers(subsection_pages, pdf)
     else
         section_page_numbers(subsection_pages, pdf)

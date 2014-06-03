@@ -2,19 +2,19 @@ module Printcover
 
 def cover(project, revision, settings, pdf)
 
-  if settings.client_detail != "do not show" 
+  if settings.client_detail == "show"  
     client_details(project, settings, pdf)
   end
     
-  if setting.project_detail != "do not show" 
+  if setting.project_detail == "show" 
     poject_details(project, revision, settings, pdf)
   end
 
-  if settings.project_image != "do not show"   
+  if settings.project_image == "show"    
     project_image(project, settings, pdf)
   end
   
-  if settings.company_detaile != "do not show"   
+  if settings.company_detaile == "show"  
     company_details(project, settings, pdf)
   end   
    

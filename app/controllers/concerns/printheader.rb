@@ -27,20 +27,20 @@ def header_contents(project, settings, pdf)
 
   pdf.y = pdf.bounds.top
 
-  if settings.header_client.show?
+  if settings.header_client == "show" 
     pdf.spec_box "#{project.client}", header_format.merge(:at =>[0.mm, pdf.y])
   end 
 
-  if settings.header_project.show?
+  if settings.header_project == "show" 
     pdf.spec_box "#{project.title}", header_format.merge(:at =>[0.mm, pdf.y])
   end    
     
-  if settings.header_document.show?
+  if settings.header_document == "show" 
     pdf.spec_box "Architectural Specification", header_format.merge(:at =>[0.mm, pdf.y])
   end    
 
 
-  if !settings.header_logo.none?
+  if settings.header_logo == "show" 
   
     case settings.header_logo
       when "author" ; url = company.photo.url.sub!(/\?.+\Z/, '') 
