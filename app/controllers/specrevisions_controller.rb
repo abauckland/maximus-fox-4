@@ -13,9 +13,9 @@ class SpecrevisionsController < ApplicationController
     #check if status of the project has changed since last revision    
     check_project_status_change(@project, @revision)
 
+    @revisions = Revision.where(:project_id => params[:id]).order('created_at')
 
-
-    if @project.ref_system == "caws"
+    if @project.ref_system == "CAWS"
 #list of tabs that can be seen should depend on the scope of the user
 
       #get list of susbections that can be access by user
@@ -63,7 +63,7 @@ class SpecrevisionsController < ApplicationController
   def show_prelim_tab_content
 
     if @project.ref_system.caws?        
-      prelim_subsections = Cawssubsection.joins(:subsections => [:clauserefs => [:clause => :alterations]]
+      prelim_subsections = Cawssubsection.joins(:subsections => [:clauserefs => [:clauses => :alterations]]
                                         ).where('alterations.project_id' => @project.id, 'alterations.revision_id' => @revision.id, :cawssection_id => 1
                                         ).group(:id)      
       #establish if subsection is new or has been deleted 
@@ -154,7 +154,7 @@ class SpecrevisionsController < ApplicationController
           @deleted_subsections = subsection
         end
       else
-
+        @changed_subsections = subsection
       #check status of clause within changed subsection           
         @added_clauses = Clause.changed_caws_clauses('new', project, revision, subsection)
         @deleted_clauses = Clause.changed_caws_clauses('deleted', project, revision, subsection)

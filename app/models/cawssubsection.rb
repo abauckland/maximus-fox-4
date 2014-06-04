@@ -29,7 +29,7 @@ class Cawssubsection < ActiveRecord::Base
 #                                                      ).order(:id
 #                                                      )}
 
-  scope :filter_user, ->(current_user) { joins(:subsections => [:susbectionusers => :projectusers]
+  scope :filter_user, ->(current_user) { joins(:subsections => [:subsectionusers => :projectuser]
                                                       ).where('projectusers.user_id' => current_user.id    
                                                       )}
 
@@ -56,18 +56,18 @@ class Cawssubsection < ActiveRecord::Base
                                          )}
 
 #revisions view
-  scope :all_subsection_revisions, ->(project, revision) { joins(:subsections => [:clauserefs => [:clause => :alterations]]
+  scope :all_subsection_revisions, ->(project, revision) { joins(:subsections => [:clauserefs => [:clauses => :alterations]]
                                          ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id
                                          ).group(:id
                                          )}
 
-  scope :prelim_subsection_revisions, ->(project, revision) { joins(:subsections => [:clauserefs => [:clause => :alterations]]
+  scope :prelim_subsection_revisions, ->(project, revision) { joins(:subsections => [:clauserefs => [:clauses => :alterations]]
                                          ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id
                                          ).where(:cawssection_id => 1
                                          ).group(:id
                                          )}
 
-  scope :subsection_revisions, ->(project, revision) { joins(:subsections => [:clauserefs => [:clause => :alterations]]
+  scope :subsection_revisions, ->(project, revision) { joins(:subsections => [:clauserefs => [:clauses => :alterations]]
                                          ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id
                                          ).where.not(:cawssection_id => 1
                                          ).group(:id

@@ -17,12 +17,14 @@ module UsersHelper
   
   def  check_active(user)
   
-    if user.role != 'admin'
-      if user.active == false 
+    if user.role != 'owner'
+      if user.active == 0
         "<div class='small_red_button'>#{activate(user)}</div>".html_safe
       else
         "<div class='small_green_button'>#{deactivate(user)}</div>".html_safe
-      end   
+      end
+    else  
+      "<div class='small_green_button'>active</div>".html_safe   
     end    
   end
   
@@ -36,21 +38,21 @@ module UsersHelper
   end
   
   def  locked_at(user)
-    if user.locked_at == true
+    if user.locked_at == 1
       "<div class='small_red_button'>#{remove_unlock(user)}</div>".html_safe   
     end
   end
 
   def deactivate(user)
-    link_to 'active', update_status_user_path(user.id)
+    link_to 'active', {:controller=> "users", :action => "update_status", :id => user.id}, :class => "get"
   end
 
   def activate(user)
-    link_to 'inactive', update_status_user_path(user.id)
+    link_to 'inactive', {:controller=> "users", :action => "update_status", :id => user.id}, :class => "get"
   end
   
   def remove_unlock(user)
-    link_to 'locked', unlock_user_path(user.id) #{:controller=> "users", :action => "unlock_user", :id => user.id}, :class => "get"
+    link_to 'locked', {:controller=> "users", :action => "unlock_user", :id => user.id}, :class => "get"
   end
   
 

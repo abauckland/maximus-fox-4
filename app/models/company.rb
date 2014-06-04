@@ -25,10 +25,12 @@ class Company < ActiveRecord::Base
 
 
 
+  validates_attachment_content_type :photo, content_type: { content_type: ["image/jpg", "image/png"]}
+  
   validates_attachment :photo,
-            :attachment_content_type => { :content_type => ["image/png", "image/jpg"] },
-            :size => { :in => 0..1000.kilobytes },
-            if: "photo.nil?"  
+    :on => :create,
+    :size => { :in => 0..1000.kilobytes }
+
 
   
   def custom_validation_check_field

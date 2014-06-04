@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
   before_filter :authenticate
   before_filter :authorise_project_manager, only: [:edit, :update]
-  before_action :set_project, only: [:empty_project, :edit, :update]
+  before_action :set_project, only: [:empty_project, :show, :edit, :update]
   before_action :set_project_user, only: [:index]
 
   # GET /projects
@@ -62,7 +62,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @project.save
         Revision.create(:project_id => @project.id, :user_id => current_user.id, :date => Date.today)
-        Projectuser.create(:project_id => @project.id, :user_id => current_user.id, :role => "manager")
+        Projectuser.create(:project_id => @project.id, :user_id => current_user.id, :role => "manage")
         Printsetting.create(:project_id => @project.id)
         
         #set defuault project template
@@ -139,7 +139,7 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit({:clients_attributes => [:name, :attachment]}, :code, :title, :parent_id, :company_id, :project_status, :ref_system, :logo_path, :photo_file_name, :photo_content_type, :photo_file_size, :photo_updated_at)
+      params.require(:project).permit({:client_attributes => [:name, :photo]}, :code, :title, :parent_id, :company_id, :project_status, :ref_system, :logo_path, :photo)
     end
     
     def authorise_project_manager

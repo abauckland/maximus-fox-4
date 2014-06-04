@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
- 
+
 
  protected 
 
@@ -25,16 +25,23 @@ class ApplicationController < ActionController::Base
   def current_revision_render(project)
 
     project_revisions = Revision.where(:project_id => project.id).order('created_at')         
-    last_rev_check = Alteration.where(:project_id => project.id, :revision_id => project_revisions.ids.last).first
+    last_rev_check = Alteration.where(:project_id => project.id, :revision_id => project_revisions.last.id).first
     if last_rev_check.blank?
-      #remove last revision reference from id array if no changes recorded for that revision
-      project_revisions.delete(project_revisions.last)
+      #count of revision records indicates the revision rev no
+      #first revision record, when document is in draft - rev == NULL
+      #second revision records, when document has been issued for the first time - rev == '-'
+      #third revision record, when document has been issued and then revised - rev =='a'
+      
+      #if no changes recorded for current revision record then last record still applies
+      #reduce record count by 1 to indicate this
+      rev_number = project_revisions.count
+      current_rev_number = rev_number-1
     end  
     
-    if project_revisions.blank?
+    if current_rev_number == 0 #revision rev == NULL
       @current_revision_rev = 'n/a'
     else  
-      if project_revisions.last.rev == '-'
+      if current_rev_number == 1 #revision rev == '-'
         @current_revision_rev = '-'
       else    
         @current_revision_rev = project_revisions.last.rev.capitalize

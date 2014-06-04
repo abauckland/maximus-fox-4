@@ -17,13 +17,8 @@ class PrintsController < ApplicationController
     #call to protected method that restablishes text to be shown for project revision status
     current_revision_render(@project)
     
-      #establish selected revision for project    
-      check_changes = Alteration.where(:project_id => @project.id, :revision_id => @revision.id).first    
-      if check_changes.blank?
-        revision_ids = Revision.where(:project_id => @project.id).order('created_at').ids
-        revision_ids.delete(revision_ids.last)
-        @revision = Revision.find(:id => revision_ids.last).first
-      end 
+    @revisions = Revision.where(:project_id => params[:id]).order('created_at')
+
     #show if print with superseded
     #check if selected revision has been superseded, i.e. nest revision has been published        
     if @project.project_status == 'Draft'      

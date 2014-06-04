@@ -18,7 +18,13 @@ Rails.application.routes.draw do
   
   resources :helps
   
-  resources :prints
+  resources :exports do
+    get :keynote_export, :on => :member
+  end 
+ 
+  resources :prints do
+    get :print_project, :on => :member
+  end
 
   root :to => "homes#index"  
 
@@ -62,10 +68,7 @@ Rails.application.routes.draw do
   end
 
   resources :projects do
-    get :empty_project, :on => :member  
-    member do   
-      put :update_project, :as => 'change'    
-    end   
+    get :empty_project, :on => :member   
   end
 
   resources :projectusers

@@ -4,10 +4,10 @@ class Client < ActiveRecord::Base
   
   has_attached_file :photo 
   
-  validates_attachment_presence :photo unless :photo
+  validates_attachment_content_type :photo, content_type: { content_type: ["image/jpg", "image/png"]}
+  
   validates_attachment :photo,
     :on => :create,
-    :attachment_content_type => { :content_type => ["image/png", "image/jpg"] },
     :size => { :in => 0..1000.kilobytes }
 
 

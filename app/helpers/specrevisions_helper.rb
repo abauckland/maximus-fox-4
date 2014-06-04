@@ -267,8 +267,7 @@ end
     link_to image_tag("info.png", :mouseover =>"info_rollover.png", :border=>0), {:controller => "revisions", :action => "clause_change_info", :id => @current_project, :rev_id => @selected_revision, :clause_id => clause.id}, :class => "get", :title => "change info"
   end
 
-  def revision_help(revision_subsections, revision, project)
-    if revision_subsections.blank?
+  def revision_help(revision, project)
       if project.project_status == 'Draft'
         render :partial => "revision_help_draft"
       else
@@ -291,7 +290,6 @@ end
           "<p>Changes to the document are only recorded after document has been published for the first time.</p>".html_safe
         end
       end   
-    end
   end
   
 end

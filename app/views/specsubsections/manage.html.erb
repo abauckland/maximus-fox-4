@@ -17,7 +17,7 @@
 						<tr><td>
 							<div class="section_form_label form_input_label">Project Template:</div>
 							<div class="form_input">
-      							<%= select_tag "selected_template_id", options_from_collection_for_select(@templates, "id", "project_code_and_title", @template.id), {:onchange => "window.location='/specsubsections/#{@current_project.id}/manage?template_id='+this.value;"} %>
+      							<%= select_tag "selected_template_id", options_from_collection_for_select(@templates, "id", "code_and_title", @template.id), {:onchange => "window.location='/specsubsections/#{@project.id}/manage?template_id='+this.value;"} %>
 							</div>				
 						</td></tr>										
 						</table>				
@@ -55,7 +55,7 @@
         		<div>
         			<div class="column_submit"><%= submit_tag "Add Sections"%></div>
 					<% end %> 
-        			<div class="column_cancel"><%= link_to "Cancel", project_path(@project) %></div>              
+        			<div class="column_cancel"><%= link_to "Cancel", specification_path(@project.id) %></div>              
         		</div>   
       		</div>        		      		
       	</div>   
@@ -93,7 +93,7 @@
         		<div>
 					<div class="column_submit"><%= submit_tag "Delete Sections", :confirm => "Subsections moved from the Project will be deleted premanently, they are not copied to the template project. Do you wish to continue?" %></div>
 					<% end %>  
-        			<div class="column_cancel"><%= link_to "Cancel", project_path(@project) %></div>              
+        			<div class="column_cancel"><%= link_to "Cancel", specification_path(@project.id) %></div>              
         		</div>   
       		</div>        		     		
       	</div>				

@@ -35,7 +35,11 @@
 								<div class="form_error_note"> <%= error_check(@project, :title)%> </div>
 							</div>				
 						</td></tr>
-						<%= f.fields_for :clients do |builder| %>
+                        <tr><td>
+                            <div class="project_form_label form_input_label">Reference System:</div>
+                            <div class="form_default"><%= f.select :ref_system, options_for_select(["CAWS", "Uniclass_2"], @project.ref_system) %></div>              
+                        </td></tr>
+						<%= f.fields_for :client do |builder| %>
 						<tr><td>
 							<div class="project_form_label form_input_label">Project Client:</div>
 							<div class="form_input"><%= builder.text_field :name %></div>				

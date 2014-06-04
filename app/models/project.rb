@@ -16,15 +16,15 @@ class Project < ActiveRecord::Base
 
 
   enum project_status: [:Draft, :Preliminary, :Tender, :Contract, :As_Built]
-  enum ref_system: [:caws, :uniclass]
+  enum ref_system: [:CAWS, :Uniclass_2]
 
   validates_presence_of :code
   validates_presence_of :title
-
-  validates_attachment_presence :photo unless :photo
+  
+  validates_attachment_content_type :photo, content_type: { content_type: ["image/jpg", "image/png"]}
+  
   validates_attachment :photo,
     :on => :create,
-    :attachment_content_type => { :content_type => ["image/png", "image/jpg"] },
     :size => { :in => 0..1000.kilobytes }
 
   

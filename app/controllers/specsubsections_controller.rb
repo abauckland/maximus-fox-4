@@ -1,12 +1,14 @@
 class SpecsubsectionsController < ApplicationController
-  before_filter :require_user
-  before_action :set_project, only: [:show, :add_subsections, :delete_subsections]
+  before_filter :authenticate
+  before_filter :authorise_project_manager_editor, only: [:manage, :add, :delete]  
+  before_action :set_project, only: [:manage, :add, :delete]
+  before_action :set_project_user, only: [:manage, :add, :delete]
+
+
 
   layout "projects"
 
-  def manage
-    authorise_project_action(@project.id, ["manage", "edit"])
-      
+  def manage      
     user_templates = Project.project_templates(@project, current_user)
     standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system)    
     @templates = user_templates + standard_templates
@@ -22,10 +24,10 @@ class SpecsubsectionsController < ApplicationController
       @template = Project.find(params[:template_id])     
     end
 
-    if @project.ref_system.caws?
+    if @project.ref_system == "CAWS"
 
       #filtered by users role and subsectionusers for projectusers
-      project_subsection = Subsectionusers.joins(:projectuers).where('projectusers.user_id' => current_user.id).first   
+      project_subsection = Subsectionuser.joins(:projectuser).where('projectusers.user_id' => current_user.id).first   
       if project_subsection
         @project_subsections = Cawssubsection.project_subsections(@project).filter_user(current_user)
         @template_subsections = Cawssubsection.template_subsections(@project, @template).filter_user(current_user)
@@ -46,7 +48,7 @@ class SpecsubsectionsController < ApplicationController
   def add
     authorise_project_action(@project.id, ["manage", "edit"]) 
 
-    if @project.ref_system.caws?    
+    if @project.ref_system == "CAWS"   
       speclines_to_add = Specline.cawssubsection_speclines(params[:template_id], params[:template_sections])
     else
 #      speclines_to_add = Specline.unisubsection_speclines(params[:template_id], params[:template_sections])
@@ -67,7 +69,7 @@ class SpecsubsectionsController < ApplicationController
   def delete
     authorise_project_action(@project.id, ["manage", "edit"]) 
 
-    if @project.ref_system.caws?    
+    if @project.ref_system == "CAWS"   
       speclines_to_delete = Specline.cawssubsection_speclines(params[:template_id], params[:template_sections])
     else
 #      speclines_to_delete = Specline.unisubsection_speclines(params[:template_id], params[:template_sections])
@@ -102,4 +104,18 @@ class SpecsubsectionsController < ApplicationController
     def set_project
       @project = Project.find(params[:id])
     end
+
+    def set_project_user
+      @project_user = Projectuser.where(:user_id => current_user.id, :project_id => params[:id]).first 
+    end
+    
+    def authorise_project_manager_editor
+      set_project_user    
+      if @project_user.role == "manage" || "edit"
+        return @project_user
+      else        
+        redirect_to log_out_path  
+      end 
+    end
+    
 end

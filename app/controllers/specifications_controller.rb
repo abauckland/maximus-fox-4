@@ -12,7 +12,7 @@ class SpecificationsController < ApplicationController
     current_revision_render(@project)
 
     #establish project clauses, subsections & sections    
-    if @project.ref_system == "caws"
+    if @project.ref_system == "CAWS"
 
       #list of all subsections that can be selected - for small screen
       #filtered by users role and subsectionusers for projectusers
@@ -24,10 +24,7 @@ class SpecificationsController < ApplicationController
       end
     
       #if no contents redirect to manage_subsection page
-#why does this not work checking project subsections?????????????
-      check_lines = Specline.where(:project_id => @project.id).first
       if @project_subsections.blank?
-      #if check_lines.blank?
         redirect_to empty_project_project_path(@project.id)
       end
 

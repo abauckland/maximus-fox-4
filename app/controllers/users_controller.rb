@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
   before_filter :authenticate, only: [:edit, :update]
   before_filter :authenticate_owner, only: [:index, :create]
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :unlock_user]
-  before_action :set_users, only: [:index, :update_licence_status]
-  before_action :set_active_users, only: [:index, :update_licence_status]
+  before_action :set_user, only: [:show, :edit, :update, :unlock_user]
+  before_action :set_users, only: [:index, :create, :update_licence_status]
+  before_action :set_active_users, only: [:index, :create, :update_status, :update_licence_status]
 
   layout "users"
 
@@ -22,8 +22,12 @@ class UsersController < ApplicationController
     if @user.save
       respond_to do |format| 
         format.html { render :action => "index"}
-        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
-      end 
+      end
+    else
+       respond_to do |format| 
+        format.html { render :action => "index"}
+        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity } 
+        end      
     end  
   end
 
@@ -44,28 +48,28 @@ class UsersController < ApplicationController
   #ajax event  
   def update_status
       
-    if @user.locked_at == true
-      @user.locked_at = false
+    @selected_user = User.where(:id => params[:id]).first  
+      
+    if @selected_user.locked_at == 1
+      @selected_user.locked_at = 0
     end
 
-    @available_licences = @user.company.no_licence - @active_users.count
+    @available_licences = current_user.company.no_licence - @active_users.count
      
-    if @user.active == true
-      @user.active = false                     
+    if @selected_user.active == 1
+      @selected_user.active = 0                     
       @available_licences = @available_licences + 1 
     else      
       if @available_licences >= 0        
-        @user.active = true         
+        @selected_user.active = 1        
         @available_licences = @available_licences - 1          
       end
     end   
-    @user.save
+    @selected_user.save
 
-    #create new User object for form
-    @user = User.new 
-    
+
     respond_to do |format|
-        format.js   { render :update_status, :layout => false }
+        format.js { render :update_status, :layout => false }
     end 
   end
 
@@ -74,7 +78,7 @@ class UsersController < ApplicationController
   def unlock_user
     @user.update(:failed_attempts => 0, :locked_at => 0)
     respond_to do |format|
-        format.js   { render :unlock_user, :layout => false }
+        format.js { render :unlock_user, :layout => false }
     end    
   end 
 
@@ -95,6 +99,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:company_id, :first_name, :surname, :email, :role, :api_key, :password_hash, :password_salt, :password_reset_token, :password_reset_sent_at, :failed_attempts, :locked_at, :number_times_logged_in, :active, :last_sign_in, :ip)
+      params.require(:user).permit(:company_id, :first_name, :surname, :email, :role, :api_key, :password, :password_confirmation, :failed_attempts, :locked_at, :number_times_logged_in, :active, :last_sign_in, :ip)
     end
 end

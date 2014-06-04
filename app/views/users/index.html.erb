@@ -61,7 +61,7 @@
 										
 					<div class="column_form">
 						<%= form_for @user do |f| %>   
-    						<%= f.hidden_field(:role, {:value => 'user'})%>
+    						<%= f.hidden_field(:role, {:value => 'employee'})%>
   							<%= f.hidden_field(:company_id, {:value => current_user.company_id})%> 			
 						<table>
 						<tr><td>
