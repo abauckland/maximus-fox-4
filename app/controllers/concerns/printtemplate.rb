@@ -21,7 +21,7 @@ def print_caws_document(project, revision, pdf)
 
   
 #set common document settings  
-  pdf.font "#{settings.font_style}"
+  pdf.font settings.font_style
 
 
   
@@ -34,7 +34,7 @@ def print_caws_document(project, revision, pdf)
 
 ##REVISIONS
   # print revisions - if reported at front of document  
-  if structure.group_revisions?
+  if settings.structure == "group revisions"
   #get all subsections for project with change
 
     #cover page
@@ -48,7 +48,7 @@ def print_caws_document(project, revision, pdf)
       project_status_change(@previous_status, @current_status, pdf)
     end
 
-    if prelim.single_section?  
+    if settings.prelim == "single section" 
         prelim_subsections = Alteration.changed_caws_prelim_sections(project, revision)
     
         if prelim_subsections
@@ -93,18 +93,18 @@ def print_caws_document(project, revision, pdf)
 
 
 ##PRELIMINARIES
-if prelim.single_section?
+if settings.prelim == "single section" 
   
   #cover for combined prelim section
-  if section_cover.section_cover?
+  if settings.section_cover == "section cover"
     prelim_caws_cover(pdf)
 #PPPPPPP    
     pdf.start_new_page
   end
 
   #revisions for all prelims sections
-  if structure.revision_by_section?
-      if section_cover.section_cover?
+  if settings.structure == "revision by section"
+      if settings.section_cover == "section cover"
           #if there is a cover for prelims
           prelim_caws_revision_subtitle(subsection, pdf)
       else
@@ -123,7 +123,7 @@ if prelim.single_section?
   end
 
   #speclines for prelims
-  if section_cover.section_cover?
+  if settings.section_cover == "section cover"
     #if there is a cover for prelims
     prelim_caws_specification_subtitle(subsection, pdf)
   else
@@ -131,7 +131,7 @@ if prelim.single_section?
     prelim_caws_specification_title(subsection, pdf)
   end  
   
-  prelim_subsections = Cawssubsections.prelim_subsections(project)
+  prelim_subsections = Cawssubsection.prelim_subsections(project)
   
   prelim_subsections.each do |subsection|
     specification_title(subsection, pdf)    
@@ -141,12 +141,12 @@ if prelim.single_section?
 
 else
 
-  prelim_subsections = Cawssubsections.prelim_subsections(project)
+  prelim_subsections = Cawssubsection.prelim_subsections(project)
 
   prelim_subsections.each do |subsection|
      
       #cover for combined prelim section
-      if section_cover.section_cover?
+      if settings.section_cover == "section cover"
         prelim_caws_cover(pdf)
 #PPPPPPP    
         pdf.start_new_page
@@ -157,7 +157,7 @@ else
         subsection_revs = Alteration.changed_caws_subsections(project, revision, subsection)
             
         if subsection_revs
-            if section_cover.section_cover?
+            if settings.section_cover == "section cover"
                 #if there is a cover for prelims
                 prelim_caws_revision_subtitle(subsection, pdf)
             else
@@ -174,7 +174,7 @@ else
       end
 
       #speclines for prelims
-      if section_cover.section_cover?
+      if settings.section_cover == "section cover"
           #if there is a cover for prelims
           prelim_caws_specification_subtitle(subsection, pdf)
       else
@@ -190,23 +190,23 @@ end
 
 
 ##NON PRELIM SUBSECTIONS
-  subsections = Cawssubsections.subsections(project)
+  subsections = Cawssubsection.subsections(project)
 
   subsections.each do |subsection|
      
       #cover for combined prelim section
-      if section_cover.section_cover?
+      if settings.section_cover == "section cover"
         prelim_caws_cover(pdf)
 #PPPPPPP     
         pdf.start_new_page
       end      
             
-      if structure.revision_by_section?
+      if settings.structure == "revision by section"
         #revisions for project
         subsection_revs = Alteration.changed_caws_subsections(project, revision, subsection)
             
         if subsection_revs
-            if section_cover.section_cover?
+            if settings.section_cover == "section cover"
                 #if there is a cover for prelims
                 caws_revision_subtitle(subsection, pdf)
             else
@@ -223,7 +223,7 @@ end
       end
 
       #speclines for prelims
-      if section_cover.section_cover?
+      if settings.section_cover == "section cover"
           #if there is a cover for prelims
           caws_specification_subtitle(subsection, pdf)
       else
@@ -247,13 +247,13 @@ end
   watermark_helper(project, revision, pdf)
 
 ##PAGE NUMBERING
-  page_numbers(subsection_pages, settings, pdf)
+#  page_numbers(subsection_pages, settings, pdf)
 
 ##CONTENTS PAGE
-  contents(subsection_pages, pdf)
+#  contents(subsection_pages, pdf)
 
 ##DOCUMENT OUTLINE
-  outline(subsection_pages, pdf)
+#  outline(subsection_pages, pdf)
 
 
 end

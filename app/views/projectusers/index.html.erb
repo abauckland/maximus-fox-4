@@ -6,24 +6,32 @@
                             
             <table class="users">
                 <tr>
-                    <th class="mob_cell">Name</th>
-                    <th class="s_tab">Access</th>
+                    <th>Name</th>
+                    <th>Access</th>
                     <th class="s_tab">Subsections</th>
-                    <th width="s_tab">Last Logged In</th>
-                    <th width="60px"></th>
-                    <th width="60px"></th>
+                    <th class="mob_cell">Last Logged In</th>
+                    <th width="30px"></th>
+                    <th width="30px"></th>
                 </tr>
                 <% @projectusers.each do |projectuser| %>
                 <tr>
-                    <td class="mob_cell"><%= projectuser.user.name %></td>
-                    <td class="s_tab"><%= projectuser.role %></td>
+                    <td><%= projectuser.user.name %></td>
+                    <td><%= projectuser.role %></td>
                     <td class="s_tab"><%= project_access(projectuser) %></td>
-                    <td class="s_tab"><%= last_seen(projectuser.user) %></td>    
-                    <td><%= link_to 'Edit', edit_projectuser_path(projectuser) %></td>
-                    <td><%= link_to 'Destroy', projectuser, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                    <td class="mob_cell"><%= last_seen(projectuser.user) %></td>    
+                    <% if projectuser.role != "manage" %>
+                        <td><%= link_to image_tag("edit_user.png", :mouseover =>"edit_user-rollover.png", :border=>0), edit_projectuser_path(projectuser) %></td>
+                        <td><%= link_to image_tag("delete.png", :mouseover =>"delete-rollover.png", :border=>0), projectuser, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                    <% end %>                                       
                 </tr>
                 <%end%>  
-            </table>           
+            </table> 
+            
+            <div class="column_footer">
+                <div>
+                    <div class="column_cancel"><%= link_to "Cancel", edit_project_path(@project.id) %></div>                         
+                </div>
+            </div>          
         </div>
     </div>
     
@@ -49,21 +57,21 @@
                     <% end %>
                     
                     <div class="column_guide">              
-                        <p>Each new user can be afforded one of the following levels of access, this can be changed at anytime</p>
+                        <p>Each new user can be assigned one of the following levels of access, this can be changed at anytime.</p>
                             <ul>
-                                <li>edit: user can edit the whole document and publish it</li>
-                                <li>write: user can edit speclines and clauses, not add/delete subsections or publish the document</li>
-                                <li>read: user can only read the last published version of the document</li>
+                                <li>edit: user can edit the whole document and publish it.</li>
+                                <li>write: user can edit speclines and clauses, not add/delete subsections or publish the document.</li>
+                                <li>read: user can only read the last published version of the document.</li>
                             </ul>    
                     </div>                                             
                                         
                     <div class="column_form">
                         <%= form_for @projectuser do |f| %>   
-                            <%= f.hidden_field(:project_id, {:value => @projectusers.first.project_id})%>         
+                            <%= f.hidden_field(:project_id, {:value => @project.id})%>         
                         <table>
                         <tr><td>
                             <div class="user_form_label form_input_label"><%= label_error_check(@projectuser, 'email', 'email')%></div>
-                            <div class="new_user_form form_input"><%= f.email_field :email %></div>                 
+                            <div class="new_user_form form_input"><%= f.collection_select :user_id, @company_users, :id, :email, {:prompt => "Please select", :default => nil} %></div>                 
                         </td></tr>
                         <tr><td>
                             <div class="user_form_label form_input_label"><%= label_error_check(@projectuser, 'role', 'role')%></div>
@@ -71,18 +79,18 @@
                         </td></tr>                                             
                         <tr><td>
                             <div class="user_form_label form_input_label"><%= label_error_check(@projectuser, 'subsections', 'subsections')%></div>
-                            <div class="new_user_form form_input"><%= f.collection_select :subsections, @subsections, :id, full_code, {:prompt => 'All', :default => nil}, { :multiple => true, :size => 5 }%></div>                
+                            <div class="new_user_form form_input"><%= f.collection_select :subsection_ids, @subsections, :id, :full_code, {:prompt => 'All', :default => nil}, { :multiple => true, :size => 5 }%></div>                
                         </td></tr> 
                         </table>                
                     </div>
                 </div>                              
                 <div class="column_footer">
                     <div>
-                        <div class="column_submit"><%= f.submit "add proect user"%></div>              
+                        <div class="column_submit"><%= f.submit "add project user"%></div>              
                     </div>
                     <% end %>   
                 </div>
-                <% end %>                           
+                               
             </div> 
         </div> 
     </div>      

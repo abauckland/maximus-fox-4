@@ -4,7 +4,7 @@
 <div class="content">
     <div class="column_1">
 		<div class="column_content">       
-			<div class="column_title">Copy Clauses into <%= @subsection.subsection_code %></div>   
+			<div class="column_title">Copy Clauses into <%= @subsection.full_code %></div>   
     			
     		<div class="column_sub_content">
 
@@ -17,7 +17,7 @@
 						<tr><td>
 							<div class="section_form_label form_input_label">Project Template:</div>
 							<div class="form_input">
-      							<%= select_tag "selected_template_id", options_from_collection_for_select(@selectable_templates, "id", "project_code_and_title", @template.id), {:onchange => "window.location='/speclines/#{@project.id}/manage_clauses?project_id=#{@project.id}&subsection_id=#{@subsection.id}&selected_template_id='+this.value;"} %>
+      							<%= select_tag "selected_template_id", options_from_collection_for_select(@selectable_templates, "id", "code_and_title", @template.id), {:onchange => "window.location='/speclines/#{@project.id}/manage_clauses?project_id=#{@project.id}&subsection_id=#{@subsection.id}&selected_template_id='+this.value;"} %>
 							</div>				
 						</td></tr>										
 						</table>				
@@ -28,9 +28,9 @@
       			</div>
 				
 				<div class="column_form">				
-						<%= form_tag(:controller => "speclines", :action => "add_clauses") do %>
+						<%= form_tag(:controller => "specclauses", :action => "add_clauses") do %>
 						<%= hidden_field_tag "project_id", @project.id%>
-            			<%= hidden_field_tag "template_id", @project_template.id%>
+            			<%= hidden_field_tag "template_id", @template.id%>
             			<%= hidden_field_tag "subsection_id", @subsection.id %>						
 						<table>
 						<tr><td>
@@ -61,7 +61,7 @@
 	
 	<div class="column_2">
 		<div class="column_content">       
-			<div class="column_title">Delete Clauses from <%= @subsection.subsection_code %></div>   
+			<div class="column_title">Delete Clauses from <%= @subsection.full_code %></div>   
     			
     		<div class="column_sub_content">		
 
@@ -71,7 +71,7 @@
       			</div>
 				
 				<div class="column_form">				
-						<%= form_tag(:controller => "speclines", :action => "delete_clauses") do %>
+						<%= form_tag(:controller => "specclauses", :action => "delete_clauses") do %>
 						<%= hidden_field_tag "project_id", @project.id%>
             			<%= hidden_field_tag "template_id", @template.id%>
             			<%= hidden_field_tag "subsection_id", @subsection.id %>
@@ -98,7 +98,7 @@
 	 
     <div class="column_3">
     	<div class="column_content">       
-			<div class="column_title">Create new Clause in <%= @subsection.subsection_code %></div>
+			<div class="column_title">Create new Clause in <%= @subsection.full_code %></div>
 			
 			<div class="column_sub_content">
 

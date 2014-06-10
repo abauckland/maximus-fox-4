@@ -166,7 +166,7 @@ ajaxLinks();
 	});	
 
 
-	$('.project_option_select').children('select').selectBox({autoWidth: false});
+	$('.project_option_select, .project_index_select_large, .project_index_select_small').children('select').selectBox({autoWidth: false});
 	$('.option_select_1').children('select').selectBox({autoWidth: false});
 	$('select#subsection').selectBox({autoWidth: false});
 	$('select#revision').selectBox().selectBox({autoWidth: false});
@@ -214,9 +214,6 @@ ajaxLinks();
 			});   
 		}	 		
 	});
-
-
-//show/hide functions for spec and clause lines menus
 
  $('table.specline_table').on({
     mouseenter:function(){ 

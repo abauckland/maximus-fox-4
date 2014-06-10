@@ -67,17 +67,13 @@ Rails.application.routes.draw do
     get :deactivated, :on => :member
   end
 
-  resources :projects do
-    get :empty_project, :on => :member   
-  end
+  resources :projects
 
   resources :projectusers
   
   resources :specifications do
+    get :empty_project, :on => :member  
     get :show_tab_content, :on => :member  
-    get :manage_subsections, :on => :member
-    post :add_subsections, :on => :member
-    post :delete_subsections, :on => :member 
   end
   
   resources :specrevisions do
@@ -87,15 +83,17 @@ Rails.application.routes.draw do
 
   resources :specsubsections do
     get :manage, :on => :member
-    get :add, :on => :member
-    get :delete, :on => :member
+    post :add, :on => :member
+    post :delete, :on => :member
   end
 
   resources :specclauses do
-    get :add_clause, :on => :member
+    get :manage, :on => :member
     get :add_clauses, :on => :member
     get :delete_clauses, :on => :member
   end
+  
+  resources :clauses
 
   resources :speclines do
     delete :delete_clause, :on => :member

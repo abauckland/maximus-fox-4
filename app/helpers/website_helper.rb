@@ -15,14 +15,22 @@ module WebsiteHelper
     action = request.path_parameters[:action]
 
     if controller == 'projects'
-      if ['index', 'new', 'edit'].include?(action)
         check = 'project'
-      else
-        check = 'document'
-      end
     end
 
-    if controller == 'speclines'
+    if controller == 'projectusers'
+        check = 'project'
+    end
+    
+    if controller == 'printsettings'
+        check = 'project'
+    end    
+
+    if controller == 'specifications'
+        check = 'document'
+    end
+
+    if controller == 'specsubsections'
         check = 'document'
     end
     
@@ -30,7 +38,7 @@ module WebsiteHelper
         check = 'document'
     end
     
-    if controller == 'revisions'
+    if controller == 'specrevisions'
         check = 'revision'
     end    
 

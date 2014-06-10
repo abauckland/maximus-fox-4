@@ -1,6 +1,6 @@
 module Printrevision
 
-def revisions(project, subsection, revision)
+def revisions(project, subsection, revision, pdf)
 
 #get all revisions for subsection
 #return list of changes

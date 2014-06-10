@@ -17,7 +17,6 @@ class Cawssubsection < ActiveRecord::Base
 
   scope :template_subsections, ->(project, template) { joins(:subsections => [:clauserefs => [:clauses => :speclines]]
                                                       ).where('speclines.project_id' => template.id
-                                                      ).where.not('speclines.project_id' => project.id
                                                       ).group('cawssubsections.id'
                                                       ).order('cawssubsections.id'
                                                       )}

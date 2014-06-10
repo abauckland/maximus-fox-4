@@ -479,11 +479,6 @@ end
     end      
   end
 
-  def authorise_specline_view(permissible_roles)
-    if permissible_roles.include?(@current_user.role)
-      return true
-    end     
-  end
 
 
   def authorise_specline_action(specline_id, permissible_roles)

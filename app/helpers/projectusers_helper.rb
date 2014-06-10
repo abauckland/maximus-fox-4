@@ -4,18 +4,18 @@ module ProjectusersHelper
   def  project_access(projectuser)  
       #list subsections that user has access to for project
       #if not subsections - user has access to whole project
-      if projectuser.project.ref_system == caws
-        subsections = Cawssubsections.joins(:subsection => :subsectionusers
+      if projectuser.project.ref_system == "CAWS"
+        subsection_array = Cawssubsection.joins(:subsections => :subsectionusers
                                     ).where('subsectionusers.projectuser_id' =>projectuser.id
                                     ).collect{|x| x.full_code}.uniq.sort.join(",")
       else
 ##uniclass query here        
       end  
             
-      if subsections
-        subsections
+      if subsection_array.length == 0
+        return "All".html_safe 
       else  
-        "all".html_safe
+        return subsections
       end 
   end
   

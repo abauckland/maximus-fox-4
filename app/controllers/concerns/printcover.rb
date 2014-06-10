@@ -6,7 +6,7 @@ def cover(project, revision, settings, pdf)
     client_details(project, settings, pdf)
   end
     
-  if setting.project_detail == "show" 
+  if settings.project_detail == "show" 
     poject_details(project, revision, settings, pdf)
   end
 
@@ -14,7 +14,7 @@ def cover(project, revision, settings, pdf)
     project_image(project, settings, pdf)
   end
   
-  if settings.company_detaile == "show"  
+  if settings.company_detail == "show"  
     company_details(project, settings, pdf)
   end   
    

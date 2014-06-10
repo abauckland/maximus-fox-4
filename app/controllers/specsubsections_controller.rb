@@ -1,101 +1,109 @@
 class SpecsubsectionsController < ApplicationController
   before_filter :authenticate
-  before_filter :authorise_project_manager_editor, only: [:manage, :add, :delete]  
+  before_filter :authorise_project_manager_editor, only: [:manage, :add, :delete]
   before_action :set_project, only: [:manage, :add, :delete]
-  before_action :set_project_user, only: [:manage, :add, :delete]
-
-
 
   layout "projects"
 
   def manage      
-    user_templates = Project.project_templates(@project, current_user)
-    standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system)    
-    @templates = user_templates + standard_templates
-  
-    #call to protected method that restablishes text to be shown for project revision status
-    current_revision_render(@project)
+    #only users with role 'manage' and 'edit' have access to action    
+    #only those projects that the current user is a 'projectuser' of are available as a template
+    #users also have access to standard (specright) templates                                 
+    user_templates = Project.project_templates(@project, current_user).ids
+    standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system).ids
+    template_ids = user_templates+standard_templates
 
-##if user does not have access to default template?
-#whet is template is not that same ref_system?  
-    if params[:template_id].blank? == true    
-      @template = @templates.first
+    @templates = Project.where(:id => template_ids).order("code")
+
+    #uses default template set for project unless different template is selected from drop down list
+    if params[:template_id].blank? == true
+      @template = Project.find(@project.parent_id)
     else
-      @template = Project.find(params[:template_id])     
+      @template = Project.find(params[:template_id])
     end
 
-    if @project.ref_system == "CAWS"
-
-      #filtered by users role and subsectionusers for projectusers
-      project_subsection = Subsectionuser.joins(:projectuser).where('projectusers.user_id' => current_user.id).first   
-      if project_subsection
-        @project_subsections = Cawssubsection.project_subsections(@project).filter_user(current_user)
-        @template_subsections = Cawssubsection.template_subsections(@project, @template).filter_user(current_user)
-      else
-        @project_subsections = Cawssubsection.project_subsections(@project).filter_user(current_user)
-        @template_subsections = Cawssubsection.template_subsections(@project, @template)
-      end
-
+    #both types of users are able to add and delete all subsections
+    #no requiremens to filter by role
+    if @project.CAWS?
+      
+        @project_subsections = Cawssubsection.project_subsections(@project)
+        template_subsection_ids = Cawssubsection.template_subsections(@project, @template).ids
+        #take subsections already in project away from list of subsections available in template
+        #prevents attempted over writing of subsections already in project
+        template_subsection_ids = template_subsection_ids - @project_subsections.ids
+        
+        @template_subsections = Cawssubsection.where(:id => template_subsection_ids)
     else  
-#      @project_subsections = Unisubsection.project_subsections(@project)    
-#      @template_subsections = Unisubsection.template_subsections(@project, @template)
+      
+#        @project_subsections = Unisubsection.project_subsections(@project)
+#        template_subsection_ids = Unisubsection.template_subsections(@project, @template).ids
+#        #take subsections already in project away from list of subsections available in template
+#        template_subsection_ids = template_subsection_ids - @project_subsections.ids
+        
+#        @template_subsections = Unisubsection.where(:id => template_subsection_ids)
     end 
-
   end
   
   
   ##POST
   def add
-    authorise_project_action(@project.id, ["manage", "edit"]) 
-
-    if @project.ref_system == "CAWS"   
-      speclines_to_add = Specline.cawssubsection_speclines(params[:template_id], params[:template_sections])
+    #only users with role 'manage' and 'edit' have access to action
+    #get hash of all speclines within selected subsections
+    if @project.CAWS?   
+      selected_speclines = Specline.cawssubsection_speclines(params[:template_id], params[:template_sections])
     else
-#      speclines_to_add = Specline.unisubsection_speclines(params[:template_id], params[:template_sections])
+#       speclines_to_add = Specline.unisubsection_speclines(template_id, subsection_ids)
     end
-
-    speclines_to_add.each do |line_to_add|
-      new_specline = Specline.new(line_to_add.attributes.merge(:project_id => params[:id]))
-      new_specline.save
-      clause_change_record = 3
-      record_new(@new_specline, @clause_change_record)
-    end                   
-
-     redirect_to manage_specsubsection_path(:id => @project.id, :template_id => @template.id)     
+      
+    #add each specline within each subsection to the project
+    selected_speclines.each do |line_to_add|
+      @new_specline = Specline.create(line_to_add.attributes.merge(:id => nil, :project_id => params[:id]))
+      #for each specline record change event
+      #does not record event when project status is 'draft'
+      record_new(@new_specline, event_type)
+    end                        
+     #render manage page
+     redirect_to manage_specsubsection_path(:id => @project.id, :template_id => params[:template_id])     
   end
 
 
   ##POST
   def delete
-    authorise_project_action(@project.id, ["manage", "edit"]) 
-
-    if @project.ref_system == "CAWS"   
-      speclines_to_delete = Specline.cawssubsection_speclines(params[:template_id], params[:template_sections])
+    #only users with role 'manage' and 'edit' have access to action
+    #get hash of all speclines within selected subsections
+    if @project.CAWS?   
+      selected_speclines = Specline.cawssubsection_speclines(@project.id, params[:project_sections])
     else
-#      speclines_to_delete = Specline.unisubsection_speclines(params[:template_id], params[:template_sections])
+#       speclines_to_add = Specline.unisubsection_speclines(template_id, subsection_ids)
     end
-    
-    clauses_to_delete = speclines_to_delete.collect{|i| i.clause_id}.uniq.sort
-
-    speclines_to_delete.each do |line_to_delete|        
-      if line_to_delete.clause_line != 0       
-        specline = line_to_delete
-        clause_change_record = 3
-        record_delete(@specline, @clause_change_record)             
+            
+    #destroy each specline within each subsection from the project
+    selected_speclines.each do |line|        
+      #for each specline record change event
+      #do not record the deletion of clause title line
+      #does not record event when project status is 'draft'      
+      if line.clause_line != 0
+        record_delete(line, event_type)             
       end
-    line_to_delete.destroy
+      line.destroy
     end
 
+    #get array of ids for clauses that are to be deleted from the project
+    #estabish current revision for project
+    #check if there have been any changes to the clauses to be deleted within the current revision (since the project was last issued)
+    clauses_to_delete = selected_speclines.collect{|i| i.clause_id}.uniq.sort
     revision = Revision.where('project_id = ?', @project.id).last
     previous_changes_to_clause = Alteration.where(:project_id => params[:id], :clause_id => clauses_to_delete, :revision_id => revision.id)
-    if !previous_changes_to_clause.blank?
+    
+    #if there are previsous changes update change event record
+    #illustrate that all lines within the clause have been deleted as part of subsection deletion event (3)
+    if previous_changes_to_clause
       previous_changes_to_clause.each do |previous_change|
-      previous_change.clause_add_delete = 3
-      previous_change.save
+        previous_change.update(:clause_add_delete => 3)
       end    
     end
-
-     redirect_to manage_specsubsection_path(:id => @project.id, :template_id => @template.id)     
+     #render manage page
+     redirect_to manage_specsubsection_path(:id => @project.id, :template_id => params[:template_id])      
   end
 
 
@@ -105,13 +113,18 @@ class SpecsubsectionsController < ApplicationController
       @project = Project.find(params[:id])
     end
 
-    def set_project_user
-      @project_user = Projectuser.where(:user_id => current_user.id, :project_id => params[:id]).first 
+    def event_type
+      #indicate type event that addition of the specline is associated with
+      #1 => line added/deleted/changed
+      #2 => clause added/deleted
+      #3 => subsection added/deleted
+      #information used in reporting changes to the document
+      return 3
     end
     
     def authorise_project_manager_editor
-      set_project_user    
-      if @project_user.role == "manage" || "edit"
+      @project_user = Projectuser.where(:user_id => current_user.id, :project_id => params[:id]).first   
+      if @project_user.manage? || @project_user.edit?
         return @project_user
       else        
         redirect_to log_out_path  

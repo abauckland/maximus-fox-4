@@ -1,8 +1,9 @@
 class ProjectsController < ApplicationController
   before_filter :authenticate
-  before_filter :authorise_project_manager, only: [:edit, :update]
+  before_filter :authorise_project_manager, only: [:update]
   before_action :set_project, only: [:empty_project, :show, :edit, :update]
-  before_action :set_project_user, only: [:index]
+  before_action :set_project_user, only: [:edit]
+#  before_action :set_project_user, only: [:index]
 
   # GET /projects
   # GET /projects.json
@@ -14,7 +15,7 @@ class ProjectsController < ApplicationController
 #changes this to create hash of projects with user access in brackets
     @projects = Project.user_projects_access(current_user)
     @project = @projects.first  
-    
+    @project_user = Projectuser.where(:user_id => current_user.id, :project_id => @projects.first.id).first
     #@project_user = Projectuser.where(:user_id => current_user.id, :project_id => @project.id).first    
     
     #if user is not assigned to any project
@@ -36,14 +37,6 @@ class ProjectsController < ApplicationController
     @projects = Project.user_projects(current_user)     
   end
 
-  def empty_project
-          
-    @projects = Project.user_projects(current_user)
-    if @projects.length == 1
-      @not_used = true
-    end 
-
-  end
 
 
   # GET /projects/new
@@ -84,14 +77,22 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1/edit
   def edit
+    
+    @project_user = Projectuser.where(:user_id => current_user.id, :project_id => @project.id).first
+    #if project user does not have permission to edit project redirect to project/show
+    if !@project_user.manage?      
+      redirect_to project_path(@project.id)  
+    end     
+    
+    
     @projects = Project.user_projects(current_user)
     @client = @project.clients.build  
     @template = Project.project_template(@project)
     
-    user_templates = Project.project_templates(@project, current_user)
-    standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system)
+    user_templates = Project.project_templates(@project, current_user).order(:id)
+    standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system).order(:id)
     
-    @templates = user_templates + standard_templates
+    @templates = standard_templates + user_templates
         
     project_status_array = ['Draft', 'Preliminary', 'Tender', 'Contract', 'As Built']
     current_status_index = project_status_array.index(@project.project_status)
@@ -144,7 +145,7 @@ class ProjectsController < ApplicationController
     
     def authorise_project_manager
       set_project_user    
-      if @project_user.role == "manage"
+      if @project_user.manage?
         return @project_user
       else        
         redirect_to log_out_path  

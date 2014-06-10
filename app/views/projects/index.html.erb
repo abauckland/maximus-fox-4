@@ -10,28 +10,27 @@
 	<% if @projects %>
 	   <div class="project_select">
 		  <div class="project_label_select">Project:</div>
-		  <div class="small_hide project_option_select">
-      	     <%= select_tag "project", options_from_collection_for_select(@projects, :id, :code_and_title, @project.id), { :class => 'project_selectBox', :onchange => "window.location='/projects/'+this.value+'/edit';"} %> 		
+		  <div class="small_hide project_index_select_large">
+      	     <%= select_tag "project", options_from_collection_for_select(@projects, :id, :code_and_title), {:prompt => "Select project to view/edit", :class => 'project_selectBox', :onchange => "window.location='/projects/'+this.value+'/edit';"} %> 		
 		  </div>
-		  <div class="small_show project_option_select">
-      		 <%= select_tag "project", options_from_collection_for_select(@projects, :id, :code, @project.id), {:class => 'project_selectBox', :onchange => "window.location='/projects/'+this.value+'/edit';"} %> 		
+		  <div class="small_show project_index_select_small">
+      		 <%= select_tag "project", options_from_collection_for_select(@projects, :id, :code), {:prompt => 'Select', :onchange => "window.location='/projects/'+this.value+'/edit';"} %> 		
 		  </div>
 	   </div>
 	<% end %>
 
-    <% if authorise_project_view(@project.id, ["manage", "edit"]) %>
 	   <div class="small_hide project_create_button"><%= link_to "create new project", new_project_path %> </div>
 	   <div class="small_show project_create_button"><%= link_to "+ project", new_project_path %> </div>   
-    <% end %>
 </div>
 
 
 <div class="content">
     
     <% if @project_user %>    
-        <%= index_help_text(@project_user)%>
+        <%= existing_user_intro(@project_user) %>
     <% else %>
-
+        
+        <%= new_user_intro %> 
     <% end %>    
 
 </div> 

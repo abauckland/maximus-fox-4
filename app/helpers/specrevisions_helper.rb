@@ -136,7 +136,7 @@ module SpecrevisionsHelper
  end
 
 def clause_ref_text(clause)                                                        
-  if @project.ref_system.caws?
+  if @project.ref_system == "CAWS"
     clause.clauseref.subsection.cawssubsection.cawssection.ref.to_s + clause.clauseref.subsection.cawssubsection.ref.to_s + clause.clauseref.clausetype_id.to_s + clause.clauseref.clause.to_s + clause.clauseref.subclause.to_s  
   else
     clause.clauseref.subsection.unisubsection.unisection.ref.to_s + clause.clauseref.subsection.unisubsection.ref.to_s + clause.clauseref.clausetype_id.to_s + clause.clauseref.clause.to_s + clause.clauseref.subclause.to_s   

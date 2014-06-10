@@ -58,7 +58,7 @@ class PrintsController < ApplicationController
       pdf_document = Print.where(:project_id => @project.id, :revision_id => @revision.id).first
       #open document and apply superseded water mark to all pages
       
-      
+###template support may have been removed in latest version      
       filename = pdf_document.attachment
       Prawn::Document.generate("#{@project.code}_rev_#{@revision.rev.capitalize}.pdf", :template => filename) do
         
@@ -85,7 +85,7 @@ class PrintsController < ApplicationController
       :info => {:title => @project.title}
     ) do |pdf|
     
-        if @project.ref_system.caws?
+        if @project.ref_system == "CAWS"
             print_caws_document(@project, @revision, pdf)
         else
             print_uni_document(@project, @revision, pdf)
@@ -97,13 +97,25 @@ class PrintsController < ApplicationController
     update_revision(@project, @revision)
 
     
-    filename = "#{@project.code}_rev_#{@revision.rev.capitalize}.pdf"
-    document.render_file "tmp/#{filename}"
+    if @revision.rev
+      case @revision.rev
+      when '' 
+        filename = "#{@project.code}_rev_na.pdf" 
+      when '-'
+        filename = "#{@project.code}_rev_-.pdf"
+      else 
+        filename = "#{@project.code}_rev_#{@revision.rev.upcase}.pdf"      
+      end
+    else
+      filename = "#{@project.code}_rev_na.pdf"   
+    end
+    
+    #document.render_file "tmp/#{filename}"
 
-    print_file = Print.create(:attachment => LocalFile.new(RAILS_ROOT + "/tmp/#{filename}"), :project_id => @project.id, :revision_id => @revision, :user_id => current_user.id)
+ #   print_file = Print.create(:attachment => LocalFile.new(RAILS.root + "/tmp/#{filename}"), :project_id => @project.id, :revision_id => @revision, :user_id => current_user.id)
 
-    return filename
-
+    #return filename
+send_data document.render, filename: "test.pdf", :type => "application/pdf"
   #  redirect_to print_path(@project.id)
 
   end

@@ -44,7 +44,7 @@ class Project < ActiveRecord::Base
                               ).where.not(:id => project.id
                               ).order("code")}
   
-  scope :cawssubsection_project_templates, ->(project, subsection, current_user) { joins(:projectusers, :speclines => [:clauses => [:clauserefs => :subsections]]
+  scope :cawssubsection_project_templates, ->(project, subsection, current_user) { joins(:projectusers, :speclines => [:clause => [:clauseref => :subsection]]
                               ).where('projectusers.user_id' => current_user.id, :ref_system => project.ref_system
                               ).where('subsections.cawssubsection_id' => subsection.id
                               ).where.not(:id => project.id

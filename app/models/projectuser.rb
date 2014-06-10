@@ -4,8 +4,7 @@ class Projectuser < ActiveRecord::Base
   has_many :subsectionusers
   has_many :subsections, :through => :subsectionusers
 
-  attr_accessor :email
-  attr_accessor :subsections
+  attr_accessor :subsection_ids
   
   enum role: [:manage, :edit, :write, :read]  
   #manage - manages access to project plus all other functions

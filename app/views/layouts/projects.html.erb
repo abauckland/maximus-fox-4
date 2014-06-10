@@ -26,21 +26,17 @@
             <!-- menu for new project -->
                 <nav class="app_menu">
                     <div class="menu_item_container">                              
-                        <div class="app_menu_item"><%= link_to "PROJECTS", projects_path, :class => check_current('project')%></div>
+                        <div class="app_menu_item"><%= link_to "PROJECTS", projects_path, :class => 'not_link'%></div>
                     </div>
                 </nav>        
         
-                <nav class="app_mob_menu"><%= link_to "PROJECTS", projects_path, :class => check_current('project')%></nav>
+                <nav class="app_mob_menu"><%= link_to "PROJECTS", projects_path, :class => 'not_link'%></nav>
             <% else %>
 
 
 		      <nav class="app_menu">
 			     <div class="menu_item_container">  			    			
-    			 <% if authorise_project_view(@project.id, ["manage"])%> 
-    			     <div class="app_menu_item"><%= link_to "PROJECT", edit_project_path(@project.id), :class => check_current('project')%></div>
-    			 <% else %>     
-                     <div class="app_menu_item"><%= link_to "PROJECT", project_path(@project.id), :class => check_current('project')%></div>
-    			 <% end %>
+    			 <div class="app_menu_item"><%= link_to "PROJECTS", edit_project_path(@project.id), :class => check_current('project')%></div>
     			 <div class="app_menu_item"><%= link_to "DOCUMENT", specification_path(@project.id), :class => check_current('document')%></div>
     			 <div class="app_menu_item"><%= link_to "REVISIONS", specrevision_path(@project.id), :class => check_current('revision')%></div>
     			 <div class="app_menu_item"><%= link_to "PUBLISH", print_path(@project.id), :class => check_current('publish')%></div>

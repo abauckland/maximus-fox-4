@@ -1,3 +1,4 @@
+<!-- project information - ALL DEVICES (formatting changed in CSS -->
 <div class="project_info">
 	<div class="project_title">
 		<div class="project_code">   
@@ -16,55 +17,53 @@
 </div>
 
 
-<div class="option_band_single">
-	
+<div class="option_band_single">	
+<!-- subsection select and add/delete link for MOBILE -->
 	<div class="section_select_mobile">
 		<div class="select_1">
 			<div class="label_select_1">Subsection:</div>
 			<div class="option_select_1">
-      			<%= select_tag "section", options_from_collection_for_select(@project_subsections, :id, :subsection_code, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/projects/#{@project.id}?subsection='+this.value;"}  %>	
+      			<%= select_tag "section", options_from_collection_for_select(@project_subsections, :id, :full_code, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/projects/#{@project.id}?subsection='+this.value;"}  %>	
 			</div>
 		</div>
-		<% if authorise_project_view(project_id, ["manage", "edit"])%>
+		<% if @project_user.manage? || @project_user.edit? %>
 		  <div class="subsection_button_small"><%= link_to '+/-', manage_specsubsection_path(:id => @project.id, :template_id => @project.parent_id) %></div> 
 		<% end %>
 	</div>
+	
+<!-- subsection select and add/delete link for TABLET-->
 	<div class="section_select_tablet">
 		<div class="select_1">
 			<div class="label_select_1">Subsection:</div>
 			<div class="option_select_1">
-      			<%= select_tag "section", options_from_collection_for_select(@project_subsections, :id, :subsection_full_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/projects/#{@project.id}?subsection='+this.value;"}  %>	
+      			<%= select_tag "section", options_from_collection_for_select(@project_subsections, :id, :full_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/projects/#{@project.id}?subsection='+this.value;"}  %>	
 			</div>
 		</div>
-		<% if authorise_project_view(project_id, ["manage", "edit"])%>
+		<% if @project_user.manage? || @project_user.edit? %>
 		  <div class="subsection_button_medium"><%= link_to '+/- sections', manage_specsubsection_path(:id => @project.id, :template_id => @project.parent_id) %></div> 
 	    <% end %>
 	</div>
 
+<!-- subsection select and add/delete link for DESKTOP -->
 	<div class="section_select_desktop">
 		<div class="select_1">
 			<div class="label_select_1">Section:</div>
 			<div class="option_select_1">
-      			<%= select_tag "section", options_from_collection_for_select(@project_sections, :id, :section_code_and_title, @selected_section.id), {:class => 'document_selectBox_1', :onchange => "window.location='/projects/#{@project.id}?section='+this.value;"}  %>	
+      			<%= select_tag "section", options_from_collection_for_select(@project_sections, :id, :code_and_title, @selected_section.id), {:class => 'document_selectBox_1', :onchange => "window.location='/projects/#{@project.id}?section='+this.value;"}  %>	
 			</div>
 		</div>
 		<div class="select_2">
 			<div class="label_select_1">Subsection:</div>
 			<div class="option_select_2">
-      			<%= select_tag "subsection", options_from_collection_for_select(@selected_section_subsections, :id, :subsection_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_2', :onchange => "window.location='/projects/#{@project.id}?subsection='+this.value;"}  %>	
+      			<%= select_tag "subsection", options_from_collection_for_select(@selected_section_subsections, :id, :part_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_2', :onchange => "window.location='/projects/#{@project.id}?subsection='+this.value;"}  %>	
 			</div>
 		</div>
-		<% if authorise_project_view(project_id, ["manage", "edit"])%>
+		<% if @project_user.manage? || @project_user.edit? %>
 		  <div class="subsection_button_large"><%= link_to 'add/delete sections', manage_specsubsection_path(:id => @project.id, :template_id => @project.parent_id) %></div>
 	    <% end %>
 	</div>
 			
 </div>
-
-
-
-
-
 
 
 

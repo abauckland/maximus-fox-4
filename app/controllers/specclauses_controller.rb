@@ -1,11 +1,11 @@
 class SpecclausesController < ApplicationController
-  before_action :set_project, only: [:show, :add_clauses, :delete_clauses]
+  before_filter :authenticate  
+  before_action :set_project, only: [:manage, :add_clauses, :delete_clauses]
 
   layout "projects"
 
 
-def show
-  authorize @project 
+def manage
 
   #call to protected method that establishes text to be shown for project revision status
   current_revision_render(@project)
@@ -16,24 +16,24 @@ def show
     @template = Project.where(:id => params[:template_id]).first     
   end
 
-  if @project.ref_system.caws?
+  if @project.CAWS?
     
     @subsection = Cawssubsection.where(:id => params[:subsection_id]).first
  
-    @selectable_templates = Project.cawssubsection_project_templates(@project, @subsection)
+    @selectable_templates = Project.cawssubsection_project_templates(@project, @subsection, current_user)
   
-    @current_project_clauses = Clause.joins(:clauseref => [:subsections], :speclines => [:projects => :projectusers]
+    @current_project_clauses = Clause.joins(:clauseref => [:subsection], :speclines => [:project => :projectusers]
                               ).where('projectusers.user_id' => current_user.id
                               ).where('speclines.project_id' => @project.id
-                              ).where('subsections.cawssubsection_id' => subsection.id
+                              ).where('subsections.cawssubsection_id' => @subsection.id
                               ).group(:id
                               ).order('clauserefs.clausetype_id, clauserefs.clause, clauserefs.subclause'
                               )
   
-    @template_project_clauses = Clause.joins(:clauseref, :speclines
+    @template_project_clauses = Clause.joins(:clauseref => [:subsection], :speclines => [:project => :projectusers]
                               ).where('projectusers.user_id' => current_user.id
                               ).where('speclines.project_id' => @template.id
-                              ).where('subsections.cawssubsection_id' => subsection.id
+                              ).where('subsections.cawssubsection_id' => @subsection.id
                               ).where.not('speclines.project_id' => @project.id
                               ).group(:id
                               ).order('clauserefs.clausetype_id, clauserefs.clause, clauserefs.subclause'
@@ -45,7 +45,6 @@ end
 
 
 def add_clauses
-  authorize @project   
 
     speclines_to_add = Specline.where(:project_id => params[:template_id], :clause_id => params[:template_clauses]) 
     speclines_to_add.each do |line_to_add|
@@ -63,7 +62,7 @@ end
 
 
 def delete_clauses
-  authorize @project     
+   
      
     #get all clauses that are in include list    
     specline_lines_to_deleted = Specline.where(:project_id => @project.id, :clause_id => params[:project_clauses])      
@@ -84,7 +83,7 @@ def delete_clauses
       end    
     end
 
-  if @project.ref_system.caws?
+  if @project.CAWS?
     #find if any clauses are in current subsection after changes
     get_valid_spline_ref = Specline.cawssubsection_specline(@project.id, params[:subsection_id]).last
   else
