@@ -61,19 +61,36 @@ class ApplicationController < ActionController::Base
     end
   end
 
+#speclines controller - new_specline action
+  def update_subsequent_specline_clause_line_ref(subsequent_speclines, action, selected_specline)
 
-  def update_subsequent_specline_clause_line_ref(subsequent_specline_lines, action_type, selected_specline)
-    
-    if subsequent_specline_lines   
-     subsequent_specline_lines.each_with_index do |subsequent_specline, i|
-      if action_type == 'new'
-        subsequent_specline.update_attributes(:clause_line => selected_specline.clause_line + 2 + i)
+    subsequent_speclines.each_with_index do |line, i|
+      if action == 'new'
+        line.update(:clause_line => selected_specline.clause_line + 2 + i)
       end
-      if action_type =='delete'
-        subsequent_specline.update_attributes(:clause_line => selected_specline.clause_line + i)
+      if action == 'delete'
+        line.update(:clause_line => selected_specline.clause_line + i)
       end
-     end
-    end    
+    end
+       
+  end
+
+
+  def update_clause_change_records(project, revision, clause_ids, event_type)
+
+    #estabish current revision for project
+    revision = Revision.where('project_id = ?', @project.id).last
+
+    #check if there have been any changes to the clauses to be deleted within the current revision (since the project was last issued)
+    #if there are previous changes update change event record
+    #illustrate that all lines within the clause have been deleted as part of subsection deletion event (3)
+    previous_changes = Alteration.where(:project_id => project.id, :clause_id => params[:project_clauses], :revision_id => revision.id)
+    if previous_changes
+      previous_changes.each do |previous_change|
+        previous_change.update(:clause_add_delete => event_type)
+      end    
+    end
+  
   end
 
 
@@ -414,20 +431,22 @@ def update_subsequent_lines_last(subsequent_clause_lines, set_txt1_id)
   end
 end
 
-def update_subsequent_lines_on_move(subsequent_clause_lines, set_txt1_id)
+def update_subsequent_lines_on_move(subsequent_lines, set_txt1_id)
     @subsequent_prefixes = []
-  subsequent_clause_lines.each_with_index do |next_clause_line, i|
-  check_linetype = Linetype.where('id =?', next_clause_line.linetype_id).first
-    if check_linetype.txt1 == true
-       next_txt1_id = (set_txt1_id + 1 + i)
-      next_clause_line.txt1_id = next_txt1_id
-      next_clause_line.save      
-      next_txt1_text = Txt1.where(:id => next_txt1_id).first     
-      @subsequent_prefixes[i] = [next_clause_line.id, next_txt1_text.text] 
-    else
-      break
+    subsequent_lines.each_with_index do |line, i|
+      check_linetype = Linetype.where(:id => line.linetype_id).first
+      if check_linetype.txt1 == true
+        next_txt1_id = (set_txt1_id + 1 + i) #because i starts at 0        
+        line.update(:txt1_id => next_txt1_id)            
+        txt1_text = Txt1.where(:id => next_txt1_id).first     
+        @subsequent_prefixes[i] = [line.id, txt1_text] 
+      else
+        break
+      end
     end
-  end
+    @subsequent_prefixes.compact
+#need to set this outsize of the method - as subsequent calls will override it
+    @previous_prefixes = @subsequent_prefixes
 end
 
 

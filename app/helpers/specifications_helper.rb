@@ -164,7 +164,7 @@ end
 
 
 def specline_move
-    image_tag("move.png", :mouseover =>"move_rollover.png", :border=>0, :title => 'drag & drop')
+    image_tag("move.png", :mouseover => "move_rollover.png", :border=>0, :title => 'drag & drop')
 end
 
 def specline_mob_spec_menu(specline)
@@ -190,9 +190,9 @@ end
 
 def spec_clause_ref_text(specline)                                                        
   if @project.ref_system == "CAWS"
-    specline.clause.clauseref.subsection.cawssubsection.cawssection.ref + sprintf("%02d", specline.clause.clauseref.subsection.cawssubsection.ref).to_s<<"."<<specline.clause.clauseref.clausetype_id.to_s<<sprintf("%02d", specline.clause.clauseref.clause).to_s<<specline.clause.clauseref.subclause.to_s 
+    specline.clause.clauseref.subsection.cawssubsection.cawssection.ref + sprintf("%02d", specline.clause.clauseref.subsection.cawssubsection.ref).to_s<<"."<<specline.clause.clauseref.clausetype_id.to_s<<sprintf("%02d", specline.clause.clauseref.clause_no).to_s<<specline.clause.clauseref.subclause.to_s 
   else
-    specline.clause.clauseref.subsection.unisubsection.unisection.ref + sprintf("%02d", specline.clause.clauseref.subsection.unisubsection.ref).to_s<<"."<<specline.clause.clauseref.clausetype_id.to_s<<sprintf("%02d", specline.clause.clauseref.clause).to_s<<specline.clause.clauseref.subclause.to_s     
+    specline.clause.clauseref.subsection.unisubsection.unisection.ref + sprintf("%02d", specline.clause.clauseref.subsection.unisubsection.ref).to_s<<"."<<specline.clause.clauseref.clausetype_id.to_s<<sprintf("%02d", specline.clause.clauseref.clause_no).to_s<<specline.clause.clauseref.subclause.to_s     
   end  
 end
 

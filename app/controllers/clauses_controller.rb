@@ -1,18 +1,19 @@
 class ClausesController < ApplicationController
 
-before_action :set_project, only: [:new, :create, :new_clone_subsection_list, :new_clone_clause_list]
 
-layout "projects"
+  before_filter :authenticate
+  before_action :set_project, only: [:new, :create, :new_clone_project_list, :new_clone_subsection_list, :new_clone_clause_list]
 
-#new clause create code
-#need to set up route and carry over variables
+  layout "projects"
+
+
   def new   
     
     @clause = Clause.new
     clausetitle = @clause.build_clausetitle
     clauseref = @clause.build_clauseref
         
-    if @project.ref_system.caws?    
+    if @project.CAWS?    
       @subsection = Cawssubsection.where(:id => params[:subsection_id]).first
     else
 ###uniclass code to go here - same as above 
@@ -20,14 +21,15 @@ layout "projects"
   end
 
 
-  def create        
-    @clause = Clause.new(params[:clause])
 
+  def create        
+    @clause = Clause.new(clause_params)
+    
     current_clauseref = Specline.joins(:clause => :clauseref
-                               ).where(:project_id => @project, 
+                               ).where(:project_id => @project.id, 
                                'clauserefs.subsection_id' => params[:clause][:clauseref_attributes][:subsection_id], 
                                'clauserefs.clausetype_id' => params[:clause][:clauseref_attributes][:full_clause_ref][0,1], 
-                               'clauserefs.clause' => params[:clause][:clauseref_attributes][:full_clause_ref][1,2], 
+                               'clauserefs.clause_no' => params[:clause][:clauseref_attributes][:full_clause_ref][1,2], 
                                'clauserefs.subclause' => params[:clause][:clauseref_attributes][:full_clause_ref][3,1]
                                ).first
     
@@ -53,20 +55,19 @@ layout "projects"
         end
                           
         if params[:clause_content] == 'blank_content'              
-          @new_specline = Specline.create(:project_id => @project.id, :clause_id => @clause.id, :clause_line => 0, :linetype_id => @linetype_id)
+          @new_specline = Specline.create(:project_id => @project.id, :clause_id => @clause.id, :clause_line => 1, :linetype_id => @linetype_id)
         else   
-          clone_speclines = Specline.where('clause_id = ? AND project_id = ? AND clause_line > ?', params[:clone_clause_id], params[:clone_template_id], 0)         
+          clone_speclines = Specline.where(:clause_id => params[:clone_clause_id], :project_id => params[:clone_template_id]).where.not(:clause_line => 0)         
           clone_speclines.each do |clone_line|
-            @new_specline = Specline.create(clone_line.attributes.merge({:project_id => @project.id, :clause_id => @clause.id}))      
+            @new_specline = Specline.create(clone_line.attributes.merge(:id => nil, :project_id => @project.id, :clause_id => @clause.id))      
           end            
-        @clause_change_record = 2
-        record_new(@new_specline, clause_change_record)
+        record_new(@new_specline, event_type)
         end
          
-        redirect_to(:controller => "speclauses", :action => "manage", :id => @project.id, :subsection_id => params[:clause][:clauseref_attributes][:subsection_id])
+        redirect_to manage_specclause_path(:id => @project.id, :subsection_id => params[:clause][:clauseref_attributes][:subsection_id])
       else
         respond_to do |format|
-          format.html { render :action => "new"}
+          format.html { render :action => "new", :id => @project.id, :subsection_id => params[:clause][:clauseref_attributes][:subsection_id]}
           format.xml  { render :xml => @clause.errors, :status => :unprocessable_entity }
         end
       end 
@@ -74,6 +75,49 @@ layout "projects"
   end
 
 
+  def new_clone_project_list
+#projects must contain something      
+      user_projects = Project.user_projects_access(current_user).ref_system(@project).order("code").ids   
+      standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system).order("code").ids      
+      template_ids = user_projects + standard_templates
+
+      @projects = Project.where(:id => template_ids)
+
+  end
+  
+  def new_clone_subsection_list
+
+      if @project.CAWS?            
+        #if user is identified as having access to only some subsections return list of subsections
+        #if user has access to all, return all subsections for project
+        subsectionuser_ids = Subsectionuser.joins(:projectuser
+                                      ).where('projectusers.user_id' => current_user.id, 'projectusers.project_id' => @project.id
+                                      ).ids         
+        
+        if subsectionuser_ids.blank?
+          clone_subsection_ids = Cawssubsection.project_subsections(@project).order("id").ids.uniq
+
+        else
+          clone_subsection_ids = Cawssubsection.joins(:subsections => :subsectionusers
+                                            ).where('subsectionusers.id' => subsectionuser_ids 
+                                            ).ids.uniq         
+        end
+        @clone_subsections = Cawssubsection.includes(:cawssection).where(:id => clone_subsection_ids).order('cawssections.ref, cawssubsections.ref')        
+      else
+###uniclass code to go here - same as above 
+      end
+  end
+  
+  def new_clone_clause_list
+      if @project.CAWS?     
+        clone_clause_ids = Clause.joins(:speclines, :clauseref => [:subsection]
+                              ).where('speclines.project_id' => @project.id, 'subsections.cawssubsection_id' => params[:subsection]
+                              ).ids.uniq    
+        @clone_clauses = Clause.includes(:clausetitle, :clauseref => [:subsection => [:cawssubsection => :cawssection]]).where(:id => clone_clause_ids).order('clauserefs.subsection_id', 'clauserefs.clausetype_id', 'clauserefs.clause_no', 'clauserefs.subclause')          
+      else
+###uniclass code to go here - same as above 
+      end    
+  end
     
   private
     # Use callbacks to share common setup or constraints between actions.    
@@ -81,26 +125,18 @@ layout "projects"
       @project = Project.find(params[:id])
     end
 
-    def new_clone_project_list
-      @projects = Project.user_projects(current_user).order("company_id, code")   
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def clause_params
+      params.require(:clause).permit({:clauseref_attributes => [:subsection_id, :full_clause_ref]}, :project_id, :title_text)
     end
-  
-    def new_clone_subsection_list
-      if @project.ref_system.caws?    
-        @clone_subsections = Cawssubsection.project_subsections(@project)
-      else
-###uniclass code to go here - same as above 
-      end
-    end
-  
-    def new_clone_clause_list
-      if @project.ref_system.caws?      
-        @clone_clauses = Clause.joins(:speclines, :clauseref => [:subsection]
-                              ).where('speclines.project_id' => @project.id, 'subsections.cawssubsection_id' => params[:subsection]
-                              ).order('subsections.cawssubsection_id', 'clauserefs.clausetype_id', 'clauserefs.clause', 'clauserefs.subclause')    
-      else
-###uniclass code to go here - same as above 
-      end    
+
+    def event_type
+      #indicate type event that addition of the specline is associated with
+      #1 => line added/deleted/changed
+      #2 => clause added/deleted
+      #3 => subsection added/deleted
+      #information used in reporting changes to the document
+      return 2
     end
 
 #end of class

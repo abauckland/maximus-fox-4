@@ -28,9 +28,9 @@ class Cawssubsection < ActiveRecord::Base
 #                                                      ).order(:id
 #                                                      )}
 
-  scope :filter_user, ->(current_user) { joins(:subsections => [:subsectionusers => :projectuser]
-                                                      ).where('projectusers.user_id' => current_user.id    
-                                                      )}
+#  scope :filter_user, ->(current_user) { joins(:subsections => [:subsectionusers => :projectuser]
+#                                                      ).where('projectusers.user_id' => current_user.id    
+#                                                      )}
 
 
   scope :all_subsections, ->(project) { joins(:subsections => [:clauserefs => [:clauses => :speclines]]

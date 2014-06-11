@@ -6,76 +6,51 @@ class SpeclinesController < ApplicationController
   # GET
   def new_specline     
     #call to protected method in application controller that changes the clause_line ref in any subsequent speclines    
-    existing_subsequent_specline_lines = Specline.where('clause_id = ? AND project_id = ? AND clause_line > ?', @specline.clause_id, @specline.project_id, @specline.clause_line).order('clause_line')    
-    update_subsequent_specline_clause_line_ref(existing_subsequent_specline_lines, 'new', @specline)
+    subsequent_speclines = Specline.where('clause_id = ? AND project_id = ? AND clause_line > ?', @specline.clause_id, @specline.project_id, @specline.clause_line).order('clause_line')    
+    update_subsequent_specline_clause_line_ref(subsequent_speclines, 'new', @specline)
       
     if @specline.clause_line == 0
-      case @specline.clausetype_id
-        when '1', '6', '7', '8', '10', '11', '12' ;  @linetype_id = 7
-        when '2', '3', '4', '5' ;  @linetype_id = 8
+      case @specline.clause.clauseref.clausetype_id
+        when 1, 6, 7, 8, 10, 11, 12 ;  linetype_id = 7
+        when 2, 3, 4, 5 ;  linetype_id = 8
       end
     else
       linetype_id = @specline.linetype_id
     end 
     
     #if specline is a product or reference line (linetype 10, 11 or 12) 
-    if [10,11].include?(@specline.linetype_id) 
-     @new_specline = Specline.new do |n|        
-            n.project_id = @specline.project_id 
-            n.clause_id = @specline.clause_id 
-            n.clause_line = @specline.clause_line + 1
-            n.txt1_id = 1
-            n.txt2_id = 1
-            n.txt3_id = 1
-            n.txt4_id = 1
-            n.txt5_id = 1
-            n.txt6_id = 1
-            n.identity_id = 1
-            n.perform_id = 1
-            n.linetype_id = linetype_id
-          end  
-     else
-      @new_specline = Specline.new(@specline.attributes.merge(:clause_line => @specline.clause_line + 1, :linetype_id => linetype_id))               
-     end  
-     @new_specline.save 
-      
-    #if other lines of clause have been deleted in same revision then amended to recorded change event for line
-      @current_revision = Revision.where('project_id = ?', @specline.project_id).last
-      previous_change_to_clause = Change.where(:project_id => @specline.project_id, :clause_id => @specline.clause_id, :revision_id => @current_revision.id).order('created_at').last
-      if !previous_change_to_clause.blank?  
-          @clause_change_record = previous_change_to_clause.clause_add_delete      
-      end
-               
+    if [10,11].include?(@specline.linetype_id)      
+      @new_specline = Specline.create(:id => nil, :project_id => @specline.project_id, :clause_id => @specline.clause_id, :clause_line => @specline.clause_line + 1, :linetype_id => linetype_id) 
+    else
+      @new_specline = Specline.create(@specline.attributes.merge(:id => nil, :clause_line => @specline.clause_line + 1, :linetype_id => linetype_id))               
+    end
+          
     #call to private method that records addition of line in Changes table
-    record_new(@specline, @clause_change_record)  
+    record_new(@new_specline, @clause_change_record)  
     #change prefixs to clauselines in clause
-    txt1_insert_line(@new_specline, @specline, existing_subsequent_specline_lines)
-      if !@subsequent_prefixes.blank?
-        @subsequent_prefixes.compact
-      end
+    txt1_insert_line(@new_specline, @specline, subsequent_speclines)
+    if !@subsequent_prefixes.blank?
+      @subsequent_prefixes.compact
     end
        
     respond_to do |format|
-        format.js   { render :new_specline, :layout => false } 
+        format.js   { render :new_specline, :layout => false }
+    end     
   end
 #################################
 
-def move_specline
+  def move_specline
     
-
-    @selected_specline = @specline #obtained in before filter
+    @selected = @specline #obtained in before filter
     
-
 ###general stuff
     prefixed_linetypes_array = Linetype.where('txt1 = ?', 1).collect{|i| i.id}
 
 ####old location information
 #old clause information
-    old_limit_ref = @selected_specline.clause_line
-    old_clause_line_limit = old_limit_ref - 2 
-    previous_speclines = Specline.where('clause_id = ? AND project_id = ? AND clause_line > ?', @selected_specline.clause_id,  @selected_specline.project_id, old_clause_line_limit).order('clause_line')
-    previous_specline_id_array = previous_speclines.collect{|i| i.id}
-    previous_specline_id_array_length = previous_specline_id_array.length
+    old_clause_line_limit = @selected.clause_line - 2 
+    previous_speclines = Specline.where('clause_id = ? AND project_id = ? AND clause_line > ?', @selected.clause_id,  @selected.project_id, old_clause_line_limit).order('clause_line')
+    previous_speclines_length = previous_speclines.ids.length
 #old position information
     #@selected_specline
 #id of line above old position
@@ -89,195 +64,123 @@ def move_specline
 
 #####old location tidy up
 #renumber clause_lines
-  if previous_specline_id_array_length > 2
-    old_above_clauseline_ref = old_above_specline.clause_line
-    last_array_item_ref = previous_specline_id_array_length - 1
+    if previous_speclines_length > 2
+      old_above_clauseline_ref = old_above_specline.clause_line
+      last_array_item_ref = previous_speclines_length - 1
 
-    for i in (2..last_array_item_ref) do
-      specline_to_change = previous_speclines[i]
-      specline_to_change.clause_line = i - 1 + old_above_clauseline_ref 
-      specline_to_change.save
+      for i in (2..last_array_item_ref) do
+        new_clause_line = i - 1 + old_above_clauseline_ref
+        specline_to_change = previous_speclines[i].update(:clause_line => new_clause_line)
+      end
     end
-  end
 
 #renumber prefixes
 #check if line had prefix
-if prefixed_linetypes_array.include?(@selected_specline.linetype_id)
+    subsequent_clause_lines = previous_speclines[2..last_array_item_ref]
 
-          if !prefixed_linetypes_array.include?(old_above_specline.linetype_id)
-            set_txt1_id = 0
-          else
-            set_txt1_id = old_above_specline.txt1_id #- 1
-          end
-          
-          if previous_speclines.length > 2
-            subsequent_clause_lines = previous_speclines[2..last_array_item_ref]
-            update_subsequent_lines_on_move(subsequent_clause_lines, set_txt1_id)
-                  if !@subsequent_prefixes.blank?
-                    @previous_prefixes = @subsequent_prefixes.compact
-                  end
-          end    
-else #if did not have prefix then update only if above and below had prefixes
-  if prefixed_linetypes_array.include?(old_above_specline.linetype_id)
-    if !old_below_specline.blank?
-    if prefixed_linetypes_array.include?(old_below_specline.linetype_id)
-          set_txt1_id = old_above_specline.txt1_id
-          subsequent_clause_lines = previous_speclines[2..last_array_item_ref]
+    if prefixed_linetypes_array.include?(old_above_specline.linetype_id)
+      set_txt1_id = old_above_specline.txt1_id
+    else
+      set_txt1_id = 0
+    end
+   
+    if prefixed_linetypes_array.include?(@selected.linetype_id)
+      if previous_speclines.length > 2                
+        update_subsequent_lines_on_move(subsequent_clause_lines, set_txt1_id)
+      end    
+    else #if did not have prefix then update only if above and below had prefixes
+      if old_below_specline           
           update_subsequent_lines_on_move(subsequent_clause_lines, set_txt1_id)
-           if !@subsequent_prefixes.blank?
-                    @previous_prefixes = @subsequent_prefixes.compact
-                  end 
+      end
     end
-    end
-  end 
-end
-
-
 
 ####new location information
-#new position information
-######    
+#new position information  
     array_as_string = params[:table_id_array]
     id_array = array_as_string.split(",").map { |s| s.to_s }
-   # id_as_string = params[:id]
-   # b = a.to_i
     array_location = id_array.index(params[:id])
 
 #id of new above position
-if array_location == 0  
-    new_above_specline = Specline.where('clause_id = ? AND project_id = ? AND clause_line = ?', @selected_specline.clause_id,  @selected_specline.project_id, 0).first  
-else
-
-    new_above_id_location = array_location - 1
-    new_above_specline_id = id_array[new_above_id_location]
-    new_above_specline = Specline.where(:id => new_above_specline_id).first
-end
-    @new_above_specline = new_above_specline
-    new_limit_ref = new_above_specline.clause_line
-    new_above_clauseline_ref = new_above_specline.clause_line
-########
+    if array_location == 0  
+      @new_above_specline = Specline.where('clause_id = ? AND project_id = ? AND clause_line = ?', @selected.clause_id,  @selected.project_id, 0).first  
+    else
+      @new_above_specline = Specline.where(:id => id_array[array_location - 1]).first
+    end
    
 #new clause information
+    new_clause_line_limit = @new_above_specline.clause_line - 1
+    next_speclines = Specline.where('clause_id = ? AND project_id = ? AND clause_line > ?', @new_above_specline.clause_id,  @new_above_specline.project_id, new_clause_line_limit).order('clause_line')
+    next_specline_ids = next_speclines.ids
+    next_speclines_length = next_specline_ids.length
 
-    new_clause_line_limit = new_limit_ref - 1
-    next_speclines = Specline.where('clause_id = ? AND project_id = ? AND clause_line > ?', new_above_specline.clause_id,  new_above_specline.project_id, new_clause_line_limit).order('clause_line')
-    next_specline_id_array = next_speclines.collect{|item| item.id}
-    next_specline_id_array_length = next_specline_id_array.length
 #id of new below position
-
-    new_below_specline = next_speclines[1]
-
-  if !new_below_specline.blank?   
+    if next_speclines[1]  
       
-  if next_specline_id_array.include?(@selected_specline.id)
-    index_of_id = next_specline_id_array.index(@selected_specline.id)
-    next_speclines.delete_at(index_of_id)
-    last_array_item_ref = next_specline_id_array_length - 2
-  else
-    last_array_item_ref = next_specline_id_array_length - 1
-  end
+      if next_specline_ids.include?(@selected.id)
+        index_of_id = next_specline_ids.index(@selected.id)
+        next_speclines.delete_at(index_of_id)
+        last_array_item_ref = next_speclines_length - 2
+      else
+        last_array_item_ref = next_speclines_length - 1
+      end
     
-  if next_specline_id_array_length > 1
-    for i in (1..last_array_item_ref) do
-      specline_to_change = next_speclines[i]
-      specline_to_change.clause_line = i + 1 + new_above_clauseline_ref
-      specline_to_change.save
-    end
-  end
-
-end
-  #renumber prefixes
-#check if moved line had prefix
-
-if prefixed_linetypes_array.include?(@selected_specline.linetype_id)
-
-    if prefixed_linetypes_array.include?(new_above_specline.linetype_id)
-     if !new_below_specline.blank? 
-      if prefixed_linetypes_array.include?(new_below_specline.linetype_id)
-      #if both do
-       new_selected_txt1_id = new_above_specline.txt1_id
-        selected_specline_new_txt1_id = new_selected_txt1_id + 1
-        subsequent_clause_lines = next_speclines[1..last_array_item_ref]
-        update_subsequent_lines_on_move(subsequent_clause_lines, selected_specline_new_txt1_id)
-        if !@subsequent_prefixes.blank?
-          @subsequent_prefixes.compact
-        end 
-      else
-      #if above does but below does not
-        new_selected_txt1_id = new_above_specline.txt1_id
-        selected_specline_new_txt1_id = new_selected_txt1_id + 1 
+      if next_speclines_length > 1
+        for i in (1..last_array_item_ref) do
+          new_clause_line = i + 1 + @new_above_specline.clause_line
+          specline_to_change = next_speclines[i].update(:clause_line => new_clause_line)
+        end
       end
-     else
+    end
+
+#renumber prefixes
+    if prefixed_linetypes_array.include?(@selected.linetype_id)
+      if prefixed_linetypes_array.include?(new_above_specline.linetype_id)
         new_selected_txt1_id = new_above_specline.txt1_id
-        selected_specline_new_txt1_id = new_selected_txt1_id + 1 
-       
-     end
+        selected_specline_new_txt1_id = new_selected_txt1_id + 1      
+      else
+        selected_specline_new_txt1_id = 1
+      end
     else
-     if !new_below_specline.blank? 
-      if prefixed_linetypes_array.include?(new_below_specline.linetype_id)
-      #if above does not and below does
-        selected_specline_new_txt1_id = 1
-        subsequent_clause_lines = next_speclines[1..last_array_item_ref]
-        update_subsequent_lines_on_move(subsequent_clause_lines, new_above_specline.txt1_id)
-        if !@subsequent_prefixes.blank?
-          @subsequent_prefixes.compact
+      selected_specline_new_txt1_id = 1 
+    end
+
+#check if moved line had prefix
+    if new_below_specline
+      if prefixed_linetypes_array.include?(@selected.linetype_id)
+        if prefixed_linetypes_array.include?(new_below_specline.linetype_id)
+          update_subsequent_lines_on_move(next_speclines[1..last_array_item_ref], new_above_specline.txt1_id)      
+        end
+      else #if did not have prefix then update only if above and below had prefixes
+        if prefixed_linetypes_array.include?(new_above_specline.linetype_id)      
+          update_subsequent_lines_on_move(next_speclines[1..next_speclines_length], 0)       
         end 
-      else
-      #if both do not
-        selected_specline_new_txt1_id = 1
       end
-     else
-      #if both do not
-      selected_specline_new_txt1_id = 1
-     end
     end
-
-else #if did not have prefix then update only if above and below had prefixes
-
-    if prefixed_linetypes_array.include?(new_above_specline.linetype_id) 
-     if !new_below_specline.blank? 
-      if prefixed_linetypes_array.include?(new_below_specline.linetype_id)
-      #if both do
-        subsequent_clause_lines = next_speclines[1..next_specline_id_array_length]
-        update_subsequent_lines_on_move(subsequent_clause_lines, 0) 
-        if !@subsequent_prefixes.blank?
-          @subsequent_prefixes.compact
-        end      
-      end
-     end 
-    end
-    selected_specline_new_txt1_id = 1 
-end
 
 #tracking changes
-
-  if new_above_specline.clause_id != old_above_specline.clause_id 
-    @new_specline = Specline.create(@selected_specline.attributes.merge(:txt1_id => selected_specline_new_txt1_id, :clause_id => new_above_specline.clause_id, :clause_line => new_above_clauseline_ref + 1))
-      @current_revision = Revision.where('project_id = ?', @new_specline.project_id).last
-      previous_change_to_clause = Change.where('project_id = ? AND clause_id = ? AND revision_id =?', @new_specline.project_id, @new_specline.clause_id, @current_revision.id).order('created_at').last
-      if !previous_change_to_clause.blank?  
-        @clause_change_record = previous_change_to_clause.clause_add_delete      
+#only needs to be tracked if line is moved from one clause to another
+    @old_specline_ref = @selected.id
+    if new_above_specline.clause_id != old_above_specline.clause_id 
+      @new_specline = Specline.create(@selected.attributes.merge(:id => nil, :txt1_id => selected_specline_new_txt1_id, :clause_id => new_above_specline.clause_id, :clause_line => @new_above_specline.clause_line + 1))
+      previous_change_to_clause = Alteration.where('project_id = ? AND clause_id = ? AND revision_id =?', @new_specline.project_id, @new_specline.clause_id, @revision.id).order('created_at').last
+      if previous_change_to_clause  
+        clause_change_record = previous_change_to_clause.clause_add_delete      
       end
-    record_new(@specline, @clause_change_record)  
-    
-    @specline = @selected_specline
-    @specline.destroy
-    record_delete(@specline, @clause_change_record)
-      @old_specline_ref = @selected_specline.id
-      @updated_specline = Specline.where(:id => @new_specline.id).first
-  else
-    @old_specline_ref = @selected_specline.id
-      @selected_specline.txt1_id = selected_specline_new_txt1_id
-      @selected_specline.clause_line = new_above_clauseline_ref + 1
-      @selected_specline.save
-        @updated_specline = Specline.where(:id => @old_specline_ref).first
-  end
-
+#!!!should this be @new_specline
+      record_new(@specline, clause_change_record)  
+#change record - what if there is no previous??    
+      @selected.destroy
+      record_delete(@selected, clause_change_record)    
+    else
+      @selected.update(:txt1_id => selected_specline_new_txt1_id, :clause_line => @new_above_specline.clause_line + 1)    
+    end
+    @updated_specline = Specline.where(:id => @old_specline_ref).first
+  
     respond_to do |format|
       format.js   { render :move_specline, :layout => false } 
     end
 
-end
+  end
   
 
   
@@ -610,7 +513,7 @@ end
     if [10,11].include?(params[:specline][:linetype_id])
       @specline_update.update_attributes(:linetype_id => new_linetype.id, :perform_id => 1, :identity_id => 1)
     else
-      @specline_update.update_attributes(params[:specline])
+      @specline_update.update(specline_params)
     end    
   
   end

@@ -33,30 +33,35 @@ before_save :assign_title
   scope :subsection_clauses, ->(project, subsection) { joins(:speclines
                               ).includes(:clausetitle, :clauseref => [:subsection => [:cawssubsection => :cawssection]]
                               ).where('speclines.project_id' => project.id, 'subsections.cawssubsection_id' => subsection.id, 'clauserefs.clausetype_id' => [2..4]
-                              ).order('clauserefs.subsection_id, clauserefs.clausetype_id, clauserefs.clause, clauserefs.subclause'
+                              ).order('clauserefs.subsection_id, clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
                               ).uniq
                               } 
 
 
-def clause_section_full_title
+def caws_full_title
 #this needs to be sorted, unclear what is going on
-  return clauseref.subsection.section.ref.to_s + sprintf("%02d", clauseref.subsection.ref).to_s + '.' + clauseref.clausetype_id.to_s + sprintf("%02d", clauseref.clause).to_s + clauseref.subclause.to_s + ' ' + clausetitle.text.to_s
+  return clauseref.subsection.cawssubsection.cawssection.ref.to_s + sprintf("%02d", clauseref.subsection.cawssubsection.ref).to_s + '.' + clauseref.clausetype_id.to_s + sprintf("%02d", clauseref.clause_no).to_s + clauseref.subclause.to_s + ' ' + clausetitle.text.to_s
 end
 
-def clause_full_title
-#this needs to be sorted, unclear what is going on
-  return clauseref.clausetype.text.to_s + ' ' + clauseref.clausetype_id.to_s + sprintf("%02d", clauseref.clause).to_s + clauseref.subclause.to_s + ': ' + clausetitle.text.to_s
+def uniclass_full_title
+####
 end
 
-def clause_code
-#this needs to be sorted, unclear what is going on
-  return clauseref.subsection.section.ref.to_s + sprintf("%02d", clauseref.subsection.ref).to_s + '.' + clauseref.clausetype_id.to_s + sprintf("%02d", clauseref.clause).to_s + clauseref.subclause.to_s
+
+def part_ref_title
+  return clauseref.clausetype.text.to_s + ' ' + clauseref.clausetype_id.to_s + sprintf("%02d", clauseref.clause_no).to_s + clauseref.subclause.to_s + ': ' + clausetitle.text.to_s
 end
 
-def clause_code_title_in_brackets
+
+#def clause_code
 #this needs to be sorted, unclear what is going on
-  return clauseref.subsection.section.ref.to_s + sprintf("%02d", clauseref.subsection.ref).to_s + '.' + clauseref.clausetype_id.to_s + sprintf("%02d", clauseref.clause).to_s + clauseref.subclause.to_s + ' (' + clausetitle.text.to_s + ')'
-end
+#  return clauseref.subsection.section.ref.to_s + sprintf("%02d", clauseref.subsection.ref).to_s + '.' + clauseref.clausetype_id.to_s + sprintf("%02d", clauseref.clause).to_s + clauseref.subclause.to_s
+#end
+
+#def clause_code_title_in_brackets
+#this needs to be sorted, unclear what is going on
+#  return clauseref.subsection.section.ref.to_s + sprintf("%02d", clauseref.subsection.ref).to_s + '.' + clauseref.clausetype_id.to_s + sprintf("%02d", clauseref.clause).to_s + clauseref.subclause.to_s + ' (' + clausetitle.text.to_s + ')'
+#end
 
 
 def custom_validation_2

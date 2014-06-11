@@ -16,7 +16,6 @@ class ProjectsController < ApplicationController
     @projects = Project.user_projects_access(current_user)
     @project = @projects.first  
     @project_user = Projectuser.where(:user_id => current_user.id, :project_id => @projects.first.id).first
-    #@project_user = Projectuser.where(:user_id => current_user.id, :project_id => @project.id).first    
     
     #if user is not assigned to any project
     #show intro page and option to create a project
@@ -80,7 +79,7 @@ class ProjectsController < ApplicationController
     
     @project_user = Projectuser.where(:user_id => current_user.id, :project_id => @project.id).first
     #if project user does not have permission to edit project redirect to project/show
-    if !@project_user.manage?      
+    if !@project_user.manage?    
       redirect_to project_path(@project.id)  
     end     
     

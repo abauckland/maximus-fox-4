@@ -17,7 +17,7 @@
 						<tr><td>
 							<div class="section_form_label form_input_label">Project Template:</div>
 							<div class="form_input">
-      							<%= select_tag "selected_template_id", options_from_collection_for_select(@selectable_templates, "id", "code_and_title", @template.id), {:onchange => "window.location='/speclines/#{@project.id}/manage_clauses?project_id=#{@project.id}&subsection_id=#{@subsection.id}&selected_template_id='+this.value;"} %>
+      							<%= select_tag "selected_template_id", options_from_collection_for_select(@templates, "id", "code_and_title", @template.id), {:onchange => "window.location='/specclauses/#{@project.id}/manage?project_id=#{@project.id}&subsection_id=#{@subsection.id}&template_id='+this.value;"} %>
 							</div>				
 						</td></tr>										
 						</table>				
@@ -37,7 +37,7 @@
 							<div class="section_form_label form_input_label">Clauses in Template:</div>
 							<% if @template_project_clauses %>
 								<div class="form_input">
-              						<%= select_tag "template_clauses", options_from_collection_for_select(@template_project_clauses, :id, :clause_full_title), multiple: true, size: 8  %>
+                                    <%= select_tag "template_clauses", options_from_collection_for_select(@template_project_clauses, :id, :part_ref_title), multiple: true, size: 8  %>                     						
 								</div>
 							<% else %>
 								<div class="form_input_blank_note">
@@ -53,7 +53,7 @@
         		<div>
         			<div class="column_submit"><%= submit_tag "Add Clauses"%></div>
 					<% end %> 
-        			<div class="column_cancel"><%= link_to "Cancel", {:controller => "projects", :action => "show", :id => @project.id, :subsection => @subsection.id} %></div>              
+        			<div class="column_cancel"><%= link_to "Cancel", {:controller => "specifications", :action => "show", :id => @project.id, :subsection => @subsection.id} %></div>              
         		</div>   
       		</div>        		      		
       	</div>   
@@ -79,7 +79,7 @@
 						<tr><td>
 							<div class="section_form_label form_input_label">Clauses in Project:</div>
 							<div class="form_input">          
-          						<%= select_tag "project_clauses", options_from_collection_for_select(@current_project_clauses, :id, :clause_full_title), multiple: true, size: 13  %>    
+                                <%= select_tag "project_clauses", options_from_collection_for_select(@current_project_clauses, :id, :part_ref_title), multiple: true, size: 13  %>    
 							</div>				
 						</td></tr>										
 						</table>				
@@ -90,7 +90,7 @@
         		<div>
 					<div class="column_submit"><%= submit_tag "Delete Clauses", :confirm => "Clauses moved from the Project will be deleted premanently, they are not copied to the template project. Do you wish to continue?" %></div>
 					<% end %>  
-        			<div class="column_cancel"><%= link_to "Cancel", {:controller => "projects", :action => "show", :id => @project.id, :subsection => @subsection.id} %></div>              
+        			<div class="column_cancel"><%= link_to "Cancel", {:controller => "specifications", :action => "show", :id => @project.id, :subsection => @subsection.id} %></div>              
         		</div>   
       		</div>        		     		
       	</div>				
@@ -110,7 +110,7 @@
       		<div class="column_footer">
 				<div>
           			<div class="column_add">
-        				<%= link_to "Create New Clause", {:controller => "clauses", :action => "new", :id => @project.id, :subsection => @subsection.id} %>
+        				<%= link_to "Create New Clause", {:controller => "clauses", :action => "new", :id => @project.id, :subsection_id => @subsection.id} %>
         			</div>
 				</div>    
       		</div>      			

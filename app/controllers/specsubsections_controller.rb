@@ -1,9 +1,12 @@
 class SpecsubsectionsController < ApplicationController
+
+
   before_filter :authenticate
   before_filter :authorise_project_manager_editor, only: [:manage, :add, :delete]
   before_action :set_project, only: [:manage, :add, :delete]
 
   layout "projects"
+
 
   def manage      
     #only users with role 'manage' and 'edit' have access to action    
@@ -16,7 +19,7 @@ class SpecsubsectionsController < ApplicationController
     @templates = Project.where(:id => template_ids).order("code")
 
     #uses default template set for project unless different template is selected from drop down list
-    if params[:template_id].blank? == true
+    if params[:template_id].blank?
       @template = Project.find(@project.parent_id)
     else
       @template = Project.find(params[:template_id])
@@ -67,7 +70,6 @@ class SpecsubsectionsController < ApplicationController
   end
 
 
-  ##POST
   def delete
     #only users with role 'manage' and 'edit' have access to action
     #get hash of all speclines within selected subsections
@@ -89,21 +91,13 @@ class SpecsubsectionsController < ApplicationController
     end
 
     #get array of ids for clauses that are to be deleted from the project
-    #estabish current revision for project
-    #check if there have been any changes to the clauses to be deleted within the current revision (since the project was last issued)
     clauses_to_delete = selected_speclines.collect{|i| i.clause_id}.uniq.sort
-    revision = Revision.where('project_id = ?', @project.id).last
-    previous_changes_to_clause = Alteration.where(:project_id => params[:id], :clause_id => clauses_to_delete, :revision_id => revision.id)
     
-    #if there are previsous changes update change event record
-    #illustrate that all lines within the clause have been deleted as part of subsection deletion event (3)
-    if previous_changes_to_clause
-      previous_changes_to_clause.each do |previous_change|
-        previous_change.update(:clause_add_delete => 3)
-      end    
-    end
-     #render manage page
-     redirect_to manage_specsubsection_path(:id => @project.id, :template_id => params[:template_id])      
+    #if there are previous changes update change event record
+    update_clause_change_records(@project, @revision, clause_ids, event_type)
+
+    #render manage page
+    redirect_to manage_specsubsection_path(:id => @project.id, :template_id => params[:template_id])      
   end
 
 

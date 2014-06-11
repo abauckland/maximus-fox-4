@@ -2,12 +2,12 @@
 
 one:
   clausetype_id: 1
-  clause: 1
+  clause_no: 1
   subclause: 1
   subsection_id: 1
 
 two:
   clausetype_id: 1
-  clause: 1
+  clause_no: 1
   subclause: 1
   subsection_id: 1

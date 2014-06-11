@@ -28,7 +28,7 @@ class Specline < ActiveRecord::Base
 
   scope :show_cawssubsection_speclines, ->(project_id, cawssubsection_id, clausetype_id) { includes(:txt1, :txt3, :txt4, :txt5, :txt6, :identity => [:identkey, :identvalue], :perform => [:performkey, :performvalue], :clause => [:clausetitle, :guidenote, :clauseref => [:subsection]]
                                         ).where(:project_id => project_id, 'subsections.cawssubsection_id' => cawssubsection_id, 'clauserefs.clausetype_id' => clausetype_id
-                                        ).order('clauserefs.clause, clauserefs.subclause, clause_line')} 
+                                        ).order('clauserefs.clause_no, clauserefs.subclause, clause_line')} 
 
 
 #  scope :cawssubsection_speclines, ->(project_id, cawssubsection_id) { joins(:clause => [:clauserefs => :subsections]

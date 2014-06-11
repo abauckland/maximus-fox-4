@@ -44,12 +44,11 @@ class Project < ActiveRecord::Base
                               ).where.not(:id => project.id
                               ).order("code")}
   
-  scope :cawssubsection_project_templates, ->(project, subsection, current_user) { joins(:projectusers, :speclines => [:clause => [:clauseref => :subsection]]
-                              ).where('projectusers.user_id' => current_user.id, :ref_system => project.ref_system
+  scope :cawssubsections, ->(subsection) { joins(:speclines => [:clause => [:clauseref => :subsection]]
                               ).where('subsections.cawssubsection_id' => subsection.id
-                              ).where.not(:id => project.id
-                              ).order("code")}
+                              )}
 
+  scope :ref_system, ->(project) { where(:ref_system => project.ref_system) }
   
   def code_and_title
     return code+' '+title

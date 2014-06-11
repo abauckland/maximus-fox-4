@@ -90,10 +90,16 @@ Rails.application.routes.draw do
   resources :specclauses do
     get :manage, :on => :member
     get :add_clauses, :on => :member
-    get :delete_clauses, :on => :member
+    post :delete_clauses, :on => :member
   end
   
-  resources :clauses
+  resources :clauses do
+    post :clause_ref_select, :on => :member
+    get :subclause_select, :on => :member
+    get :new_clone_project_list, :on => :member
+    get :new_clone_subsection_list, :on => :member
+    get :new_clone_clause_list, :on => :member    
+  end
 
   resources :speclines do
     delete :delete_clause, :on => :member

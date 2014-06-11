@@ -4,14 +4,14 @@ class CreateSpeclines < ActiveRecord::Migration
       t.integer :project_id
       t.integer :clause_id
       t.integer :clause_line
-      t.integer :txt1_id
-      t.integer :txt2_id
-      t.integer :txt3_id
-      t.integer :txt4_id
-      t.integer :txt5_id
-      t.integer :txt6_id
-      t.integer :identity_id
-      t.integer :perform_id
+      t.integer :txt1_id, :default => 1
+      t.integer :txt2_id, :default => 1
+      t.integer :txt3_id, :default => 1
+      t.integer :txt4_id, :default => 1
+      t.integer :txt5_id, :default => 1
+      t.integer :txt6_id, :default => 1
+      t.integer :identity_id, :default => 1
+      t.integer :perform_id, :default => 1
       t.integer :linetype_id
 
       t.timestamps

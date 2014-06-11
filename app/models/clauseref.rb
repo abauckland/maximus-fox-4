@@ -8,7 +8,7 @@ class Clauseref < ActiveRecord::Base
 
   # Getter
   def full_clause_ref
-    [clausetype_id, clause, subclause].join('')
+    [clausetype_id, clause_no, subclause].join('')
   end
 
 
@@ -17,7 +17,7 @@ class Clauseref < ActiveRecord::Base
     self.clausetype_id = code[0,1]
     #variables required to calculate length of reference
       @clauseref_clausetype_id = code[0,1]
-    self.clause = code[1,2]
+    self.clause_no = code[1,2]
       @clauseref_clause = code[1,2]
     self.subclause = code[3,1]
       @clauseref_subclause = code[3,1]

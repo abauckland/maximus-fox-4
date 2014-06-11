@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 20140527201109) do
 
   create_table "clauserefs", force: true do |t|
     t.integer  "clausetype_id"
-    t.integer  "clause"
+    t.integer  "clause_no"
     t.integer  "subclause"
     t.integer  "subsection_id"
     t.datetime "created_at"
@@ -363,14 +363,14 @@ ActiveRecord::Schema.define(version: 20140527201109) do
     t.integer  "project_id"
     t.integer  "clause_id"
     t.integer  "clause_line"
-    t.integer  "txt1_id"
-    t.integer  "txt2_id"
-    t.integer  "txt3_id"
-    t.integer  "txt4_id"
-    t.integer  "txt5_id"
-    t.integer  "txt6_id"
-    t.integer  "identity_id"
-    t.integer  "perform_id"
+    t.integer  "txt1_id",   default: 1
+    t.integer  "txt2_id",   default: 1
+    t.integer  "txt3_id",   default: 1
+    t.integer  "txt4_id",   default: 1
+    t.integer  "txt5_id",   default: 1
+    t.integer  "txt6_id",   default: 1
+    t.integer  "identity_id",   default: 1
+    t.integer  "perform_id",   default: 1
     t.integer  "linetype_id"
     t.datetime "created_at"
     t.datetime "updated_at"
