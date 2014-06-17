@@ -135,9 +135,10 @@ class SpecrevisionsController < ApplicationController
         else
           @changed_prelim_subsections[i] = subsection
 
-          @deleted_prelim_clauses[subsection.id] = Clause.changed_caws_clauses('new', project, revision, subsection)
-          @added_prelim_clauses[subsection.id] = Clause.changed_caws_clauses('deleted', project, revision, subsection)
-          @changed_prelim_clauses[subsection.id] = Clause.changed_caws_clauses('changed', project, revision, subsection)
+          @deleted_prelim_clauses[subsection.id] = Clause.changed_caws_clauses('deleted', project, revision, subsection)
+          @added_prelim_clauses[subsection.id] = Clause.changed_caws_clauses('new', project, revision, subsection)
+                    
+          @changed_prelim_clauses[subsection.id] = Clause.changed_caws_clause_content('changed', project, revision, subsection)
         end 
       end        
     end

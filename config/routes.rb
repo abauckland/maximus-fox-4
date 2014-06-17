@@ -124,7 +124,7 @@ Rails.application.routes.draw do
     get :reinstate_clause, :on => :member
   end
 
-  resources :changes do
+  resources :alterations do
     get :clause_change_info, :on => :member
     get :line_change_info, :on => :member
     member do

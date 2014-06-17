@@ -1,12 +1,12 @@
 
 
-$('table#<%=@specline_update.id%>').replaceWith('<%= escape_javascript(render :partial => 'specline_update', :locals => {:specline_update => @specline_update}) %>');
+$('table#<%=@specline.id%>').replaceWith('<%= escape_javascript(render :partial => 'specline_update', :locals => {:specline_update => @specline}) %>');
 
 
-$('table#<%=@specline_update.id%> a.delete').deleteWithAjax();
-$('table#<%=@specline_update.id%> a.put').putWithAjax();
-$('table#<%=@specline_update.id%> a.get').getWithAjax();
-$('table#<%=@specline_update.id%> a.post').postWithAjax();
+$('table#<%=@specline.id%> a.delete').deleteWithAjax();
+$('table#<%=@specline.id%> a.put').putWithAjax();
+$('table#<%=@specline.id%> a.get').getWithAjax();
+$('table#<%=@specline.id%> a.post').postWithAjax();
 
 
 	$('.suffixed_line_menu_mob').off('hover');

@@ -82,11 +82,8 @@ class SpecsubsectionsController < ApplicationController
     #destroy each specline within each subsection from the project
     selected_speclines.each do |line|        
       #for each specline record change event
-      #do not record the deletion of clause title line
       #does not record event when project status is 'draft'      
-      if line.clause_line != 0
-        record_delete(line, event_type)             
-      end
+      record_delete(line, event_type)             
       line.destroy
     end
 
@@ -94,7 +91,7 @@ class SpecsubsectionsController < ApplicationController
     clauses_to_delete = selected_speclines.collect{|i| i.clause_id}.uniq.sort
     
     #if there are previous changes update change event record
-    update_clause_change_records(@project, @revision, clause_ids, event_type)
+    update_clause_change_records(@project, @revision, clauses_to_delete, event_type)
 
     #render manage page
     redirect_to manage_specsubsection_path(:id => @project.id, :template_id => params[:template_id])      

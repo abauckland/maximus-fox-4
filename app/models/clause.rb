@@ -27,8 +27,12 @@ before_save :assign_title
 
   scope :changed_caws_clauses, ->(event, project, revision, subsection) { joins(:alterations, :clauseref => :subsection
     ).where('alterations.event' => event, 'alterations.clause_add_delete' => 2, 'alterations.project_id' => project.id, 'alterations.revision_id' => revision.id, 'subsections.cawssubsection_id' => subsection.id
-    ).group(:id
-    )}
+    ).uniq}
+
+  scope :changed_caws_clause_content, ->(event, project, revision, subsection) { joins(:alterations, :clauseref => :subsection
+    ).where('alterations.clause_add_delete' => 1, 'alterations.project_id' => project.id, 'alterations.revision_id' => revision.id, 'subsections.cawssubsection_id' => subsection.id
+    ).uniq}
+
 
   scope :subsection_clauses, ->(project, subsection) { joins(:speclines
                               ).includes(:clausetitle, :clauseref => [:subsection => [:cawssubsection => :cawssection]]
@@ -37,6 +41,15 @@ before_save :assign_title
                               ).uniq
                               } 
 
+
+def caws_code
+#this needs to be sorted, unclear what is going on
+  return clauseref.subsection.cawssubsection.cawssection.ref.to_s + sprintf("%02d", clauseref.subsection.cawssubsection.ref).to_s + '.' + clauseref.clausetype_id.to_s + sprintf("%02d", clauseref.clause_no).to_s + clauseref.subclause.to_s
+end
+
+def uniclass_code
+####
+end
 
 def caws_full_title
 #this needs to be sorted, unclear what is going on

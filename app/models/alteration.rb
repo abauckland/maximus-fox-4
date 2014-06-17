@@ -17,6 +17,8 @@ belongs_to :perform
 
 belongs_to :user
 
+#need to allow hash of specline to be saved into Alteration model - should really delete out of hasd before creating
+attr_accessor :clause_line
 
   scope :changed_caws_all_sections, ->(project, revision) { where(:project_id => project.id, :revision_id => revision.id
                                     ).group(:id
@@ -33,9 +35,16 @@ belongs_to :user
                                     ).group(:id
                                     ) }
   
-  scope :changed_caws_subsections, ->(project, revision, subsection) { joins(:clause => [:clauseref => :subsection]
-                                    ).where(:clause_add_delete => 3, :project_id => project.id, 'subsections.cawssubsection_id' => subsection.id, :revision_id => revision.id
-                                    ).first }
+ # scope :changed_caws_subsections, ->(project, revision, subsection) { joins(:clause => [:clauseref => :subsection]
+  #                                  ).where(:clause_add_delete => 3, :project_id => project.id, 'subsections.cawssubsection_id' => subsection.id, :revision_id => revision.id
+  #                                  ).first }
+
+  def self.changed_caws_subsections(project, revision, subsection)
+    joins(:clause => [:clauseref => :subsection]
+   ).where(:clause_add_delete => 3, :project_id => project.id, 'subsections.cawssubsection_id' => subsection.id, :revision_id => revision.id
+   ).first
+  end
+
 
   
 end

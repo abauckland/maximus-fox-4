@@ -9,23 +9,13 @@ class ApplicationController < ActionController::Base
 
  protected 
 
-#called from specline controller
-  def clean_text(value)
-    @value = value 
-    @value.strip
-    @value = @value.gsub(/\n/,"")
-    @value.chomp
-    @value.chomp   
-    while [",", ";", "!", "?"].include?(value.last)
-    @value.chop!
-    end
-  end
+
   
 #project action => manage_subsections  
   def current_revision_render(project)
 
-    project_revisions = Revision.where(:project_id => project.id).order('created_at')         
-    last_rev_check = Alteration.where(:project_id => project.id, :revision_id => project_revisions.last.id).first
+    revisions = Revision.where(:project_id => project.id).order('created_at')         
+    last_rev_check = Alteration.where(:project_id => project.id, :revision_id => revisions.last.id).first
     if last_rev_check.blank?
       #count of revision records indicates the revision rev no
       #first revision record, when document is in draft - rev == NULL
@@ -34,7 +24,7 @@ class ApplicationController < ActionController::Base
       
       #if no changes recorded for current revision record then last record still applies
       #reduce record count by 1 to indicate this
-      rev_number = project_revisions.count
+      rev_number = revisions.count
       current_rev_number = rev_number-1
     end  
     
@@ -44,7 +34,7 @@ class ApplicationController < ActionController::Base
       if current_rev_number == 1 #revision rev == '-'
         @current_revision_rev = '-'
       else    
-        @current_revision_rev = project_revisions.last.rev.capitalize
+        @current_revision_rev = revisions.last.rev.capitalize
       end
     end
   end  
@@ -62,14 +52,14 @@ class ApplicationController < ActionController::Base
   end
 
 #speclines controller - new_specline action
-  def update_subsequent_specline_clause_line_ref(subsequent_speclines, action, selected_specline)
+  def update_subsequent_specline_clause_line_ref(subsequent_lines, action, specline)
 
-    subsequent_speclines.each_with_index do |line, i|
+    subsequent_lines.each_with_index do |line, i|
       if action == 'new'
-        line.update(:clause_line => selected_specline.clause_line + 2 + i)
+        line.update(:clause_line => specline.clause_line + 2 + i)
       end
       if action == 'delete'
-        line.update(:clause_line => selected_specline.clause_line + i)
+        line.update(:clause_line => specline.clause_line + i)
       end
     end
        
@@ -94,7 +84,10 @@ class ApplicationController < ActionController::Base
   end
 
 
-  def record_delete(specline, clause_change_record)
+  def record_delete(specline, event_type)
+
+    #set update hash of specline data for creating new change records
+    specline_hash(specline, revision)
       
     #get current revision for project 
     revision = Revision.where(:project_id => specline.project_id).order('created_at').last
@@ -107,16 +100,12 @@ class ApplicationController < ActionController::Base
         if existing_record.blank?
           #define if change action applied to line, clause or section
           #information used when reporting changes and upon reinstatement
-          if clause_change_record.blank?
-             clause_add_delete = 1
-          else
-             clause_add_delete = clause_change_record
-          end
+          set_event_type(event_type)
+           
           #if no previous changes for specline create delete record for line                     
-          new_delete_rec = Alteration.create(specline.attributes.merge(:clause_add_delete => clause_add_delete,
-                                                                     :event => 'deleted',
-                                                                     :revision_id => revision.id,
-                                                                     :user_id => current_user.id )) 
+          new_delete_rec = Alteration.create(@specline_hash.merge(:specline_id => specline.id,
+                                                                  :clause_add_delete => clause_add_delete,
+                                                                  :event => 'deleted')) 
         else
           #where previous 'new' and 'change' events have been reorded
           #'delete' events not checked as none will exist for selected line (you cannot select a line that has already been deleted)
@@ -136,14 +125,14 @@ class ApplicationController < ActionController::Base
   end
 
 
-  def record_new(specline, clause_change_record)
+  def record_new(specline, event_type)
+
+    #set update hash of specline data for creating new change records
+    specline_hash(specline, revision)
+
     #define if change action applied to line, clause or section
     #information used when reporting changes and upon reinstatement     
-    if clause_change_record.blank?
-      clause_add_delete = 1
-    else
-      clause_add_delete = clause_change_record
-    end
+    set_event_type(event_type)
     
     #get current revision for project     
     revision = Revision.where(:project_id => specline.project_id).order('created_at').last
@@ -155,12 +144,11 @@ class ApplicationController < ActionController::Base
       #private method in application controller
       specline_current_text_match_check(specline, revision)
       if @check_new_match_previous.blank?
-                   
+   
           #if no previous changes for specline create new record for line 
-          new_new_rec = Alteration.create(specline.attributes.merge(:clause_add_delete => clause_add_delete,
-                                                                     :event => 'new',
-                                                                     :revision_id => revision.id,
-                                                                     :user_id => current_user.id )) 
+          new_new_rec = Alteration.create(@specline_hash.merge(:specline_id => specline.id,
+                                                                 :clause_add_delete => clause_add_delete,
+                                                                 :event => 'new')) 
       else
         #update specline_id of all precious changes for existing change record specline with specline of new line
         update_specline_id_prior_changes(@check_new_match_previous.specline_id, specline.id)
@@ -176,7 +164,8 @@ class ApplicationController < ActionController::Base
             #create 'new' change record for current specline with id of old change
             previous_changed_specline = Specline.where(:id => @check_new_match_previous.specline_id).first
 
-            new_new_rec = Change.create(:clause_add_delete => clause_add_delete,
+            new_new_rec = Alteration.create( 
+                                        :clause_add_delete => clause_add_delete,
                                         :event => 'new',
                                         :revision_id => revision.id,
                                         :project_id => @check_new_match_previous.project_id,
@@ -198,8 +187,11 @@ class ApplicationController < ActionController::Base
   end
 
 
-  def record_change(specline, specline_update)
+  def record_change(specline)
         
+    #set update hash of specline data for creating new change records
+    specline_hash(specline, revision)
+    
     #changes can only be applied to line
     #information used when reporting changes and upon reinstatement 
     clause_add_delete = 1
@@ -213,27 +205,27 @@ class ApplicationController < ActionController::Base
       #check if any changes already made for selected specline in current revision
       #check by rev_id, txts and linetype as 'changed' line may match an existing line or previous change record
       #private method in application controller
-      specline_current_text_match_check(specline_update, revision)
+      specline_current_text_match_check(specline, revision)
       if @check_new_match_previous.blank?
         #check if any changes already made for selected specline in current revision
         #check by specline_id and rev_id only as delete action does not create/change a line whereby it may match an existing line or previous change
         existing_change_record = Alteration.where(:specline_id => specline.id, :revision_id => revision.id).first
         if existing_change_record.blank?          
           #if no previous changes for specline create new record for line 
-          new_new_rec = Alteration.create(specline.attributes.merge(:clause_add_delete => clause_add_delete,
-                                                                     :event => 'changed',
-                                                                     :revision_id => revision.id,
-                                                                     :user_id => current_user.id ))
+          new_new_rec = Alteration.create(@specline_hash.merge(
+                                          :specline_id => specline.id,
+                                          :clause_add_delete => clause_add_delete,
+                                          :event => 'changed'))     
         else
           #if previous action was 'new'
           if existing_change_record.event == 'new'
-                existing_change_record.update(:txt3_id => specline_update.txt3_id,               
-                                              :txt4_id => specline_update.txt4_id,
-                                              :txt5_id => specline_update.txt5_id,
-                                              :txt6_id => specline_update.txt6_id,
-                                              :identity_id => specline_update.identity_id,
-                                              :perform_id => specline_update.perform_id,
-                                              :linetype_id => specline_update.linetype_id,
+                existing_change_record.update(:txt3_id => specline.txt3_id,               
+                                              :txt4_id => specline.txt4_id,
+                                              :txt5_id => specline.txt5_id,
+                                              :txt6_id => specline.txt6_id,
+                                              :identity_id => specline.identity_id,
+                                              :perform_id => specline.perform_id,
+                                              :linetype_id => specline.linetype_id,
                                               :user_id => current_user.id)                    
           end
           #if existing_change_record exists then do nothing because original chang record still valid         
@@ -242,7 +234,7 @@ class ApplicationController < ActionController::Base
           #if previous action was 'delete'
           if @check_new_match_previous.event == 'deleted'
             
-            previous_changes_for_specline = Alteration.where(:specline_id => specline_update.id).first
+            previous_changes_for_specline = Alteration.where(:specline_id => specline.id).first
 #update specline_id of all previous changes for existing change record specline with specline of new line
 update_specline_id_prior_changes(@check_new_match_previous.specline_id, specline.id)
 
@@ -261,11 +253,9 @@ update_specline_id_prior_changes(@check_new_match_previous.specline_id, specline
 
             else            
               #create 'deleted' change record for current specline
-              new_delete_rec = Alteration.create(specline.attributes.merge(:clause_add_delete => clause_add_delete,
+              new_delete_rec = Alteration.create(@specline_hash.merge(:clause_add_delete => clause_add_delete,
                                                                      :event => 'deleted',
-                                                                     :revision_id => revision.id,
-                                                                     :specline_id => @check_new_match_previous.specline_id,
-                                                                     :user_id => current_user.id ))  
+                                                                     :specline_id => @check_new_match_previous.specline_id))  
               #delete change record, as this line has no longer been changed, but re-created
                           
             end
@@ -274,15 +264,15 @@ update_specline_id_prior_changes(@check_new_match_previous.specline_id, specline
           end          
           #if previous action was 'new' then update content of change record
           if @check_new_match_previous.event == 'new'
-            previous_changes_for_specline = Alteration.where(:specline_id => specline_update.id).first
+            previous_changes_for_specline = Alteration.where(:specline_id => specline.id).first
             if previous_changes_for_specline      
-              previous_changes_for_specline.update(:txt3_id => specline_update.txt3_id,               
-                                              :txt4_id => specline_update.txt4_id,
-                                              :txt5_id => specline_update.txt5_id,
-                                              :txt6_id => specline_update.txt6_id,
-                                              :identity_id => specline_update.identity_id,
-                                              :perform_id => specline_update.perform_id,
-                                              :linetype_id => specline_update.linetype_id,
+              previous_changes_for_specline.update(:txt3_id => specline.txt3_id,               
+                                              :txt4_id => specline.txt4_id,
+                                              :txt5_id => specline.txt5_id,
+                                              :txt6_id => specline.txt6_id,
+                                              :identity_id => specline.identity_id,
+                                              :perform_id => specline.perform_id,
+                                              :linetype_id => specline.linetype_id,
                                               :user_id => current_user.id)                                    
             else                 
 #what happens here?         
@@ -300,11 +290,9 @@ update_specline_id_prior_changes(@check_new_match_previous.specline_id, @speclin
               if previous_changes_for_specline.blank?            
                 #create 'deleted' change record for current specline
                 @specline = Specline.find(params[:id])
-                previous_changes_for_specline = Alteration.create(specline.attributes.merge(:clause_add_delete => clause_add_delete,
+                previous_changes_for_specline = Alteration.create(@specline_hash.merge(:clause_add_delete => clause_add_delete,
                                                                      :event => 'changed',
-                                                                     :revision_id => revision.id,
-                                                                     :specline_id => @check_new_match_previous.specline_id,
-                                                                     :user_id => current_user.id )) 
+                                                                     :specline_id => @check_new_match_previous.specline_id)) 
               else
                 
                 #if current change line change record event = changed 
@@ -359,10 +347,10 @@ def txt1_delete_line(specline)
   check_linetype = Linetype.find(specline.linetype_id)
 
   previous_clauseline = specline.clause_line - 1 
-    get_previous_specline_line = Specline.where("project_id = ? AND clause_id = ? AND clause_line = ?", specline.project_id, specline.clause_id, previous_clauseline).order("clause_line").last
-    check_linetype = Linetype.find(get_previous_specline_line.linetype_id)
+    previous_line = Specline.where("project_id = ? AND clause_id = ? AND clause_line = ?", specline.project_id, specline.clause_id, previous_clauseline).order("clause_line").last
+    check_linetype = Linetype.find(previous_line.linetype_id)
       if check_linetype.txt1 == true
-        set_txt1_id = get_previous_specline_line.txt1_id
+        set_txt1_id = previous_line.txt1_id
       else
         set_txt1_id = 0
       end  
@@ -383,11 +371,11 @@ def txt1_change_linetype(specline, old_linetype, new_linetype)
   else
     if new_linetype.txt1 == true
       previous_clauseline = specline.clause_line - 1   
-      get_previous_specline_line = Specline.where("project_id = ? AND clause_id = ? AND clause_line = ?", specline.project_id, specline.clause_id, previous_clauseline).last
-      check_linetype = Linetype.find(get_previous_specline_line.linetype_id)
+      previous_line = Specline.where("project_id = ? AND clause_id = ? AND clause_line = ?", specline.project_id, specline.clause_id, previous_clauseline).last
+      check_linetype = Linetype.find(previous_line.linetype_id)
       if check_linetype.txt1 == true
-        specline.txt1_id = get_previous_specline_line.txt1_id + 1
-        set_txt1_id = get_previous_specline_line.txt1_id + 1 
+        specline.txt1_id = previous_line.txt1_id + 1
+        set_txt1_id = previous_line.txt1_id + 1 
       else
         specline.txt1_id = 1
         set_txt1_id = 1
@@ -400,117 +388,103 @@ def txt1_change_linetype(specline, old_linetype, new_linetype)
 end
 
 
-def update_subsequent_lines(subsequent_clause_lines, set_txt1_id)
-  @subsequent_prefixes = []
-  subsequent_clause_lines.each_with_index do |next_clause_line, i|
-
-  check_linetype = Linetype.where('id =?', next_clause_line.linetype_id).first
-    if check_linetype.txt1 == true
-      next_txt1_id = (set_txt1_id + 1 + i)
-      next_clause_line.txt1_id = next_txt1_id
-      next_clause_line.save      
-      next_txt1_text = Txt1.where(:id => next_txt1_id).first
-      @subsequent_prefixes[i] = [next_clause_line.id, next_txt1_text.text] 
-    else
-      break
-    end
-  end
-end
-
-
-
-def update_subsequent_lines_last(subsequent_clause_lines, set_txt1_id)
-  subsequent_clause_lines.each_with_index do |next_clause_line, i|
-  check_linetype = Linetype.where('id =?', next_clause_line.linetype_id).first
-    if check_linetype.txt1 == true
-      next_clause_line.txt1_id = (set_txt1_id + i)
-      next_clause_line.save
-    else
-      break
-    end
-  end
-end
-
-def update_subsequent_lines_on_move(subsequent_lines, set_txt1_id)
+  def update_subsequent_lines(subsequent_lines, set_txt1_id)
     @subsequent_prefixes = []
-    subsequent_lines.each_with_index do |line, i|
-      check_linetype = Linetype.where(:id => line.linetype_id).first
+    
+    subsequent_lines.each_with_index do |next_line, i|
+  
+      check_linetype = Linetype.where('id =?', next_line.linetype_id).first
       if check_linetype.txt1 == true
-        next_txt1_id = (set_txt1_id + 1 + i) #because i starts at 0        
-        line.update(:txt1_id => next_txt1_id)            
-        txt1_text = Txt1.where(:id => next_txt1_id).first     
-        @subsequent_prefixes[i] = [line.id, txt1_text] 
+        next_txt1_id = (set_txt1_id + 1 + i)
+        next_line.update(:txt1_id => next_txt1_id)
+        
+        next_txt1_text = Txt1.where(:id => next_txt1_id).first
+        @subsequent_prefixes[i] = [next_line.id, next_txt1_text.text] 
       else
         break
       end
     end
-    @subsequent_prefixes.compact
-#need to set this outsize of the method - as subsequent calls will override it
-    @previous_prefixes = @subsequent_prefixes
-end
+  end
+
+
+
+  def update_subsequent_lines_last(subsequent_lines, set_txt1_id)
+    
+    subsequent_lines.each_with_index do |next_line, i|
+      check_linetype = Linetype.where('id =?', next_line.linetype_id).first
+      if check_linetype.txt1 == true
+        next_txt1_id = (set_txt1_id + i)
+        next_line.update(:txt1_id => next_txt1_id)
+      else
+        break
+      end
+    end
+    
+  end
+
 
 
   private
  
-  def permission_denied
-    session[:user_id] = nil  
-    redirect_to home_path 
-  end
-
-  def current_user  
-    @current_user ||= User.find(session[:user_id]) if session[:user_id]  
-  end
-
-  def authenticate
-    #@current_user ||= User.find(session[:user_id]) if session[:user_id]
-    #if @current_user.role == 'user'
-    #   redirect_to log_out_path
-    #end    
-    redirect_to log_out_path unless current_user
-  end
-
-  def authenticate_owner
-    redirect_to log_out_path unless current_user.role == "owner"
-  end
+    def permission_denied
+      session[:user_id] = nil  
+      redirect_to home_path 
+    end
+  
+    def current_user  
+      @current_user ||= User.find(session[:user_id]) if session[:user_id]  
+    end
+  
+    def authenticate
+      #@current_user ||= User.find(session[:user_id]) if session[:user_id]
+      #if @current_user.role == 'user'
+      #   redirect_to log_out_path
+      #end    
+      redirect_to log_out_path unless current_user
+    end
+  
+    def authenticate_owner
+      redirect_to log_out_path unless current_user.role == "owner"
+    end
 
 
 #user_role(["admin", "owner", "employee"])
 #project_role(@project, ["manage", "publish", "write", "read"])
 
-  def authorise_user_view(permissible_roles)
-    if permissible_roles.include?(@current_user.role)
-      return true
-    end      
-  end
+#  def authorise_user_view(permissible_roles)
+#    if permissible_roles.include?(@current_user.role)
+#      return true
+#    end      
+#  end
 
 
  
 
 
 
-  def subsection_action(project_id, subsection_id, permissible_roles)
-    permitted_user = Projectuser.joins(:subsectionusers
-                               ).where(:user_id => @current_user.id, :project_id => project_id, :role => permissible_roles
-                               ).where.not('subsectionusers.subsection_id' => subsection_id
-                               ).first    
-    if permitted_user.blank?
-       redirect_to log_out_path
-    end      
-  end
+#  def subsection_action(project_id, subsection_id, permissible_roles)
+#    permitted_user = Projectuser.joins(:subsectionusers
+#                               ).where(:user_id => @current_user.id, :project_id => project_id, :role => permissible_roles
+#                               ).where.not('subsectionusers.subsection_id' => subsection_id
+#                               ).first    
+#    if permitted_user.blank?
+#       redirect_to log_out_path
+#    end      
+#  end
 
 
 
-  def authorise_specline_action(specline_id, permissible_roles)
-    permitted_user = Subsectionuser.where(:user_id => @current_user.id, :project_id => project_id, :role => permissible_roles).first    
-    if permitted_user.blank?
-       redirect_to log_out_path
-    end      
-  end
+#  def authorise_specline_action(specline_id, permissible_roles)
+#    permitted_user = Subsectionuser.where(:user_id => @current_user.id, :project_id => project_id, :role => permissible_roles).first    
+#    if permitted_user.blank?
+#       redirect_to log_out_path
+#    end      
+#  end
 
 
 
 
-  def specline_current_text_match_check(specline_update, revision)
+    def specline_current_text_match_check(specline_update, revision)
 
       specline_hash = {}      
       linetype = Linetype.where(:id => specline_update.linetype_id).first
@@ -538,18 +512,41 @@ end
       specline_hash[:clause_id] = specline_update.clause_id
       specline_hash[:linetype_id] = specline_update.linetype_id 
 
-      @check_new_match_previous = Alteration.joins(:txt3, :txt4, :txt5, :txt6, :identity, :perform).where(specline_hash).first
+      @check_new_match_previous = Alteration.joins(:txt3, :txt4, :txt5, :txt6, :identity, :perform).where(:specline_id => specline_update.id).first
 
-  end
+    end
   
-  #update specline_id of all precious changes for existing change record specline with specline of new line
-  def update_specline_id_prior_changes(previous_change_specline_id, new_specline_id)
-    
-    prior_specline_changes = Alteration.where('specline_id =?', previous_change_specline_id)
-    prior_specline_changes.each do |prior_change|
-      prior_change.specline_id = new_specline_id
-      prior_change.save
-    end  
-  end
+      #update specline_id of all previous changes to the same line
+      def update_specline_id_prior_changes(previous_id, new_id)
+        
+        prior_changes = Alteration.where(:specline_id => previous_id)
+        prior_changes.each do |change|
+          change.update(:specline_id => new_id)
+        end  
+      end
+
+     def specline_hash(specline, revision)  
+       @specline_hash = {:project_id => specline.project_id,
+                        :clause_id => specline.clause_id,                        
+                        :txt3_id => specline.txt3_id,               
+                        :txt4_id => specline.txt4_id,
+                        :txt5_id => specline.txt5_id,
+                        :txt6_id => specline.txt6_id,
+                        :identity_id => specline.identity_id,
+                        :perform_id => specline.perform_id,
+                        :linetype_id => specline.linetype_id,
+                        :revision_id => revision.id,
+                        :user_id => current_user.id,
+                        :print_change => 1 }       
+      end 
+
+      def set_event_type(event_type) 
+          if event_type.blank?
+             clause_add_delete = 1
+          else
+             clause_add_delete = event_type
+          end
+          return clause_add_delete
+      end
   
 end

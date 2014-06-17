@@ -1,45 +1,48 @@
     <% if !@deleted_prelim_subsections.empty? %>
       <table class='rev_deleted_subsection_title' width ='100%'><tr><td class='rev_title'>Deleted Subsections:</td></tr></table>
-        <% @deleted_prelim_subsections.each do |prelim_subsection|%>
-        <%= changed_prelim_subsection_text(prelim_subsection) %>
+        <% @deleted_prelim_subsections.compact.each do |subsection|%>
+        <%= changed_prelim_subsection_text(@project, subsection) %>
         <% end%>
     <% end%>
     
     <% if !@added_prelim_subsections.empty? %>
       <table class='rev_deleted_subsection_title' width ='100%'><tr><td class='rev_title'>Added Subsections:</td></tr></table>
-        <% @added_prelim_subsections.each do |prelim_subsection|%>
-        <%= changed_prelim_subsection_text(prelim_subsection) %>
+        <% @added_prelim_subsections.compact.each do |subsection|%>
+        <%= changed_prelim_subsection_text(@project, subsection) %>
         <% end%>
     <% end%>
     
     <% if !@changed_prelim_subsections.empty? %>
       <table class='rev_deleted_subsection_title' width ='100%'><tr><td class='rev_title'>Changed Subsections:</td></tr></table>
         
-        <% @changed_prelim_subsections.each do |subsection|%>
+        <% @changed_prelim_subsections.compact.each do |subsection|%>
 
-		  <%= changed_prelim_subsection_text(subsection) %>
-          <%= deleted_prelim_clauses_text(subsection) %>
+		  <%= changed_prelim_subsection_text(@project, subsection) %>
+          
          
-          <%= deleted_prelim_clauses_text(subsection) %> 
-          <% @deleted_clauses = @deleted_prelim_clauses[subsection.id].compact %>
-          <% @deleted_clauses.each do |clause| %>          
-            <%= changed_clause_titles(clause, 'deleted') %>
-          <% end %>         
-         
-          <%= new_prelim_clauses_text(subsection) %> 
-          <% @added_clauses = @added_prelim_clauses[subsection.id].compact %>
-          <% @added_clauses.each do |clause| %>          
-            <%= changed_clause_titles(clause, 'added') %>
+          <% if !@deleted_prelim_clauses[subsection.id].empty? %>
+            <table><tr><td class='rev_subsection_action'>Clauses Deleted:</td></tr></table>
+            <% @deleted_prelim_clauses[subsection.id].each do |clause| %>          
+                <%= changed_clause_titles(clause, 'deleted', @revision, @project) %>
+            <% end %>         
+          <% end %>
+           
+          
+          <% if !@added_prelim_clauses[subsection.id].empty?  %>
+            <table><tr><td class='rev_subsection_action'>Clauses Added:</td></tr></table>
+            <% @added_prelim_clauses[subsection.id].each do |clause| %>          
+                <%= changed_clause_titles(clause, 'added', @revision, @project) %>
+            <% end %>
           <% end %>
 
+           
+          <% if !@changed_prelim_clauses[subsection.id].empty?  %>
+          <table><tr><td class='rev_subsection_action'>Clauses Changed:</td></tr></table>
           
-          <%= changed_prelim_clauses_text(subsection) %>
- 
-          <% @changed_clauses = @changed_prelim_clauses[subsection.id].compact %>
-          <% @changed_clauses.each do |clause| %>
+          <% @changed_prelim_clauses[subsection.id].each do |clause| %>
+          
+            <%= changed_clause_titles(clause, 'changed', @revision, @project) %>
             
-        	<%= changed_clause_titles(clause, 'changed') %>
-          
       		<%= clause_line_text_altered(clause, 'new') %>
         	<% @altered_lines.each do |line| %>
           		<%= original_line_text(line) %>
@@ -56,5 +59,6 @@
             <% end %> 
                     
           <% end%>
+          <% end %>
         <% end%>
     <% end%>

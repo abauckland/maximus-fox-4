@@ -46,6 +46,8 @@ class ClausesController < ApplicationController
       if @clause.save
         #create title line
         @new_specline = Specline.create(:project_id => @project.id, :clause_id => @clause.id, :clause_line => 0, :linetype_id => 1)
+        #create change record for new clause title line
+        record_new(@new_specline, event_type) 
         
         #get information on content to be created
         clausetype_id = params[:clause][:clauseref_attributes][:full_clause_ref][0,1]
@@ -56,12 +58,15 @@ class ClausesController < ApplicationController
                           
         if params[:clause_content] == 'blank_content'              
           @new_specline = Specline.create(:project_id => @project.id, :clause_id => @clause.id, :clause_line => 1, :linetype_id => @linetype_id)
+          #create change record for line
+          record_new(@new_specline, event_type)          
         else   
           clone_speclines = Specline.where(:clause_id => params[:clone_clause_id], :project_id => params[:clone_template_id]).where.not(:clause_line => 0)         
           clone_speclines.each do |clone_line|
             @new_specline = Specline.create(clone_line.attributes.merge(:id => nil, :project_id => @project.id, :clause_id => @clause.id))      
-          end            
-        record_new(@new_specline, event_type)
+            #create change record for each new line
+            record_new(@new_specline, event_type)
+          end                    
         end
          
         redirect_to manage_specclause_path(:id => @project.id, :subsection_id => params[:clause][:clauseref_attributes][:subsection_id])
