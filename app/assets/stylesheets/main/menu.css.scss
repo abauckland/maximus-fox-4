@@ -1,0 +1,188 @@
+.lrg_menu {  
+  position: absolute;
+  top: 0px;
+  left: 115px;
+  right: 50px;
+  }
+  @media screen and (max-width: 800px) {
+  .lrg_menu {  
+    top: -1px;
+    left: 90px;
+    right: 50px;
+    } 
+  }
+
+
+.menu_container ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  display: block;
+  height: 46px;
+  width: 100%;
+  font-size: 14px;
+  font-weight: bold;
+  li{
+    display: block;
+    position: relative;
+    float: left;
+    a{
+      display: block;
+      color: #ffffff;
+      text-decoration: none;      
+      padding: 15px 12px;      
+    }
+    &:hover a{text-decoration: underline;}  
+    ul {
+      position: absolute;
+      top: 46px;
+      opacity: 0;
+      z-index: 1000;
+      font-size: 12px;
+            li {
+        position: relative;
+        background: #000;
+        a {
+          width: 130px;
+          border-bottom: 1px solid #444;
+          padding: 10px 20px;
+          color: #eee;    
+          text-decoration: none;
+        }
+        &:hover a{text-decoration: underline;}
+        &:last-child a{border-bottom: 0;}
+        &.last a{border-bottom: 0;}
+      }
+    }
+    &.right{
+      float: right;
+      a{padding: 16px 12px;}
+    }
+    &.has-sub{
+      a{padding-right: 26px; text-decoration: none;}
+      &:hover {
+        a{text-decoration: underline;}
+        ul {opacity: 1;
+          li a{text-decoration: none;}
+          li:hover a{text-decoration: underline;}
+        }      
+      } 
+    }
+    &.has-sub::after {
+      right: 10px;
+      top: 20px;
+      border: 5px solid transparent;
+      border-top-color: #ffffff;
+    }
+  }
+  #menu-button {display: none;}
+}
+
+
+.menu_container li.has-sub::after {
+  display: block;
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+
+
+
+
+
+
+@media all and (max-width: 800px), only screen and (-webkit-min-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (min--moz-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (-o-min-device-pixel-ratio: 2/1) and (max-width: 1024px), only screen and (min-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (min-resolution: 192dpi) and (max-width: 1024px), only screen and (min-resolution: 2dppx) and (max-width: 1024px) {
+.menu_container  {
+    width: auto;
+  }
+.menu_container ul {
+    width: auto;
+  }
+.menu_container .submenuArrow,
+.menu_container #indicatorContainer {
+    display: none;
+  }
+.menu_container > ul {
+    height: auto;
+    display: block;
+  }
+.menu_container > ul > li {
+    float: none;
+  }
+  
+ 
+.menu_container li,
+.menu_container > ul > li {
+    display: none;
+  }
+.menu_container ul ul,
+.menu_container ul > li:hover > ul,
+.menu_container ul ul > li:hover > ul {
+    position: relative;
+    left: auto;
+    top: auto;
+    opacity: 1;
+    padding-left: 0;
+  }
+.menu_container ul .has-sub::after {
+    display: none;
+  }
+.menu_container ul li a {
+    padding: 12px 20px;
+    
+  }
+.menu_container ul ul li a {
+    border: 0;
+    background: #000;
+    width: auto;
+    padding: 8px 35px;
+  }
+.menu_container ul ul li:hover > a {
+    background: #000;
+    color: #fff;
+  }
+
+.menu_container > ul > #menu-button {
+    display: block;
+    cursor: pointer;
+  }
+.menu_container #menu-button > a {
+    padding: 14px 20px;
+  }
+.menu_container ul.open li,
+.menu_container > ul.open > li {
+    display: block;
+  }
+.menu_container > ul.open > li#menu-button > a {
+    color: #fff;
+    border-bottom: 1px solid rgba(150, 150, 150, 0.1);
+  }
+.menu_container #menu-button::after {
+    display: block;
+    content: '';
+    position: absolute;
+    height: 3px;
+    width: 22px;
+    border-top: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    right: 20px;
+    top: 15px;
+  }
+.menu_container #menu-button::before {
+    display: block;
+    content: '';
+    position: absolute;
+    height: 3px;
+    width: 22px;
+    border-top: 2px solid #fff;
+    right: 20px;
+    top: 25px;
+  }
+.menu_container ul.open #menu-button::after,
+.menu_container ul.open #menu-button::before {
+    border-color: #fff;
+  }
+}

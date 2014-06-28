@@ -379,7 +379,7 @@ def update_product_key
       @specline_update.update(:linetype_id => 10)
      # @specline_update.linetype_id = 10
       #@specline_update.save
-      record_change(@specline, @specline_update)     
+      record_change(@specline)     
     end
     
     #if only one value option auto complete otherwise set value to 1 ('not specified')
@@ -400,14 +400,14 @@ def update_product_key
     @specline_update.update(:identity_id => update_identity_id)
     #@specline_update.identity_id = update_identity_id
     #@specline_update.save
-    record_change(@specline, @specline_update) 
+    record_change(@specline) 
     
   else
     if @specline_update.linetype_id != 11
       @specline_update.update(:linetype_id => 11)
       #@specline_update.linetype_id = 11
       #@specline_update.save
-      record_change(@specline, @specline_update)      
+      record_change(@specline)      
     end
     
     #if only one value option auto complete otherwise set value to 1 ('not specified')
@@ -431,7 +431,7 @@ def update_product_key
     #@specline_update.perform_id = update_perform_id
     #@specline_update.save
     @specline_update.update(:perform_id => update_perform_id)
-    record_change(@specline, @specline_update)     
+    record_change(@specline)     
   end
     #render :text=> params[:value]  
     render :update, :layout => false 
@@ -460,7 +460,7 @@ def update_product_value
     @specline_update.update(:identity_id => new_identity_pair.id)
     #@specline_update.identity_id = new_identity_pair.id
     #@specline_update.save
-    record_change(@specline, @specline_update)       
+    record_change(@specline)       
   else
       performvalue_id = params[:value]    
       new_perform_pair = Perform.where(:performkey_id => @specline.perform.performkey_id, :performvalue_id  => performvalue_id).first
@@ -468,7 +468,7 @@ def update_product_value
       @specline_update.update(:perform_id => new_perform_pair.id)
       #@specline_update.perform_id = new_perform_pair.id
      # @specline_update.save
-      record_change(@specline, @specline_update)     
+      record_change(@specline)     
   end  
         
   render :text => render_value_text

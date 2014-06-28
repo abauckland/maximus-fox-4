@@ -13,53 +13,44 @@
 <body>
 
 <div class="app_page_container">
-	
-	<!-- menu header-->
-	<header class="app_page_header">
-   
-		<figure class="app_logo"></figure>
 
-        
-        
-        <% if @project %>    
-            <% if request.path_parameters[:action] == "new" %>
-            <!-- menu for new project -->
-                <nav class="app_menu">
-                    <div class="menu_item_container">                              
-                        <div class="app_menu_item"><%= link_to "PROJECTS", projects_path, :class => 'not_link'%></div>
+    <header class="app_page_header">
+        <figure class="app_logo"></figure>	
+	    
+              <nav class="lrg_menu">
+            	    <!-- menu header-->
+                    <div class='menu_container'>
+                    <ul>
+                       <li class='has-sub'><%= link_to "PROJECT", edit_project_path(@project.id)%></a>
+                          <ul>
+                             <li><%= link_to "Select Project", edit_project_path(@project.id)%></a></li>
+                             <li><%= link_to "Create Project", edit_project_path(@project.id)%></a></li>
+                             <li><%= link_to "Edit Project Details", edit_project_path(@project.id)%></a></li>
+                             <li><%= link_to "Project Authorisation", edit_project_path(@project.id)%></a></li>
+                          </ul>
+                       </li>
+                       <li><%= link_to "SPECIFICATION", edit_project_path(@project.id)%></a>
+                       <li><%= link_to "REVISIONS", edit_project_path(@project.id)%></a>
+                       <li class='has-sub'><%= link_to "PUBLISH", edit_project_path(@project.id)%></a>
+                          <ul>
+                             <li><%= link_to "Download/Publish PDF", edit_project_path(@project.id)%></a></li>
+                             <li><%= link_to "PDF Settings", edit_project_path(@project.id)%></a></li>
+                             <li><%= link_to "Download Keynote File", edit_project_path(@project.id)%></a></li>
+                          </ul>
+                       </li>
+                       <li class='has-sub right'><%= link_to current_user.name, edit_project_path(@project.id)%></a>
+                         <ul>
+                             <li><%= link_to "Download/Publish PDF", edit_project_path(@project.id)%></a></li>
+                             <li><%= link_to "PDF Settings", edit_project_path(@project.id)%></a></li>
+                             <li><%= link_to "Download Keynote File", edit_project_path(@project.id)%></a></li>
+                          </ul>      
+                       </li>                                         
+                    </ul>
                     </div>
-                </nav>        
-        
-                <nav class="app_mob_menu"><%= link_to "PROJECTS", projects_path, :class => 'not_link'%></nav>
-            <% else %>
+              </nav>              
 
-
-		      <nav class="app_menu">
-			     <div class="menu_item_container">  			    			
-    			 <div class="app_menu_item"><%= link_to "PROJECTS", edit_project_path(@project.id), :class => check_current('project')%></div>
-    			 <div class="app_menu_item"><%= link_to "DOCUMENT", specification_path(@project.id), :class => check_current('document')%></div>
-    			 <div class="app_menu_item"><%= link_to "REVISIONS", specrevision_path(@project.id), :class => check_current('revision')%></div>
-    			 <div class="app_menu_item"><%= link_to "PUBLISH", print_path(@project.id), :class => check_current('publish')%></div>
-    			 <% if current_user.company.category == 'manufacturer'%>    
-    				<div class="app_menu_item"><%= link_to "DASHBOARD", nil %></div>
-    			 <% end %>
-    		      </div>
-  		        </nav>
-		
-		      <nav class="app_mob_menu">menu</nav>	
-		      <!-- drop general menu for mobile-->
-		      <%= render :partial => "spec_menu", :project => @project %>
-            <% end %>
-        <% end %>
-        
-  		<!-- show icon only in mob version -->
-  		<nav class="app_user_name"><%= current_user.name %></nav>  
-		<nav class="app_logout"><%= link_to "logout", log_out_path %></nav> 
-	</header>
-	<!-- drop down user settings menu -->
-	<%= render :partial => "user_menu", :current_user => current_user %>
-	
-	
+            <nav class="app_logout"><%= link_to "logout", log_out_path %></nav>     
+    </header>	
 
 <%= yield %>
 

@@ -86,12 +86,12 @@ class ApplicationController < ActionController::Base
 
   def record_delete(specline, event_type)
 
-    #set update hash of specline data for creating new change records
-    specline_hash(specline, revision)
-      
     #get current revision for project 
     revision = Revision.where(:project_id => specline.project_id).order('created_at').last
     if revision
+      #set update hash of specline data for creating new change records
+      specline_hash(specline, revision)
+
       #do not record change if project has not been prevsioulsy issued (not in draft) 
       if revision.rev.to_s >= 'a'
         #check if any changes already made for selected specline in current revision
@@ -104,7 +104,7 @@ class ApplicationController < ActionController::Base
            
           #if no previous changes for specline create delete record for line                     
           new_delete_rec = Alteration.create(@specline_hash.merge(:specline_id => specline.id,
-                                                                  :clause_add_delete => clause_add_delete,
+                                                                  :clause_add_delete => @clause_add_delete,
                                                                   :event => 'deleted')) 
         else
           #where previous 'new' and 'change' events have been reorded
@@ -126,17 +126,14 @@ class ApplicationController < ActionController::Base
 
 
   def record_new(specline, event_type)
-
-    #set update hash of specline data for creating new change records
-    specline_hash(specline, revision)
-
-    #define if change action applied to line, clause or section
-    #information used when reporting changes and upon reinstatement     
-    set_event_type(event_type)
-    
     #get current revision for project     
     revision = Revision.where(:project_id => specline.project_id).order('created_at').last
     if revision
+      #set update hash of specline data for creating new change records
+      specline_hash(specline, revision)
+      #define if change action applied to line, clause or section
+      #information used when reporting changes and upon reinstatement     
+      set_event_type(event_type)
       #do not record change if project has not been prevsioulsy issued (not in draft) 
       if revision.rev.to_s >= 'a'                       
       #check if any changes already made for selected specline in current revision
@@ -147,7 +144,7 @@ class ApplicationController < ActionController::Base
    
           #if no previous changes for specline create new record for line 
           new_new_rec = Alteration.create(@specline_hash.merge(:specline_id => specline.id,
-                                                                 :clause_add_delete => clause_add_delete,
+                                                                 :clause_add_delete => @clause_add_delete,
                                                                  :event => 'new')) 
       else
         #update specline_id of all precious changes for existing change record specline with specline of new line
@@ -165,7 +162,7 @@ class ApplicationController < ActionController::Base
             previous_changed_specline = Specline.where(:id => @check_new_match_previous.specline_id).first
 
             new_new_rec = Alteration.create( 
-                                        :clause_add_delete => clause_add_delete,
+                                        :clause_add_delete => @clause_add_delete,
                                         :event => 'new',
                                         :revision_id => revision.id,
                                         :project_id => @check_new_match_previous.project_id,
@@ -188,10 +185,7 @@ class ApplicationController < ActionController::Base
 
 
   def record_change(specline)
-        
-    #set update hash of specline data for creating new change records
-    specline_hash(specline, revision)
-    
+
     #changes can only be applied to line
     #information used when reporting changes and upon reinstatement 
     clause_add_delete = 1
@@ -199,6 +193,8 @@ class ApplicationController < ActionController::Base
     #get current revision for project     
     revision = Revision.where(:project_id => specline.project_id).order('created_at').last
     if revision
+      #set update hash of specline data for creating new change records
+      specline_hash(specline, revision)
       #do not record change if project has not been prevsioulsy issued (not in draft) 
       if revision.rev.to_s >= 'a'  
 
@@ -214,7 +210,7 @@ class ApplicationController < ActionController::Base
           #if no previous changes for specline create new record for line 
           new_new_rec = Alteration.create(@specline_hash.merge(
                                           :specline_id => specline.id,
-                                          :clause_add_delete => clause_add_delete,
+                                          :clause_add_delete => @clause_add_delete,
                                           :event => 'changed'))     
         else
           #if previous action was 'new'
@@ -253,7 +249,7 @@ update_specline_id_prior_changes(@check_new_match_previous.specline_id, specline
 
             else            
               #create 'deleted' change record for current specline
-              new_delete_rec = Alteration.create(@specline_hash.merge(:clause_add_delete => clause_add_delete,
+              new_delete_rec = Alteration.create(@specline_hash.merge(:clause_add_delete => @clause_add_delete,
                                                                      :event => 'deleted',
                                                                      :specline_id => @check_new_match_previous.specline_id))  
               #delete change record, as this line has no longer been changed, but re-created
@@ -290,7 +286,7 @@ update_specline_id_prior_changes(@check_new_match_previous.specline_id, @speclin
               if previous_changes_for_specline.blank?            
                 #create 'deleted' change record for current specline
                 @specline = Specline.find(params[:id])
-                previous_changes_for_specline = Alteration.create(@specline_hash.merge(:clause_add_delete => clause_add_delete,
+                previous_changes_for_specline = Alteration.create(@specline_hash.merge(:clause_add_delete => @clause_add_delete,
                                                                      :event => 'changed',
                                                                      :specline_id => @check_new_match_previous.specline_id)) 
               else
@@ -542,11 +538,11 @@ end
 
       def set_event_type(event_type) 
           if event_type.blank?
-             clause_add_delete = 1
+             @clause_add_delete = 1
           else
-             clause_add_delete = event_type
+             @clause_add_delete = event_type
           end
-          return clause_add_delete
+          return @clause_add_delete
       end
   
 end
