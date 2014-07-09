@@ -3,10 +3,7 @@ class CreateClientimages < ActiveRecord::Migration
     create_table :clients do |t|
       t.string :name
       t.integer :project_id
-      t.string :photo_file_name
-      t.string :photo_content_type
-      t.string :photo_file_size
-      t.string :photo_updated_at
+      t.string :client_logo
 
       t.timestamps
     end

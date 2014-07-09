@@ -7,6 +7,9 @@ module SpecificationsHelper
     end     
   end
 
+def clause_link(project_id, subsection_id)
+    "<div class='guide_download_button'>#{link_to 'add/delete clauses', {:controller => "specclauses", :action => "manage", :id => project_id, :project_id => project_id, :subsection_id => subsection_id}}</div>".html_safe
+end
 
 ##specline table formatting
 def specline_table(specline)

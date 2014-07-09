@@ -1,13 +1,17 @@
 module Printspecline
 
 
-def specification(project, section, revision)
+def specification(project, subsection, revision, pdf)
+
+    #get array of linetypes that have a prefix
+    prefixed_linetypes_array = Linetype.where('txt1 = ?', 1).ids
 
     clausetypes = Clausetype.includes(:clauserefs => [:clauses => :speclines]).where('speclines.project_id' => project, 'clauserefs.subsection_id' => subsection.id).order('clausetypes.id')    
     clausetypes.each do |clausetype|
 
+      
       #get all speclines for each clausetype    
-      clausetype_speclines = Specline.includes(:clause => [:clauseref]).where(:project_id => project, 'clauserefs.subsection_id' => subsection.id, 'clauserefs.clausetype_id' => clausetype.id).order('clauserefs.clause, clauserefs.subclause, clause_line');
+      clausetype_speclines = Specline.includes(:clause => [:clauseref]).where(:project_id => project, 'clauserefs.subsection_id' => subsection.id, 'clauserefs.clausetype_id' => clausetype.id).order('clauserefs.clause_no, clauserefs.subclause, clause_line');
 
       clausetype_speclines.each_with_index do |line, i|
 
@@ -27,11 +31,11 @@ def specification(project, section, revision)
         
         #if first clause of clausetype, insert clause type title
         if i == 0
-          clausetype_print(subsection, clausetype, pdf)
+          clausetype_print(project, subsection, clausetype, pdf)
         end 
         
         #print line
-        line_print(line, pdf)
+        line_print(project, line, pdf)
         pdf.move_down(pdf.box_height + 2.mm)           
       end
     end
@@ -112,7 +116,7 @@ def print_line_space_check(line, i, clausetype_speclines, prefixed_linetypes_arr
 end
 
 
-def page_break(line, pdf)
+def page_break(project, line, pdf)
   if line.clause_line == 0
     pdf.start_new_page
     pdf.y = 268.mm 
@@ -121,13 +125,13 @@ def page_break(line, pdf)
     pdf.start_new_page
     pdf.y = 268.mm
       
-    clausetitle_repeat(line, pdf)
+    clausetitle_repeat(project, line, pdf)
     pdf.move_down(pdf.box_height + 2.mm) 
   end   
 end
 
 
-def clausetype_print(subsection, clausetype, pdf)
+def clausetype_print(project, subsection, clausetype, pdf)
 #font styles for page  
   font_style_clausetype_code = {:size => 11, :style => :bold}
 #formating for lines  
@@ -135,7 +139,11 @@ def clausetype_print(subsection, clausetype, pdf)
   clausetype_title_format = font_style_clausetype_code.merge(:width => 155.mm, :overflow => :expand)
 
       pdf.move_down(6.mm)         
-      pdf.spec_box subsection.subsection_code + '.' + clausetype.id.to_s + '000', clausetype_code_format.merge(:at =>[0.mm, pdf.y])
+      if project.CAWS?
+        pdf.spec_box subsection.full_code + '.' + clausetype.id.to_s + '000', clausetype_code_format.merge(:at =>[0.mm, pdf.y])
+      else
+        pdf.spec_box subsection.full_code + '.' + clausetype.id.to_s + '000', clausetype_code_format.merge(:at =>[0.mm, pdf.y])
+      end
       pdf.spec_box clausetype.text.upcase, clausetype_title_format.merge(:at =>[20.mm, pdf.y])
       pdf.move_down(pdf.box_height)
 end
@@ -179,7 +187,7 @@ end
 
  
 
-def line_print(line, pdf)
+def line_print(project, line, pdf)
 #font styles for lines
   font_style_clause_title = {:size => 11, :style => :bold}
   font_style_specline = {:size => 10}
@@ -193,7 +201,7 @@ def line_print(line, pdf)
 
 
     case line.linetype_id
-      when 1, 2 ;   print_linetype_1_helper(line, clausetitle_format, pdf)        
+      when 1, 2 ;   print_linetype_1_helper(project, line, clausetitle_format, pdf)        
       when 3 ;      print_linetype_3_helper(line, specline_prefix_format, prefixed_specline_format, pdf)       
       when 4 ;      print_linetype_4_helper(line, specline_prefix_format, prefixed_specline_format, pdf) 
       when 7 ;      print_linetype_7_helper(line, indent_format, specline_format, pdf)
@@ -204,9 +212,9 @@ def line_print(line, pdf)
     end    
 end
 
-def print_linetype_1_helper(line, specline_format, pdf)
+def print_linetype_1_helper(project, line, specline_format, pdf)
      pdf.move_down(4.mm)
-     pdf.spec_box "#{full_clause_code(line)}", specline_format.merge(:at =>[0.mm, pdf.y]) 
+     pdf.spec_box "#{full_clause_code(project, line)}", specline_format.merge(:at =>[0.mm, pdf.y]) 
      pdf.spec_box "#{line.clause.clausetitle.text}", specline_format.merge(:at =>[20.mm, pdf.y]) 
 end
 
@@ -255,14 +263,18 @@ def clausetitle_continued(line, pdf)
      pdf.spec_box 'Clause continued on next page...', :size => 9, :style => :italic, :at =>[20.mm, 14.mm], :width => 155.mm, :overflow => :expand
 end
 
-def clausetitle_repeat(line, pdf)
-     pdf.spec_box full_clause_code(line), :size => 10, :style => :bold_italic, :at =>[0.mm, pdf.y], :width => 20.mm, :height => 5.mm
+def clausetitle_repeat(project, line, pdf)
+     pdf.spec_box full_clause_code(project, line), :size => 10, :style => :bold_italic, :at =>[0.mm, pdf.y], :width => 20.mm, :height => 5.mm
      pdf.spec_box line.clause.clausetitle.text + ' (continued)', :size => 10, :style => :bold_italic, :at =>[20.mm, pdf.y], :width => 155.mm, :overflow => :expand
 end
 
 
-def full_clause_code(line)
-  line.clause.clauseref.subsection.section.ref + sprintf("%02d", line.clause.clauseref.subsection.ref).to_s + '.' + line.clause.clauseref.clausetype_id.to_s + sprintf("%02d", line.clause.clauseref.clause).to_s + line.clause.clauseref.subclause.to_s
+def full_clause_code(project, line)
+  if project.CAWS?
+    line.clause.caws_code#clauseref.subsection.cawssubsection.full_code + '.' + line.clause.clauseref.clausetype_id.to_s + sprintf("%02d", line.clause.clauseref.clause).to_s + line.clause.clauseref.subclause.to_s
+  else
+    #line.clause.clauseref.subsection.section.ref + sprintf("%02d", line.clause.clauseref.subsection.ref).to_s + '.' + line.clause.clauseref.clausetype_id.to_s + sprintf("%02d", line.clause.clauseref.clause).to_s + line.clause.clauseref.subclause.to_s    
+  end  
 end
 
 end

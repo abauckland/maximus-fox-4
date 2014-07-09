@@ -80,4 +80,12 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+  
+  #custom added for password reset action
+  config.action_mailer.default_url_options = { :host => 'www.specright.co.uk' }
+  config.action_mailer.sendmail_settings = {
+          :location => '/usr/sbin/sendmail',
+          :arguments => '-i'
+        }
+  
 end

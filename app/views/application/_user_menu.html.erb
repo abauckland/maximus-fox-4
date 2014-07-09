@@ -1,11 +1,27 @@
-<nav class="app_user_menu">
-    <ul>
-      <li><%= link_to "Tutorials", helps_path %></li>
-      <li><%= link_to "My Details", edit_user_path(current_user.id)%></li>
-      <% if current_user.role == 'owner'%>
-      	<li><%= link_to "Company Details", edit_company_path(current_user.company_id)%></li>
-      	<li><%= link_to "User Licences", users_path %></li> 
-      <% end %>    
-    </ul>
-</nav>
+<div class="user_menu"><%= current_user.name %></div>
+<ul class='right_menu'>
+    <li class="has_sub">                            
+        <ul class="sub_menu">
+            <li class="sub_item"><%= link_to "Edit My Details", edit_user_path(current_user.id)%></li>
+                <% if current_user.role == 'owner'%>
+                    <li class="sub_item"><%= link_to "Company Details", edit_company_path(current_user.company_id)%></li>
+                    <li class="sub_item"><%= link_to "Manage Users", users_path %></li> 
+                <% end %>    
+        </ul>
+    </li>                                                      
+</ul>
+
+
+<div class="user_menu_mob"></div>
+<ul class='right_menu_mob'>
+    <li class="has_sub_mob">                             
+        <ul class="sub_menu_mob">
+            <li class="sub_item_mob"><%= link_to "Edit My Details", edit_user_path(current_user.id)%></li>
+             <% if current_user.role == 'owner'%>
+                <li class="sub_item_mob"><%= link_to "Company Details", edit_company_path(current_user.company_id)%></li>
+                <li class="sub_item_mob"><%= link_to "Manage Users", users_path %></li> 
+             <% end %>    
+        </ul>
+    </li>                                                      
+</ul>
 

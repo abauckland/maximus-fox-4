@@ -10,12 +10,12 @@
     <div class="lrg_menu_tile">     
         <div class="lrg_menu_tile_container">
             <% @features.each_with_index do |content, i|%>
-            <div id ="lrg_menu_tile_<%= i %>" class="lrg_menu_tile_item">
+            <div id ="lrg_menu_tile_<%=h i %>" class="lrg_menu_tile_item">
             <div class="sub_container">
-                <a href="<%=feature_path(content) %>">
+                <a href="<%= feature_path(content) %>">
                     <%= image_tag "#{content.title}.png", :border=>0, :height=> '88', :width => '220', :class=>"lrg_menu_tile_image" %>
-                    <p class="lrg_menu_tile_title"><%= content.title %></p>
-                    <p class="lrg_menu_tile_text"><%= content.text %></p>     
+                    <p class="lrg_menu_tile_title"><%=h content.title %></p>
+                    <p class="lrg_menu_tile_text"><%=h content.text %></p>     
                 </a>
             </div>
             </div>

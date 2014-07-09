@@ -3,12 +3,12 @@
 <div class="content">
     <div class="column_1">
 		<div class="column_content">       
-			<div class="column_title">Create new clause in <%=@subsection.full_code%></div>   
+			<div class="column_title">Create new clause in <%=h @subsection.full_code%></div>   
     			
     		<div class="column_sub_content">
 
 				<div class="column_guide">
-					<p>Create new clause in <%=@subsection.full_code%></p>
+					<p>Create new clause in <%=h @subsection.full_code%></p>
       			</div>
 
 				<div class="column_form">
@@ -23,7 +23,7 @@
 							<%= ref.hidden_field(:subsection_id, {:value => @subsection.id})%> 	
 							<div class="clause_form_label">Reference:</div>
 							<div class="form_input">
-								<%=@subsection.full_code%>.
+								<%=h @subsection.full_code %>.
 								<%= ref.text_field :full_clause_ref, :id=>"enter_clause_ref_default", :value=>"????", :size => 2 %>
           						<%= ref.text_field :full_clause_ref, :id=>"enter_clause_ref", :value=>"", :size => 2 %> 
 							</div>

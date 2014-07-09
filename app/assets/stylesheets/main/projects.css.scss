@@ -13,25 +13,6 @@ html {
 
 
 
-//header menu
-.app_mob_menu{
-  position: absolute;
-  top: 11px;
-  left: 115px;
-  font-family: $heading_font;
-  @include small-button;
-  @include dark-grey-button;
-  @include shadow-all(0px 0px 5px #aeaeae);
-  border: 1px solid #000;
-  display: none; //item here to override mixin settings
-  }
-  @media screen and (max-width: $small_menu) {
-    .app_mob_menu {
-      display: block;
-      top: 7px;
-      left: 95px;
-    }  
-  }
 
 .mob_spec_menu{
   display: none; 
@@ -389,7 +370,7 @@ right: 30px;
   
 .prelim_show{
   position: absolute;
-  top: 0px;
+  top: 32px;
   left: 10px;
   right: 10px;
   bottom: 10px;

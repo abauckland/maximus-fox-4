@@ -10,12 +10,12 @@
 				<% if @company.errors.any? %> 
 				<div class="column_error">      		    
         			<div class="column_error_heading">
-        				<p><%= pluralize(@company.errors.count, "error") %> prohibited this account from being updated :</p>
+        				<p><%=h pluralize(@company.errors.count, "error") %> prohibited this account from being updated :</p>
         			</div>
         			<div class="column_error_content">
         				<ul>
     					<% @company.each_with_index do |error, i| %> 
-							<li><%= error %></li>
+							<li><%=h error %></li>
     					<% end %>  
         				</ul>
 					</div>  
@@ -60,11 +60,11 @@
 						</td></tr>
 						<tr><td>
 							<div class="company_form_label form_input_label">Company Logo:</div>
-							<div class="form_input"><%= show_image(@company, 30)%></div>					
+							<div class="form_input"><%= show_image(@company.logo, :height=> 30 %></div>					
 						</td></tr>
 						<tr><td>
 							<div class="company_form_label form_input_label">Change Logo:<span class="form_label_note"> (1Mb max)</span></div>
-							<div class="form_input"><%= f.file_field :photo %></div>			
+							<div class="form_input"><%= f.file_field :logo %></div>			
 						</td></tr>	
 						</table>	      	
       			</div>

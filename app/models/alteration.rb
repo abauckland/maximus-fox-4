@@ -45,6 +45,5 @@ attr_accessor :clause_line
    ).first
   end
 
-
   
 end

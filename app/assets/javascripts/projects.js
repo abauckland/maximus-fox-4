@@ -171,28 +171,11 @@ ajaxLinks();
 	$('select#subsection').selectBox({autoWidth: false});
 	$('select#revision').selectBox().selectBox({autoWidth: false});
 
-	
 
 //show/hide user settings menu
-	$('nav.app_user_name').click(function (){
-		$('nav.app_user_menu').toggle();
-	});
-  
-	$('nav.app_user_menu').mouseleave(function (){
-		$(this).hide();
-	});
-
-//show or hide website mobile menu settings menu
-	$('nav.app_mob_menu').click(function (){
-		$('nav.mob_spec_menu').toggle();
-	});
-  
 	$('nav.mob_spec_menu').mouseleave(function (){
 		$(this).hide();
 	});
-
-
-
 
 
 //sortable specline
@@ -421,10 +404,6 @@ $('#enter_clause_ref').focusout(function() {
         $('#enter_clause_ref_default').default_value('????'); //will clear on click
     }
 });
-
-
-$('td.suffixed_line_menu').children('a').tipsy();
-$('td.prefixed_line_menu').children('img').tipsy();
 
 
 

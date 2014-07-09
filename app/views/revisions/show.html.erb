@@ -1,28 +1,28 @@
-<p id="notice"><%= notice %></p>
+<p id="notice"><%=h notice %></p>
 
 <p>
   <strong>Rev:</strong>
-  <%= @revision.rev %>
+  <%=h @revision.rev %>
 </p>
 
 <p>
   <strong>Project status:</strong>
-  <%= @revision.project_status %>
+  <%=h @revision.project_status %>
 </p>
 
 <p>
   <strong>Project:</strong>
-  <%= @revision.project_id %>
+  <%=h @revision.project_id %>
 </p>
 
 <p>
   <strong>User:</strong>
-  <%= @revision.user_id %>
+  <%=h @revision.user_id %>
 </p>
 
 <p>
   <strong>Date:</strong>
-  <%= @revision.date %>
+  <%=h @revision.date %>
 </p>
 
 <%= link_to 'Edit', edit_revision_path(@revision) %> |

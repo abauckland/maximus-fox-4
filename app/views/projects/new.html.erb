@@ -22,6 +22,7 @@
 				<div class="column_form">
 				<%= form_for @project, :html => { :multipart => true } do |f| %>
 						<%= f.hidden_field :project_status, :value =>'Draft' %>
+						<%= f.hidden_field :ref_system, :value =>'CAWS' %>
 						<table>
 						<tr><td>
 							<div class="project_form_label form_input_label">Project Code:*</div>
@@ -35,23 +36,19 @@
 								<div class="form_error_note"> <%= error_check(@project, :title)%> </div>
 							</div>				
 						</td></tr>
-                        <tr><td>
-                            <div class="project_form_label form_input_label">Reference System:</div>
-                            <div class="form_default"><%= f.select :ref_system, options_for_select(["CAWS", "Uniclass_2"], @project.ref_system) %></div>              
-                        </td></tr>
-						<%= f.fields_for :client do |builder| %>
-						<tr><td>
-							<div class="project_form_label form_input_label">Project Client:</div>
-							<div class="form_input"><%= builder.text_field :name %></div>				
-						</td></tr>
-						<tr><td>
-                            <div class="project_form_label form_input_label">Upload Client Logo:<br><span class="form_label_note"> (1Mb max)</span></div>
-                            <div class="form_input"><%= builder.file_field :photo %></div>             
-                        </td></tr>
-                        <% end %>   												
+    						<%= f.fields_for :client do |builder| %>
+    						<tr><td>
+    							<div class="project_form_label form_input_label">Project Client:</div>
+    							<div class="form_input"><%= builder.text_field :name %></div>				
+    						</td></tr>
+    						<tr><td>
+                                <div class="project_form_label form_input_label">Upload Client Logo:<br><span class="form_label_note"> (1Mb max)</span></div>
+                                <div class="form_input"><%= builder.file_field :client_logo %></div>             
+                            </td></tr>
+                            <% end %>   												
 						<tr><td>
 							<div class="project_form_label form_input_label">Upload Project Image:<br><span class="form_label_note"> (1Mb max)</span></div>
-							<div class="form_input"><%= f.file_field :photo %></div>			
+							<div class="form_input"><%= f.file_field :project_image %></div>			
 						</td></tr>
 						</table>	      	
       			</div>
@@ -61,7 +58,7 @@
         		<div>
         			<div class="column_submit"><%= f.submit "save"%></div>              
 
-        			<div class="column_cancel"><%= link_to "Cancel", {:controller => "projects", :action => "index"} %></div>              
+        			<div class="column_cancel"><%= link_to "Cancel", projects_path %></div>              
         		<% end %>       		             
         		</div>   
       		</div>

@@ -1,6 +1,13 @@
-class ExportsController < ActionController::Base
+class KeynotesController < ApplicationController
+  before_filter :authenticate
+  before_action :set_project, only: [:show, :keynote_export]
+  before_action :set_revision, only: [:show]
 
-before_action :set_project, only: [:keynote_export]
+  def show
+    #call to protected method that restablishes text to be shown for project revision status
+    current_revision_render(@project)
+    
+  end
 
 
   def keynote_export    
@@ -143,5 +150,12 @@ before_action :set_project, only: [:keynote_export]
     def set_project
       @project = Project.find(params[:id])
     end
-    
+
+    def set_revision
+      if params[:revision_id].blank?
+        @revision = Revision.where(:project_id => params[:id]).order('created_at').last 
+      else
+        @revision = Revision.find(params[:revision_id])
+      end
+    end    
 end

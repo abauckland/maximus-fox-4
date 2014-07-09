@@ -2,17 +2,17 @@
 <div class="project_info">
 	<div class="project_title">
 		<div class="project_code">   
-    		Project: <%= @project.code%>
+    		Project: <%=h @project.code%>
 		</div>
 		<div class="project_code_title">   
-    		<%= @project.title %>
+    		<%=h @project.title %>
 		</div>
 	</div>	
 	<div class="project_status">
-		Status: <%= @project.project_status %>
+		Status: <%=h @project.project_status %>
 	</div>
 	<div class="project_rev">
-    	Rev: <%= @current_revision_rev %>
+    	Rev: <%=h @current_revision_rev %>
   	</div>
 </div>
 
@@ -61,63 +61,76 @@
 		<% if @project_user.manage? || @project_user.edit? %>
 		  <div class="subsection_button_large"><%= link_to 'add/delete sections', manage_specsubsection_path(:id => @project.id, :template_id => @project.parent_id) %></div>
 	    <% end %>
-	</div>
-			
+	</div>			
 </div>
-
-
 
 <% if @selected_section.id == 1 %>
 
-<div class="document_tabs">
-	<div class="prelim_show">
-		<%= render "tab_specline_content", locals: {selected_specline_lines: @selected_specline_lines} %>     
-    	<table><tr class='specline_row'><td></td></tr></table>
-	</div>
-</div>
+    <div class="document_tabs">
+    	<div class="prelim_show">
+    		<%= render "tab_specline_content", locals: {selected_specline_lines: @selected_specline_lines} %>     
+        	<table><tr class='specline_row'><td></td></tr></table>
+    	</div>
+        <div class="tab_sub_menu">      
+
+            <%= clause_link(@project.id, @selected_subsection.id) %>
+
+            <div class="character_menu">
+                <div class="character_menu_content">
+                    <ul>
+                        <li class="character" id="symbol_0">'º'</li>
+                        <li class="character" id="symbol_1">'²'</li>
+                        <li class="character" id="symbol_2">'³'</li>
+                        <li class="character" id="symbol_3">'±'</li>
+                        <li class="character" id="symbol_4">'≤'</li>
+                        <li class="character" id="symbol_5">'≥'</li>
+                    </ul>
+                </div>
+                <div class="character_menu_label">insert symbol:</div>
+            </div>      
+        </div>      	
+    	
+    </div>
 
 <% else %>
 
-<div class="document_tabs">
-	<div class="tab_sub_menu">		
-		<% if authorise_specline_view(@project.id, @selected_subsection.id, ["manage", "edit", "write"])%>
-		  <%= clause_link(@project.id, @selected_subsection.id) %>
-		<% end %>
-		<div class="character_menu">
-			<div class="character_menu_content">
-				<ul>
-					<li class="character" id="symbol_0">'º'</li>
-					<li class="character" id="symbol_1">'²'</li>
-					<li class="character" id="symbol_2">'³'</li>
-					<li class="character" id="symbol_3">'±'</li>
-					<li class="character" id="symbol_4">'≤'</li>
-					<li class="character" id="symbol_5">'≥'</li>
-				</ul>
-			</div>
-			<div class="character_menu_label">insert symbol:</div>
-		</div>
-		
-	</div>	
-	
-	<ul class='tabs'>
-		<% @clausetypes.each_with_index do |clausetype, i|%>
-      		<li id="<%= clausetype.id %>"><a href='#<%= clausetype.id %>000'><%= clausetype.text %></a></li>
-    	<%end%>
-  	</ul>
- 	<% @clausetypes.each_with_index do |clausetype, i|%>	   
-		<% if i == 0 %>
-			<div id="<%= clausetype.id %>000" class="tab_content <%= clausetype.id %>"> 
-				<%= render "tab_specline_content", locals: {selected_specline_lines: @selected_specline_lines} %>
-			</div> 
-		<% else %>
-			<div id="<%= clausetype.id %>000" class="tab_content <%= clausetype.id %>">
-				<p>Loading...</p>
-			</div> 					
-		<% end %>   
-	<%end%> 
-	
+    <div class="document_tabs">
+    	<div class="tab_sub_menu">		
 
-</div>
+    		<%= clause_link(@project.id, @selected_subsection.id) %>
+
+    		<div class="character_menu">
+    			<div class="character_menu_content">
+    				<ul>
+    					<li class="character" id="symbol_0">'º'</li>
+    					<li class="character" id="symbol_1">'²'</li>
+    					<li class="character" id="symbol_2">'³'</li>
+    					<li class="character" id="symbol_3">'±'</li>
+    					<li class="character" id="symbol_4">'≤'</li>
+    					<li class="character" id="symbol_5">'≥'</li>
+    				</ul>
+    			</div>
+    			<div class="character_menu_label">insert symbol:</div>
+    		</div>		
+    	</div>	
+    	
+    	<ul class='tabs'>
+    		<% @clausetypes.each_with_index do |clausetype, i|%>
+          		<li id="<%=h clausetype.id %>"><a href='#<%=h clausetype.id %>000'><%=h clausetype.text %></a></li>
+        	<%end%>
+      	</ul>
+     	<% @clausetypes.each_with_index do |clausetype, i|%>	   
+    		<% if i == 0 %>
+    			<div id="<%=h clausetype.id %>000" class="tab_content <%=h clausetype.id %>"> 
+    				<%= render "tab_specline_content", locals: {selected_specline_lines: @selected_specline_lines} %>
+    			</div> 
+    		<% else %>
+    			<div id="<%=h clausetype.id %>000" class="tab_content <%=h clausetype.id %>">
+    				<p>Loading...</p>
+    			</div> 					
+    		<% end %>   
+    	<%end%> 
+    </div>
 
 <% end %>
 

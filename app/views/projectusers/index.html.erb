@@ -1,4 +1,4 @@
-<div class="page_title"><%= @project.code_and_title %></div>
+<div class="page_title"><%=h @project.code_and_title %></div>
 
 <div class="content">
     <div class="column_1_2">
@@ -15,8 +15,8 @@
                 </tr>
                 <% @projectusers.each do |projectuser| %>
                 <tr>
-                    <td><%= projectuser.user.name %></td>
-                    <td><%= projectuser.role %></td>
+                    <td><%=h projectuser.user.name %></td>
+                    <td><%=h projectuser.role %></td>
                     <td class="s_tab"><%= project_access(projectuser) %></td>
                     <td class="mob_cell"><%= last_seen(projectuser.user) %></td>    
                     <% if projectuser.role != "manage" %>

@@ -10,7 +10,7 @@
 				<% if @company.errors.any? %>  
 					<div class="column_error">      		    
         				<div class="column_error_text">
-        					<p><%= pluralize(@company.errors.count, "error") %> prohibited this account from being created, please refer to items highlighted below.</p>
+        					<p><%=h pluralize(@company.errors.count, "error") %> prohibited this account from being created, please refer to items highlighted below.</p>
         				</div>
 					</div>
 				<% end %>      		

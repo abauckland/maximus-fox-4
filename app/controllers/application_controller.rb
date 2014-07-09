@@ -278,10 +278,10 @@ update_specline_id_prior_changes(@check_new_match_previous.specline_id, specline
           if @check_new_match_previous.event == 'changed'              
             #double check is same specline as recorded change
             #this should be called when a prevsiously changed record is changed back to its original status
-            if @check_new_match_previous.specline_id != @specline_update.id
+            if @check_new_match_previous.specline_id != @specline.id
 #update specline_id of all previous changes for existing change record specline with specline of new changed line
 update_specline_id_prior_changes(@check_new_match_previous.specline_id, @specline.id)
-              previous_changes_for_specline = Change.where(:specline_id => @specline_update.id).first
+              previous_changes_for_specline = Alteration.where(:specline_id => @specline.id).first
               
               if previous_changes_for_specline.blank?            
                 #create 'deleted' change record for current specline

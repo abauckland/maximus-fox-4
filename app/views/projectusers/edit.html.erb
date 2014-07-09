@@ -1,4 +1,4 @@
-<div class="page_title"><%= @projectuser.project.code %>: <%= @projectuser.user.name %></div>
+<div class="page_title"><%=h @projectuser.project.code %>: <%=h @projectuser.user.name %></div>
 
 <div class="content">
 
@@ -16,7 +16,7 @@
                         <div class="column_error_content">
                             <ul>
                                 <%@projectuser.errors.each do |attribute, message|%>
-                                <li><%= "#{attribute}: #{message}" %></li>
+                                <li><%=h "#{attribute}: #{message}" %></li>
                                 <%end%>
                             </ul>
                         </div>

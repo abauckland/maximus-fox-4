@@ -1,17 +1,17 @@
 <div class="project_info">
 	<div class="project_title">
 		<div class="project_code">   
-    		Project: <%= @project.code%>
+    		Project: <%=h @project.code%>
 		</div>
 		<div class="project_code_title">   
-    		<%= @project.title %>
+    		<%=h @project.title %>
 		</div>
 	</div>	
 	<div class="project_status">
-		Status: <%= @project.project_status %>
+		Status: <%=h @project.project_status %>
 	</div>
 	<div class="project_rev">
-    	Rev: <%= @revision.rev %>
+    	Rev: <%=h @revision.rev %>
   	</div>
 </div>
 
@@ -54,17 +54,17 @@
 
   <% if @prelim_subsections %>
     <% if @project.ref_system == "CAWS" %> 
-        <li class="prelim"><a href='#prelim_rev_view'><%= @prelim_subsections.first.cawssection.ref%>--</a></li>
+        <li class="prelim"><a href='#prelim_rev_view'><%=h @prelim_subsections.first.cawssection.ref%>--</a></li>
     <% else %>
-        <li class="prelim"><a href='#prelim_rev_view'><%= @prelim_subsections.first.unisection.ref%>--</a></li>    
+        <li class="prelim"><a href='#prelim_rev_view'><%=h @prelim_subsections.first.unisection.ref%>--</a></li>    
     <% end %>        
   <% end%>
   
   <% @non_prelim_subsections.each do |subsection|%>
     <% if @project.ref_system == "CAWS" %> 
-        <li id="<%= subsection.id %>" class="non_prelim"><a href='#<%= subsection.id%>rev_view'><%= subsection.cawssection.ref%><%= subsection.ref%></a></li>
+        <li id="<%=h subsection.id %>" class="non_prelim"><a href='#<%=h subsection.id%>rev_view'><%=h subsection.cawssection.ref%><%=h subsection.ref%></a></li>
     <% else %>
-        <li id="<%= subsection.id %>" class="non_prelim"><a href='#<%= subsection.id%>rev_view'><%= subsection.unisection.ref%><%= subsection.ref%></a></li>    
+        <li id="<%=h subsection.id %>" class="non_prelim"><a href='#<%=h subsection.id%>rev_view'><%=h subsection.unisection.ref%><%=h subsection.ref%></a></li>    
     <% end %>  
   <% end %>
 </ul>
@@ -72,7 +72,7 @@
 
   <% if @revision_project_status_changed %>
   	<div id="prelim_rev_view" class="tab_content">
-		Project Status changed from <%= @previous_revision_project_status %> to <%= @project.revision.project_status %>
+		Project Status changed from <%=h @previous_revision_project_status %> to <%=h @project.revision.project_status %>
     </div>  
     
   	<% if @prelim_subsections %>  

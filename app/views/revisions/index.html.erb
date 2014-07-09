@@ -15,11 +15,11 @@
   <tbody>
     <% @revisions.each do |revision| %>
       <tr>
-        <td><%= revision.rev %></td>
-        <td><%= revision.project_status %></td>
-        <td><%= revision.project_id %></td>
-        <td><%= revision.user_id %></td>
-        <td><%= revision.date %></td>
+        <td><%=h revision.rev %></td>
+        <td><%=h revision.project_status %></td>
+        <td><%=h revision.project_id %></td>
+        <td><%=h revision.user_id %></td>
+        <td><%=h revision.date %></td>
         <td><%= link_to 'Show', revision %></td>
         <td><%= link_to 'Edit', edit_revision_path(revision) %></td>
         <td><%= link_to 'Destroy', revision, method: :delete, data: { confirm: 'Are you sure?' } %></td>

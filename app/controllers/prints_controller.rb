@@ -24,7 +24,7 @@ class PrintsController < ApplicationController
     if @project.project_status == 'Draft'      
       @print_status_show = 'draft'      
     else          
-      project_rev_array = @all_project_revisions.collect{|i| i.rev}
+      project_rev_array = @revisions.collect{|i| i.rev}
 
       total_revisions = project_rev_array.length        
       selected_revision = project_rev_array.index(@revision.rev)    
@@ -78,24 +78,24 @@ class PrintsController < ApplicationController
 
   
   def print_project
-        
+            
    document = Prawn::Document.new(
-      :page_size => "A4",
-      :margin => [20.mm, 14.mm, 5.mm, 20.mm],
-      :info => {:title => @project.title}
-    ) do |pdf|
-    
+    :page_size => "A4",
+    :margin => [20.mm, 14.mm, 5.mm, 20.mm],
+    :info => {:title => @project.title}
+    ) do |pdf|    
         if @project.ref_system == "CAWS"
             print_caws_document(@project, @revision, pdf)
         else
             print_uni_document(@project, @revision, pdf)
-        end
-            
+        end            
     end        
 
+    #if document is to be issued, not issued with 'not for issue' watermark, update revision reference
+    if params[:issue] == true
     #update revision status of project if document is not if draft status
-    update_revision(@project, @revision)
-
+      update_revision(@project, @revision)
+    end
     
     if @revision.rev
       case @revision.rev
@@ -109,15 +109,24 @@ class PrintsController < ApplicationController
     else
       filename = "#{@project.code}_rev_na.pdf"   
     end
-    
-    #document.render_file "tmp/#{filename}"
 
- #   print_file = Print.create(:attachment => LocalFile.new(RAILS.root + "/tmp/#{filename}"), :project_id => @project.id, :revision_id => @revision, :user_id => current_user.id)
-
-    #return filename
-send_data document.render, filename: "test.pdf", :type => "application/pdf"
-  #  redirect_to print_path(@project.id)
-
+    if params[:issue] == true 
+      if !@project.Draft?      
+          document.render_file(filename)
+          pdf_file = File.open(filename)
+          @print = Print.new()
+          @print.project_id = @project.id 
+          @print.revision_id = @revision.id
+          @print.user_id = current_user.id
+          @print.document = pdf_file
+          @print.save
+      
+          send_file pdf_file, :type => "application/pdf"
+      else
+          send_data document.render, filename: filename, :type => "application/pdf"
+      end
+    end
+##clean tem directory in crontab
   end
 
 

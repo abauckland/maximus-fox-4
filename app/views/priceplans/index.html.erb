@@ -7,11 +7,11 @@
 	<div class="content_tile">		
 		<div class="content_tile_container">
 			<% @priceplans.each_with_index do |plan, i|%>
-			<div id ="content_price_<%= i %>" class="content_price_item_container">
+			<div id ="content_price_<%=h i %>" class="content_price_item_container">
 				<div class="content_price_item">
 
-      				<div class="content_price_name"><%= plan.name %></div>
-      				<div class="content_price_price"><%= plan.plan %></div>
+      				<div class="content_price_name"><%=h plan.name %></div>
+      				<div class="content_price_price"><%=h plan.plan %></div>
       				<div class="content_price_features" >
       					<% plan.planfeatures.each do |feature|%>
       						<div class="content_price_feature_item"><%= feature.text %></div>

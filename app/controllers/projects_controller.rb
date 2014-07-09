@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
   before_filter :authenticate
   before_filter :authorise_project_manager, only: [:update]
   before_action :set_project, only: [:empty_project, :show, :edit, :update]
-  before_action :set_project_user, only: [:edit]
+  before_action :set_project_user, only: [:show, :edit]
 #  before_action :set_project_user, only: [:index]
 
   # GET /projects
@@ -16,7 +16,7 @@ class ProjectsController < ApplicationController
     @projects = Project.user_projects_access(current_user)
     @project = @projects.first  
     @project_user = Projectuser.where(:user_id => current_user.id, :project_id => @projects.first.id).first
-    
+   
     #if user is not assigned to any project
     #show intro page and option to create a project
     #render partial 1
@@ -54,8 +54,14 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @project.save
         Revision.create(:project_id => @project.id, :user_id => current_user.id, :date => Date.today)
-        Projectuser.create(:project_id => @project.id, :user_id => current_user.id, :role => "manage")
         Printsetting.create(:project_id => @project.id)
+
+        #Projectuser.create(:project_id => @project.id, :user_id => current_user.id, :role => "manage")
+#get all users for the company
+        new_project_users =  User.where(:company_id => current_user.company_id)
+        new_project_users.each do |user|
+          Projectuser.create(:project_id => @project.id, :user_id => user.id, :role => "manage")
+        end
         
         #set defuault project template
         project_template = Project.where(:id => [1..10], :ref_system => @project.ref_system).first
@@ -139,7 +145,7 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit({:client_attributes => [:name, :photo]}, :code, :title, :parent_id, :company_id, :project_status, :ref_system, :logo_path, :photo)
+      params.require(:project).permit({:client_attributes => [:name, :client_logo]}, :code, :title, :parent_id, :company_id, :project_status, :ref_system, :project_image)
     end
     
     def authorise_project_manager

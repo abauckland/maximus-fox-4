@@ -1,11 +1,64 @@
-<nav class="mob_spec_menu">
-    <ul>
-      <li><%= link_to "Projects", edit_project_path(@project.id), :class => check_current('project')%></li>
-      <li><%= link_to "Document", specification_path(@project.id), :class => check_current('document') %></li>
-      <li><%= link_to "Revisions", specrevision_path(@project.id), :class => check_current('revision')%></li>
-      <li><%= link_to "Publish", print_path(@project.id), :class => check_current('publish')%></li>
-    <% if current_user.company.category == 'manufacturer'%>    
-    	<li><%= link_to "Dashboard", nil %></li>
-    <% end %>                
-    </ul>
-</nav>
+
+<!-- desktop menu -->              
+<div class="lrg_menu">                    
+    <div class='menu_container'>                                                                    
+        <ul class="left_menu">                            
+            <% if request.path_parameters[:action] == "new" %>                        
+                <li class="has_sub"><%= link_to "PROJECTS", projects_path, :class => check_current('project') %> 
+                    <ul>
+                        <li><%= link_to "Select Project", projects_path %> </li>
+                    </ul>                              
+                </li>
+            <% else %>
+                <li class="has_sub"><%= link_to "PROJECTS", projects_path, :class => check_current('project') %> 
+                    <ul>
+                        <li><%= link_to "Select Project", projects_path %> </li>
+                        <li><%= link_to "Create Project", new_project_path %> </li>
+                        <li><%= link_to "Edit Project Details", edit_project_path(@project.id) %> </li>                                        
+                    </ul>                              
+                </li>
+                <li><%= link_to "DOCUMENT", specification_path(@project.id), :class => check_current('revision') %></li>
+                <li><%= link_to "REVISIONS", specrevision_path(@project.id), :class => check_current('revision') %></li>
+                <li class="has_sub"><%= link_to "PUBLISH", print_path(@project.id), :class => check_current('revision') %> 
+                    <ul>
+                        <li><%= link_to "Create/Download PDF", print_path(@project.id) %> </li>
+                    </ul>                              
+                </li>                      
+            <% end %>
+        </ul>                       
+    </div>                      
+</div>
+
+<!-- mob menu -->
+<div class="app_mob_menu">MENU</div>
+
+<div class="lrg_menu_mob">                    
+    <div class='menu_container_mob'>                                                                    
+        <ul class="left_menu_mob">                            
+            <% if request.path_parameters[:action] == "new" %>                        
+                <li class="has_sub_mob"><%= link_to "PROJECTS", projects_path, :class => check_current('project') %> 
+                    <ul>
+                        <li><%= link_to "Select Project", projects_path %> </li>
+                    </ul>                              
+                </li>
+            <% else %>
+                <li class="has_sub_mob"><%= link_to "PROJECTS", projects_path, :class => check_current('project') %> 
+                    <ul>
+                        <li><%= link_to "Select Project", projects_path %> </li>
+                        <li><%= link_to "Create Project", new_project_path %> </li>
+                        <li><%= link_to "Edit Project Details", edit_project_path(@project.id) %> </li>                                        
+                    </ul>                              
+                </li>
+                <li><%= link_to "DOCUMENT", specifications_path(@project.id), :class => check_current('revision') %></li>
+                <li><%= link_to "REVISIONS", specrevisions_path(@project.id), :class => check_current('revision') %></li>
+                <li class="has_sub_mob"><%= link_to "PUBLISH", print_path(@project.id), :class => check_current('revision') %> 
+                    <ul>
+                        <li><%= link_to "Create/Download PDF", print_path(@project.id) %> </li>
+                    </ul>                              
+                </li>                      
+            <% end %>
+        </ul>                       
+    </div>                      
+</div>
+
+

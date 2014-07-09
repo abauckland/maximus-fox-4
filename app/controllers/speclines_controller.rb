@@ -287,7 +287,7 @@ class SpeclinesController < ApplicationController
     #changes must be recorded before line is updated because update to any copy of object will also be updated           
     @specline.update(:txt5_id => new_txt5.id)
 
-    render :text=> new_txt4.text  
+    render :text=> new_txt5.text  
   end
 
 

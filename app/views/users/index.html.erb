@@ -16,13 +16,13 @@
 				</tr>
 				<% @users.each do |user|%>
 				<tr>
-					<td><%= user.name %></td>
-					<td class="mob_cell"><%= user.email %></td>
+					<td><%=h user.name %></td>
+					<td class="mob_cell"><%=h user.email %></td>
 					<td class="mob_cell"><%= created(user) %></td>
-					<td class="s_tab"><%= user.number_times_logged_in %></td>
+					<td class="s_tab"><%=h user.number_times_logged_in %></td>
 					<td class="s_tab"><%= last_seen(user) %></td>
 					<td class="active_licence"><%= check_active(user) %></td> 
-					<td id="<%= user.id%>-unlock"><%= locked_at(user) %></td>    
+					<td id="<%=h user.id%>-unlock"><%= locked_at(user) %></td>    
 				</tr>
 				<%end%>  
 			</table>           

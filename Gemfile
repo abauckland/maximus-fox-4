@@ -26,11 +26,12 @@ gem 'mysql2'
 
 gem 'jquery-datatables-rails'
 
-gem 'paperclip', "~> 4.1"
+gem 'carrierwave'
 
 gem 'bcrypt', :require => 'bcrypt'
 
 gem 'prawn'
+gem "gibbon", "~> 1.0.4"
 
 group :development, :test do
   gem 'factory_girl_rails'

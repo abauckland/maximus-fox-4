@@ -10,10 +10,7 @@ class CreateCompanies < ActiveRecord::Migration
       t.string :reg_location
       t.integer :read_term
       t.integer :category
-      t.string :photo_file_name
-      t.string :photo_content_type
-      t.string :photo_file_size
-      t.string :photo_updated_at
+      t.string :logo
       t.integer :no_licence
 
       t.timestamps

@@ -53,6 +53,7 @@
 					$('.character_menu').css('visibility', 'hidden'); 
 				}, 200);
 			});
+
 			
 			textarea.blur(function(){
           		t = setTimeout(function() {

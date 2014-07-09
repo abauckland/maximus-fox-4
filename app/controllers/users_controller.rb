@@ -20,6 +20,13 @@ class UsersController < ApplicationController
     @user = User.new(user_params)  
 
     if @user.save
+      
+        projects =  Project.where(:company_id => current_user.company_id)
+        projects.each do |project|
+          Projectuser.create(:project_id => project.id, :user_id => @user.id, :role => "manage")
+        end
+      
+      
       respond_to do |format| 
         format.html { render :action => "index"}
       end

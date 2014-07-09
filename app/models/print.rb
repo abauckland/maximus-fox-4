@@ -4,7 +4,7 @@ class Print < ActiveRecord::Base
   belongs_to :revision
   belongs_to :user
   
-  has_attached_file :attachment
+  mount_uploader :document, DocumentUploader
   
   #Paperclip will also throw "Missing Required Validator Error" in case of PDF file upload. The workaround for that is: First install the "GhostScript" and then add "application/pdf" to content-type.
   

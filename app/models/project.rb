@@ -12,7 +12,7 @@ class Project < ActiveRecord::Base
   
   accepts_nested_attributes_for :clients
   
-  has_attached_file :photo 
+  mount_uploader :project_image, ProjectImageUploader 
 
 
   enum project_status: [:Draft, :Preliminary, :Tender, :Contract, :As_Built]
@@ -21,11 +21,6 @@ class Project < ActiveRecord::Base
   validates_presence_of :code
   validates_presence_of :title
   
-  validates_attachment_content_type :photo, content_type: { content_type: ["image/jpg", "image/png"]}
-  
-  validates_attachment :photo,
-    :on => :create,
-    :size => { :in => 0..1000.kilobytes }
 
   
 
@@ -58,13 +53,5 @@ class Project < ActiveRecord::Base
     return code+' '+title
   end
 
-
-  Paperclip.interpolates :normalized_video_file_name do |attachment, style|
-    attachment.instance.normalized_image_file_name
-  end
-
-  def normalized_video_file_name
-    "#{self.id}-#{self.video_image_name.gsub( /[^a-zA-Z0-9_\.]/, '_')}"
-  end
 
 end
