@@ -14,3 +14,9 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# Ignor public files
+/public
+
+# Ignor secrets
+/config/secrets.yml
