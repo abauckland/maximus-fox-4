@@ -1,6 +1,5 @@
 module Printspecline
-
-
+  
 def specification(project, subsection, revision, pdf)
 
     #get array of linetypes that have a prefix
@@ -26,7 +25,7 @@ def specification(project, subsection, revision, pdf)
         if pdf.y >= 13.mm
           pdf.y = y_position      
         else
-          page_break(line, pdf)
+          page_break(project, line, pdf)
         end
         
         #if first clause of clausetype, insert clause type title
@@ -260,7 +259,7 @@ end
 
 
 def clausetitle_continued(line, pdf)
-     pdf.spec_box 'Clause continued on next page...', :size => 9, :style => :italic, :at =>[20.mm, 14.mm], :width => 155.mm, :overflow => :expand
+     pdf.spec_box 'Clause continued on next page...', :size => 9, :style => :italic, :at =>[20.mm, 16.mm], :width => 155.mm, :overflow => :expand
 end
 
 def clausetitle_repeat(project, line, pdf)

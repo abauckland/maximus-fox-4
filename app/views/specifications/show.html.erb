@@ -23,7 +23,7 @@
 		<div class="select_1">
 			<div class="label_select_1">Subsection:</div>
 			<div class="option_select_1">
-      			<%= select_tag "section", options_from_collection_for_select(@project_subsections, :id, :full_code, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/projects/#{@project.id}?subsection='+this.value;"}  %>	
+      			<%= select_tag "section", options_from_collection_for_select(@project_subsections, :id, :full_code, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/specifications/#{@project.id}?subsection='+this.value;"}  %>	
 			</div>
 		</div>
 		<% if @project_user.manage? || @project_user.edit? %>
@@ -36,7 +36,7 @@
 		<div class="select_1">
 			<div class="label_select_1">Subsection:</div>
 			<div class="option_select_1">
-      			<%= select_tag "section", options_from_collection_for_select(@project_subsections, :id, :full_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/projects/#{@project.id}?subsection='+this.value;"}  %>	
+      			<%= select_tag "section", options_from_collection_for_select(@project_subsections, :id, :full_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/specifications/#{@project.id}?subsection='+this.value;"}  %>	
 			</div>
 		</div>
 		<% if @project_user.manage? || @project_user.edit? %>
@@ -49,13 +49,13 @@
 		<div class="select_1">
 			<div class="label_select_1">Section:</div>
 			<div class="option_select_1">
-      			<%= select_tag "section", options_from_collection_for_select(@project_sections, :id, :code_and_title, @selected_section.id), {:class => 'document_selectBox_1', :onchange => "window.location='/projects/#{@project.id}?section='+this.value;"}  %>	
+      			<%= select_tag "section", options_from_collection_for_select(@project_sections, :id, :code_and_title, @selected_section.id), {:class => 'document_selectBox_1', :onchange => "window.location='/specifications/#{@project.id}?section='+this.value;"}  %>	
 			</div>
 		</div>
 		<div class="select_2">
 			<div class="label_select_1">Subsection:</div>
 			<div class="option_select_2">
-      			<%= select_tag "subsection", options_from_collection_for_select(@selected_section_subsections, :id, :part_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_2', :onchange => "window.location='/projects/#{@project.id}?subsection='+this.value;"}  %>	
+      			<%= select_tag "subsection", options_from_collection_for_select(@selected_section_subsections, :id, :part_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_2', :onchange => "window.location='/specifications/#{@project.id}?subsection='+this.value;"}  %>	
 			</div>
 		</div>
 		<% if @project_user.manage? || @project_user.edit? %>
@@ -139,7 +139,7 @@
 	<script>
 		$('ul.tabs').children('li').click(function(){
 			var clausetype_id = $(this).attr('id');
-			jQuery.get('/projects/<%= @project.id%>/show_tab_content?subsection_id=<%= @selected_subsection.id %>&clausetype_id=' + clausetype_id);
+			jQuery.get('/specifications/<%= @project.id%>/show_tab_content?subsection_id=<%= @selected_subsection.id %>&clausetype_id=' + clausetype_id);
 		});
 	</script>
 

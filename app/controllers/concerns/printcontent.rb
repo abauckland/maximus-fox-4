@@ -18,13 +18,13 @@ module Printcontent
     else
       prelim_subsections = Cawssubsection.prelim_subsections(project)
       if !prelim_subsections.blank?
-        content_list_length = content_list_length + prelim_subsections.count
+        content_list_length = content_list_length + prelim_subsections.length
       end             
     end
     
     subsections = Cawssubsection.subsections(project)
     if !subsections.blank?
-      content_list_length = content_list_length + subsections.count      
+      content_list_length = content_list_length + subsections.length      
     end
     
     pages = (content_list_length*8)/230
@@ -68,7 +68,7 @@ module Printcontent
 
     page_title_header(pdf)
 
-    pdf.table(document_content, :cell_style => contents_style, :column_widths => [470, 20])
+    pdf.table(document_content, :cell_style => contents_style, :column_widths => [465, 25])
 
   end
 

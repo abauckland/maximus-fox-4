@@ -197,8 +197,8 @@ def print_caws_document(project, revision, pdf)
           #set title based on whether cover is provided to section      
           prelim_caws_title_type(settings, subsection_revs, "specification", pdf)   
           #specline info
-          caws_specification_title(subsection, pdf)    
-          caws_specification(project, subsection, revision, pdf)
+          caws_title(subsection, "specline", pdf)    
+          specification(project, subsection, revision, pdf)
           pdf.start_new_page    
       end
     end    
@@ -231,8 +231,8 @@ def print_caws_document(project, revision, pdf)
         #set title based on whether cover is provided to section      
         caws_title_type(settings, subsection, "specification", pdf) 
         #specline info
-        caws_specification_title(subsection, pdf)    
-        caws_specification(project, subsection, revision, pdf)
+        caws_title(subsection, "specline", pdf)    
+        specification(project, subsection, revision, pdf)
         
         pdf.start_new_page
     end    

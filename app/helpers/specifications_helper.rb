@@ -130,7 +130,7 @@ end
 
 def perform_pair(specline) 
 #  if authorise_specline_view(['manage', 'edit', 'write'])
-    "<td class='text_text'><span id='#{specline.id}'class='editable_product_key'>#{specline.perform.performkey.text}</span>: <span id='#{specline.id}'class='editable_product_value'>#{specline.perform.performvalue.full_perform_value}</span></td>".html_safe
+    "<td class='text_text'><span id='#{specline.id}'class='editable_product_key'>#{specline.perform.performkey.text}</span>: <span id='#{specline.id}'class='editable_product_value'>#{specline.perform.performvalue.value_with_units}</span></td>".html_safe
 #  else
 #    "<td class='text_text'>#{specline.perform.performkey.text}: #{specline.perform.performvalue.full_perform_value}</td>".html_safe    
 #  end  

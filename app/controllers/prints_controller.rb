@@ -1,4 +1,5 @@
 class PrintsController < ApplicationController
+
   before_filter :authenticate
   before_action :set_project, only: [:show, :print_project]
   before_action :set_revision, only: [:show, :print_project]
@@ -6,7 +7,8 @@ class PrintsController < ApplicationController
   layout "projects", :except => [:print_project]
 
   require "prawn"
-  require "prawn/measurement_extensions"
+  require "prawn/measurement_extensions"  
+  require "prawn/table"
 
   include Printtemplate        
 
@@ -125,6 +127,8 @@ class PrintsController < ApplicationController
       else
           send_data document.render, filename: filename, :type => "application/pdf"
       end
+    else
+      send_data document.render, filename: filename, :type => "application/pdf"  
     end
 ##clean tem directory in crontab
   end

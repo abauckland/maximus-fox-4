@@ -49,8 +49,9 @@ def header_contents(project, settings, pdf)
       when "company" ; url = company.logo 
       when "client" ; url = client.client_logo
     end
-  
-    pdf.image url, :position => :right, :vposition => -11.mm, :align => :right, :fit => [250,25]
+    if url  
+      pdf.image url, :position => :right, :vposition => -11.mm, :align => :right, :fit => [250,25]
+    end
   end 
       
 end

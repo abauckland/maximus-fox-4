@@ -31,6 +31,8 @@ gem 'carrierwave'
 gem 'bcrypt', :require => 'bcrypt'
 
 gem 'prawn'
+gem 'prawn-table'
+
 gem "gibbon", "~> 1.0.4"
 
 group :development, :test do
