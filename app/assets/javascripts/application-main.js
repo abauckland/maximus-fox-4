@@ -6,7 +6,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui
+//= require sortable
 //= require core
 //= require projects
 //= require jquery.jeditable
