@@ -1,55 +1,48 @@
-
-
-
-
-
 $(document).ready(function(){
 
 //$('td.suffixed_line_menu').children('a').tipsy();
 //$('td.prefixed_line_menu').children('img').tipsy();
 
-	$(window).resize(function(){
-		var window_width = $(window).width();
+//large_menu
+	$('li.has_sub').mouseover(function (){
+		$(this).children('ul.sub_menu').css('visibility', 'visible');
+	});	
+				
+	$('ul.sub_menu').mouseout(function (){
+		$(this).css('visibility', 'hidden');
+	});
 	
-		if (window_width > 800){
-			$('ul.left_menu, ul.right_menu').css('display', 'block');
-			$('ul.sub_menu').css('visibility', 'hidden');
-			
-			$('.has_sub').mouseover(function (){
-				$(this).children('ul.sub_menu').css('visibility', 'visible');
-			});
-		
-			$('ul.sub_menu').mouseout(function (){
-				$(this).css('visibility', 'hidden');
-			});
-		
-			$('.has_sub').mouseout(function (){
-				$('ul.sub_menu').css('visibility', 'hidden');
-			});
-		}else{
-			//$('ul.left_menu, ul.right_menu').css('visibility', 'hidden');		
-			$('nav.app_mob_menu').click(function (){
-				$('ul.left_menu').toggle();
-			});
-			$('nav.app_user_menu').click(function (){
-				$('ul.right_menu').toggle();
-			});
-		};	
+	$('li.has_sub').mouseout(function (){
+		$(this).children('ul.sub_menu').css('visibility', 'hidden');
 	});
 
+//mob_menu
+	$('.app_mob_menu').click(function (){
+		$('ul.left_menu_mob').toggle();
+		$('ul.right_menu_mob').hide();
+	});
 
-	var window_width = $(window).width();
+//user_menu
+	$('.user_menu').mouseover(function (){
+		$('ul.right_menu').css('visibility', 'visible');
+	});	
+				
+	$('ul.right_menu').mouseout(function (){
+		$(this).css('visibility', 'hidden');
+	});
 	
-	if (window_width > 800){				
+	$('ul.right_menu').mouseover(function (){
+		$('ul.right_menu').css('visibility', 'visible');
+	});	
+	
+	$('.user_menu').mouseout(function (){
+		$('ul.right_menu').css('visibility', 'hidden');
+	});
 
-	}else{		
-		//$('ul.left_menu, ul.right_menu').css('visibility', 'hidden');		
-		$('nav.app_mob_menu').click(function (){
-			$('ul.left_menu').toggle();
-		});
-		$('nav.app_user_menu').click(function (){
-			$('ul.right_menu').toggle();
-		});					 
-	};		
+//user_menu_mob
+	$('.user_menu_mob').click(function (){
+		$('ul.right_menu_mob').toggle();
+		$('ul.left_menu_mob').hide();
+	});
 
 });

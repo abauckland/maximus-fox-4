@@ -8,6 +8,7 @@
 //= require jquery_ujs
 //= require jquery-ui/sortable
 //= require core
+//= require nav
 //= require projects
 //= require jquery.jeditable
 //= require jquery.selectBox
