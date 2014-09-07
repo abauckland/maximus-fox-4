@@ -40,8 +40,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/new
   def new     
-    @project = Project.new
-    client = @project.clients.build    
+    @project = Project.new   
   end
 
 
@@ -68,7 +67,7 @@ class ProjectsController < ApplicationController
 #        @project.update(:parent_id => project_template.id)
         
         #format.html { redirect_to(:controller => "projects", :action => "manage_subsections", :id => @project.id) }
-        format.html { redirect_to @project, notice: 'Project was successfully created.' }
+        format.html { redirect_to specification_path(@project), notice: 'Project was successfully created.' }
         format.json { render :show, status: :created, location: @project }
       else
         @project = Project.user_projects.first 
@@ -90,8 +89,7 @@ class ProjectsController < ApplicationController
     end     
     
     
-    @projects = Project.user_projects(current_user)
-    @client = @project.clients.build  
+    @projects = Project.user_projects(current_user)  
     @template = Project.project_template(@project)
     
     user_templates = Project.project_templates(@project, current_user).order(:id)
@@ -145,7 +143,7 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit({:client_attributes => [:name, :client_logo]}, :code, :title, :parent_id, :company_id, :project_status, :ref_system, :project_image)
+      params.require(:project).permit(:client_name, :client_logo, :code, :title, :parent_id, :company_id, :project_status, :ref_system, :project_image)
     end
     
     def authorise_project_manager

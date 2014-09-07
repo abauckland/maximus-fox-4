@@ -19,7 +19,7 @@ end
 def header_contents(project, settings, pdf)
 #find project company
   company = Company.joins(:users => :projectusers).where('projectusers.role' => "owner", 'projectusers.project_id' => project.id).first
-  client = Client.where(:project_id => project.id).first
+
 #font styles for page  
   header_style = {:size => 8}
 #formating for lines  
@@ -28,7 +28,7 @@ def header_contents(project, settings, pdf)
   pdf.y = 285.mm
 
   if settings.header_client == "show" 
-    pdf.spec_box "#{client.name}", header_format.merge(:at =>[0.mm, pdf.y])
+    pdf.spec_box "#{project.client_name}", header_format.merge(:at =>[0.mm, pdf.y])
     pdf.move_down(pdf.box_height + 1.mm)
   end 
 
@@ -46,8 +46,8 @@ def header_contents(project, settings, pdf)
   if settings.header_logo == "show" 
   
     case settings.header_logo
-      when "company" ; url = company.logo 
-      when "client" ; url = client.client_logo
+      when "company" ; url = company.logo.path 
+      when "client" ; url = project.client_logo.path
     end
     if url  
       pdf.image url, :position => :right, :vposition => -11.mm, :align => :right, :fit => [250,25]

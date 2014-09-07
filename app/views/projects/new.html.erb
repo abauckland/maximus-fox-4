@@ -38,20 +38,19 @@
 								<div class="form_error_note"> <%= error_check(@project, :title)%> </div>
 							</div>				
 						</td></tr>
-    						<%= f.fields_for :client do |builder| %>
-    						<tr><td>
-    							<div class="project_form_label form_input_label">Project Client:</div>
-    							<div class="form_input"><%= builder.text_field :name %></div>				
-    						</td></tr>
-    						<tr><td>
-                                <div class="project_form_label form_input_label">Upload Client Logo:<br><span class="form_label_note"> (1Mb max)</span></div>
-                                <div class="form_input"><%= builder.file_field :client_logo %></div>             
-                            </td></tr>
-                            <% end %>   												
+											
 						<tr><td>
 							<div class="project_form_label form_input_label">Upload Project Image:<br><span class="form_label_note"> (1Mb max)</span></div>
 							<div class="form_input"><%= f.file_field :project_image %></div>			
 						</td></tr>
+                            <tr><td>
+                                <div class="project_form_label form_input_label">Project Client:</div>
+                                <div class="form_input"><%= f.text_field :client_name %></div>              
+                            </td></tr>
+                            <tr><td>
+                                <div class="project_form_label form_input_label">Upload Client Logo:<br><span class="form_label_note"> (1Mb max)</span></div>
+                                <div class="form_input"><%= f.file_field :client_logo %></div>             
+                            </td></tr>  
 						</table>	      	
       			</div>
     		</div>

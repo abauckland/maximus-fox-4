@@ -25,14 +25,12 @@ def client_details(project, settings, pdf)
 #font styles for page   
   client_style = {:size => 16, :style => :bold, :align => settings.company_detail.to_sym}
 
-  client = Client.where(:project_id => project.id).first
-
-  if !client.blank?
+  if !project.client_name.blank?
     pdf.bounding_box([0,273.mm], :width => 176.mm, :height => 400) do    
-      if !client.client_logo.blank?
-        pdf.image client.client_logo, :position => :right, :vposition => :logo_bottom, :fit => [350,250]
+      if !project.client_logo.blank?
+        pdf.image project.client_logo, :position => :right, :vposition => :logo_bottom, :fit => [350,250]
       end    
-      pdf.text "#{client.name}", client_style        
+      pdf.text "#{project.client_name}", client_style        
     end
   end   
 end
@@ -62,7 +60,7 @@ end
 def project_image(project, settings, pdf) 
 
   if !project.project_image.blank?
-    pdf.image project.project_image, :position => :right, :vposition => :logo_bottom, :fit => [350,250]
+    pdf.image project.project_image.path, :position => :right, :vposition => :logo_bottom, :fit => [350,250]
   end
   
 end
@@ -76,7 +74,7 @@ def company_details(project, settings, pdf)
   company_style = {:size => 9, :align => settings.company_detail.to_sym} 
 
   if !company.logo.blank?
-    pdf.image company.logo_url, :position => :right, :vposition => -0.mm, :fit => [250,35]
+    pdf.image company.logo.path, :position => :right, :vposition => -0.mm, :fit => [250,35]
   end
   
     pdf.bounding_box([0,35 + 3.mm], :width => 176.mm, :height => 400) do

@@ -8,11 +8,9 @@ class Project < ActiveRecord::Base
   has_many :alterations
   has_many :printsettings
   has_many :prints
-  has_many :clients
   
-  accepts_nested_attributes_for :clients
-  
-  mount_uploader :project_image, ProjectImageUploader 
+  mount_uploader :project_image, ProjectImageUploader
+  mount_uploader :client_logo, ClientLogoUploader 
 
 
   enum project_status: [:Draft, :Preliminary, :Tender, :Contract, :As_Built]
