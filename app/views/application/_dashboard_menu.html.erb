@@ -1,0 +1,28 @@
+
+<!-- desktop menu -->              
+<div class="lrg_menu">                    
+    <div class='menu_container'>                                                                    
+        <ul class="left_menu">                            
+            <% if current_user.company.category == 'manufacturer'%>                         
+                <li class="has_sub"><%= link_to "DASHBOARD", nil %></li>
+            <% end %>
+            <li class="has_sub"><%= link_to "SPECIFICATIONS", projects_path %></li> 
+        </ul>                       
+    </div>                      
+</div>
+
+<!-- mob menu -->
+<div class="app_mob_menu">MENU</div>
+
+<div class="lrg_menu_mob">                    
+    <div class='menu_container_mob'>                                                                    
+        <ul class="left_menu_mob">                            
+            <% if current_user.company.category == 'manufacturer'%>                         
+                <li class="has_sub"><%= link_to "DASHBOARD", nil %></li>
+            <% end %>
+            <li class="has_sub"><%= link_to "SPECIFICATIONS", projects_path %></li> 
+        </ul>                       
+    </div>                      
+</div>
+
+

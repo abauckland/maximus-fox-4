@@ -1,7 +1,7 @@
 class SpeclinesController < ApplicationController
   before_action :set_specline
   before_action :set_project, only: [:delete_clause]
-  before_action :set_revision, only: [:delete_clause]
+  before_action :set_revision, only: [:delete_clause, :move_specline]
 
   # GET
   def new_specline     
@@ -86,12 +86,13 @@ class SpeclinesController < ApplicationController
 
 #VARIABLES FOR VIEW
     @old_specline_ref = @selected.id
-    @new_above_specline =new_above_specline
+    @new_above_specline = new_above_specline
+    @updated_specline = Specline.where(:id => @selected.id).first
 
-#TRACKING CHANGES
+#UPDATE & TRACKING CHANGES
     #only needs to be tracked if line is moved from one clause to another
     if new_above_specline.clause_id != @selected.clause_id 
-      @new_specline = Specline.create(@selected.attributes.merge(:id => nil, :txt1_id => @new_location_prefix_id, :clause_line => @new_location_clause_line, :clause_id => @new_location_clause_id))
+      @new_specline = Specline.create(@selected.attributes.merge(:id => nil, :txt1_id => @new_location_prefix_id, :clause_line => @new_location_clause_line, :clause_id => @new_location_clause_id))      
       previous_change_to_clause = Alteration.where('project_id = ? AND clause_id = ? AND revision_id =?', @new_specline.project_id, @new_specline.clause_id, @revision.id).order('created_at').last
       if previous_change_to_clause  
         event_type = previous_change_to_clause.clause_add_delete 
@@ -104,7 +105,8 @@ class SpeclinesController < ApplicationController
       record_delete(@selected, event_type)
       @updated_specline = @new_specline    
     else
-      @updated_specline = @selected.update(:txt1_id => @new_location_prefix_id, :clause_line => @new_location_clause_line)    
+      @selected.update(:txt1_id => @new_location_prefix_id, :clause_line => @new_location_clause_line)
+      @updated_specline = @selected  
     end
     
     respond_to do |format|
@@ -644,6 +646,8 @@ end
   
     end
 
+    
+
     def update_old_location_on_move(selected, prefixed_linetypes_array)
 
     #UPDATING OLD LOCATAION
@@ -657,23 +661,24 @@ end
         old_above_specline = previous_speclines[0]
         #id of line below old position
         old_below_specline = previous_speclines[2]
+        
+        last_array_item_ref = previous_speclines_length - 1 #total number of lines will be one less, because selected line has been removed
     
     #update clause_line refs
         #act as if selected line has been removed from clause
         #tidy up clause of selected line
         #renumber clause_line ref for lines below selected line
-        if previous_speclines_length > 2 #if there is a line after the selected line
-          last_array_item_ref = previous_speclines_length - 1 #total number of lines will be one less, because selected line has been removed
+        if previous_speclines_length > 2 #if there is a line after the selected line          
           for i in (2..last_array_item_ref) do #for each line in the clause below the selected line
             new_clause_line = old_above_specline.clause_line - 1 + i #determine new clause_line ref for line
             specline_to_change = previous_speclines[i].update(:clause_line => new_clause_line)#update clause_line refer for line
           end
         end
-    
+        
     #update prefixes
         #check if line had prefix
         #renumber prefixes
-        if previous_speclines[2..last_array_item_ref].blank?   
+        if previous_speclines_length > 2 #if there is a line after the selected line    
           # if next line in clause is prefixed update all subsequent prefixed lines   
           if prefixed_linetypes_array.include?(old_below_specline.linetype_id)      
             #set prefix reference
@@ -681,51 +686,60 @@ end
             #1. prefixes of subsequent lines will follow on
             #2. else prefixes of subsequent lines will start from 'a'.
             if prefixed_linetypes_array.include?(old_above_specline.linetype_id)
-              next_txt1_id = old_above_specline.txt1_id
+              next_txt1_id = old_above_specline.txt1_id + 1
             else
-              next_txt1_id = 0
+              next_txt1_id = 1
             end      
-                  
-            update_subsequent_lines_on_move(previous_speclines[2..last_array_item_ref], next_txt1_id)
-            if @subsequent_prefixes
-              @previous_prefixes = @subsequent_prefixes.compact
-            end    
+
+              previous_prefixes = []
+              previous_speclines[2..last_array_item_ref].each_with_index do |line, n|
+                check_linetype = Linetype.where(:id => line.linetype_id).first
+                if check_linetype.txt1 == true
+                  next_txt1_id = (next_txt1_id + n) #because n starts at 0        
+                  line.update(:txt1_id => next_txt1_id)            
+                  txt1_text = Txt1.where(:id => next_txt1_id).first     
+                  previous_prefixes[n] = [line.id, txt1_text.text] 
+                else
+                  break
+                end
+              end
+           # if @subsequent_prefixes
+              @previous_prefixes = previous_prefixes.compact
+           # end    
           end    
         end
     end
+
 
     def update_new_location_on_move(new_above_specline, selected, prefixed_linetypes_array)
 
         @new_location_clause_id = new_above_specline.clause_id
        
-        next_speclines = Specline.where('clause_id = ? AND project_id = ? AND clause_line > ?', new_above_specline.clause_id,  new_above_specline.project_id, new_clause_line_above).order('clause_line')
-        next_specline_ids = next_speclines.ids
+        next_speclines = Specline.where('clause_id = ? AND project_id = ? AND clause_line > ?', new_above_specline.clause_id,  new_above_specline.project_id, new_above_specline.clause_line).order('clause_line')
+        next_specline_ids = next_speclines.ids.compact
         next_speclines_length = next_specline_ids.length
-    
-        #id of line above old position
-        new_above_specline = next_speclines[0]
-        #id of line below old position
-        new_below_specline = next_speclines[1]
+        index_selected = next_specline_ids.index(selected.id)
+        last_array_item_ref = next_speclines_length - 1#total number of lines will be one less because of line above new location must be removed
+        
+        #id of line above new position
+        #new_above_specline# = new_above_specline.id#next_speclines[0]
+        #id of line below new position
+        new_below_specline = next_speclines[0]
     
     #update clause_line refs
         #act as if selected line has been added to clause
         #tidy up clause
         #renumber clause_line ref for lines below the new location of the selected line
-        if next_speclines_length > 0 #if there is a line after the new location for the selected line
-          if next_specline_ids.include?(selected.id) #if subseqent lines include the selected line (has not beeb save to new location)
-            next_speclines.delete(selected.id) #remove selected line from array of lines to be updated - will be updated separately
-            last_array_item_ref = next_speclines_length - 2 #total number of lines will be one less because of line above new location must be removed, plus selected line
-          else
-            last_array_item_ref = next_speclines_length - 1 #total number of lines will be one less because of line above new location must be removed
-          end      
-    
-          @new_location_clause_line = new_above_specline.clause_line + 1
-    
-          for i in (1..last_array_item_ref) do #for each line in the clause below the selected line
-            new_clause_line = new_above_specline.clause_line + 1 + i #determine new clause_line ref for line
-            specline_to_change = next_speclines[i].update(:clause_line => new_clause_line)#update clause_line refer for line
+        if next_speclines_length > 0 #if there is a line after the new location for the selected line       
+          for i in (0..last_array_item_ref) do #for each line in the clause below the selected line
+            new_clause_line = new_above_specline.clause_line + 2 + i #determine new clause_line ref for line
+            #omit seleted line from update           
+            if i != index_selected           
+              specline_to_change = next_speclines[i].update(:clause_line => new_clause_line)#update clause_line refer for line
+            end
           end
-        end
+        end       
+        @new_location_clause_line = new_above_specline.clause_line + 1
     
     #update prefixes
         #if line below has prefix update prefixes
@@ -748,29 +762,33 @@ end
             new_below_prefix_id = 1
           end 
         end
-        
-        if prefixed_linetypes_array.include?(new_below_specline.linetype_id)
-          update_subsequent_lines_on_move(next_speclines[1..last_array_item_ref], new_below_prefix_id)    
-          if @subsequent_prefixes
-            @subsequent_prefixes = @subsequent_prefixes.compact
-          end 
-        end  
+    
+        if next_speclines_length > 0
+          if prefixed_linetypes_array.include?(new_below_specline.linetype_id)
+            # update_subsequent_lines_on_move(next_speclines[0..last_array_item_ref], new_below_prefix_id)    
+            subsequent_prefixes = []
+            next_speclines[0..last_array_item_ref].each_with_index do |line, n|                          
+              #omit seleted line from update 
+              if n != index_selected 
+                check_linetype = Linetype.where(:id => line.linetype_id).first
+                if check_linetype.txt1 == true
+                  next_txt1_id = (new_below_prefix_id + n) #because n starts at 0        
+                  line.update(:txt1_id => next_txt1_id)            
+                  txt1_text = Txt1.where(:id => next_txt1_id).first     
+                  subsequent_prefixes[n] = [line.id, txt1_text.text] 
+                else
+                  break
+                end                             
+              end
+            end     
+            
+            if subsequent_prefixes
+              @subsequent_prefixes = subsequent_prefixes.compact
+            end 
+          end
+        end          
     end 
 
-    def update_subsequent_lines_on_move(subsequent_lines, set_txt1_id)
-      @subsequent_prefixes = []
-      subsequent_lines.each_with_index do |line, i|
-        check_linetype = Linetype.where(:id => line.linetype_id).first
-        if check_linetype.txt1 == true
-          next_txt1_id = (set_txt1_id + 1 + i) #because i starts at 0        
-          line.update(:txt1_id => next_txt1_id)            
-          txt1_text = Txt1.where(:id => next_txt1_id).first     
-          @subsequent_prefixes[i] = [line.id, txt1_text] 
-        else
-          break
-        end
-      end
-    end
 
     def event_type
       #indicate type event that addition of the specline is associated with

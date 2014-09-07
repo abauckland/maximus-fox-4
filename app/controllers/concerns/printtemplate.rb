@@ -21,7 +21,7 @@ def print_caws_document(project, revision, pdf)
   status_change(project)
   
 #set common document settings  
-  pdf.font "Times-Roman"#settings.font_style
+  pdf.font settings.font_style
 
 ##COVER
   cover(project, revision, settings, pdf)
@@ -180,7 +180,7 @@ def print_caws_document(project, revision, pdf)
   
           #cover for combined prelim section
           if settings.section_cover == "section cover"
-            prelim_caws_cover(pdf)   
+            section_cover(subsection, pdf)   
             pdf.start_new_page
           end      
                 
@@ -197,7 +197,7 @@ def print_caws_document(project, revision, pdf)
           #set title based on whether cover is provided to section      
           prelim_caws_title_type(settings, subsection_revs, "specification", pdf)   
           #specline info
-          caws_title(subsection, "specline", pdf)    
+          #caws_title(subsection, "specline", pdf)    
           specification(project, subsection, revision, pdf)
           pdf.start_new_page    
       end
@@ -231,7 +231,7 @@ def print_caws_document(project, revision, pdf)
         #set title based on whether cover is provided to section      
         caws_title_type(settings, subsection, "specification", pdf) 
         #specline info
-        caws_title(subsection, "specline", pdf)    
+        #caws_title(subsection, "specline", pdf)    
         specification(project, subsection, revision, pdf)
         
         pdf.start_new_page

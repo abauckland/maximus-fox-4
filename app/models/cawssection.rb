@@ -1,7 +1,7 @@
 class Cawssection < ActiveRecord::Base
   has_many :cawssubsections
 
-  scope :project_sections, ->(project) { joins(:cawssubsections => [:subsections [:clauserefs => [:clauses => :speclines]]]
+  scope :project_sections, ->(project) { joins(:cawssubsections => [:subsections => [:clauserefs => [:clauses => :speclines]]]
                                        ).where('speclines.project_id' => project.id
                                        ).group(:id).sort
                                        }

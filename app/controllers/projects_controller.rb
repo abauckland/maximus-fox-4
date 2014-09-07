@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
     #list projects user is assigned to
 #changes this to create hash of projects with user access in brackets
     @projects = Project.user_projects_access(current_user)
-    @project = @projects.first  
+   # @project = @projects.first  
     @project_user = Projectuser.where(:user_id => current_user.id, :project_id => @projects.first.id).first
    
     #if user is not assigned to any project
@@ -64,8 +64,8 @@ class ProjectsController < ApplicationController
         end
         
         #set defuault project template
-        project_template = Project.where(:id => [1..10], :ref_system => @project.ref_system).first
-        @project.update(:parent_id => project_template.id)
+#        project_template = Project.where(:id => [1..10], :ref_system => @project.ref_system).first
+#        @project.update(:parent_id => project_template.id)
         
         #format.html { redirect_to(:controller => "projects", :action => "manage_subsections", :id => @project.id) }
         format.html { redirect_to @project, notice: 'Project was successfully created.' }

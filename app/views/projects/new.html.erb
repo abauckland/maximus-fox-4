@@ -23,6 +23,8 @@
 				<%= form_for @project, :html => { :multipart => true } do |f| %>
 						<%= f.hidden_field :project_status, :value =>'Draft' %>
 						<%= f.hidden_field :ref_system, :value =>'CAWS' %>
+						<%= f.hidden_field :parent_id, :value => 2 %>
+						<%= f.hidden_field :company_id, :value => current_user.company.id %>
 						<table>
 						<tr><td>
 							<div class="project_form_label form_input_label">Project Code:*</div>

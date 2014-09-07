@@ -53,14 +53,17 @@ class SpecclausesController < ApplicationController
                                       ).order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
                                       )
   
-      @template_project_clauses = Clause.joins(:clauseref => [:subsection], :speclines => [:project => :projectusers]
-                                        ).where('projectusers.user_id' => current_user.id
+      template_clauses = Clause.joins(:clauseref => [:subsection], :speclines => [:project => :projectusers]
                                         ).where('speclines.project_id' => @template.id
-                                        ).where('subsections.cawssubsection_id' => @subsection.id
-                                        ).where.not('speclines.project_id' => @project.id
+                                        ).where('subsections.cawssubsection_id' => @subsection.id                                        
                                         ).group(:id
                                         ).order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
                                         )
+
+       template_clause_ids = template_clauses.ids - @current_project_clauses.ids
+        
+       @template_project_clauses = Clause.joins(:clauseref).where(:id => template_clause_ids).order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause')
+
     else
 ###uniclass code to go here - same as above 
     end     
@@ -72,7 +75,7 @@ class SpecclausesController < ApplicationController
     speclines_to_add = Specline.where(:project_id => params[:template_id], :clause_id => params[:template_clauses]) 
     speclines_to_add.each do |line_to_add|
       @new_specline = Specline.create(line_to_add.attributes.merge(:id => nil, :project_id => @project.id))
-      record_new(@specline, event_type)
+      record_new(@new_specline, event_type)
     end                   
 
     redirect_to manage_specclause_path(:id => @project.id, :template_id => params[:template_id], :subsection_id => params[:subsection_id])

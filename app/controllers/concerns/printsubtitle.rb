@@ -91,7 +91,7 @@ end
   def prelim_caws_title_type(settings, subsection, category, pdf)
     if settings.section_cover == "section cover"
       #if there is a cover for prelims
-      prelim_caws_subtitle(subsection, category, pdf)
+      #prelim_caws_subtitle(subsection, category, pdf)
     else
       #if there is no cover
       prelim_caws_title(subsection, category, pdf)
@@ -144,7 +144,7 @@ end
   def caws_title_type(settings, subsection, category, pdf)
     if settings.section_cover == "section cover"
       #if there is a cover for prelims
-      caws_subtitle(subsection, category, pdf)
+      #caws_subtitle(subsection, category, pdf)
     else
       #if there is no cover
       caws_title(subsection, category, pdf)

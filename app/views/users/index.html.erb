@@ -8,6 +8,7 @@
 				<tr>
 					<th>Name</th>
 					<th class="mob_cell">Email</th>
+					<th class="mob_cell">Role</th>
 					<th class="mob_cell">Created</th>
 					<th class="s_tab">Log-ins</th>
 					<th class="s_tab">Last Log-in</th>
@@ -18,10 +19,11 @@
 				<tr>
 					<td><%=h user.name %></td>
 					<td class="mob_cell"><%=h user.email %></td>
+					<td class="mob_cell"><%=h user.role.capitalize %></td>
 					<td class="mob_cell"><%= created(user) %></td>
 					<td class="s_tab"><%=h user.number_times_logged_in %></td>
 					<td class="s_tab"><%= last_seen(user) %></td>
-					<td class="active_licence"><%= check_active(user) %></td> 
+					<td  id="<%=h user.id%> class="active_licence"><%= check_active(user) %></td> 
 					<td id="<%=h user.id%>-unlock"><%= locked_at(user) %></td>    
 				</tr>
 				<%end%>  
@@ -36,7 +38,7 @@
     			<div class="column_sub_content">
     				
     				<div class="column_guide">
-						<p><%= licence_status(@active_users.count, current_user.company.no_licence) %></p>
+						<p class="information"><%= licence_status(@active_users.count, current_user.company.no_licence) %></p>
       				</div>
 					
 					<% if @user.errors.any? %> 

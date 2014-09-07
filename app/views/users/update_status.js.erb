@@ -1,28 +1,28 @@
 $(function (){
 if (<%= @selected_user.active%> == 1)
 {
-$('#<%=@selected_user.id%>').children('#active_button').hide();
-$('#<%=@selected_user.id%>').children('#deactive_button').show();
+$('#<%=@selected_user.id%>').children('.small_green_button').hide();
+$('#<%=@selected_user.id%>').children('.small_red_button').show();
 }
 else
 {
-$('#<%=@selected_user.id%>').children('#deactive_button').hide();
-$('#<%=@selected_user.id%>').children('#active_button').show();
+$('#<%=@selected_user.id%>').children('.small_red_button').hide();
+$('#<%=@selected_user.id%>').children('.small_green_button').show();
 }
 });
 
-$('#unlock-<%=@selected_user.id%>').children('#unlock_button').hide();
+$('#unlock-<%=@selected_user.id%>').children('.small_green_button').hide();
 
 
 $(function (){
 if (<%= @available_licences %> == 0)
 {
-$('#information').css('color', '#ff0000').html("All the company's licences (<%= current_user.company.no_licence %>) are allocated.");
+$('.information').css('color', '#ff0000').html("All the company's licences (<%= current_user.company.no_licence %>) are allocated.");
 $('#bottom_form_title, #bottom_form, #bottom_button').hide();
 }
 else
 {
-$('#information').css('color', '#000').html("<%= @available_licences %> licence(s) are currently active out of an available <%= current_user.company.no_licence %> licence(s).");
+$('.information').css('color', '#000').html("<%= @available_licences %> licence(s) are currently active out of an available <%= current_user.company.no_licence %> licence(s).");
 }
 });
 

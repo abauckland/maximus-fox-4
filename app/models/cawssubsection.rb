@@ -94,7 +94,7 @@ class Cawssubsection < ActiveRecord::Base
 
 
   scope :section_subsections, ->(project, section) {joins(:subsections => [:clauserefs => [:clauses => :speclines]]
-                                   ).includes(:section).where('speclines.project_id' => project.id, :section_id => section.id
+                                   ).includes(:cawssection).where('speclines.project_id' => project.id, :cawssection_id => section.id
                                    ).group('cawssubsections.id').sort 
                                    }
 

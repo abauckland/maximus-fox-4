@@ -9,7 +9,7 @@ class PrintsettingsController < ApplicationController
   # GET /projects/1/edit
   def edit
 
-    @font_styles = ["times new roman", "helvetica"]
+    @font_styles = ["Times-Roman", "Helvetica"]
     @font_sizes = ["small", "medium", "large"]
   
     @structures = ["group revisions", "revision by section"]

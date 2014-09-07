@@ -1,30 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :performkeys
-
-  resources :performkeys
-
-  resources :printsettings
-
-  resources :companies
-
-  resources :abouts
-
-  resources :featurecontents
-
-  resources :features
-
-  resources :priceplans
-  
-  resources :helps
-  
-  resources :exports do
-    get :keynote_export, :on => :member
-  end 
- 
-  resources :prints do
-    get :print_project, :on => :member
-  end
 
   root :to => "homes#index"  
 
@@ -37,32 +12,46 @@ Rails.application.routes.draw do
   get "pricing" => "priceplans#index", :as => "pricing"
   
   get "log_out" => "sessions#destroy", :as => "log_out"
+
+
+  resources :printsettings, :only => [:edit, :update]
+
+  resources :companies, :only => [:new, :create, :edit, :update]
+
+  resources :abouts, :only => [:index]
+
+  resources :features, :only => [:index, :show]
+
+  resources :priceplans, :only => [:index]
   
-  resources :helps
+  resources :helps, :only => [:index, :show]
 
-  resources :faqs
+  resources :termcats, :only => [:index]
 
-  resources :terms
+  resources :faqs, :only => [:index]
+ 
+  
+  resources :keynotes, :only => [:show] do
+    get :keynote_export, :on => :member
+  end 
+ 
+  resources :prints, :only => [:show] do
+    get :print_project, :on => :member
+    get :rint_download, :on => :member
+  end
 
-  resources :sessions do
+  resources :sessions, :only => [:new, :create] do
     collection do
       post :create_session
     end    
   end
 
-  resources :users do
- #   get :new_users, :on => :member
- #   get :edit_user_details, :on => :member
+  resources :users, :only => [:index, :create, :edit, :update] do
     get :update_status, :on => :member
     get :unlock, :on => :member
-#    get :unlocked, :on => :member
- #   member do
- #     put :update_status
- #     put :update_user_details
- #   end
   end
 
-  resources :password_resets do
+  resources :password_resets, :only => [:create, :edit, :update] do
     get :locked, :on => :member
     get :deactivated, :on => :member
   end
@@ -71,37 +60,35 @@ Rails.application.routes.draw do
 
   resources :projectusers
   
-  resources :specifications do
+  resources :specifications, :only => [:index, :show] do
     get :empty_project, :on => :member  
     get :show_tab_content, :on => :member  
   end
   
-  resources :specrevisions do
+  resources :specrevisions, :only => [:index, :show] do
     get :show_prelim_tab_content, :on => :member
     get :show_rev_tab_content, :on => :member
   end
 
-  resources :specsubsections do
+  resources :specsubsections, :only => [] do
     get :manage, :on => :member
     post :add, :on => :member
     post :delete, :on => :member
   end
 
-  resources :specclauses do
+  resources :specclauses, :only => [] do
     get :manage, :on => :member
-    get :add_clauses, :on => :member
+    post :add_clauses, :on => :member
     post :delete_clauses, :on => :member
   end
   
-  resources :clauses do
-    post :clause_ref_select, :on => :member
-    get :subclause_select, :on => :member
+  resources :clauses, :only => [:new, :create] do
     get :new_clone_project_list, :on => :member
     get :new_clone_subsection_list, :on => :member
     get :new_clone_clause_list, :on => :member    
   end
 
-  resources :speclines do
+  resources :speclines, :only => [:edit, :update] do
     delete :delete_clause, :on => :member
     get :new_specline, :on => :member
     delete :delete_specline, :on => :member
@@ -109,22 +96,22 @@ Rails.application.routes.draw do
     get :xref_data, :on => :member
              
     member do
-    put :move_specline
-    put :update_specline_3
-    put :update_specline_4
-    put :update_specline_5
-    put :update_specline_6
-    put :update_product_key
-    put :update_product_value       
+      put :move_specline
+      put :update_specline_3
+      put :update_specline_4
+      put :update_specline_5
+      put :update_specline_6
+      put :update_product_key
+      put :update_product_value       
     end    
   end
 
-  resources :reinstates do
+  resources :reinstates, :only => [] do
     get :reinstate, :on => :member
     get :reinstate_clause, :on => :member
   end
 
-  resources :alterations do
+  resources :alterations, :only => [] do
     get :clause_change_info, :on => :member
     get :line_change_info, :on => :member
     member do

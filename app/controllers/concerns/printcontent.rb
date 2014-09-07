@@ -62,7 +62,7 @@ module Printcontent
   
   def contents_page(document_content, pdf)
 
-    contents_style = {:size => 12, :border_width => 0}    
+    contents_style = {:size => 11, :border_width => 0}    
     
     pdf.go_to_page(3)
 

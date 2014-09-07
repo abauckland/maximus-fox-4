@@ -58,10 +58,12 @@
 							<div class="company_form_label form_input_label">Website Address:</div>
 							<div class="form_input"><%= f.text_field :www %></div>					
 						</td></tr>
-						<tr><td>
-							<div class="company_form_label form_input_label">Company Logo:</div>
-							<div class="form_input"><%= show_image(@company.logo, :height=> 30 %></div>					
-						</td></tr>
+						<% if @company.logo %>
+    						<tr><td>
+    							<div class="company_form_label form_input_label">Company Logo:</div>
+    							<div class="form_input"><%= image_tag(@company.logo, :height=> 30) %></div>					
+    						</td></tr>
+						<% end %>
 						<tr><td>
 							<div class="company_form_label form_input_label">Change Logo:<span class="form_label_note"> (1Mb max)</span></div>
 							<div class="form_input"><%= f.file_field :logo %></div>			
@@ -72,7 +74,7 @@
     	
       		<div class="column_footer">
         		<div>
-        		<div class="column_submit"><%= f.submit "update"%></div>
+        		<div class="column_submit"><%= f.submit "update" %></div>
         			<% end %>               
         		</div>   
       		</div>

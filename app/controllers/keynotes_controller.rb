@@ -3,6 +3,8 @@ class KeynotesController < ApplicationController
   before_action :set_project, only: [:show, :keynote_export]
   before_action :set_revision, only: [:show]
 
+  layout "projects"
+
   def show
     #call to protected method that restablishes text to be shown for project revision status
     current_revision_render(@project)
@@ -43,17 +45,17 @@ class KeynotesController < ApplicationController
         subsections = Cawssubsection.section_subsections(project, section)               
         subsections.each_with_index do |subsection, n|
           #project subsection  
-          txt << ["#{subsection.sprintf("%02d", ref).to_s}\t#{subsection.text}\t#{subsection.section.ref}\n"]
+          txt << ["#{sprintf("%02d", subsection.ref).to_s}\t#{subsection.text}\t#{subsection.cawssection.ref}\n"]
           
           clauses = Clause.subsection_clauses(project, subsection)                 
           clauses.each_with_index do |clause, m|
             #project clauses 
-            txt << ["#{clause.clause_code}\t#{clause.clausetitle.text}\t#{clause.clauseref.subsection.cawssubsection.full_code}\n"] 
+            txt << ["#{clause.caws_code}\t#{clause.clausetitle.text}\t#{clause.clauseref.subsection.cawssubsection.full_code}\n"] 
           end 
         end 
       end
     end  
-    send_data @bim_revit_export, :type => 'text/plain', :disposition => 'attachment'      
+    send_data @bim_revit_export, :type => 'text/plain', :disposition => 'attachment; filename=#{filename}.txt'     
   end
           
   
