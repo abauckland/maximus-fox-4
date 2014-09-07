@@ -51,7 +51,7 @@ Rails.application.routes.draw do
     get :unlock, :on => :member
   end
 
-  resources :password_resets, :only => [:create, :edit, :update] do
+  resources :password_resets, :only => [:new, :create, :edit, :update] do
     get :locked, :on => :member
     get :deactivated, :on => :member
   end
@@ -70,13 +70,13 @@ Rails.application.routes.draw do
     get :show_rev_tab_content, :on => :member
   end
 
-  resources :specsubsections, :only => [] do
+  resources :specsubsections do
     get :manage, :on => :member
     post :add, :on => :member
     post :delete, :on => :member
   end
 
-  resources :specclauses, :only => [] do
+  resources :specclauses do
     get :manage, :on => :member
     post :add_clauses, :on => :member
     post :delete_clauses, :on => :member
@@ -106,12 +106,12 @@ Rails.application.routes.draw do
     end    
   end
 
-  resources :reinstates, :only => [] do
+  resources :reinstates do
     get :reinstate, :on => :member
     get :reinstate_clause, :on => :member
   end
 
-  resources :alterations, :only => [] do
+  resources :alterations do
     get :clause_change_info, :on => :member
     get :line_change_info, :on => :member
     member do
