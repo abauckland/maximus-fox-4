@@ -43,14 +43,13 @@ def header_contents(project, settings, pdf)
   end    
 
 
-  if settings.header_logo == "show" 
+  if settings.header_logo != "none" 
   
-    case settings.header_logo
-      when "company" ; url = company.logo.path 
-      when "client" ; url = project.client_logo.path
+    if settings.header_logo == "author" 
+      pdf.image company.logo.path, :position => :right, :vposition => -12.mm, :align => :right, :fit => [250,25]
     end
-    if url  
-      pdf.image url, :position => :right, :vposition => -11.mm, :align => :right, :fit => [250,25]
+    if settings.header_logo == "client" 
+      pdf.image project.client_logo.path, :position => :right, :vposition => -12.mm, :align => :right, :fit => [250,25]
     end
   end 
       

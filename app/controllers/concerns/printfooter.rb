@@ -39,11 +39,11 @@ def footer_contents(project, revision, settings, pdf)
   end 
 
   if settings.footer_detail == "show" 
-    pdf.spec_box "Project Ref: #{project.code}, Status: #{project.project_status}, Rev: #{current_revision_rev}", footer_format.merge(:at =>[0.mm, pdf.bounds.bottom + 6.mm])
+    pdf.spec_box "Project Ref: #{project.code}, Status: #{project.project_status}, Rev: #{current_revision_rev}", footer_format.merge(:at =>[0.mm, pdf.bounds.bottom + 7.mm])
   end 
 
   if settings.footer_date == "show" 
-    pdf.text_box "Created: #{reformated_date}", footer_format.merge(:at =>[0.mm, pdf.bounds.bottom + 2.mm])
+    pdf.text_box "Created: #{reformated_date}", footer_format.merge(:at =>[0.mm, pdf.bounds.bottom + 4.mm])
   end    
      
 end

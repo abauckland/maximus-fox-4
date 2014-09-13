@@ -15,7 +15,7 @@ class SpecrevisionsController < ApplicationController
 
     @revisions = Revision.where(:project_id => params[:id]).order('created_at')
 
-    if @project.ref_system == "CAWS"
+    if @project.CAWS?
 #list of tabs that can be seen should depend on the scope of the user
 
       #get list of susbections that can be access by user
@@ -62,7 +62,7 @@ class SpecrevisionsController < ApplicationController
 
   def show_prelim_tab_content
 
-    if @project.ref_system.caws?        
+    if @project.CAWS?       
       prelim_subsections = Cawssubsection.joins(:subsections => [:clauserefs => [:clauses => :alterations]]
                                         ).where('alterations.project_id' => @project.id, 'alterations.revision_id' => @revision.id, :cawssection_id => 1
                                         ).group(:id)      
@@ -80,7 +80,7 @@ class SpecrevisionsController < ApplicationController
 
   def show_rev_tab_content    
     
-    if @project.ref_system.caws?    
+    if @project.CAWS?  
       subsection = Cawssubsection.find(params[:subsection_id])             
       cawssubsection_change_data(@project, subsection, @revision)
     else    

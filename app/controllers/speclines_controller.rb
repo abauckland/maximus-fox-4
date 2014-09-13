@@ -715,10 +715,12 @@ end
 
         @new_location_clause_id = new_above_specline.clause_id
        
-        next_speclines = Specline.where('clause_id = ? AND project_id = ? AND clause_line > ?', new_above_specline.clause_id,  new_above_specline.project_id, new_above_specline.clause_line).order('clause_line')
+#        next_speclines = Specline.where('clause_id = ? AND project_id = ? AND clause_line > ?', new_above_specline.clause_id,  new_above_specline.project_id, new_above_specline.clause_line).order('clause_line')
+        next_speclines = Specline.where.not(:id => selected.id).where('clause_id = ? AND project_id = ? AND clause_line > ?', new_above_specline.clause_id,  new_above_specline.project_id, new_above_specline.clause_line).order('clause_line')
+
         next_specline_ids = next_speclines.ids.compact
         next_speclines_length = next_specline_ids.length
-        index_selected = next_specline_ids.index(selected.id)
+#        index_selected = next_specline_ids.index(selected.id)
         last_array_item_ref = next_speclines_length - 1#total number of lines will be one less because of line above new location must be removed
         
         #id of line above new position
@@ -734,10 +736,10 @@ end
           for i in (0..last_array_item_ref) do #for each line in the clause below the selected line
             new_clause_line = new_above_specline.clause_line + 2 + i #determine new clause_line ref for line
             #omit seleted line from update           
-            if i != index_selected           
+#            if i != index_selected           
               specline_to_change = next_speclines[i].update(:clause_line => new_clause_line)#update clause_line refer for line
             end
-          end
+#          end
         end       
         @new_location_clause_line = new_above_specline.clause_line + 1
     
@@ -769,7 +771,7 @@ end
             subsequent_prefixes = []
             next_speclines[0..last_array_item_ref].each_with_index do |line, n|                          
               #omit seleted line from update 
-              if n != index_selected 
+#              if n != index_selected 
                 check_linetype = Linetype.where(:id => line.linetype_id).first
                 if check_linetype.txt1 == true
                   next_txt1_id = (new_below_prefix_id + n) #because n starts at 0        
@@ -779,7 +781,7 @@ end
                 else
                   break
                 end                             
-              end
+#              end
             end     
             
             if subsequent_prefixes

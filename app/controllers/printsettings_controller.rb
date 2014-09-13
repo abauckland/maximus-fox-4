@@ -20,11 +20,11 @@ class PrintsettingsController < ApplicationController
   
   
   #docuemnt cover
-    @client_details = ["none", "left", "centre", "right"]
-    @client_logos = ["none", "left", "centre", "right"]
-    @project_details = ["none", "left", "centre", "right"]
-    @project_images = ["none", "left", "centre", "right"]
-    @company_details = ["none", "left", "centre", "right"]
+    @client_details = ["none", "left", "center", "right"]
+    @client_logos = ["none", "left", "center", "right"]
+    @project_details = ["none", "left", "center", "right"]
+    @project_images = ["none", "left", "center", "right"]
+    @company_details = ["none", "left", "center", "right"]
   
   #header settings
     @header_projects = ["none", "show"]

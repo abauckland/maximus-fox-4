@@ -57,8 +57,8 @@
                     </ul>                              
                 </li>
                 <% if @project %> 
-                    <li><%= link_to "DOCUMENT", specifications_path(@project.id), :class => check_current('revision') %></li>
-                    <li><%= link_to "REVISIONS", specrevisions_path(@project.id), :class => check_current('revision') %></li>
+                    <li><%= link_to "DOCUMENT", specification_path(@project.id), :class => check_current('revision') %></li>
+                    <li><%= link_to "REVISIONS", specrevision_path(@project.id), :class => check_current('revision') %></li>
                     <li class="has_sub_mob"><%= link_to "PUBLISH", print_path(@project.id), :class => check_current('revision') %> 
                         <ul class="sub_menu_mob">
                             <li><%= link_to "Create/Download PDF", print_path(@project.id) %> </li>
