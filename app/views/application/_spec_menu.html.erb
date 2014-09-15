@@ -26,6 +26,7 @@
                         <ul class="sub_menu">                        
                             <li><%= link_to "Create/Download PDF", print_path(@project.id) %> </li>
                             <li><%= link_to "Document Settings", edit_printsetting_path(@project.id) %> </li>
+                            <li><%= link_to "Keynote Download", keynote_path(@project.id) %> </li>
                         </ul>                              
                     </li>
                 <% end %>                       

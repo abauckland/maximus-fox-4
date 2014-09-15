@@ -27,35 +27,34 @@ class KeynotesController < ApplicationController
   end
   
 
-#File.open('file.txt', 'a+') { |f| User.find(:all).each { |u|
-#f.write("#{u.login}\t#{u.email}\n") } }
   def revit_keynote_export(project)
 
-  project = Project.where(:id => params[:id]).first 
-  filename = project.code + " specright_keynote"
-  @bim_revit_export = File.open('#{filename}.txt', 'a+') do |txt|   
+
+    section = Cawssection.first
+
+    data = ""
+
+    project = Project.where(:id => params[:id]).first 
 
       #for each section 
       sections = Cawssection.project_sections(project)                                   
-      sections.each_with_index do |section, i|
+      sections.each_with_index do |s, i|
         #project section    
-        txt << ["#{section.ref}\t#{section.text}\n"]  
-       
+        data = data + "#{s.ref}\t#{s.text}\n"       
         #for each subsection     
-        subsections = Cawssubsection.section_subsections(project, section)               
+        subsections = Cawssubsection.section_subsections(project, s)               
         subsections.each_with_index do |subsection, n|
           #project subsection  
-          txt << ["#{sprintf("%02d", subsection.ref).to_s}\t#{subsection.text}\t#{subsection.cawssection.ref}\n"]
+          data = data + "#{sprintf("%02d", subsection.ref).to_s}\t#{subsection.text}\t#{subsection.cawssection.ref}\n"
           
           clauses = Clause.subsection_clauses(project, subsection)                 
           clauses.each_with_index do |clause, m|
             #project clauses 
-            txt << ["#{clause.caws_code}\t#{clause.clausetitle.text}\t#{clause.clauseref.subsection.cawssubsection.full_code}\n"] 
+            data = data + "#{clause.caws_code}\t#{clause.clausetitle.text}\t#{clause.clauseref.subsection.cawssubsection.full_code}\n"
           end 
         end 
       end
-    end  
-    send_data @bim_revit_export, :type => 'text/plain', :disposition => 'attachment; filename=#{filename}.txt'     
+     send_data( data, :filename => "#{project.title}_revit_keyontes.txt" ) 
   end
           
   
