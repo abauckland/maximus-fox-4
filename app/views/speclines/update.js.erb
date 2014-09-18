@@ -114,6 +114,10 @@ var spec_id = $(this).attr('id');
 	});    
 });
 
+$('span').filter(function(){
+  return $(this).text() === 'Not specified';
+}).css('color', 'blue');
+
 
 <% if @subsequent_prefixes %>
 	<% @subsequent_prefixes.each_with_index do |sub_prefix, i|	%>

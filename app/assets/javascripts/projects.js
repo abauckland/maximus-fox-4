@@ -179,7 +179,7 @@ ajaxLinks();
 
 
 //sortable specline
-	$('.1, .2, .3, .4, .5, .6, .prelim_show').sortable({
+	$('.1, .2, .3, .4, .5, .6, 7, .8, .prelim_show').sortable({
 		axis: 'y',
 		cancel: '.clause_title, span',
 		cursor: 'pointer',
@@ -408,9 +408,9 @@ $('#enter_clause_ref').focusout(function() {
 
 
 
-//$('span').filter(function(){
-//  return $(this).text() === 'Not specified';
-//}).css('color', 'blue');
+$('span').filter(function(){
+  return $(this).text() === 'Not specified';
+}).css('color', 'blue');
 
 
 
