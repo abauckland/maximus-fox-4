@@ -27,7 +27,7 @@ module Printcontent
       content_list_length = content_list_length + subsections.length      
     end
     
-    pages = (content_list_length*9)/230
+    pages = (content_list_length*8)/230
 
     #content list to cover even number of pages - for double sided printing
     if pages == 0
