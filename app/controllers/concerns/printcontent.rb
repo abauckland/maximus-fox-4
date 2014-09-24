@@ -27,7 +27,7 @@ module Printcontent
       content_list_length = content_list_length + subsections.length      
     end
     
-    pages = (content_list_length*8)/230
+    pages = (content_list_length*8.5)/230
 
     #content list to cover even number of pages - for double sided printing
     if pages == 0
@@ -68,7 +68,7 @@ module Printcontent
 
     page_title_header(pdf)
 
-    pdf.table(document_content, :cell_style => contents_style, :column_widths => [465, 25])
+    pdf.table(document_content, :cell_style => contents_style, :column_widths => [455, 35])
 
   end
 
