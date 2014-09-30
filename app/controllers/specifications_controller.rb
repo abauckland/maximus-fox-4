@@ -15,10 +15,8 @@ class SpecificationsController < ApplicationController
 
 
   def show    
-    #call to protected method that restablishes text to be shown for project revision status
-    current_revision_render(@project)
 
-      #if no contents redirect to manage_subsection page
+    #if no contents redirect to manage_subsection page
     speclines = Specline.where(:project_id => @project.id).first
     if speclines.blank?
       redirect_to empty_project_specification_path(@project.id)

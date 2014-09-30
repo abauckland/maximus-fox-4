@@ -16,9 +16,6 @@ class PrintsController < ApplicationController
   # GET /txt1s/1.xml
   def show
     
-    #call to protected method that restablishes text to be shown for project revision status
-    current_revision_render(@project)
-    
     @revisions = Revision.where(:project_id => params[:id]).order('created_at')
 
     #show if print with superseded
@@ -51,31 +48,17 @@ class PrintsController < ApplicationController
 
   def print_download
   
-    current_revision Revision.where(:project_id => @project.id).order('created_at').last 
+    current_revision = Revision.where(:project_id => @project.id).order('created_at').last 
 #current verision equals current unplublihsed version
 #if current verision has no new revisions do not apply superseded watermark    
     if @revision == current_revision
       print_project
     else
-      pdf_document = Print.where(:project_id => @project.id, :revision_id => @revision.id).first
-      #open document and apply superseded water mark to all pages
-      
-###template support may have been removed in latest version      
-      filename = pdf_document.attachment
-      Prawn::Document.generate("#{@project.code}_rev_#{@revision.rev.capitalize}.pdf", :template => filename) do
-        
-        settings = Printsetting.where(:project_id => project.id).first
-        pdf.font "#{settings.font_style}"
-        
-        watermark_style = {:width => 250.mm, :size => 108, :style => :bold, :at => [20.mm,55.mm], :rotate => 60}
-        
-        pdf.transparent(0.15) do
-          pdf.text_box "superseded", watermark_style
-        end
-        
-      end
-    end
-    
+      @print = Print.where(:project_id => @project.id, :revision_id => @revision.id).first
+
+      #send copy of the saved document
+      send_file @print.document.path
+    end   
   end
 
   
@@ -83,10 +66,10 @@ class PrintsController < ApplicationController
             
    document = Prawn::Document.new(
     :page_size => "A4",
-    :margin => [20.mm, 14.mm, 5.mm, 20.mm],
+    :margin => [20.mm, 14.mm, 10.mm, 20.mm],
     :info => {:title => @project.title}
     ) do |pdf|    
-        if @project.ref_system == "CAWS"
+        if @project.CAWS?
             print_caws_document(@project, @revision, pdf)
         else
             print_uni_document(@project, @revision, pdf)
@@ -94,10 +77,12 @@ class PrintsController < ApplicationController
     end        
 
     #if document is to be issued, not issued with 'not for issue' watermark, update revision reference
-    if params[:issue] == true
+
+##THIS IS NOT WORKING - PARAMS NOT CORRECT
+#    if !params[:issue].present?
     #update revision status of project if document is not if draft status
-      update_revision(@project, @revision)
-    end
+#      update_revision(@project, @revision)
+#    end
     
     if @revision.rev
       case @revision.rev
@@ -112,18 +97,19 @@ class PrintsController < ApplicationController
       filename = "#{@project.code}_rev_na.pdf"   
     end
 
-    if params[:issue] == true 
+##THIS IS NOT WORKING - PARAMS NOT CORRECT
+    if !params[:issue].present?
       if !@project.Draft?      
-          document.render_file(filename)
-          pdf_file = File.open(filename)
-          @print = Print.new()
-          @print.project_id = @project.id 
-          @print.revision_id = @revision.id
-          @print.user_id = current_user.id
-          @print.document = pdf_file
-          @print.save
+          
+          tempfile = document.render_file(filename)
+          @print = Print.create(:project_id => @project.id,
+                                :revision_id => @revision.id,
+                                :user_id => current_user.id)
+                                
+          @print.document = tempfile  
+          @print.save                   
       
-          send_file pdf_file, :type => "application/pdf"
+          #send_data pdf_file, filename: filename, :type => "application/pdf"
       else
           send_data document.render, filename: filename, :type => "application/pdf"
       end
@@ -152,7 +138,10 @@ class PrintsController < ApplicationController
   end
   
 
-
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def print_params
+    params.require(:print).permit(:project_id, :revision_id, :user_id, :print, :document, :created_at, :updated_at)
+  end
   
   def update_revision(project, revision)
 
@@ -179,7 +168,7 @@ class PrintsController < ApplicationController
             end             
           end  
         end
-        @new_rev_record = Revision.create(:rev => next_revision_ref, :project_id => project.id, :user_id => current_user.id, :date => Date.today)                                      
+        @new_rev_record = Revision.create(:rev => next_revision_ref, :project_status => project.project_status, :project_id => project.id, :user_id => current_user.id, :date => Date.today)                                      
       end
       @current_revision_rev = current_revision.rev.capitalize       
     end    

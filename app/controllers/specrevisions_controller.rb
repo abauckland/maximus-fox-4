@@ -29,25 +29,25 @@ class SpecrevisionsController < ApplicationController
       project_subsection = Subsectionuser.joins(:projectuser).where('projectusers.user_id' => current_user.id).first   
       if project_subsection      
         @subsections = Cawssubsection.all_subsection_revisions(@project, @revision).filter_user(current_user)
-        @prelim_subsections = Cawssubsection.prelim_subsection_revisions(@project, @revision).filter_user(current_user)   
-        @non_prelim_subsections = Cawssubsection.subsection_revisions(@project, @revision).filter_user(current_user)
+##        @prelim_subsections = Cawssubsection.prelim_subsection_revisions(@project, @revision).filter_user(current_user)   
+##        @non_prelim_subsections = Cawssubsection.subsection_revisions(@project, @revision).filter_user(current_user)
       else
         @subsections = Cawssubsection.all_subsection_revisions(@project, @revision)
-        @prelim_subsections = Cawssubsection.prelim_subsection_revisions(@project, @revision)    
-        @non_prelim_subsections = Cawssubsection.subsection_revisions(@project, @revision)               
+##        @prelim_subsections = Cawssubsection.prelim_subsection_revisions(@project, @revision)    
+##        @non_prelim_subsections = Cawssubsection.subsection_revisions(@project, @revision)               
       end  
 
      
-      ##prelim subsections
-      if @prelim_subsections
-        #get list of prelim subsections in project where changes have been made   
-        prelim_cawssubsection_change_data(@project, @prelim_subsections, @revision)         
-      ##non prelim subsections
-      else
+##      ##prelim subsections
+##      if @prelim_subsections
+##        #get list of prelim subsections in project where changes have been made   
+##        prelim_cawssubsection_change_data(@project, @prelim_subsections, @revision)         
+##      non prelim subsections
+##      else
         @subsection = @subsections.first.id     
         #establish if subsection is new or has been deleted      
         cawssubsection_change_data(@project, @subsection, @revision)
-      end
+##      end
     else    
 ###uniclass code to go here - same as above       
     end    
@@ -60,22 +60,22 @@ class SpecrevisionsController < ApplicationController
   end
 
 
-  def show_prelim_tab_content
+##  def show_prelim_tab_content
 
-    if @project.CAWS?       
-      prelim_subsections = Cawssubsection.joins(:subsections => [:clauserefs => [:clauses => :alterations]]
-                                        ).where('alterations.project_id' => @project.id, 'alterations.revision_id' => @revision.id, :cawssection_id => 1
-                                        ).group(:id)      
+##    if @project.CAWS?       
+##      prelim_subsections = Cawssubsection.joins(:subsections => [:clauserefs => [:clauses => :alterations]]
+##                                        ).where('alterations.project_id' => @project.id, 'alterations.revision_id' => @revision.id, :cawssection_id => 1
+##                                        ).group(:id)      
       #establish if subsection is new or has been deleted 
-      prelim_cawssubsection_change_data(@project, prelim_subsections, @revision)
-    else    
+##      prelim_cawssubsection_change_data(@project, prelim_subsections, @revision)
+##    else    
 ###uniclass code to go here - same as above       
-    end
+##    end
 
-    respond_to do |format|
-      format.js  { render :show_rev_tab_content_prelim, :layout => false } 
-    end    
-  end
+##    respond_to do |format|
+##      format.js  { render :show_rev_tab_content_prelim, :layout => false } 
+##    end    
+##  end
 
 
   def show_rev_tab_content    
@@ -110,38 +110,38 @@ class SpecrevisionsController < ApplicationController
 
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def prelim_cawssubsection_change_data(project, prelim_subsections, revision)
+##    def prelim_cawssubsection_change_data(project, prelim_subsections, revision)
 
-      @deleted_prelim_subsections = []
-      @added_prelim_subsections = []
-      @changed_prelim_subsections = []
+##      @deleted_prelim_subsections = []
+##      @added_prelim_subsections = []
+##      @changed_prelim_subsections = []
 
-      @deleted_prelim_clauses ={}
-      @added_prelim_clauses = {}
-      @changed_prelim_clauses = {}
+##      @deleted_prelim_clauses ={}
+##      @added_prelim_clauses = {}
+##      @changed_prelim_clauses = {}
 
       #check if prelim subsection is new, added or changed
-      prelim_subsections.each_with_index do |subsection, i|
+##      prelim_subsections.each_with_index do |subsection, i|
 
-        subsection_change = Alteration.changed_caws_subsections(project, revision, subsection)
+##        subsection_change = Alteration.changed_caws_subsections(project, revision, subsection)
       
-        if subsection_change
-          if subsection_change.event == 'new'
-            @added_prelim_subsections[i] = subsection
-          end
-          if subsection_change.event == 'deleted'
-            @deleted_prelim_subsections[i] = subsection
-          end
-        else
-          @changed_prelim_subsections[i] = subsection
+##        if subsection_change
+##          if subsection_change.event == 'new'
+##            @added_prelim_subsections[i] = subsection
+##          end
+##          if subsection_change.event == 'deleted'
+##            @deleted_prelim_subsections[i] = subsection
+##          end
+##        else
+##          @changed_prelim_subsections[i] = subsection
 
-          @deleted_prelim_clauses[subsection.id] = Clause.changed_caws_clauses('deleted', project, revision, subsection)
-          @added_prelim_clauses[subsection.id] = Clause.changed_caws_clauses('new', project, revision, subsection)
+##          @deleted_prelim_clauses[subsection.id] = Clause.changed_caws_clauses('deleted', project, revision, subsection)
+##          @added_prelim_clauses[subsection.id] = Clause.changed_caws_clauses('new', project, revision, subsection)
                     
-          @changed_prelim_clauses[subsection.id] = Clause.changed_caws_clause_content('changed', project, revision, subsection)
-        end 
-      end        
-    end
+##          @changed_prelim_clauses[subsection.id] = Clause.changed_caws_clause_content('changed', project, revision, subsection)
+##        end 
+##      end        
+##    end
 
 
     def cawssubsection_change_data(project, subsection, revision)

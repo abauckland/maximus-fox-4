@@ -1,21 +1,5 @@
-<!-- project information - ALL DEVICES (formatting changed in CSS -->
-<div class="project_info">
-	<div class="project_title">
-		<div class="project_code">   
-    		Project: <%=h @project.code%>
-		</div>
-		<div class="project_code_title">   
-    		<%=h @project.title %>
-		</div>
-	</div>	
-	<div class="project_status">
-		Status: <%=h @project.project_status %>
-	</div>
-	<div class="project_rev">
-    	Rev: <%=h @current_revision_rev %>
-  	</div>
-</div>
-
+<!-- project information bar -->
+<%= render "project_info_bar", locals: {project: @project} %>
 
 <div class="option_band_single">	
 <!-- subsection select and add/delete link for MOBILE -->

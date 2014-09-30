@@ -197,16 +197,14 @@ class SpeclinesController < ApplicationController
   
 
   # PUT /projects/update_specline_3/id
-  def update_specline_3
-   
+  def update_specline_3   
     #removes white space and punctuation from end of text
-    clean_text(params[:value])
+    clean_text(params[:value])    
+    #create duplicate record for alteration tracking
+    old_specline = @specline.dup
     
-    if @value == ""
-      #if no value then set text to 'not specified'
-      new_txt3 = Txt3.first
-      #record change to text
-      record_change(@specline)   
+    if @value == ""      
+      new_txt3 = Txt3.first #if no value then set text to 'not specified'
     else 
       #save new text if exact match does not exist in Txt table
       #get new text info
@@ -215,83 +213,69 @@ class SpeclinesController < ApplicationController
         new_txt3 = Txt3.create(:text => @value)
       else
         new_txt3 = txt3_exist
-      end     
-      #check if new text is similar to old text 
-      if @specline.txt3.text.casecmp(@value) != 0
-        #if new text is not similar to old text save change to text and create change record
-          record_change(@specline)         
       end
-    end
-    #changes must be recorded before line is updated because update to any copy of object will also be updated           
-    @specline.update(:txt3_id => new_txt3.id)
-
-    render :text=> new_txt3.text    
+    end       
+    #save changes
+    @specline.update(:txt3_id => new_txt3.id)     
+    #check if new text is similar to old text 
+    if @specline.txt3.text.casecmp(@value) != 0
+      #if new text is not similar to old text record change to text   
+      record_change(old_specline, @specline)
+    end       
+    render :text=> params[:value]   
   end  
  
   
   # PUT /projects/update_specline_4/id
   def update_specline_4
-    #removes white space and punctuation from end of text
-    clean_text(params[:value])    
-    #value = new text
+
+    clean_text(params[:value])
+    old_specline = @specline.dup    
+
     if @value == ""
-      #if no value then set text to 'not specified'
-      new_txt4 = Txt4.first
-      #record change to text
-      record_change(@specline)   
-    else      
-      #check if similar text exists    
+      new_txt4 = Txt4.first  
+    else        
       txt4_exist = Txt4.where('BINARY text =?', @value).first
       if txt4_exist.blank?
          new_txt4 = Txt4.create(:text => @value)
       else
          new_txt4 = txt4_exist
       end
-                  
-      #if new text is not similar to old text save change to text and create change record
-      #txt4_check = Txt4.where(:text => @value).first
-      if @specline.txt4.text.casecmp(@value) != 0#txt4_check.blank?
-        record_change(@specline)
-      end 
     end
-    #changes must be recorded before line is updated because update to any copy of object will also be updated           
-    @specline.update(:txt4_id => new_txt4.id)
 
-    render :text=> new_txt4.text       
+    @specline.update(:txt4_id => new_txt4.id)
+    
+    if @specline.txt4.text.casecmp(@value) != 0
+      record_change(old_specline, @specline)
+    end  
+    render :text=> params[:value]     
   end  
 
   
   # PUT /projects/update_specline_5/id
   def update_specline_5
-    #removes white space and punctuation from end of text
-    clean_text(params[:value])
     
-    #value = new text
+    clean_text(params[:value])
+    old_specline = @specline.dup
+        
     if @value == ""
-      #if no value then set text to 'not specified'
-      new_txt5 = Txt5.first
-      #record change to text
-      record_change(@specline)   
-    else 
-      #check if similar text exists    
+      new_txt5 = Txt5.first 
+    else   
       txt5_exist = Txt5.where('BINARY text =?', @value).first
       if txt5_exist.blank?
          new_txt5 = Txt5.create(:text => @value)
       else
          new_txt5 = txt5_exist
       end    
-      #check if new text is similar to old text
-      if @specline.txt5.text.casecmp(@value) != 0
-        #if new text is not similar to old text save change to text and create change record
-          record_change(@specline)         
-      end
     end  
-    #changes must be recorded before line is updated because update to any copy of object will also be updated           
+        
     @specline.update(:txt5_id => new_txt5.id)
 
-    render :text=> new_txt5.text  
+    if @specline.txt5.text.casecmp(@value) != 0
+      record_change(old_specline, @specline)         
+    end
+    render :text=> params[:value]
   end
-
 
   
   def xref_data
@@ -336,6 +320,8 @@ def update_product_key
   #key text returned
   @specline_update = @specline  
   key = params[:value]
+  
+  old_specline = @specline.dup
 
     #get product identity pairs in clause which have been completed, not including current line
     product_identity_pairs = Specline.product_identity_pairs(@specline)
@@ -377,11 +363,11 @@ def update_product_key
   #if identity key then linetype = 10
   if check_identkey_exist
     #update linetype
-    if @specline_update.linetype_id != 10
-      @specline_update.update(:linetype_id => 10)
+    if @specline.linetype_id != 10
+      @specline.update(:linetype_id => 10)
      # @specline_update.linetype_id = 10
       #@specline_update.save
-      record_change(@specline)     
+      record_change(old_specline, @specline)     
     end
     
     #if only one value option auto complete otherwise set value to 1 ('not specified')
@@ -399,17 +385,17 @@ def update_product_key
       check_identity = Identity.where(:identvalue_id => 1, :identkey_id => check_identkey_exist.id).first_or_create 
       update_identity_id = check_identity.id     
     end
-    @specline_update.update(:identity_id => update_identity_id)
+    @specline.update(:identity_id => update_identity_id)
     #@specline_update.identity_id = update_identity_id
     #@specline_update.save
-    record_change(@specline) 
+    record_change(old_specline, @specline) 
     
   else
-    if @specline_update.linetype_id != 11
-      @specline_update.update(:linetype_id => 11)
+    if @specline.linetype_id != 11
+      @specline.update(:linetype_id => 11)
       #@specline_update.linetype_id = 11
       #@specline_update.save
-      record_change(@specline)      
+      record_change(old_specline, @specline)      
     end
     
     #if only one value option auto complete otherwise set value to 1 ('not specified')
@@ -432,8 +418,8 @@ def update_product_key
     end
     #@specline_update.perform_id = update_perform_id
     #@specline_update.save
-    @specline_update.update(:perform_id => update_perform_id)
-    record_change(@specline)     
+    @specline.update(:perform_id => update_perform_id)
+    record_change(old_specline, @specline)     
   end
     #render :text=> params[:value]  
     render :update, :layout => false 
@@ -462,7 +448,7 @@ def update_product_value
     @specline_update.update(:identity_id => new_identity_pair.id)
     #@specline_update.identity_id = new_identity_pair.id
     #@specline_update.save
-    record_change(@specline)       
+    record_change(old_specline, @specline)       
   else
       performvalue_id = params[:value]    
       new_perform_pair = Perform.where(:performkey_id => @specline.perform.performkey_id, :performvalue_id  => performvalue_id).first
@@ -470,7 +456,7 @@ def update_product_value
       @specline_update.update(:perform_id => new_perform_pair.id)
       #@specline_update.perform_id = new_perform_pair.id
      # @specline_update.save
-      record_change(@specline)     
+      record_change(old_specline, @specline)     
   end  
         
   render :text => render_value_text
@@ -481,6 +467,8 @@ end
   # PUT /speclines/1
   # PUT /speclines/1.xml
   def update
+    
+    old_specline = @specline.dup 
        
     old_linetype = Linetype.find(@specline.linetype_id)
     new_linetype = Linetype.find(params[:specline][:linetype_id])  
@@ -497,7 +485,7 @@ end
     old_linetype_array = [old_linetype.txt3, old_linetype.txt4, old_linetype.txt5, old_linetype.txt6]    
     new_linetype_array = [new_linetype.txt3, new_linetype.txt4, new_linetype.txt5, new_linetype.txt6]    
     if new_linetype_array != old_linetype_array
-      record_change(@specline)  
+      record_change(old_specline, @specline)  
     end
         #if new linetype is for product data set identity and perform value pairs to 'not specified'
     if [10,11].include?(params[:specline][:linetype_id])
@@ -519,8 +507,6 @@ end
     #clause = Clause.find(@specline.clause_id)
     #adds in parent clause title line where clause has parent clause
     #add_parent_clause(clause, @current_project)
-
-
     
     clause_lines = Specline.where(:project_id => @specline.project_id, :clause_id => @specline.clause_id).order('clause_line')    
       clause_lines.each_with_index do |clause_line, i|
@@ -565,7 +551,6 @@ end
   # DELETE /speclines/1.xml
   def delete_specline
        
-
    # check_specline = Specline.where('clause_id = ? AND project_id = ? AND clause_line > ?',  @specline.clause_id, @specline.project_id, 0).order('clause_line')  
   
         @spec_line_div = @specline.id
@@ -636,14 +621,13 @@ end
     end
 
     def update_txt5_delete_cross_refence(specline_id)
-       
-      @specline = Specline.where(specline_id).first       
-      @specline_update = @specline
-      @specline_update.txt5_id = 1
+             
+      @specline = Specline.where(specline_id).first
+      old_specline = @specline.dup
+                    
+      @specline.update(:txt5_id => 1)
       #create change record
-      record_change(@specline, @specline_update)        
-      @specline_update.save
-  
+      record_change(old_specline, @specline)          
     end
 
     

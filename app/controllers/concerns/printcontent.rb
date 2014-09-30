@@ -10,17 +10,17 @@ module Printcontent
       end    
     end
     
-    if settings.prelim == "single section" 
-      prelim_subsections = Cawssubsection.prelim_subsections(project)
-      if !prelim_subsections.blank?
+#    if settings.prelim == "single section" 
+#      prelim_subsections = Cawssubsection.prelim_subsections(project)
+#      if !prelim_subsections.blank?
         content_list_length = content_list_length + 1
-      end  
-    else
-      prelim_subsections = Cawssubsection.prelim_subsections(project)
-      if !prelim_subsections.blank?
-        content_list_length = content_list_length + prelim_subsections.length
-      end             
-    end
+#      end  
+#    else
+#      prelim_subsections = Cawssubsection.prelim_subsections(project)
+#      if !prelim_subsections.blank?
+#        content_list_length = content_list_length + prelim_subsections.length
+#      end             
+#    end
     
     subsections = Cawssubsection.subsections(project)
     if !subsections.blank?
@@ -67,9 +67,9 @@ module Printcontent
     pdf.go_to_page(3)
 
     page_title_header(pdf)
-
-    pdf.table(document_content, :cell_style => contents_style, :column_widths => [455, 35])
-
+    if !document_content.blank? #required where document has no contents
+      pdf.table(document_content, :cell_style => contents_style, :column_widths => [455, 35])
+    end
   end
 
   def page_title_header(pdf)

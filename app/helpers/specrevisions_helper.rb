@@ -2,7 +2,7 @@ module SpecrevisionsHelper
 #revision select menu
   def revision_select(revisions, revision, project, subsections)
 
-    if project.project_status == 'Draft'
+    if project.Draft?
       "<div class='revision_select_draft'>n/a</div>".html_safe
     else
       #if revision_subsections.blank?
@@ -28,34 +28,34 @@ module SpecrevisionsHelper
 #    end
 #  end
   
-#prelim
-#subsections titles of subsections added or deleted   
- def changed_prelim_subsection_text(project, subsection)   
-    if project.CAWS?
-        "<table width='100%'><tr id='#{subsection.id.to_s}' class='clause_title'><td class='changed_subsection_code'>#{subsection.full_code_and_title.upcase}</td></tr></table>".html_safe 
-    else
-        "<table width='100%'><tr id='#{subsection.id.to_s}' class='clause_title'><td class='changed_subsection_code'>#{subsection.full_code_and_title.upcase}</td></tr></table>".html_safe     
-    end  
- end
+##prelim
+##subsections titles of subsections added or deleted   
+# def changed_prelim_subsection_text(project, subsection)   
+##    if project.CAWS?
+#        "<table width='100%'><tr id='#{subsection.id.to_s}' class='clause_title'><td class='changed_subsection_code'>#{subsection.full_code_and_title.upcase}</td></tr></table>".html_safe 
+#    else
+#        "<table width='100%'><tr id='#{subsection.id.to_s}' class='clause_title'><td class='changed_subsection_code'>#{subsection.full_code_and_title.upcase}</td></tr></table>".html_safe     
+#    end  
+# end
    
 #prelim  
 #clause titles for added or deleted clauses   
-  def changed_clause_titles(clause, action, revision, project)
-    if clause
-        #check print status
-      if action != 'changed'
-          "<table width='100%' class='rev_table'><tr  id='#{clause.id.to_s}' class='clause_title_2'><td class='rev_clause_code'>#{clause_ref(clause)}</td><td class ='rev_clause_title'>#{clause.clausetitle.text.to_s}</td><td class='rev_line_menu_mob'>#{rev_mob_menu(clause)}</td><td class='rev_line_menu'>#{reinstate_original_clause(clause)}#{change_info_clause(clause, revision, project)}</td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{reinstate_original_clause(clause)}#{change_info_clause(clause, revision, project)}</td></tr></table>".html_safe    
-      else
-
-        check_clause_print_status = Alteration.where(:project_id => @project, :clause_id => clause, :revision_id => @revision.id).collect{|item| item.print_change}.uniq            
-        if check_clause_print_status.include?(true)
-          "<table><tr class='clause_title'><td class='changed_clause_code'>#{clause_ref(clause)}</td><td class ='changed_clause_title'>#{clause.clausetitle.text.to_s}</td></tr></table>".html_safe    
-        else
-          "<table><tr class='clause_title_strike'><td class='changed_clause_code'>#{clause_ref(clause)}</td><td class ='changed_clause_title'>#{clause.clausetitle.text.to_s}</td></tr></table>".html_safe    
-        end
-      end
-    end
-  end
+#  def changed_clause_titles(clause, action, revision, project)
+#    if clause
+#        #check print status
+#      if action != 'changed'
+#          "<table width='100%' class='rev_table'><tr  id='#{clause.id.to_s}' class='clause_title_2'><td class='rev_clause_code'>#{clause_ref(clause)}</td><td class ='rev_clause_title'>#{clause.clausetitle.text.to_s}</td><td class='rev_line_menu_mob'>#{rev_mob_menu(clause)}</td><td class='rev_line_menu'>#{reinstate_original_clause(clause)}#{change_info_clause(clause, revision, project)}</td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{reinstate_original_clause(clause)}#{change_info_clause(clause, revision, project)}</td></tr></table>".html_safe    
+#      else
+#
+#        check_clause_print_status = Alteration.where(:project_id => @project, :clause_id => clause, :revision_id => @revision.id).collect{|item| item.print_change}.uniq            
+#        if check_clause_print_status.include?(true)
+#          "<table><tr class='clause_title'><td class='changed_clause_code'>#{clause_ref(clause)}</td><td class ='changed_clause_title'>#{clause.clausetitle.text.to_s}</td></tr></table>".html_safe    
+#        else
+#          "<table><tr class='clause_title_strike'><td class='changed_clause_code'>#{clause_ref(clause)}</td><td class ='changed_clause_title'>#{clause.clausetitle.text.to_s}</td></tr></table>".html_safe    
+#        end
+#      end
+#    end
+#  end
 
 #non prelim
 #statement of if non prelim subsection has been added or deleted    
@@ -145,7 +145,7 @@ end
     
     last_clause_change = Alteration.where(:specline_id => line.specline_id).last
     if line[:id] == last_clause_change[:id] 
-      "<table width='100%' class='rev_table'><tr id='#{line.id.to_s}' class='#{rev_line_class}'><td class='rev_row_padding'>#{line_content(line)}</td><td class='rev_line_menu_mob'>#{rev_mob_menu(line)}</td><td class='rev_line_menu'>#{reinstate_original_line(line)}#{change_info(line)}</td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{reinstate_original_line(line)}#{change_info(line)}</td></tr></table>".html_safe    
+      "<table width='100%' class='rev_table'><tr id='#{line.id.to_s}' class='#{rev_line_class}'><td class='rev_row_padding'>#{line_content(line)}</td><td class='rev_line_menu_mob'>#{rev_mob_menu(line)}</td><td class='rev_line_menu'>#{change_info(line)}</td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{change_info(line)}</td></tr></table>".html_safe    
     else
       "<table width='100%' class='rev_table'><tr id='#{line.id.to_s}' class='#{rev_line_class}'><td class='rev_row_padding'>#{line_content(line)}</td><td class='rev_line_menu_mob'>#{rev_mob_menu(line)}</td><td class='rev_line_menu'>#{change_info(line)}</td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{change_info(line)}</td></tr></table>".html_safe        
     end    
@@ -173,9 +173,9 @@ end
 
     last_clause_change = Alteration.where(:specline_id => line.specline_id).last
     if line[:id] == last_clause_change[:id]   
-      "<table width='100%' class='rev_table'><tr id='#{line.id.to_s}' class='#{rev_row_class}'><td class='rev_row_padding'> <table width='100%'><tr><td class='#{change_title_class}'>From:</td></tr><tr><td class='#{change_line_class}'>#{line_content(line)}</td></tr><tr><td class='#{change_title_class}'>To:</td></tr><tr><td class='#{change_line_class}'>#{line_content(current_line)}</td></tr></table>  <td class='rev_line_menu_mob'>#{rev_mob_menu(line)}</td><td class='rev_line_menu'>#{reinstate_original_line(line)}#{change_info(line)}#{toggle_print_setting(line, revision, project)}</td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{reinstate_original_line(line)}#{change_info(line)}#{toggle_print_setting(line, revision, project)}</td></tr></table>".html_safe
+      "<table width='100%' class='rev_table'><tr id='#{line.id.to_s}' class='#{rev_row_class}'><td class='rev_row_padding'> <table width='100%'><tr><td class='#{change_title_class}'>From:</td></tr><tr><td class='#{change_line_class}'>#{line_content(line)}</td></tr><tr><td class='#{change_title_class}'>To:</td></tr><tr><td class='#{change_line_class}'>#{line_content(current_line)}</td></tr></table>  <td class='rev_line_menu_mob'>#{rev_mob_menu(line)}</td><td class='rev_line_menu'>#{change_info(line)}#{toggle_print_setting(line, revision, project)}</td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{change_info(line)}#{toggle_print_setting(line, revision, project)}</td></tr></table>".html_safe
     else  
-      "<table width='100%' class='rev_table'><tr id='#{line.id.to_s}' class='#{rev_row_class}'><td class='rev_row_padding'> <table width='100%'><tr><td class='#{change_title_class}'>From:</td></tr><tr><td class='#{change_line_class}'>#{line_content(line)}</td></tr><tr><td class='#{change_title_class}'>To:</td></tr><tr><td class='#{change_line_class}'>#{line_content(current_line)}</td></tr></table>  <td class='rev_line_menu_mob'>#{rev_mob_menu(line)}</td><td class='rev_line_menu'>#{change_info(line)}#{toggle_print_setting(line, revision, project)}</td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{change_info(line)}#{toggle_print_setting(line, srevision, project)}</td></tr></table>".html_safe
+      "<table width='100%' class='rev_table'><tr id='#{line.id.to_s}' class='#{rev_row_class}'><td class='rev_row_padding'> <table width='100%'><tr><td class='#{change_title_class}'>From:</td></tr><tr><td class='#{change_line_class}'>#{line_content(line)}</td></tr><tr><td class='#{change_title_class}'>To:</td></tr><tr><td class='#{change_line_class}'>#{line_content(current_line)}</td></tr></table>  <td class='rev_line_menu_mob'>#{rev_mob_menu(line)}</td><td class='rev_line_menu'>#{change_info(line)}#{toggle_print_setting(line, revision, project)}</td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{change_info(line)}#{toggle_print_setting(line, revision, project)}</td></tr></table>".html_safe
     end    
   end
   
@@ -209,17 +209,17 @@ end
     image_tag("menu.png", :mouseover =>"menu_rollover.png", :border=>0)    
   end
 
-  def reinstate_original_line(line)
-    if authorise_specline_view(['manage', 'edit', 'write'])
-      link_to image_tag("reinstate.png", :mouseover =>"reinstate_rollover.png", :border=>0), {:controller => "changes", :action => "reinstate", :id => line.id, :project_id => line.project_id}, :class => "get", :title => "reinstate"
-    end
-  end
+#  def reinstate_original_line(line)
+#    if authorise_specline_view(['manage', 'edit', 'write'])
+#      link_to image_tag("reinstate.png", :mouseover =>"reinstate_rollover.png", :border=>0), {:controller => "changes", :action => "reinstate", :id => line.id, :project_id => line.project_id}, :class => "get", :title => "reinstate"
+#    end
+#  end
   
-  def reinstate_original_clause(clause)
-    if authorise_specline_view(['manage', 'edit', 'write'])
-      link_to image_tag("reinstate.png", :mouseover =>"reinstate_rollover.png", :border=>0), {:controller => "changes", :action => "reinstate_clause", :id => clause.id, :project_id => @project.id, :revision_id => @selected_revision.id}, :class => "get", :title => "reinstate"
-    end
-  end
+#  def reinstate_original_clause(clause)
+#    if authorise_specline_view(['manage', 'edit', 'write'])
+#      link_to image_tag("reinstate.png", :mouseover =>"reinstate_rollover.png", :border=>0), {:controller => "changes", :action => "reinstate_clause", :id => clause.id, :project_id => @project.id, :revision_id => @selected_revision.id}, :class => "get", :title => "reinstate"
+#    end
+#  end
     
   def toggle_print_setting(line, revision, project)
     if authorise_specline_view(['manage', 'edit', 'write'])
