@@ -74,7 +74,7 @@ class CompaniesController < ApplicationController
     
     def create_demo_project    
         #create demonstration project
-        @project = Project.create(:code => 'D1', :title => 'Demo Project', :parent_id => 1, :project_status => 'Draft', :ref_system => 'caws')
+        @project = Project.create(:code => 'D1', :title => 'Demo Project', :parent_id => 1, :project_status => 'Draft', :ref_system => 'CAWS')
         project_template = Project.where(:id => [1..10], :ref_system => @project.ref_system).first
         @project.update(:parent_id => project_template.id)
     end

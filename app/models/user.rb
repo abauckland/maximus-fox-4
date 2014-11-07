@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   attr_accessor :password, :password_confirmation
  
   before_save :encrypt_password  
-  after_create :add_user_to_mailchimp
+#  after_create :add_user_to_mailchimp
   
   validates :first_name,   
             :presence => {:message => "First name cannot be blank"}
@@ -68,12 +68,12 @@ class User < ActiveRecord::Base
   end
 
   
-  def add_user_to_mailchimp  
-    mailchimp = Gibbon::API.new('4d0b1be76e0e5a65e23b00efa3fe8ef3-us5')
+#  def add_user_to_mailchimp  
+#    mailchimp = Gibbon::API.new('4d0b1be76e0e5a65e23b00efa3fe8ef3-us5')
   
-    mailchimp.lists.subscribe({:id => 'c65ee7deb5', :email => {:email => self.email}, :merge_vars => {:FNAME => self.first_name, :LNAME => self.surname}, :double_optin => false, :send_welcome => true, })
+#    mailchimp.lists.subscribe({:id => 'c65ee7deb5', :email => {:email => self.email}, :merge_vars => {:FNAME => self.first_name, :LNAME => self.surname}, :double_optin => false, :send_welcome => true, })
    # mailchimp.lists.subscribe({:id => '01239b3a0f', :email => {:email => self.email}, :merge_vars => {:FNAME => self.first_name, :LNAME => self.surname}, :double_optin => false, :send_welcome => true, })    
-  end
+#  end
 
   
 end
