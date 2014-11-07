@@ -24,7 +24,7 @@
 				<%= form_for @company do |f| %>
 				
 				    <%= f.hidden_field(:no_licence, {:value => '5'})%>
-				    <%= f.hidden_field(:category, {:value => 1})%>
+				    <%= f.hidden_field(:category, {:value => :designer})%>
 					
 					<%= f.fields_for :users do |builder| %>
 						<div class="form_check"><%= f.text_field :check_field%></div>
