@@ -8,6 +8,35 @@ class ApplicationController < ActionController::Base
 
 
  protected 
+
+  def current_revision_render(project)
+
+    revisions = Revision.where(:project_id => project.id).order('created_at')         
+    last_rev_check = Alteration.where(:project_id => project.id, :revision_id => revisions.last.id).first
+    if last_rev_check.blank?
+      #count of revision records indicates the revision rev no
+      #first revision record, when document is in draft - rev == NULL
+      #second revision records, when document has been issued for the first time - rev == '-'
+      #third revision record, when document has been issued and then revised - rev =='a'
+      
+      #if no changes recorded for current revision record then last record still applies
+      #reduce record count by 1 to indicate this
+      rev_number = revisions.count
+      current_rev_number = rev_number-1
+    end  
+    
+    if current_rev_number == 0 #revision rev == NULL
+      @current_revision_rev = "n/a"
+    else  
+      if current_rev_number == 1 #revision rev == '-'
+       @current_revision_rev = "-"
+      else    
+        @current_revision_rev = revisions.last.rev.capitalize
+      end
+    end
+  end
+
+
  
   def check_project_status_change(project, revision)
     previous_statuses = Revision.where(:project_id => project.id).pluck(:project_status)
@@ -78,16 +107,11 @@ class ApplicationController < ActionController::Base
         else
           #where previous 'new' and 'change' events have been reorded
           #'delete' events not checked as none will exist for selected line (you cannot select a line that has already been deleted)
-          #if a change has been previously made to selected specline then...
-          if existing_record.event == 'new'
-            #if previous change event was creation of new specline then destory change record
-            existing_record.destroy
-          end
-          
-          if existing_record.event == 'changed'
-            #if previous change was for change to specline then amend action to 'delete' from 'change'
-            existing_record.update(:event => 'deleted', :user_id => current_user.id)
-          end
+          #if a change has been previously made to selected specline then...  
+          #if previous change event was creation of new specline then destory change record
+          existing_record.destroy if existing_record.event == 'new'          
+          #if previous change was for change to specline then amend action to 'delete' from 'change'
+          existing_record.update(:event => 'deleted', :user_id => current_user.id) if existing_record.event == 'changed'
         end
       end
     end   
