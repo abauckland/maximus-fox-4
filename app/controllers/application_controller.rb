@@ -84,7 +84,7 @@ class ApplicationController < ActionController::Base
 
   def record_delete(specline, event_type)
     #get current revision for project 
-    revision = Revision.where(:project_id => specline.project_id).order('created_at').last
+    revision = Revision.where(:project_id => specline.project_id).where.not(:rev => nil).order('created_at').last
     #check revision record exists - so next line does not throw error
     if revision
       #do not record change if project has not been prevsioulsy issued (not in draft) 
@@ -120,7 +120,7 @@ class ApplicationController < ActionController::Base
 
   def record_new(specline, event_type)
     #get current revision for project     
-    revision = Revision.where(:project_id => specline.project_id).order('created_at').last
+    revision = Revision.where(:project_id => specline.project_id).where.not(:rev => nil).order('created_at').last
     #check revision record exists - so next line does not throw error
     if revision
       #do not record change if project has not been prevsioulsy issued (not in draft) 
@@ -168,7 +168,7 @@ class ApplicationController < ActionController::Base
     clause_add_delete = 1
     
     #get current revision for project     
-    revision = Revision.where(:project_id => specline.project_id).order('created_at').last
+    revision = Revision.where(:project_id => old_specline.project_id).where.not(:rev => nil).order('created_at').last
     #check revision record exists - so next line does not throw error
     if revision
       #do not record alteration if project has not been prevsiously issued (not in draft) 

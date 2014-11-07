@@ -738,6 +738,7 @@ end
             @new_location_prefix_id = new_above_specline.txt1_id + 1
             new_below_prefix_id = new_above_specline.txt1_id + 2
           else
+            @new_location_prefix_id = 1
             new_below_prefix_id = 1
           end    
         else    
@@ -745,6 +746,7 @@ end
             @new_location_prefix_id = 1
             new_below_prefix_id = 2
           else
+            @new_location_prefix_id = 1
             new_below_prefix_id = 1
           end 
         end
