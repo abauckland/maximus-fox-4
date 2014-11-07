@@ -176,5 +176,32 @@ class SpecrevisionsController < ApplicationController
                                        ).group('subsectionusers.subsection_id')
       end                                   
     end    
+
+  def current_revision_render(project)
+
+    revisions = Revision.where(:project_id => project.id).order('created_at')         
+    last_rev_check = Alteration.where(:project_id => project.id, :revision_id => revisions.last.id).first
+    if last_rev_check.blank?
+      #count of revision records indicates the revision rev no
+      #first revision record, when document is in draft - rev == NULL
+      #second revision records, when document has been issued for the first time - rev == '-'
+      #third revision record, when document has been issued and then revised - rev =='a'
+      
+      #if no changes recorded for current revision record then last record still applies
+      #reduce record count by 1 to indicate this
+      rev_number = revisions.count
+      current_rev_number = rev_number-1
+    end  
+    
+    if current_rev_number == 0 #revision rev == NULL
+      @current_revision_rev = "n/a"
+    else  
+      if current_rev_number == 1 #revision rev == '-'
+       @current_revision_rev = "-"
+      else    
+        @current_revision_rev = revisions.last.rev.capitalize
+      end
+    end
+  end
     
 end
