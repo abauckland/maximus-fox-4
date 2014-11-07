@@ -33,6 +33,11 @@ class ClausesController < ApplicationController
                                'clauserefs.subclause' => params[:clause][:clauseref_attributes][:full_clause_ref][3,1]
                                ).first
     
+    if @project.CAWS?    
+      @subsection = Cawssubsection.where(:id => params[:clause][:clauseref_attributes][:subsection_id]).first
+    else
+###uniclass code to go here - same as above 
+    end
 
     if !current_clauseref.blank?
       flash.now[:error] = 'A clause with the same reference already exists in this Work Section'        
