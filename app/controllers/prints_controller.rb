@@ -109,7 +109,7 @@ class PrintsController < ApplicationController
     #  end
   #  else
       send_data document.render, filename: filename, :type => "application/pdf"  
-    end
+#    end
 ##clean tem directory in crontab
   end
 
