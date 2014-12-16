@@ -83,33 +83,54 @@ $standard_font: Arial,Helvetica,sans-serif;
   }        
 }
 
-@mixin green-button {border-color: #b0db64; @include green_28_gradient; @include button-box-shadow(#a4e271);
-                      &:hover {@include inverted_green_28_gradient; }}
-@mixin orange-button {border-color: #ebc178; @include orange_28_gradient; @include button-box-shadow(#f29c93);
-                      &:hover {@include inverted_orange_28_gradient; }}
-@mixin red-button {border-color: #db817b; @include red_28_gradient; @include button-box-shadow(#fed897);
-                      &:hover {@include inverted_red_28_gradient; }}
-@mixin dark-grey-button {border-color: #db817b; @include dark_grey_28_gradient; @include button-box-shadow(#fed897);
-                      &:hover {@include inverted_dark_grey_28_gradient; }}                      
+@mixin green-button {background: #66aa00;
+  border: solid #66aa00 0px;
+  &:hover {
+    background: #4b8533;
+  }
+  //{border-color: #b0db64; @include green_28_gradient; @include button-box-shadow(#a4e271);
+  //{@include inverted_green_28_gradient; }}
+@mixin orange-button {background: #f78014;
+  border: solid #f78014 0px;
+  &:hover {
+    background: #df6d05;
+  }
+  //{border-color: #ebc178; @include orange_28_gradient; @include button-box-shadow(#f29c93);
+ ////{@include inverted_orange_28_gradient; }}
+@mixin red-button{background: #66aa00;
+  border: solid #66aa00 0px;
+  &:hover {
+    background: #4b8533;
+  }
+  //{border-color: #db817b; @include red_28_gradient; @include button-box-shadow(#fed897);
+  ////{@include inverted_red_28_gradient; }}
+@mixin dark-grey-button {background: #555;
+  border: solid #555 0px;
+  &:hover {
+    background: #333;
+  }//{border-color: #db817b; @include dark_grey_28_gradient; @include button-box-shadow(#fed897);
+                      //{@include inverted_dark_grey_28_gradient; }}                      
+
+
 .small_green_button{
   font-family: $heading_font;
   @include small-button;
   @include green-button;
-  border: 1px solid #77a809;
+//  border: 1px solid #77a809;
   }
   
 .small_red_button{
   font-family: $heading_font;
   @include small-button;
   @include red-button;
-  border: 1px solid #ce0100;
+//  border: 1px solid #ce0100;
   }
                         
 .small_orange_button{
   font-family: $heading_font;
   @include small-button;
   @include orange-button;
-  border: 1px solid #ce0100;
+//  border: 1px solid #ce0100;
   }                      
                       
 //icons
@@ -184,12 +205,23 @@ figure {
   padding: 10px 10px 10px 10px;
   @include border-radius(0.5rem);
   @include shadow-all(0px 0px 5px #aeaeae);
-  @include dark_grey_46_gradient;
+  
+  background: #555;
+  background-image: -webkit-linear-gradient(top, #555, #333);
+  background-image: -moz-linear-gradient(top, #555, #333);
+  background-image: -ms-linear-gradient(top, #555, #333);
+  background-image: -o-linear-gradient(top, ##555, #333);
+  background-image: linear-gradient(to bottom, #555, #333);
   min-width:270px
   }  
   @media screen and (max-width: $medium_menu) {
     .app_page_header{
-      @include dark_grey_38_gradient;
+  background: #555;
+  background-image: -webkit-linear-gradient(top, #555, #333);
+  background-image: -moz-linear-gradient(top, #555, #333);
+  background-image: -ms-linear-gradient(top, #555, #333);
+  background-image: -o-linear-gradient(top, #555, #333);
+  background-image: linear-gradient(to bottom, #555, #333);
       height: 18px; 
     }  
   }
@@ -334,7 +366,14 @@ figure {
   padding: 2px 0px 0px 7px;
   border: 1px solid #bababa;
   @include border-radius(0.5rem);
-  @include light_grey_24_gradient;
+
+  background: #c2c2c2;
+  background-image: -webkit-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -moz-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -ms-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -o-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: linear-gradient(to bottom, #c2c2c2, #adadad);
+  
   .error{
   color: #ff0000;
   }
@@ -402,7 +441,12 @@ ul.tabs, ul.tabs_2{
       color: #fff;
       text-decoration: none;
       @include border-radius(0.4rem);
-      @include light_grey_32_gradient;
+  background: #c2c2c2;
+  background-image: -webkit-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -moz-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -ms-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -o-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: linear-gradient(to bottom, #c2c2c2, #adadad);
       cursor:pointer;
       padding: 6px 6px 6px 6px;
       &:hover{
