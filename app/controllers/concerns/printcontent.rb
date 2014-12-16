@@ -25,7 +25,7 @@ module Printcontent
     subsections = Cawssubsection.subsections(project)    
     content_list_length = content_list_length + subsections.length unless subsections.blank?      
     
-    pages = (content_list_length*8)/230
+    pages = (content_list_length*9)/230
 
     #content list to cover even number of pages - for double sided printing
     if pages == 0
@@ -64,7 +64,7 @@ module Printcontent
     
     pdf.go_to_page(3)
 
-    pdf.bounding_box([0, 20.mm], :width => 492, :height => 260.mm) do
+    pdf.bounding_box([0, 280.mm], :width => 492, :height => 230.mm) do
       page_title_header(pdf)    
       pdf.table(document_content, :cell_style => contents_style, :column_widths => [455, 35]) unless document_content.blank?
     end
