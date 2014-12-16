@@ -159,12 +159,12 @@ end
     pdf.move_down(8.mm) 
     pdf.spec_box subsection.full_code_and_title, section_cover_style.merge(:at =>[0.mm, pdf.y])
     pdf.move_down(pdf.box_height)
-    if category == "revision"
-      pdf.spec_box "Revisions to Section", section_cover_style.merge(:at =>[0.mm, pdf.y])
-    else
-      pdf.spec_box "Specification", section_cover_style.merge(:at =>[0.mm, pdf.y])    
-    end   
-    pdf.move_down(pdf.box_height)   
+#    if category == "revision"
+#      pdf.spec_box "Revisions to Section", section_cover_style.merge(:at =>[0.mm, pdf.y])
+#    else
+#      pdf.spec_box "Specification", section_cover_style.merge(:at =>[0.mm, pdf.y])    
+#    end   
+#    pdf.move_down(pdf.box_height)   
   end  
 
   #caws_revision_subtitle
