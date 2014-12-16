@@ -56,64 +56,64 @@ def print_caws_document(project, revision, pdf)
         #cover page
         revision_cover(pdf)
         pdf.start_new_page   
-     
+
         #state if product status has changed        
         project_status_change(@previous_status, @current_status, pdf) if @status_change
-       
+
         changed_sections.each do |subsection|
-          combined_revisions_text(project, subsection, revision, pdf) 
+          combined_revisions_text(project, subsection, revision, pdf)
         end
-    
+
         pdf.start_new_page
-      end      
-    else      
-      if @status_change            
-        
+      end
+    else
+      if @status_change
+
         ##page nummber record      
-        document_content << ["Document Revisions", (pdf.page_number - document_page_start + 1)]  
-  
+        document_content << ["Document Revisions", (pdf.page_number - document_page_start + 1)]
+
         #cover page
         revision_cover(pdf)
         pdf.start_new_page
-        
+
         #state if product status has changed
-        project_status_change(@previous_status, @current_status, pdf)            
-      
+        project_status_change(@previous_status, @current_status, pdf)
+
         pdf.start_new_page
     end    
   end
-  
+
 ## SUBSECTIONS
   subsections = Cawssubsection.all_subsections(project)
   unless subsections.blank?
     subsections.each do |subsection|     
   ##page nummber record
       document_content << [subsection.full_code_and_title, (pdf.page_number - document_page_start + 1)]
-  
+
         #cover for combined prelim section
         if settings.section_cover == "section cover"
-          section_cover(subsection, pdf)   
+          section_cover(subsection, pdf)
           pdf.start_new_page
-        end      
-              
+        end
+
         if settings.structure == "revision by section"
           #revisions for project
-          subsection_revs = Alteration.changed_caws_subsections(project, revision, subsection)            
+          subsection_revs = Alteration.changed_caws_subsections(project, revision, subsection)
           if subsection_revs
-              #set title based on whether cover is provided to section 
+              #set title based on whether cover is provided to section
               caws_title_type(settings, subsection, "revision", pdf)
               revisions_text(project, subsection, revision, pdf)
-              
-              pdf.start_new_page        
+
+              pdf.start_new_page
           end  
         end
-        
-        #set title based on whether cover is provided to section      
-        caws_title_type(settings, subsection, "specification", pdf) 
+
+        #set title based on whether cover is provided to section   
+        caws_title_type(settings, subsection, "specification", pdf)
         #specline info
-        #caws_title(subsection, "specline", pdf)    
+        #caws_title(subsection, "specline", pdf)
         specification(project, subsection, revision, pdf)
-        
+
         pdf.start_new_page
     end    
   end
