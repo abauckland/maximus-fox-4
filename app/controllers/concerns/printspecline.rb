@@ -14,7 +14,6 @@ def specification(project, subsection, revision, pdf)
 
       clausetype_speclines.each_with_index do |line, i|
 
-
         #save y position to refernce after dry run
         y_position = pdf.y
       

@@ -4,7 +4,7 @@ module Printcontent
     content_list_length = 0
     
     project_revisions = Alteration.changed_caws_all_sections(project, revision)
-    if !project_revisions.blank?    
+    unless project_revisions.blank?    
       if settings.structure == "group revisions"
         content_list_length = content_list_length + 1
       end    
@@ -13,7 +13,7 @@ module Printcontent
 #    if settings.prelim == "single section" 
 #      prelim_subsections = Cawssubsection.prelim_subsections(project)
 #      if !prelim_subsections.blank?
-        content_list_length = content_list_length + 1
+    content_list_length = content_list_length + 1
 #      end  
 #    else
 #      prelim_subsections = Cawssubsection.prelim_subsections(project)
@@ -22,10 +22,8 @@ module Printcontent
 #      end             
 #    end
     
-    subsections = Cawssubsection.subsections(project)
-    if !subsections.blank?
-      content_list_length = content_list_length + subsections.length      
-    end
+    subsections = Cawssubsection.subsections(project)    
+    content_list_length = content_list_length + subsections.length unless subsections.blank?      
     
     pages = (content_list_length*8)/230
 
@@ -66,10 +64,8 @@ module Printcontent
     
     pdf.go_to_page(3)
 
-    page_title_header(pdf)
-    if !document_content.blank? #required where document has no contents
-      pdf.table(document_content, :cell_style => contents_style, :column_widths => [455, 35])
-    end
+    page_title_header(pdf)    
+    pdf.table(document_content, :cell_style => contents_style, :column_widths => [455, 35]) unless document_content.blank?
   end
 
   def page_title_header(pdf)

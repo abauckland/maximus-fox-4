@@ -66,7 +66,7 @@ class PrintsController < ApplicationController
             
    document = Prawn::Document.new(
     :page_size => "A4",
-    :margin => [20.mm, 14.mm, 10.mm, 20.mm],
+    :margin => [20.mm, 14.mm, 5.mm, 20.mm],
     :info => {:title => @project.title}
     ) do |pdf|    
         if @project.CAWS?
@@ -75,21 +75,14 @@ class PrintsController < ApplicationController
             print_uni_document(@project, @revision, pdf)
         end            
     end        
-
-    #if document is to be issued, not issued with 'not for issue' watermark, update revision reference
-
-##THIS IS NOT WORKING - PARAMS NOT CORRECT
-#    if !params[:issue].present?
+    
     #update revision status of project if document is not if draft status
-#      update_revision(@project, @revision)
-#    end
+    update_revision(@project, @revision) unless params[:issue].present?
     
     if @revision.rev
       case @revision.rev
-      when '' 
-        filename = "#{@project.code}_rev_na.pdf" 
-      when '-'
-        filename = "#{@project.code}_rev_-.pdf"
+      when '' ; filename = "#{@project.code}_rev_na.pdf" 
+      when '-'; filename = "#{@project.code}_rev_-.pdf"
       else 
         filename = "#{@project.code}_rev_#{@revision.rev.upcase}.pdf"      
       end
@@ -98,18 +91,19 @@ class PrintsController < ApplicationController
     end
 
 ##THIS IS NOT WORKING - PARAMS NOT CORRECT
-    if !params[:issue].present?
-      if !@project.Draft?      
+    unless params[:issue].present?
+      unless @project.Draft?      
           
-          tempfile = document.render_file(filename)
+          document.render_file(filename)
           @print = Print.create(:project_id => @project.id,
                                 :revision_id => @revision.id,
                                 :user_id => current_user.id)
-                                
-          @print.document = tempfile  
-          @print.save                   
+          scr = File.join(Rails.root, filename)
+          scr_file = File.new(scr)                      
+          @print.issued = scr_file  
+          @print.save
       
-          #send_data pdf_file, filename: filename, :type => "application/pdf"
+          send_data scr_file, filename: filename, :type => "application/pdf"          
       else
           send_data document.render, filename: filename, :type => "application/pdf"
       end
@@ -118,9 +112,6 @@ class PrintsController < ApplicationController
     end
 ##clean tem directory in crontab
   end
-
-
-
 
 
   private

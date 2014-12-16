@@ -48,7 +48,7 @@ def print_caws_document(project, revision, pdf)
   if settings.structure == "group revisions"
   
     changed_sections = Alteration.changed_caws_all_sections(project, revision)
-    if !changed_sections.blank?
+    unless changed_sections.blank?
   
         ##page nummber record
         document_content << ["Document Revisions", (pdf.page_number - document_page_start + 1)]
@@ -57,10 +57,8 @@ def print_caws_document(project, revision, pdf)
         revision_cover(pdf)
         pdf.start_new_page   
      
-        #state if product status has changed
-        if @status_change
-          project_status_change(@previous_status, @current_status, pdf)
-        end
+        #state if product status has changed        
+        project_status_change(@previous_status, @current_status, pdf) if @status_change
        
         changed_sections.each do |subsection|
           combined_revisions_text(project, subsection, revision, pdf) 
@@ -87,7 +85,7 @@ def print_caws_document(project, revision, pdf)
   
 ## SUBSECTIONS
   subsections = Cawssubsection.subsections(project)
-  if !subsections.blank?
+  unless subsections.blank?
     subsections.each do |subsection|     
   ##page nummber record
       document_content << [subsection.full_code_and_title, (pdf.page_number - document_page_start + 1)]
@@ -174,13 +172,9 @@ end
     previous_states = Revision.where(:project_id => project.id).pluck(:project_status)
     @previous_status = previous_states[previous_states.length - 2]
     @current_status = current_revision.project_status
-
-    if @current_status != @previous_status
-        @status_changed = true
-    end
     
+    @status_changed = true if @current_status != @previous_status    
   end
-
 
 #end of module
 end
