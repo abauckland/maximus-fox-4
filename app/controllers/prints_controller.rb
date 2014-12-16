@@ -66,7 +66,7 @@ class PrintsController < ApplicationController
             
    document = Prawn::Document.new(
     :page_size => "A4",
-    :margin => [20.mm, 14.mm, 20.mm, 20.mm],
+    :margin => [20.mm, 14.mm, 5.mm, 20.mm],
     :info => {:title => @project.title}
     ) do |pdf|    
         if @project.CAWS?
