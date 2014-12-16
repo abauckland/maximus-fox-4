@@ -25,21 +25,21 @@ def header_contents(project, settings, pdf)
 #formating for lines  
   header_format = header_style.merge(:align => :left)
 
-  pdf.y = 282.mm
+  pdf.y = 285.mm
 
   if settings.header_client == "show" 
     pdf.spec_box "#{project.client_name}", header_format.merge(:at =>[0.mm, pdf.y])
-    pdf.move_down(pdf.box_height + 0.mm)
+    pdf.move_down(pdf.box_height + 1.mm)
   end 
 
   if settings.header_project == "show" 
     pdf.spec_box "#{project.title}", header_format.merge(:at =>[0.mm, pdf.y])
-    pdf.move_down(pdf.box_height + 0.mm)
+    pdf.move_down(pdf.box_height + 1.mm)
   end    
     
   if settings.header_document == "show" 
     pdf.spec_box "Architectural Specification", header_format.merge(:at =>[0.mm, pdf.y])
-    pdf.move_down(pdf.box_height + 0.mm)
+    pdf.move_down(pdf.box_height + 1.mm)
   end    
 
 
