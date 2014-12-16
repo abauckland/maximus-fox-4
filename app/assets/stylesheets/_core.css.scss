@@ -83,34 +83,28 @@ $standard_font: Arial,Helvetica,sans-serif;
   }        
 }
 
-@mixin green-button {background: #66aa00;
+@mixin green-button {
+  background: #66aa00;
   border: solid #66aa00 0px;
-  &:hover {
-    background: #4b8533;
+  &:hover {background: #4b8533;}
   }
-  //{border-color: #b0db64; @include green_28_gradient; @include button-box-shadow(#a4e271);
-  //{@include inverted_green_28_gradient; }}
-@mixin orange-button {background: #f78014;
+@mixin orange-button {
+  background: #f78014;
   border: solid #f78014 0px;
-  &:hover {
-    background: #df6d05;
+  &:hover {background: #df6d05;}
   }
-  //{border-color: #ebc178; @include orange_28_gradient; @include button-box-shadow(#f29c93);
- ////{@include inverted_orange_28_gradient; }}
-@mixin red-button{background: #66aa00;
-  border: solid #66aa00 0px;
-  &:hover {
-    background: #4b8533;
-  }
-  //{border-color: #db817b; @include red_28_gradient; @include button-box-shadow(#fed897);
-  ////{@include inverted_red_28_gradient; }}
-@mixin dark-grey-button {background: #555;
-  border: solid #555 0px;
-  &:hover {
-    background: #333;
-  }//{border-color: #db817b; @include dark_grey_28_gradient; @include button-box-shadow(#fed897);
-                      //{@include inverted_dark_grey_28_gradient; }}                      
 
+@mixin red-button{
+  background: #66aa00;
+  border: solid #66aa00 0px;
+  &:hover {background: #4b8533;}
+  }
+
+@mixin dark-grey-button {
+  background: #555;
+  border: solid #555 0px;
+  &:hover {background: #333;}
+  }
 
 .small_green_button{
   font-family: $heading_font;
