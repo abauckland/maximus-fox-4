@@ -64,8 +64,11 @@ module Printcontent
     
     pdf.go_to_page(3)
 
-    page_title_header(pdf)    
-    pdf.table(document_content, :cell_style => contents_style, :column_widths => [455, 35]) unless document_content.blank?
+    pdf.bounding_box([0, 20.mm], :width => 492, :height => 260) do
+      page_title_header(pdf)    
+      pdf.table(document_content, :cell_style => contents_style, :column_widths => [455, 35]) unless document_content.blank?
+    end
+
   end
 
   def page_title_header(pdf)
