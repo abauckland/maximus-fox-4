@@ -91,23 +91,23 @@ class PrintsController < ApplicationController
     end
 
 ##THIS IS NOT WORKING - PARAMS NOT CORRECT
-    unless params[:issue].present?
-      unless @project.Draft?      
+   # unless params[:issue].present?
+  #    unless @project.Draft?      
           
-          document.render_file(filename)
-          @print = Print.create(:project_id => @project.id,
-                                :revision_id => @revision.id,
-                                :user_id => current_user.id)
-          scr = File.join(Rails.root, filename)
-          scr_file = File.new(scr)                      
-          @print.issued = scr_file  
-          @print.save
+  #        document.render_file(filename)
+   #       @print = Print.create(:project_id => @project.id,
+    #                            :revision_id => @revision.id,
+    #                            :user_id => current_user.id)
+    #      scr = File.join(Rails.root, filename)
+    #      scr_file = File.new(scr)                      
+    #      @print.issued = scr_file  
+    #      @print.save
       
-          send_data scr_file, filename: filename, :type => "application/pdf"          
-      else
-          send_data document.render, filename: filename, :type => "application/pdf"
-      end
-    else
+   #       send_data scr_file, filename: filename, :type => "application/pdf"          
+    #  else
+    #      send_data document.render, filename: filename, :type => "application/pdf"
+    #  end
+  #  else
       send_data document.render, filename: filename, :type => "application/pdf"  
     end
 ##clean tem directory in crontab
