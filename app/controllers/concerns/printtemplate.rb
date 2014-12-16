@@ -84,7 +84,7 @@ def print_caws_document(project, revision, pdf)
   end
   
 ## SUBSECTIONS
-  subsections = Cawssubsection.subsections(project)
+  subsections = Cawssubsection.all_subsections(project)
   unless subsections.blank?
     subsections.each do |subsection|     
   ##page nummber record
