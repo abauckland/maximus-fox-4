@@ -47,6 +47,7 @@ def print_caws_document(project, revision, pdf)
 # print revisions - if reported at front of document  
   if settings.structure == "group revisions"
   
+#changed_subections = Cawssubsection.all_subsection_revisions(project, revision)
     changed_sections = Alteration.changed_caws_all_sections(project, revision)
     if !changed_sections.blank?
   
