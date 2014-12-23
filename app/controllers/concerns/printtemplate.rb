@@ -48,15 +48,16 @@ def print_caws_document(project, revision, pdf)
   if settings.structure == "group revisions"
   
     changed_sections = Alteration.changed_caws_all_sections(project, revision)
-    unless changed_sections.blank?
+    if !changed_sections.blank?
   
         ##page nummber record
         document_content << ["Document Revisions", (pdf.page_number - document_page_start + 1)]
     
         #cover page
-        revision_cover(pdf)
-        pdf.start_new_page   
-
+        if settings.section_cover == "section cover"
+          revision_cover(pdf)       
+          pdf.start_new_page   
+        end
         #state if product status has changed        
         project_status_change(@previous_status, @current_status, pdf) if @status_change
 
@@ -73,8 +74,10 @@ def print_caws_document(project, revision, pdf)
         document_content << ["Document Revisions", (pdf.page_number - document_page_start + 1)]
 
         #cover page
-        revision_cover(pdf)
-        pdf.start_new_page
+        if settings.section_cover == "section cover"
+          revision_cover(pdf)       
+          pdf.start_new_page   
+        end
 
         #state if product status has changed
         project_status_change(@previous_status, @current_status, pdf)
