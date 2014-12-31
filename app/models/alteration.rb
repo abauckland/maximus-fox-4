@@ -35,15 +35,19 @@ attr_accessor :clause_line
                                     ).group(:id
                                     ) }
   
- # scope :changed_caws_subsections, ->(project, revision, subsection) { joins(:clause => [:clauseref => :subsection]
-  #                                  ).where(:clause_add_delete => 3, :project_id => project.id, 'subsections.cawssubsection_id' => subsection.id, :revision_id => revision.id
-  #                                  ).first }
+  scope :changed_caws_subsections, ->(project, revision, subsection) { joins(:clause => [:clauseref => :subsection]
+                                    ).where(:project_id => project.id, 'subsections.cawssubsection_id' => subsection.id, :revision_id => revision.id
+                                    ).group(:id
+                                    ) }
+#  def self.changed_caws_subsections_show(project, revision, subsection) 
+#    joins(:clause => [:clauseref => :subsection]
+#   ).where(:clause_add_delete => 3, :project_id => project.id, 'subsections.cawssubsection_id' => subsection.id, :revision_id => revision.id
+#   ).first 
+#  end
 
-  def self.changed_caws_subsections(project, revision, subsection)
-    joins(:clause => [:clauseref => :subsection]
-   ).where(:clause_add_delete => 3, :project_id => project.id, 'subsections.cawssubsection_id' => subsection.id, :revision_id => revision.id
-   ).first
-  end
-
+  scope :changed_caws_subsections_show, ->(project, revision, subsection) { joins(:clause => [:clauseref => :subsection]
+                                    ).where(:project_id => project.id, 'subsections.cawssubsection_id' => subsection.id, :revision_id => revision.id
+                                    ).first
+                                    }
   
 end

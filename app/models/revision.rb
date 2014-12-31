@@ -6,4 +6,5 @@ class Revision < ActiveRecord::Base
 
   enum status: [:Draft, :Preliminary, :Tender, :Contract, :As_Built]
 
+
 end

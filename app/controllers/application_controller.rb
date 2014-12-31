@@ -88,7 +88,7 @@ class ApplicationController < ActionController::Base
     #check revision record exists - so next line does not throw error
     if revision
       #do not record change if project has not been prevsioulsy issued (not in draft) 
-      if revision.rev.to_s >= 'a'
+      if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
         #check if any changes already made for selected specline in current revision
         #check by specline_id and rev_id only as delete action does not create/change a line whereby it may match an existing line or previous change
         existing_record = Alteration.where(:specline_id => specline.id, :revision_id => revision.id).first
@@ -96,21 +96,19 @@ class ApplicationController < ActionController::Base
           #define if change action applied to line, clause or section
           #information used when reporting changes and upon reinstatement
           set_event_type(event_type)
-
-          #set update hash of specline data for creating new change records
-          specline_hash(specline, revision)
-           
+          #set update hash of specline data for creating new change records           
           #if no previous changes for specline create delete record for l ine                     
-          new_delete_rec = Alteration.create(@specline_hash.merge(:event => 'deleted',
-                                                                  :specline_id => specline.id,
-                                                                  :clause_add_delete => @clause_add_delete)) 
+#tested - correct 1
+          create_alteration_record(specline, specline.id, 'deleted', @event_group, revision)
         else
           #where previous 'new' and 'change' events have been reorded
           #'delete' events not checked as none will exist for selected line (you cannot select a line that has already been deleted)
           #if a change has been previously made to selected specline then...  
           #if previous change event was creation of new specline then destory change record
+#tested - correct 1
           existing_record.destroy if existing_record.event == 'new'          
           #if previous change was for change to specline then amend action to 'delete' from 'change'
+#tested - correct 1
           existing_record.update(:event => 'deleted', :user_id => current_user.id) if existing_record.event == 'changed'
         end
       end
@@ -119,44 +117,37 @@ class ApplicationController < ActionController::Base
 
 
   def record_new(specline, event_type)
-    #get current revision for project     
+    #get current revision for project
     revision = Revision.where(:project_id => specline.project_id).where.not(:rev => nil).order('created_at').last
     #check revision record exists - so next line does not throw error
     if revision
-      #do not record change if project has not been prevsioulsy issued (not in draft) 
-      if revision.rev.to_s >= 'a'                       
-        #set update hash of specline data for creating new change records
-        specline_hash(specline, revision)
+      #do not record change if project has not been prevsioulsy issued (not in draft)
+      if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
         #define if change action applied to line, clause or section
         #information used when reporting changes and upon reinstatement     
         set_event_type(event_type)
         #check if any changes already made for selected specline in current revision
         #check by rev_id, txts and linetype as 'new' line may match an existing line or previous change record
         #private method in application controller
-        text_match_previous_alterations(specline, revision)
-        if @match_previous.blank?     
-            #if no previous changes for specline create new record for line 
-            new_new_rec = Alteration.create(@specline_hash.merge(:event => 'new',
-                                                                 :specline_id => specline.id,
-                                                                 :clause_add_delete => @clause_add_delete)) 
+        match_previous(specline, revision)
+        if @previous.blank?
+#tested - correct 1
+            #if no previous changes for specline create new record for line
+            create_alteration_record(specline, specline.id, 'new', @event_group, revision)
         else
+#diffcult to test - new line is copy of existing, for situation to occur - must have been duplicat in original template?????
             #update specline_id of all precious changes for existing change record specline with specline of new line
-            update_specline_id_prior_changes(@match_previous.specline_id, specline.id)  
-
-            #if previous action was 'delete'do not create 'new' change record            
-            #delete change record, as this line has no longer been deleted, but re-created      
+            update_specline_id_prior_changes(@previous.specline_id, specline.id)
+            #if previous action was 'delete'do not create 'new' change record
+            #delete change record, as this line has no longer been deleted, but re-created
             
-            if @match_previous.event == 'changed'
-              #if previous action was 'change'
-              #create 'new' change record for current specline with id of old change  
-              new_new_rec = Alteration.create(@specline_hash.merge(:event => 'new',
-                                                                   :specline_id => @match_previous.specline_id,
-                                                                   :clause_add_delete => @clause_add_delete))
-            end
-            @match_previous.destroy         
-        end   
+            #if previous action was 'change'
+            #create 'new' change record for current specline with id of old change
+            create_alteration_record(specline, @previous.specline_id, 'new', @event_group, revision) if @previous.event == 'changed'
+            @previous.destroy
+        end
         #'delete' event not relevant because a line that has been previously deleted cannot be subsequently altered or re-created
-      end        
+      end
     end
   end
 
@@ -165,94 +156,187 @@ class ApplicationController < ActionController::Base
 
     #changes can only be applied to line
     #information used when reporting alterations and upon reinstatement 
-    clause_add_delete = 1
+    @event_group = 1
     
     #get current revision for project     
     revision = Revision.where(:project_id => old_specline.project_id).where.not(:rev => nil).order('created_at').last
     #check revision record exists - so next line does not throw error
     if revision
       #do not record alteration if project has not been prevsiously issued (not in draft) 
-      if revision.rev.to_s >= 'a'                       
+      if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
         #check if any alterations already made to selected specline in current revision
-        #check by rev_id, txts and linetype as 'new' line may match an existing line or previous alteration record
+        #check by rev_id, txts and linetype: NEW content may match an existing line or previous alteration record
         #private method in application controller
-        new_match_previous_alterations(new_specline, revision)
-        if @match_new_line_content
-        #if NEW content DOES equal the old content of any other altered line (that has been previously 'deleted' or 'changed'). 
-          #if new content matches the old content of a 'new' alteration record two copies of the same content will exist
-          #...the existing 'new' alteration record doe not therefore need to be changed.
 
-        #set update hash of specline data for creating new alteration records
-#old content
-          specline_hash(old_specline, revision)      
-          #if previous action was 'delete'
-          if @match_new_line_content.event == 'deleted'
+#if line has not been changed before and...
+
+    #if new_specline content equals content of existing 'delete' record
+        #update ids of existing 'delete record' to match new_specline        
+        #add 'delete' record for old_specline using existing 'delete record' id and info from old_specline
+        #delete existing 'delete record'
+
+    #if new_specline content equals content of existing 'changed' record - not for same specline        
+        #delete existing 'change record'
+        #create 'changed' alteration record using existing 'change record info with id of old_specline
+
+    #if new_specline content equals content of existing 'new' record - make change based on same specline only (ignor existing new record)
+        #create 'changed' alteration record using old_specline info
+
+    #no existing record matches
+        #create 'changed' alteration record using old_specline info
+
+
+#if line has been changed before and action was 'new'
+
+    #if new_specline content equals content of existing 'delete' record
+        #delete current new for old_specline
+        #delete existing 'delete' record
+    
+    #if new_specline content equals content of existing 'changed' record - not for same specline
+        #delete existing 'change record'
+        #update info in existing 'new' record with using existing 'change' record info for other line    
+
+    #if new_specline content equals content of existing 'new' record - make change based on same specline only (ignor existing new record)
+        #update info in existing 'new' record with new_specline
+    
+    #no existing record matches
+        #update info in existing 'new' record with new_specline
+
+
+#if line has been changed before and action was 'changed' then....
+
+    #if new_specline content equals content of existing 'delete' record
+        #update ids of existing 'delete record' to match new_specline        
+        #add 'delete' record for old_specline using existing 'delete record' id and info from old_specline
+        #delete existing 'delete record'
+
+    #if new_specline content equals content of existing 'changed' record - not for same specline
+        #delete existing 'change record'
+        #create 'changed' alteration record using existing 'change' record info with id of old_specline
+
+    #if new_specline content equals content of existing 'new' record - make change based on same specline only (ignor existing new record)
+        #do nothing
+
+    #no existing record matches
+        #do nothing
+
+#if line has not been changed before and...
+        alterations_for_specline = Alteration.where(:specline_id => new_specline.id, :revision_id => revision.id).first
+        #deleted records not applicable as these cannot be changed when they no longer exist
+        if alterations_for_specline.blank?
+
+            match_previous(new_specline, revision)
+            if !@previous.blank?
+
+              #if new_specline content equals content of existing 'delete' record
+              if @previous.event == 'deleted'
+#tested - correct 1
+                #update ids of existing 'delete record' to match new_specline
+                update_specline_id_prior_changes(@previous.specline_id, new_specline.id)
+                #add 'delete' record for old_specline using existing 'delete record' id and info from old_specline
+                #(content, id, action, event_group, revision)
+                create_alteration_record(old_specline, @previous.specline_id, 'deleted', @event_group, revision)
+                #delete existing 'delete record'
+                @previous.destroy
+
+              #if new_specline content equals content of existing 'changed' record - not for same specline
+              elsif @previous.event == 'changed'
+#tested - correct 1
+                #create 'changed' record using existing 'change record info with id of old_specline
+                create_alteration_record(old_specline, @previous.specline_id, 'changed', @event_group, revision)
+                #delete existing 'change record'
+                @previous.destroy
             
-            #update specline_id of all previous changes for existing change record specline with specline of new line
-#????update matching with current_id
-            update_specline_id_prior_changes(@match_new_line_content.specline_id, specline.id)
-
-#old content
-            specline_hash(old_specline, revision)
-            #create 'deleted' change record for current specline
-            new_delete_rec = Alteration.create(@specline_hash.merge(:event => 'deleted',
-                                                                    :specline_id => @match_new_line_content.specline_id,
-                                                                    :clause_add_delete => @clause_add_delete))                            
-            #delete change record, as this line has no longer been changed, but re-created
-            @match_new_line_contents.destroy            
-          end          
-
-          #if previous action was 'changed' then line will have changed back to original
-          if @match_new_line_content.event == 'changed'              
-            #line_id of existing alteration record to be assigned to previous alterations of current line
-            
-            #update specline_id of all previous changes for existing change record specline with specline of new changed line
-#????update current with matching line_id
-            update_specline_id_prior_changes(@match_new_line_content.specline_id, @specline.id)                        
-#old content
-            new_new_rec = Alteration.create(@specline_hash.merge(:event => 'changed',
-                                                                 :specline_id => specline.id,
-                                                                 :clause_add_delete => @clause_add_delete))                           
-            ##???? - what does this do
-            @match_new_line_content.destroy          
-          end            
-        #if NEW content DOES NOT equal the old content of any other altered line (that has been previously 'deleted' or 'changed').                    
-        #check if any alterations already made for selected specline in current revision
-        else
-          old_match_previous_alterations(old_specline, revision)
-          #if OLD content DOES equals a 'new' alteration record
-          #then new content should be assigned to existing 'new' alteration record and no change record crea
-          if @match_old_line_content 
-            #if previous action was 'new' then update content of change record
-            #set update hash of specline data for creating new alteration records
-            existing_record = Alteration.where(:specline_id => specline.id).first
-            if existing_record     
-#new content
-              specline_hash(new_specline, revision)
-              existing_record.update(@specline_hash)                                            
-            end        
-          else                    
-            existing_record = Alteration.where(:specline_id => specline.id, :revision_id => revision.id).first
-            if existing_record.blank?         
-              #if no previous alterations for specline create 'change' record for line 
-#old content
-              specline_hash(old_specline, revision)
-              new_new_rec = Alteration.create(@specline_hash.merge(:event => 'changed',
-                                                                   :specline_id => specline.id,
-                                                                   :clause_add_delete => @clause_add_delete))     
-            else
-              #if previous alteration to line was 'new'
-              if existing_record.event == 'new'
-              #udpate existing 'new' alteration record to reflect latest line information        
-#new content
-                specline_hash(new_specline, revision)
-                existing_record.update(@specline_hash)                    
+              #if new_specline content equals content of existing 'new' record - make change based on same specline only (ignor existing new record)              
+              else
+#diffcult to test - new line is copy of existing, for situation to occur - must have been duplicat in original template?????
+                #create 'changed' alteration record using old_specline info
+                create_alteration_record(old_specline, new_specline.id, 'changed', @event_group, revision)
               end
-              #if existing 'change' alteration record exists then do nothing because original chang record still valid
-              #'delete' event not relevant because a line that has been previously deleted cannot be subsequently altered or re-created         
-            end   
+#tested - correct 1
+            else
+              #no existing record matches
+              #create 'changed' alteration record using old_specline info
+              create_alteration_record(old_specline, new_specline.id, 'changed', @event_group, revision)
+            end
+
+        else
+          #if line has been changed before and action was 'new'
+          if alterations_for_specline.event == 'new'
+
+            match_previous(new_specline, revision)
+            if !@previous.blank?
+            
+              #if new_specline content equals content of existing 'delete' record
+              if @previous.event == 'deleted'
+#tested - correct 1
+                #update ids of existing 'delete record' to match new_specline
+                update_specline_id_prior_changes(@previous.specline_id, new_specline.id)
+                #delete current new for old_specline
+                alterations_for_specline.destroy
+                #delete existing 'delete record'
+                @previous.destroy
+#tested - correct 1
+              #if new_specline content equals content of existing 'changed' record - not for same specline
+              elsif @previous.event == 'changed'
+                #update info in existing 'new' record with using existing 'change' record info for other line                
+                #get line info for new text of previous change
+                previous_new = Specline.where(:id => @previous.specline_id).first                
+                update_alteration_record(previous_new, alterations_for_specline.id)
+                #delete existing 'change record'
+                @previous.destroy
+  
+              #if new_specline content equals content of existing 'new' record - make change based on same specline only (ignor existing new record)
+              else
+#diffcult to test - new line is copy of existing, for situation to occur - must have been duplicat in original template?????                
+                #update info in existing 'new' record with new_specline
+                update_alteration_record(new_specline, @previous.specline_id)
+              end
+            #or if no existing record matches
+            else
+#tested - correct 1
+               #update info in existing 'new' record with new_specline
+               update_alteration_record(new_specline, alterations_for_specline.id)
+            end
           end
-        end    
+
+          #if line has been changed before and action was 'changed' then....
+          if alterations_for_specline.event == 'changed'
+
+            match_previous(new_specline, revision)
+            if !@previous.blank?
+#tested - correct 1
+              #if new_specline content equals content of existing 'delete' record
+              if @previous.event == 'deleted'
+                #update ids of existing change record so that specline id points to text of previous change specline, update all ids
+                update_specline_id_prior_changes(alterations_for_specline.id, @previous.specline_id)
+                #update ids of existing 'delete record' to match new_specline
+                update_specline_id_prior_changes(@previous.specline_id, new_specline.id)
+
+                alterations_for_specline.update(:event => 'deleted')
+                #delete existing 'delete record'
+                @previous.destroy
+#tested - correct 1 
+              #if new_specline content equals content of existing 'changed' record - not for same specline
+              elsif @previous.event == 'changed'
+                #update ids of existing change record so that specline id points to text of previous change specline, update all ids
+                update_specline_id_prior_changes(alterations_for_specline.id, @previous.specline_id)
+                #delete existing 'change record'
+                @previous.destroy
+
+              else
+#diffcult to test - new line is copy of existing, for situation to occur - must have been duplicat in original template?????
+                #if new_specline content equals content of existing 'new' record - make change based on same specline only (ignor existing new record)
+                  #do nothing
+              end
+            else
+#tested - correct 1
+              #no existing record matches
+                #do nothing
+            end
+
+          end
+        end
       end   
     end  
   end
@@ -377,6 +461,70 @@ end
       redirect_to log_out_path unless current_user.role == "owner"
     end
 
+   
+    def match_previous(specline, revision)
+        @previous = Alteration.where(
+                              :txt3_id => specline.txt3_id,
+                              :txt4_id => specline.txt4_id,
+                              :txt5_id => specline.txt5_id,
+                              :txt6_id => specline.txt6_id,
+                              :identity_id => specline.identity_id,
+                              :perform_id => specline.perform_id,
+                              :revision_id => revision.id,
+                              :project_id => specline.project_id,
+                              :clause_id => specline.clause_id,
+                              :linetype_id => specline.linetype_id
+                              ).first                              
+    end
+  
+    #update specline_id of all previous changes to the same line
+    def update_specline_id_prior_changes(previous_id, new_id)        
+      prior_changes = Alteration.where(:specline_id => previous_id)
+      prior_changes.each do |change|
+        change.update(:specline_id => new_id)
+      end  
+    end
+
+    def create_alteration_record(content, line_id, event, event_group, revision)       
+       new_alteration_record = Alteration.create({:specline_id => line_id,
+                                                  :project_id => content.project_id,
+                                                  :clause_id => content.clause_id,                        
+                                                  :txt3_id => content.txt3_id,               
+                                                  :txt4_id => content.txt4_id,
+                                                  :txt5_id => content.txt5_id,
+                                                  :txt6_id => content.txt6_id,
+                                                  :identity_id => content.identity_id,
+                                                  :perform_id => content.perform_id,
+                                                  :linetype_id => content.linetype_id,
+                                                  :revision_id => revision.id,
+                                                  :user_id => current_user.id,
+                                                  :clause_add_delete => event_group,
+                                                  :event => event,
+                                                  :print_change => 1})  
+     end
+
+     def update_alteration_record(content, line_id)
+       
+       alteration = Alteration.where(:id => line_id).first
+       
+       updated_alteration_record = alteration.update({:txt3_id => content.txt3_id,               
+                                                      :txt4_id => content.txt4_id,
+                                                      :txt5_id => content.txt5_id,
+                                                      :txt6_id => content.txt6_id,
+                                                      :identity_id => content.identity_id,
+                                                      :perform_id => content.perform_id,
+                                                      :user_id => current_user.id,})  
+     end
+
+      def set_event_type(event_type) 
+          if event_type.blank?
+             @event_group = 1
+          else
+             @event_group = event_type
+          end
+          return @event_group
+      end
+
 
 #user_role(["admin", "owner", "employee"])
 #project_role(@project, ["manage", "publish", "write", "read"])
@@ -386,9 +534,6 @@ end
 #      return true
 #    end      
 #  end
-
-
- 
 
 
 
@@ -412,79 +557,9 @@ end
 #  end
 
 
-
-
-    def new_match_previous_alterations(specline, revision)      
-      specline_find_hash(specline, revision)      
-      @match_new_line_content = Alteration.joins(:txt3, :txt4, :txt5, :txt6, :identity, :perform).where(@specline_match_hash).where.not(:event => 'new').first
-    end
-
-    def old_match_previous_alterations(specline, revision)      
-      specline_find_hash(specline, revision)      
-      @match_old_line_content = Alteration.joins(:txt3, :txt4, :txt5, :txt6, :identity, :perform).where(@specline_match_hash).where.not(:event => ['changed', 'deleted']).first
-    end
-   
-    def specline_find_hash(specline, revision)
-          @specline_match_hash = {}      
-          linetype = Linetype.where(:id => specline.linetype_id).first
-          
-          if linetype[:txt3] == true     
-            @specline_match_hash['txt3s.text'] = specline.txt3.text
-          end
-          if linetype[:txt4] == true     
-            @specline_match_hash['txt4s.text'] = specline.txt4.text
-          end
-          if linetype[:txt5] == true     
-            @specline_match_hash['txt5s.text'] = specline.txt5.text
-          end
-          if linetype[:txt6] == true     
-            @specline_match_hash['txt6s.text'] = specline.txt6.text
-          end
-          if linetype[:identity] == true     
-            @specline_match_hash['identities.id'] = specline.identity.id
-          end
-          if linetype[:perform] == true     
-            @specline_match_hash['performs.id'] = specline.perform.id
-          end            
-          @specline_match_hash[:revision_id] = revision.id
-          @specline_match_hash[:project_id] = specline.project_id
-          @specline_match_hash[:clause_id] = specline.clause_id
-          @specline_match_hash[:linetype_id] = specline.linetype_id        
-    end
-
-
-  
-      #update specline_id of all previous changes to the same line
-      def update_specline_id_prior_changes(previous_id, new_id)
-        
-        prior_changes = Alteration.where(:specline_id => previous_id)
-        prior_changes.each do |change|
-          change.update(:specline_id => new_id)
-        end  
-      end
-
-     def specline_hash(specline, revision)  
-       @specline_hash = {:project_id => specline.project_id,
-                        :clause_id => specline.clause_id,                        
-                        :txt3_id => specline.txt3_id,               
-                        :txt4_id => specline.txt4_id,
-                        :txt5_id => specline.txt5_id,
-                        :txt6_id => specline.txt6_id,
-                        :identity_id => specline.identity_id,
-                        :perform_id => specline.perform_id,
-                        :linetype_id => specline.linetype_id,
-                        :revision_id => revision.id,
-                        :user_id => current_user.id,
-                        :print_change => 1 }       
-      end 
-
-      def set_event_type(event_type) 
-          if event_type.blank?
-             @clause_add_delete = 1
-          else
-             @clause_add_delete = event_type
-          end
-          return @clause_add_delete
-      end
+#    def old_match_previous_alterations(specline, revision)      
+#      specline_find_hash(specline, revision)      
+#      @match_old_line_content = Alteration.joins(:txt3, :txt4, :txt5, :txt6, :identity, :perform).where(@specline_match_hash).where.not(:event => ['changed', 'deleted']).first
+#    end
   
 end

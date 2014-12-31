@@ -1,7 +1,7 @@
 class SpecrevisionsController < ApplicationController
   before_filter :authenticate
-  before_action :set_project, only: [:show, :show_prelim_tab_content, :show_rev_tab_content]
-  before_action :set_revision, only: [:show, :show_prelim_tab_content, :show_rev_tab_content]
+  before_action :set_project, only: [:show, :show_rev_tab_content]
+  before_action :set_revision, only: [:show, :show_rev_tab_content]
 
   layout "projects"
 
@@ -44,9 +44,9 @@ class SpecrevisionsController < ApplicationController
 ##        prelim_cawssubsection_change_data(@project, @prelim_subsections, @revision)         
 ##      non prelim subsections
 ##      else
-        @subsection = @subsections.first.id     
+        @subsection = @subsections.first     
         #establish if subsection is new or has been deleted      
-        cawssubsection_change_data(@project, @subsection, @revision)
+     #   cawssubsection_change_data(@project, @subsection, @revision) if @subsection
 ##      end
     else    
 ###uniclass code to go here - same as above       
@@ -78,11 +78,11 @@ class SpecrevisionsController < ApplicationController
 ##  end
 
 
-  def show_rev_tab_content    
+  def show_rev_tab_content
     
     if @project.CAWS?  
-      subsection = Cawssubsection.find(params[:subsection_id])             
-      cawssubsection_change_data(@project, subsection, @revision)
+      @subsection = Cawssubsection.find(params[:subsection_id])             
+    #  cawssubsection_change_data(@project, subsection, @revision)
     else    
 ###uniclass code to go here - same as above       
     end 
