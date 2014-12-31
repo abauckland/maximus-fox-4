@@ -27,10 +27,12 @@ before_save :assign_title
 
   scope :changed_caws_clauses, ->(event, project, revision, subsection) { joins(:alterations, :clauseref => :subsection
     ).where('alterations.event' => event, 'alterations.clause_add_delete' => 2, 'alterations.project_id' => project.id, 'alterations.revision_id' => revision.id, 'subsections.cawssubsection_id' => subsection.id
+    ).order('clauserefs.subsection_id, clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
     ).uniq}
 
   scope :changed_caws_clause_content, ->(event, project, revision, subsection) { joins(:alterations, :clauseref => :subsection
     ).where('alterations.clause_add_delete' => 1, 'alterations.project_id' => project.id, 'alterations.revision_id' => revision.id, 'subsections.cawssubsection_id' => subsection.id
+    ).order('clauserefs.subsection_id, clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
     ).uniq}
 
 
