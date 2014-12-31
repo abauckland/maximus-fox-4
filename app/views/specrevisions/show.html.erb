@@ -30,32 +30,26 @@
 <% else %>
 
     <div class="revision_tabs">
-        <ul class='tabs'>
-          <% if @revision_project_status_changed %>
-            <li class="prelim"><a href='#prelim_rev_view'>Status</a></li>
-          <% end%>
-          
+        <ul class='tabs'>          
           <% @subsections.each do |subsection|%>
-            <% if @project.CAWS? %> 
-                <li id="<%=h subsection.id %>" class="non_prelim"><a href='#<%=h subsection.id %>rev_view'><%=h subsection.cawssection.full_code %></a></li>
-            <% else %>
-                <li id="<%=h subsection.id %>" class="non_prelim"><a href='#<%=h subsection.id %>rev_view'><%=h subsection.unisection.full_code %></a></li>    
-            <% end %>  
+            <li id="<%=h subsection.id %>" class="non_prelim"><a href='#<%=h subsection.id %>rev_view'><%=h subsection.full_code %></a></li>
           <% end %>
         </ul>
-    
-        <div id="<%= @subsection.id%>rev_view" class="tab_content <%= @subsection.id%>">
-            <% if @revision_project_status_changed %>
-                Project Status changed from <%=h @previous_revision_project_status %> to <%=h @project.revision.project_status %>
+
+        <% @subsections.each_with_index do |subsection, i|%>
+            <% if i == 0 %>
+                <div id="<%=h subsection.id%>rev_view" class="tab_content <%=h subsection.id%>">
+                    <% if @revision_project_status_changed %>
+                        Project Status changed from <%=h @previous_revision_project_status %> to <%=h @project.revision.project_status %>
+                    <% else %>
+                        <%= render "tab_revision_content", locals: {project: @project, revision: @revision, subsection: subsection} %>
+                    <%end%>
+                </div>
             <% else %>
-                <%= render "tab_revision_content", locals: {subsection: subsection, added_subsections: @added_subsections, deleted_subsections: @deleted_subsections, deleted_clauses: @deleted_clauses, changed_subsections: @changed_subsections, added_clauses: @added_clauses, changed_clauses: @changed_clauses, revision: @revision, project: @project} %>
-            <%end%>
-        </div>
-      
-        <% @subsections.each do |subsection|%>
-            <div id="<%=h subsection.id%>rev_view" class="tab_content <%=h subsection.id%>">
-                <p>Loading...</p>
-            </div>
+                <div id="<%=h subsection.id%>rev_view" class="tab_content <%= subsection.id %>">
+                    <p>Loading...</p>
+                </div>
+            <% end %> 
         <% end%>
     </div>
 
@@ -63,7 +57,7 @@
 
 <!-- jquery to load tab content -->
 <script>
-    $('ul.tabs').children('li.non_prelim').click(function(){
+    $('ul.tabs').children('li').click(function(){
         var subsection_id = $(this).attr('id');
         jQuery.get('/specrevisions/<%=h @project.id%>/show_rev_tab_content?revision_id=<%=h @revision.id %>&subsection_id=' + subsection_id);
     });

@@ -1,5 +1,5 @@
-$('div#<%= @revision_subsection.id %>rev_view').empty();
-$('div#<%= @revision_subsection.id %>rev_view').html('<%= escape_javascript(render "tab_revision_content", locals: {revision_subsection: @revision_subsection, added_subsections: @added_subsections, deleted_subsections: @deleted_subsections, deleted_clauses: @deleted_clauses, changed_subsections: @changed_subsections, added_clauses: @added_clauses, changed_clauses: @changed_clauses, revision: @revision, project: @project}) %>');
+$('div#<%= @subsection.id %>rev_view').empty();
+$('div#<%= @subsection.id %>rev_view').html('<%= escape_javascript(render :partial => 'tab_revision_content', locals: {project: @project, revision: @revision, subsection: @subsection}) %>');
 
 //show/hide functions for rev lines
 	$('.rev_table').hover(function (){

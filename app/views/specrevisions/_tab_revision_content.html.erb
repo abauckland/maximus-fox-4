@@ -1,39 +1,48 @@
-    <% if @added_subsections %>
-    	<%= new_subsection_text(@revision_subsection) %>
+    <% cawssubsection_change_data_helper(@project, @subsection, @revision) %>
+
+    <% if @added_subsection %>
+    	<%= subsection_text(@subsection, 'new') %>
 	<% end %>
 	    
-    <% if @deleted_subsections %>
-    	<%= deleted_subsection_text(@revision_subsection) %>
+    <% if @deleted_subsection %>
+    	<%= subsection_text(@subsection, 'deleted') %>
 	<% end %>
 	
-    <%= deleted_clauses_text(@revision_subsection) %>
+	
+	<% if @deleted_clauses %>
+        <%= deleted_clauses_text(@subsection) %>
       <% @deleted_clauses.each do |deleted_clause| %>
         <%= altered_clause_text(deleted_clause, @revision, @project) %>
       <% end %>
+    <% end %>
 
-    <%= new_clauses_text(@revision_subsection) %>
+    <% if @added_clauses %>    
+        <%= new_clauses_text(@subsection) %>
       <% @added_clauses.each do |new_clause| %>
         <%= altered_clause_text(new_clause, @revision, @project) %>
       <% end %>
-    
-    <%= changed_clauses_text(@revision_subsection) %> 
-    <% @changed_clauses.each do |changed_clause| %>
+    <% end %>
 
-      <%= changed_clause_titles(changed_clause, 'changed') %>
-
-      <%= clause_line_text_altered(changed_clause, 'new') %>
-        <% @altered_lines.each do |added_line| %>
-          <%= original_line_text(added_line) %>
-        <% end %>
+    <% if @changed_clauses %>     
+        <%= changed_clauses_text(@subsection) %> 
+        <% @changed_clauses.each do |changed_clause| %>
     
-      <%= clause_line_text_altered(changed_clause, 'deleted') %>
-        <% @altered_lines.each do |deleted_line| %>
-          <%= original_line_text(deleted_line) %>
-        <% end %>
+          <%= changed_clause_titles(changed_clause, 'changed') %>
     
-      <%= clause_line_text_altered(changed_clause, 'changed') %>
-        <% @altered_lines.each do |changed_line| %>
-          <%=changed_line_text(changed_line, @revision, @project)%>
-        <% end %>      
-
-    <%end%>
+          <%= clause_line_text_altered(@project, @revision, changed_clause, 'new') %>
+            <% @altered_lines.each do |added_line| %>
+              <%= original_line_text(added_line) %>
+            <% end %>
+        
+          <%= clause_line_text_altered(@project, @revision, changed_clause, 'deleted') %>
+            <% @altered_lines.each do |deleted_line| %>
+              <%= original_line_text(deleted_line) %>
+            <% end %>
+        
+          <%= clause_line_text_altered(@project, @revision, changed_clause, 'changed') %>
+            <% @altered_lines.each do |changed_line| %>
+              <%=changed_line_text(changed_line, @revision, @project)%>
+            <% end %>      
+    
+        <%end%>
+    <% end %>    
