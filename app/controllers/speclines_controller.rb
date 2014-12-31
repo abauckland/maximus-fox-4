@@ -218,7 +218,7 @@ class SpeclinesController < ApplicationController
     #save changes
     @specline.update(:txt3_id => new_txt3.id)     
     #check if new text is similar to old text 
-    if @specline.txt3.text.casecmp(@value) != 0
+    if @specline.txt3.text.casecmp(old_specline.txt3.text) != 0
       #if new text is not similar to old text record change to text   
       record_change(old_specline, @specline)
     end       
@@ -245,7 +245,7 @@ class SpeclinesController < ApplicationController
 
     @specline.update(:txt4_id => new_txt4.id)
     
-    if @specline.txt4.text.casecmp(@value) != 0
+    if @specline.txt4.text.casecmp(old_specline.txt4.text) != 0
       record_change(old_specline, @specline)
     end  
     render :text=> params[:value]     
@@ -271,8 +271,8 @@ class SpeclinesController < ApplicationController
         
     @specline.update(:txt5_id => new_txt5.id)
 
-    if @specline.txt5.text.casecmp(@value) != 0
-      record_change(old_specline, @specline)         
+    if @specline.txt5.text.casecmp(old_specline.txt5.text) != 0
+      record_change(old_specline, @specline)
     end
     render :text=> params[:value]
   end
@@ -284,7 +284,7 @@ class SpeclinesController < ApplicationController
     case @specline.clause.clauseref.clausetype_id
       when 4 ;  permissible_clausetypes = [5]
       when 3 , permissible_clausetypes = [4,5]
-      when 2 , permissible_clausetypes = [3,4,5]  
+      when 2 , permissible_clausetypes = [3,4,5]
     end
     
     #get txt5 value for line
