@@ -45,10 +45,11 @@ def print_caws_document(project, revision, pdf)
 
 ##REVISIONS
 # print revisions - if reported at front of document  
-  if settings.structure == "group revisions"
+  if settings.structure == "revisions by document"
   
 #changed_subections = Cawssubsection.all_subsection_revisions(project, revision)
-    changed_sections = Alteration.changed_caws_all_sections(project, revision)
+    #changed_sections = Alteration.changed_caws_all_sections(project, revision)
+    changed_sections = Cawssubsection.all_subsection_revisions(project, revision)
     if !changed_sections.blank?
   
         ##page nummber record
@@ -57,7 +58,8 @@ def print_caws_document(project, revision, pdf)
         #cover page
         if settings.section_cover == "section cover"
           revision_cover(pdf)       
-          pdf.start_new_page   
+          pdf.start_new_page
+          pdf.y = 268.mm
         end
         #state if product status has changed        
         project_status_change(@previous_status, @current_status, pdf) if @status_change
@@ -77,7 +79,8 @@ def print_caws_document(project, revision, pdf)
         #cover page
         if settings.section_cover == "section cover"
           revision_cover(pdf)       
-          pdf.start_new_page   
+          pdf.start_new_page
+          pdf.y = 268.mm   
         end
 
         #state if product status has changed
@@ -97,7 +100,7 @@ def print_caws_document(project, revision, pdf)
         #cover for combined prelim section
         if settings.section_cover == "section cover"
           section_cover(subsection, pdf)
-          pdf.start_new_page
+          pdf.start_new_page 
         end
 
         if settings.structure == "revision by section"
