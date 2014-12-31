@@ -14,7 +14,7 @@ def set_default_values
     self.prelim ||= "separate sections"
     self.page_number ||= "by document"
     
-    self.section_cover ||= "section cover"
+    self.section_cover ||= "no cover"
         
     self.client_detail ||= "right"   
     self.client_logo ||= "right" 

@@ -2,7 +2,7 @@ module Printsubtitle
 
   #section title where revisions all in one section at front of document
   def revision_cover(pdf)
-    section_cover_style = {:size => 11, :style => :bold}
+    section_cover_style = {:size => 16, :style => :bold}
     
     pdf.move_down(8.mm) 
     pdf.spec_box "Document Revisions", section_cover_style.merge(:at =>[0.mm, pdf.y])
@@ -144,7 +144,7 @@ end
   def caws_title_type(settings, subsection, category, pdf)
     if settings.section_cover == "section cover"
       #if there is a cover for prelims
-      #caws_subtitle(subsection, category, pdf)
+      caws_subtitle(subsection, category, pdf)
     else
       #if there is no cover
       caws_title(subsection, category, pdf)

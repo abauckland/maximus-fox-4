@@ -1,32 +1,46 @@
 module Printrevision
 
 def combined_revisions_text(project, subsection, revision, pdf)
+
+  if project.CAWS?
+    altered_subsection = Alteration.changed_caws_subsections(project, revision, subsection).first
+      if altered_subsection.clause_add_delete == 3
+        if altered_subsection.event == 'new' 
+          subsection_ref_action(subsection, "added", pdf)
+        else #altered_subsection.event == 'deleted'
+          subsection_ref_action(subsection, "deleted", pdf)
+        end  
+      else
+          subsection_ref_action(subsection, "changed", pdf)
+    end
+
     added_clauses = Clause.changed_caws_clauses('new', project, revision, subsection)
     if !added_clauses.blank?
       clauses_title("added", pdf)
-      
+
       added_clauses.each do |clause|
-      rev_clause(clause, "added", pdf)          
+      rev_clause(clause, "added", pdf)
       end
-    end  
+    end
         
     deleted_clauses = Clause.changed_caws_clauses('deleted', project, revision, subsection)
     if !deleted_clauses.blank?
       clauses_title("deleted", pdf)
 
       deleted_clauses.each do |clause|
-        rev_clause(clause, "deleted", pdf)           
+        rev_clause(clause, "deleted", pdf)
       end
-    end 
+    end
                 
     changed_clauses = Clause.changed_caws_clause_content('changed', project, revision, subsection)
     if !changed_clauses.blank?
+
       clauses_title("changed", pdf)
 
       changed_clauses.each do |clause|
-             
-        rev_clause(clause, "changed", pdf) 
-             
+
+        rev_clause(clause, "changed", pdf)
+
         #get deleted lines
         deleted_lines = Alteration.where(:event => 'deleted', :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
         if !deleted_lines.blank?
@@ -55,6 +69,7 @@ def combined_revisions_text(project, subsection, revision, pdf)
         end            
       end
     end
+  end
 end
 
 def revisions_text(project, subsection, revision, pdf)
@@ -63,22 +78,23 @@ def revisions_text(project, subsection, revision, pdf)
 #return list of changes
   if project.CAWS?
 
-      altered_subsection = Alteration.changed_caws_subsections(project, revision, subsection)
+    altered_subsection = Alteration.changed_caws_subsections(project, revision, subsection).first
+   # altered_subsections.each do |altered_subsection|
       
-      if !altered_subsection.blank?
+      if altered_subsection.clause_add_delete == 3
         if altered_subsection.event == 'new'
           subsection_action("added", pdf)
         else #altered_subsection.event == 'deleted'
           subsection_action("deleted", pdf)
         end  
-      else    
+      else
           subsection_action("changed", pdf)
           added_clauses = Clause.changed_caws_clauses('new', project, revision, subsection)
           if added_clauses
             clauses_title("added", pdf)
 
             added_clauses.each do |clause|
-              rev_clause(clause, "added")          
+              rev_clause(clause, "added", pdf)          
             end
           end  
         
@@ -87,7 +103,7 @@ def revisions_text(project, subsection, revision, pdf)
             clauses_title("deleted", pdf)
 
             deleted_clauses.each do |clause|
-              rev_clause(clause, "deleted")           
+              rev_clause(clause, "deleted", pdf)           
             end
           end
                 
@@ -127,8 +143,8 @@ def revisions_text(project, subsection, revision, pdf)
              end
              
             end
-          end
-            
+     #     end
+    end        
       end
   else
 #uniclass code here    
@@ -140,10 +156,17 @@ def subsection_action(action, pdf)
   rev_subsection_style = {:size => 12, :style => :bold_italic}
 
   pdf.move_down(2.mm)  
-  pdf.spec_box "Subsections #{action}", rev_subsection_style.merge(:at => [0.mm, pdf.y])
+  pdf.spec_box "Subsection #{action}", rev_subsection_style.merge(:at => [0.mm, pdf.y])
   pdf.move_down(pdf.box_height + 2.mm)
 end
 
+def subsection_ref_action(subsection, action, pdf)  
+  rev_subsection_style = {:size => 12, :style => :bold_italic}
+
+  pdf.move_down(2.mm)  
+  pdf.spec_box "Subsection #{subsection.full_code_and_title} #{action}", rev_subsection_style.merge(:at => [0.mm, pdf.y])
+  pdf.move_down(pdf.box_height + 2.mm)
+end
 
 
 def clauses_title(action, pdf)
@@ -166,9 +189,6 @@ def clauses_title(action, pdf)
   pdf.spec_box "Clauses #{action}:", rev_clause_style.merge(:at => [10.mm, pdf.y])
   pdf.move_down(pdf.box_height + 2.mm)      
 end
-
-
-
 
 
 def rev_clause(clause, action, pdf)
@@ -278,7 +298,7 @@ def rev_changed_line(clause, line, action, pdf)
       pdf.spec_box 'List of #{action} lines continued on next page...', :size => 9, :style => :italic, :at =>[20.mm, 14.mm]      
       pdf.start_new_page
       pdf.y = 268.mm      
-      pdf.spec_box "Lines #{action} in #{clause.clause_code} continued:", :size => 11, :style => :bold_italic, :at => [10.mm, pdf.y]
+      pdf.spec_box "Lines #{action} in #{clause.caws_code} continued:", :size => 11, :style => :bold_italic, :at => [10.mm, pdf.y]
       
     else
       pdf.y = y_position   

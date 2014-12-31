@@ -12,7 +12,7 @@ class PrintsettingsController < ApplicationController
     @font_styles = ["Times-Roman", "Helvetica"]
     @font_sizes = ["small", "medium", "large"]
   
-    @structures = ["group revisions", "revision by section"]
+    @structures = ["revisions by document", "revision by section"]
     @prelims = ["single section", "separate sections"]
     @page_numbers = ["by section", "by document"]
   

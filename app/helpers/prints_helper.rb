@@ -4,7 +4,8 @@ module PrintsHelper
     if project.project_status == 'Draft'
       "<div class='project_label_select'>Project status is 'Draft'</div>".html_safe    
     else
-      "<div class='project_label_select'>Revision:</div><div class='project_option_select'>#{print_revision_select_input(revisions, revision, project)}</div>".html_safe  
+      "<div class='project_label_select'>Revision: #{revision.rev.capitalize}</div>".html_safe
+#      "<div class='project_label_select'>Revision:</div><div class='project_option_select'>#{print_revision_select_input(revisions, revision, project)}</div>".html_safe  
     end
   end
 
