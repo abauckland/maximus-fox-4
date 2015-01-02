@@ -28,6 +28,9 @@ gem 'jquery-datatables-rails'
 
 gem 'carrierwave'
 
+gem 'devise'
+gem 'devise-encryptable'
+gem 'pundit'
 gem 'bcrypt', :require => 'bcrypt'
 
 gem 'prawn'
@@ -37,6 +40,13 @@ gem "gibbon", "~> 1.0.4"
 
 group :development, :test do
   gem 'factory_girl_rails'
+end
+
+group :development do
+  gem 'capistrano', '~> 3.1'
+  gem 'capistrano-rails', '~> 1.1'
+  gem 'capistrano-rvm'
+  gem 'capistrano-bundler', '~> 1.1.2'
 end
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
