@@ -188,7 +188,7 @@ class KeynotesController < ApplicationController
     end
 
     def set_sections(project)
-      if @project.CAWS?
+      if project.CAWS?
         @sections = Cawssection.project_sections(project)
       else
         ##
@@ -196,7 +196,7 @@ class KeynotesController < ApplicationController
     end
 
     def set_subsections(project)
-      if @project.CAWS?
+      if project.CAWS?
         @subsections = Cawssubsection.project_subsections(project)
       else
         ##
@@ -204,7 +204,7 @@ class KeynotesController < ApplicationController
     end
 
     def set_section_subsections(project, section)
-      if @project.CAWS?
+      if project.CAWS?
         @subsections = Cawssubsection.section_subsections(project, section)
       else
         ##
@@ -212,7 +212,7 @@ class KeynotesController < ApplicationController
     end
 
     def set_clauses(project, subsection)
-      if @project.CAWS?
+      if project.CAWS?
         @clauses = Clause.subsection_clauses(project, subsection)
       else
         ##
