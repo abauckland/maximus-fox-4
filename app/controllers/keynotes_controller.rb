@@ -22,19 +22,11 @@ class KeynotesController < ApplicationController
       end 
 
       if params[:cad_product] == 'bentley'
-<<<<<<< HEAD
-        bentley_keynote_export(@project)
+        bentley_keynote(@project)
       end 
 
       if params[:cad_product] == 'cadimage'
-        cadimage_keynote_export(@project)
-=======
-        bentley_keynote(@project)      
-      end 
-
-      if params[:cad_product] == 'cadimage'
-        cadimage_keynote(@project)      
->>>>>>> 6aeff61f9e7b74b3fe9905a2429e4087a8d52eb6
+        cadimage_csv(@project)      
       end              
   end
 
@@ -76,21 +68,6 @@ class KeynotesController < ApplicationController
 
     project = Project.where(:id => params[:id]).first
 
-<<<<<<< HEAD
-      #for each section
-      sections = Cawssection.project_sections(project)
-      sections.each_with_index do |s, i|
-        #project section
-        data = data + "#{s.ref}\t#{s.text}\n"       
-        #for each subsection
-        subsections = Cawssubsection.section_subsections(project, s)
-        subsections.each_with_index do |subsection, n|
-          #project subsection
-          data = data + "#{sprintf("%02d", subsection.ref).to_s}\t#{subsection.text}\t#{subsection.cawssection.ref}\n"
-          
-          clauses = Clause.subsection_clauses(project, subsection)
-          clauses.each_with_index do |clause, m|
-=======
       set_sections(project)
       @sections.each_with_index do |s, i|
         #project section    
@@ -104,7 +81,6 @@ class KeynotesController < ApplicationController
           
           set_clauses(project, subsection)
           @clauses.each_with_index do |clause, m|
->>>>>>> 6aeff61f9e7b74b3fe9905a2429e4087a8d52eb6
             #project clauses
             data = data + "#{clause.caws_code}\t#{clause.clausetitle.text}\t#{clause.clauseref.subsection.cawssubsection.full_code}\n"
           end 
@@ -146,13 +122,9 @@ class KeynotesController < ApplicationController
 
 #  def bentley_keynote(project)
     
-<<<<<<< HEAD
-    filename = project.code + " specright_keynote"   
-    @bim_bentley_export = CSV.generate do |csv|
-=======
+
 #    filename = project.code + " specright_keynote"   
 #    @bim_bentley_export = CSV.generate do |csv|  
->>>>>>> 6aeff61f9e7b74b3fe9905a2429e4087a8d52eb6
       
       #for each section
 #      sections = Cawssection.project_sections(project)
@@ -161,13 +133,9 @@ class KeynotesController < ApplicationController
 #        csv << [section.ref << ' ' << section.text]
         
         #for each subsection
-<<<<<<< HEAD
-        subsections = Cawssubsection.section_subsections(project, section)
-        subsections.each_with_index do |subsection, n|
-=======
+
 #        subsections = Cawssubsection.section_subsections(project, section) 
 #        subsections.each_with_index do |subsection, n|
->>>>>>> 6aeff61f9e7b74b3fe9905a2429e4087a8d52eb6
           #project subsection
 #          csv << [subsection.full_code << '*' << subsection.text]
           
@@ -185,25 +153,10 @@ class KeynotesController < ApplicationController
 #  end
 
 
-  
-<<<<<<< HEAD
-  def cadimage_keynote_export(project)
-
-    filename = project.code + " specright_keynote"   
-    @cadimage_keynote_export = CSV.generate(:col_sep => "\t") do |csv|
-
-      #headers
-      #set up for columns, unique identifier column to be set to 'Create Unique IDS'
-      csv << ['category', 'ignore', 'Keynote Key', 'Short Description', 'Long Description', 'Specfication Ref.', 'Time Stamp']  
-
-      #for each section
-      subsections = Cawssubsection.all_subsections(project)
-      subsections.each_with_index do |subsection, n|
-=======
-  def cadimage_keynote(project)
+  def cadimage_csv(project)
   
     #set up for columns, unique identifier column to be set to 'Create Unique IDS'    
-    headers = ['category', 'ignore', 'Keynote Key', 'Short Description', 'Long Description', 'Specfication Ref.', 'Time Stamp']
+    headers = ['Unique ID', 'Key', 'Title', 'Description', 'Reference', 'Last Edit Time', 'Category']
 
     @cadimage_keynote = CSV.generate do |csv|
 
@@ -211,25 +164,14 @@ class KeynotesController < ApplicationController
 
       set_subsections(project)
       @subsections.each_with_index do |subsection, n|
->>>>>>> 6aeff61f9e7b74b3fe9905a2429e4087a8d52eb6
         #project subsection
-        csv << [subsection.full_code, '', subsection.full_code, subsection.text]
+        csv << ['', subsection.full_code, subsection.text, '', '', '', '']
 
         #for each clause
-<<<<<<< HEAD
-        clauses = Clause.subsection_clauses(project, subsection)
-        clauses.each_with_index do |clause, m|
-          #project clauses
-          csv << [subsection.full_code, '', clause.clause_code, clause.clausetitle.text]
-        end
-      end
-    end
-    send_data @cadimage_keynote_export, :type => 'text/plain', :disposition => 'attachment; filename=#{filename}.txt'      
-=======
         set_clauses(project, subsection)
         @clauses.each_with_index do |clause, m|
           #project clauses
-          csv << [subsection.full_code, '', clause.caws_code, clause.clausetitle.text]
+          csv << ['', clause.caws_code, clause.clausetitle.text, '', '', '', subsection.full_code]
         end
       end
     end
@@ -237,7 +179,6 @@ class KeynotesController < ApplicationController
     filename = "#{@project.code}_cadimage_keynote.csv"
 
     send_data @cadimage_keynote, filename: filename, :type => 'text/csv'
->>>>>>> 6aeff61f9e7b74b3fe9905a2429e4087a8d52eb6
   end
 
 
