@@ -79,5 +79,13 @@ module ApplicationHelper
     end
   end  
 
+    def row_activate_link(model, display)
+      link_to '', polymorphic_path([:activate, model]), :method => :get, :remote => true, class: ('line_activate_icon_' << display) , title: "assign licence to user"
+    end
+
+    def row_deactivate_link(model, display)
+      link_to '', polymorphic_path([:deactivate, model]), :method => :get, :remote => true, class: ('line_deactivate_icon_' << display) , title: "remove user licence"
+    end
+
 
 end
