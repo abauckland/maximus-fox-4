@@ -18,11 +18,11 @@ class KeynotesController < ApplicationController
       end 
 
       if params[:cad_product] == 'bentley'
-        bentley_keynote_export(@project)      
+        bentley_keynote_export(@project)
       end 
 
       if params[:cad_product] == 'cadimage'
-        cadimage_keynote_export(@project)      
+        cadimage_keynote_export(@project)
       end              
   end
   
@@ -34,30 +34,30 @@ class KeynotesController < ApplicationController
 
     data = ""
 
-    project = Project.where(:id => params[:id]).first 
+    project = Project.where(:id => params[:id]).first
 
-      #for each section 
-      sections = Cawssection.project_sections(project)                                   
+      #for each section
+      sections = Cawssection.project_sections(project)
       sections.each_with_index do |s, i|
-        #project section    
+        #project section
         data = data + "#{s.ref}\t#{s.text}\n"       
-        #for each subsection     
-        subsections = Cawssubsection.section_subsections(project, s)               
+        #for each subsection
+        subsections = Cawssubsection.section_subsections(project, s)
         subsections.each_with_index do |subsection, n|
-          #project subsection  
+          #project subsection
           data = data + "#{sprintf("%02d", subsection.ref).to_s}\t#{subsection.text}\t#{subsection.cawssection.ref}\n"
           
-          clauses = Clause.subsection_clauses(project, subsection)                 
+          clauses = Clause.subsection_clauses(project, subsection)
           clauses.each_with_index do |clause, m|
-            #project clauses 
+            #project clauses
             data = data + "#{clause.caws_code}\t#{clause.clausetitle.text}\t#{clause.clauseref.subsection.cawssubsection.full_code}\n"
           end 
         end 
       end
-     send_data( data, :filename => "#{project.title}_revit_keyontes.txt" ) 
+     send_data( data, :filename => "#{project.title}_revit_keyontes.txt" )
   end
-          
-  
+
+
 #  def revit_keynote_export(project_id)
     
 #    @current_project = Project.where(:id => params[:id]).first 
@@ -91,7 +91,7 @@ class KeynotesController < ApplicationController
   def bentley_keynote_export(project)
     
     filename = project.code + " specright_keynote"   
-    @bim_bentley_export = CSV.generate do |csv|  
+    @bim_bentley_export = CSV.generate do |csv|
       
       #for each section
       sections = Cawssection.project_sections(project)
@@ -100,7 +100,7 @@ class KeynotesController < ApplicationController
         csv << [section.ref << ' ' << section.text]
         
         #for each subsection
-        subsections = Cawssubsection.section_subsections(project, section) 
+        subsections = Cawssubsection.section_subsections(project, section)
         subsections.each_with_index do |subsection, n|
           #project subsection
           csv << [subsection.subsection_code << '*' << subsection.text]
@@ -121,28 +121,28 @@ class KeynotesController < ApplicationController
 
   
   def cadimage_keynote_export(project)
-    
+
     filename = project.code + " specright_keynote"   
     @cadimage_keynote_export = CSV.generate(:col_sep => "\t") do |csv|
-      
+
       #headers
       #set up for columns, unique identifier column to be set to 'Create Unique IDS'
       csv << ['category', 'ignore', 'Keynote Key', 'Short Description', 'Long Description', 'Specfication Ref.', 'Time Stamp']  
-      
+
       #for each section
-      subsections = Cawssubsection.all_subsections(project)       
+      subsections = Cawssubsection.all_subsections(project)
       subsections.each_with_index do |subsection, n|
         #project subsection
         csv << [subsection.full_code, '', subsection.full_code, subsection.text]
-        
+
         #for each clause
-        clauses = Clause.subsection_clauses(project, subsection) 
-        clauses.each_with_index do |clause, m|           
+        clauses = Clause.subsection_clauses(project, subsection)
+        clauses.each_with_index do |clause, m|
           #project clauses
           csv << [subsection.full_code, '', clause.clause_code, clause.clausetitle.text]
-        end  
-      end      
-    end  
+        end
+      end
+    end
     send_data @cadimage_keynote_export, :type => 'text/plain', :disposition => 'attachment; filename=#{filename}.txt'      
   end
 
@@ -154,9 +154,9 @@ class KeynotesController < ApplicationController
 
     def set_revision
       if params[:revision_id].blank?
-        @revision = Revision.where(:project_id => params[:id]).order('created_at').last 
+        @revision = Revision.where(:project_id => params[:id]).order('created_at').last
       else
         @revision = Revision.find(params[:revision_id])
       end
-    end    
+    end
 end
