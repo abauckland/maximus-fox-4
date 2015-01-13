@@ -118,8 +118,8 @@ class PrintsController < ApplicationController
         end
     end
 
-    case revision
-    when '' ; filename = "#{@project.code}_rev_na.pdf"
+    case revision.rev
+    when nil ; filename = "#{@project.code}_rev_na.pdf"
     when '-'; filename = "#{@project.code}_rev_-.pdf"
     else
       filename = "#{@project.code}_rev_#{revision.rev.upcase}.pdf"
