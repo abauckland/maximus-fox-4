@@ -9,7 +9,7 @@ def cover(project, revision, settings, pdf)
   if settings.client_detail != "none"  
     client_details(project, settings, pdf)
   end
-    
+
   if settings.project_detail != "none"  
     project_details(project, revision, settings, pdf)
   end
@@ -48,10 +48,12 @@ def project_details(project, revision, settings, pdf)
   project_title_style = {:size => 18, :style => :bold, :align => settings.project_detail.to_sym}
   project_style = {:size => 14, :align => settings.project_detail.to_sym}
 
-  if revision.rev.nil?
+  if revision.rev.blank?
     current_revision_rev = 'n/a'
-  else
-    current_revision_rev = revision.rev.capitalize
+  elsif revision.rev == '-'
+    current_revision_rev = '-'    
+  else  
+    current_revision_rev = revision.rev.capitalize    
   end
 
   pdf.bounding_box([0, 220.mm], :width => 176.mm, :height => 30.mm) do

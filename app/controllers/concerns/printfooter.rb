@@ -22,9 +22,11 @@ def footer_contents(project, revision, settings, pdf)
   date = revision.created_at
   reformated_date = date.strftime("#{date.day.ordinalize} %b %Y")
 
-  if revision.rev.nil?
+  if revision.rev.blank?
     current_revision_rev = 'n/a'
-  else
+  elsif revision.rev == '-'
+    current_revision_rev = '-'    
+  else  
     current_revision_rev = revision.rev.capitalize    
   end
 

@@ -106,7 +106,7 @@ def print_caws_document(project, revision, pdf)
         if settings.structure == "revision by section"
           #revisions for project
           subsection_revs = Alteration.changed_caws_subsections(project, revision, subsection)
-          if subsection_revs
+          if !subsection_revs.blank?
               #set title based on whether cover is provided to section
               caws_title_type(settings, subsection, "revision", pdf)
               revisions_text(project, subsection, revision, pdf)
