@@ -1,6 +1,6 @@
 class PrintsController < ApplicationController
 
-  before_filter :authenticate
+#  before_filter :authenticate
   before_action :set_project, only: [:show, :print_project]
   before_action :set_revision, only: [:show, :print_project]
 
@@ -68,7 +68,14 @@ class PrintsController < ApplicationController
 
     check_alterations = Alteration.changed_caws_all_sections(@project, last_revision)
     if check_alterations.blank?
-      current_revision = Revision.where(:project_id => params[:id]).where.not(:id => last_revision.id).last
+      
+      revision_count = Revision.where(:project_id => params[:id]).count      
+      if revision_count == 1
+        current_revision = Revision.where(:project_id => params[:id]).first 
+      else
+        current_revision = Revision.where(:project_id => params[:id]).where.not(:id => last_revision.id).last        
+      end  
+      
     else
       current_revision = last_revision
     end
