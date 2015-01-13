@@ -3,7 +3,7 @@ class Printsetting < ActiveRecord::Base
   belongs_to :project
   
 
-#after_initiation :set_default_values
+after_create :set_default_values
 
 def set_default_values
   if new_record?

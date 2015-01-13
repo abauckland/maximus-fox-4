@@ -47,13 +47,13 @@ def project_details(project, revision, settings, pdf)
 #font styles for page  
   project_title_style = {:size => 18, :style => :bold, :align => settings.project_detail.to_sym}
   project_style = {:size => 14, :align => settings.project_detail.to_sym}
-  
+
   if revision.rev.nil?
     current_revision_rev = 'n/a'
   else
-    current_revision_rev = revision.rev.capitalize    
+    current_revision_rev = revision.rev.capitalize
   end
- 
+
   pdf.bounding_box([0, 220.mm], :width => 176.mm, :height => 30.mm) do
     pdf.text project.code_and_title, project_title_style
     pdf.text "Architectural Specification", project_style
