@@ -26,8 +26,13 @@ class KeynotesController < ApplicationController
       end 
 
       if params[:cad_product] == 'cadimage'
-        cadimage_csv(@project)      
-      end              
+        cadimage_csv(@project)
+      end
+
+      if params[:cad_product] == 'cadimage_keynote'
+        cadimage_keynote(@project)
+      end
+
   end
 
   
@@ -71,20 +76,20 @@ class KeynotesController < ApplicationController
       set_sections(project)
       @sections.each_with_index do |s, i|
         #project section    
-        data = data + "#{s.ref}\t#{s.text}\n"       
+        data = data + "#{s.ref}\t#{s.text}\r\n"
         #for each subsection
         set_section_subsections(project, s)
         @subsections.each_with_index do |subsection, n|
 
           #project subsection s
-          data = data + "#{sprintf("%02d", subsection.ref).to_s}\t#{subsection.text}\t#{subsection.cawssection.ref}\n"
-          
+          data = data + "#{sprintf("%02d", subsection.ref).to_s}\t#{subsection.text}\t#{subsection.cawssection.ref}\r\n"
+
           set_clauses(project, subsection)
           @clauses.each_with_index do |clause, m|
             #project clauses
-            data = data + "#{clause.caws_code}\t#{clause.clausetitle.text}\t#{clause.clauseref.subsection.cawssubsection.full_code}\n"
-          end 
-        end 
+            data = data + "#{clause.caws_code}\t#{clause.clausetitle.text}\t#{clause.clauseref.subsection.cawssubsection.full_code}\r\n"
+          end
+        end
       end
      send_data( data, :filename => "#{project.title}_revit_keyontes.txt" )
   end
@@ -182,6 +187,53 @@ class KeynotesController < ApplicationController
   end
 
 
+  def cadimage_keynote(project)
+    builder = Nokogiri::XML::Builder.new do |xml|
+      xml.keynoteAttributes {
+        xml.keynoteDatabase {
+          xml.records {
+
+          set_subsections(project)
+
+          @subsections.each do |subsection|
+            sub_key = subsection.id+"-0000-00"
+            xml.keynote(:key => sub_key, :edit => Time.now.to_formatted_s(:iso8601)) {
+              xml.name subsection.code
+              xml.title subsection.title
+            }
+
+            set_clauses(project, subsection)
+
+            @clauses.each do |clause|
+            clause_key = subsection.id+"-"+clause.clause_ref+"-00"
+            xml.keynote(:key => clause_key, :edit => Time.now.to_formatted_s(:iso8601)) {
+              xml.name clause.code
+              xml.parent sub_key
+              xml.title clause.title
+              }
+
+              set_lines(project, clause)
+
+              @lines.each_with_index do |line, i|
+              line_key = subsection.id+"-"+clause.clause_ref+"-line_id"
+              xml.keynote(:key => line_key, :edit => Time.now.to_formatted_s(:iso8601)) {
+                xml.parent clause_key
+                xml.description line.text
+                }
+              end
+            end
+          end
+            
+          }
+        }
+      }
+    end
+
+    filename = "#{@project.code}_cadimage_keynote.keynote"
+    send_data builder.to_xml, filename: filename, :type => 'text/xml'
+
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_project
@@ -219,6 +271,16 @@ class KeynotesController < ApplicationController
         ##
       end
     end
+    
+    def set_lines(project, clause)
+      if project.CAWS?
+        #return only lines relating to scope, workmanship, testing and certificates
+        @lines = Specline.joins(:clause => :clauseref).where(:project_id => project.id, :clause_id => clause.id, 'clauserefs.clausetype_id' => [1,5,6,7,8]).order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause, clause_line')
+      else
+        ##
+      end
+    end
+
 
     def set_revision
       if params[:revision_id].blank?
