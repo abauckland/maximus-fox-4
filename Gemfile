@@ -29,9 +29,11 @@ gem 'jquery-datatables-rails'
 gem 'carrierwave'
 
 gem 'devise'
-gem 'devise-encryptable'
+#gem 'devise-encryptable'
 gem 'pundit'
-gem 'bcrypt', :require => 'bcrypt'
+gem 'aasm'
+gem 'nokogiri'
+#gem 'bcrypt', :require => 'bcrypt'
 
 gem 'prawn'
 gem 'prawn-table'

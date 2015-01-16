@@ -1,4 +1,6 @@
 class KeynotesController < ApplicationController
+
+
 #  before_filter :authenticate
   before_action :set_project, only: [:show, :keynote_export]
   before_action :set_revision, only: [:show]
@@ -188,6 +190,9 @@ class KeynotesController < ApplicationController
 
 
   def cadimage_keynote(project)
+require "rubygems"
+require "nokogiri"
+    
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.keynoteAttributes {
         xml.keynoteDatabase {
@@ -196,29 +201,29 @@ class KeynotesController < ApplicationController
           set_subsections(project)
 
           @subsections.each do |subsection|
-            sub_key = subsection.id+"-0000-00"
+            sub_key = subsection.id.to_s+"-0000-00"
             xml.keynote(:key => sub_key, :edit => Time.now.to_formatted_s(:iso8601)) {
-              xml.name subsection.code
-              xml.title subsection.title
+              xml.name subsection.full_code
+              xml.title subsection.text
             }
 
-            set_clauses(project, subsection)
+            set_all_clauses(project, subsection)
 
             @clauses.each do |clause|
-            clause_key = subsection.id+"-"+clause.clause_ref+"-00"
+            clause_key = subsection.id.to_s+"-"+clause.clauseref_id.to_s+"-00"
             xml.keynote(:key => clause_key, :edit => Time.now.to_formatted_s(:iso8601)) {
-              xml.name clause.code
-              xml.parent sub_key
-              xml.title clause.title
+              xml.name clause.caws_code
+              xml.parent_ sub_key
+              xml.title clause.clausetitle.text
               }
 
               set_lines(project, clause)
 
               @lines.each_with_index do |line, i|
-              line_key = subsection.id+"-"+clause.clause_ref+"-line_id"
+              line_key = subsection.id.to_s+"-"+clause.clauseref_id.to_s+"-"+line.id.to_s
               xml.keynote(:key => line_key, :edit => Time.now.to_formatted_s(:iso8601)) {
-                xml.parent clause_key
-                xml.description line.text
+                xml.parent_ clause_key
+                xml.description line.txt4.text
                 }
               end
             end
@@ -250,7 +255,7 @@ class KeynotesController < ApplicationController
 
     def set_subsections(project)
       if project.CAWS?
-        @subsections = Cawssubsection.project_subsections(project)
+        @subsections = Cawssubsection.project_subsections(project).where.not(:cawssection_id => 1)
       else
         ##
       end
@@ -258,7 +263,7 @@ class KeynotesController < ApplicationController
 
     def set_section_subsections(project, section)
       if project.CAWS?
-        @subsections = Cawssubsection.section_subsections(project, section)
+        @subsections = Cawssubsection.section_subsections(project, section).where.not(:cawssection_id => 1)
       else
         ##
       end
@@ -271,11 +276,23 @@ class KeynotesController < ApplicationController
         ##
       end
     end
-    
+
+    def set_all_clauses(project, subsection)
+      if project.CAWS?
+        @clauses = Clause.joins(:speclines
+                        ).includes(:clausetitle, :clauseref => [:subsection => :cawssubsection]
+                        ).where('speclines.project_id' => project.id, 'subsections.cawssubsection_id' => subsection.id
+                        ).order('clauserefs.subsection_id, clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
+                        ).uniq
+      else
+        ##
+      end
+    end
+   
     def set_lines(project, clause)
       if project.CAWS?
         #return only lines relating to scope, workmanship, testing and certificates
-        @lines = Specline.joins(:clause => :clauseref).where(:project_id => project.id, :clause_id => clause.id, 'clauserefs.clausetype_id' => [1,5,6,7,8]).order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause, clause_line')
+        @lines = Specline.joins(:clause => :clauseref).where(:project_id => project.id, :clause_id => clause.id, 'clauserefs.clausetype_id' => [6..8])#.order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause, clause_line')
       else
         ##
       end
