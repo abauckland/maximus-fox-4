@@ -1,5 +1,5 @@
 class PrintsettingsController < ApplicationController
-  before_filter :authenticate
+#  before_filter :authenticate
   before_action :set_project, only: [:edit]
   before_action :set_printsetting, only: [:edit]
   before_filter :authorise_project_manager, only: [:edit]

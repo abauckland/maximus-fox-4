@@ -1,5 +1,5 @@
 class SpecificationsController < ApplicationController
-  before_filter :authenticate
+#  before_filter :authenticate
   before_action :set_project, only: [:empty_project, :show, :show_tab_content]
   before_action :set_project_user, only: [:empty_project, :show, :show_tab_content]
 

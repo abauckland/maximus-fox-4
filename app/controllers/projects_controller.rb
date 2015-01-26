@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
-  before_filter :authenticate
+#  before_filter :authenticate
+
   before_filter :authorise_project_manager, only: [:update]
   before_action :set_project, only: [:empty_project, :show, :edit, :update]
   before_action :set_project_user, only: [:show, :edit]

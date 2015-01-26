@@ -1,0 +1,96 @@
+<div class="row title_band">
+    <div class="page_title">
+        <h1>Create New Account</h1>            
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-1-3 column_1">
+        <div class="border">
+
+            <%= devise_error_messages! %>
+
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+            <%= f.hidden_field :role, :value => "owner" %>
+            
+            <div class="form_check"><%= f.text_field :check_field%></div>
+    
+            <div class="row">
+
+                    <fieldset>
+                        <%= f.fields_for(:company) do |builder| %>
+                        
+                            <!-- form input[text] --> 
+                            <div class="form_tooltip" id="user_company_name"></div>
+                            <label class="label_80">Company Name:*</label>
+                            <span>
+                                <%= builder.text_field :name %>
+                            </span></br>
+
+                        <% end %>
+
+                        <!-- form input[text] --> 
+                        <label class="label_100">First Name:*</label>
+                        <span>
+                            <%= f.text_field :first_name, autofocus: true %>
+                        </span></br>
+
+                        <!-- form input[textarea] -->    
+                        <label class="label_100">Surname:*</label>
+                        <span>
+                            <%= f.text_field :surname %>
+                        </span></br>
+
+                        <!-- form input[email] --> 
+                        <div class="form_tooltip" id="registration_email"></div>
+                        <label class="label_100">E-mail:*</label>
+                        <span>
+                            <%= f.email_field :email, {placeholder: 'e.g. demo@example.com'} %>
+                        </span></br>
+                        
+                        <!-- form input[text] --> 
+                        <div class="form_tooltip" id="registration_password"></div>
+                        <label class="label_100">New password:*</label>
+                        <span>
+                            <%= f.password_field :password, autocomplete: "off" %>
+                        </span></br>
+
+                        <!-- form input[textarea] -->    
+                        <div class="form_tooltip" id="registration_password_confirm"></div>
+                        <label class="label_100">Confirm new password:*</label>
+                        <span>
+                            <%= f.password_field :password_confirmation, autocomplete: "off" %>
+                        </span></br>
+
+                        <%= f.fields_for(:company) do |builder| %>
+                        
+                            <!-- form input[text] --> 
+                            <div class="form_tooltip" id="company_terms"></div>
+                            <label class="label_80">Accept T&Cs:*</label>
+                            <span>
+                                <%= builder.check_box :read_term %>
+                                <span>Accepted (<%= link_to "Read T&Cs", nil %>)</span>
+                            </span></br>
+
+                        <% end %>
+                        
+                    </fieldset>                                        
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="form_footer">
+                    <%= f.submit "save" %>
+                </div>
+                <% end %>
+            </div>
+            
+        </div>
+    </div>
+    <div class="col-1-3 column_2">
+        <div class="border blank_column"></div>
+    </div>
+    <div class="col-1-3 column_3">
+        <div class="border blank_column"></div>
+    </div>
+</div>

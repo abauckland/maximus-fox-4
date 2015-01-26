@@ -14,14 +14,21 @@
 
 <div class="app_page_container">
 
+<% if notice %>
+  <p class="alert alert-success"><%= notice %></p>
+<% end %>
+<% if alert %>
+  <p class="alert alert-danger"><%= alert %></p>
+<% end %>
+
+
     <header class="app_page_header">
         <figure class="app_logo"></figure>	
 	                               
         <%= render :partial => "spec_menu", :project => @project %>              
              
         <%= render :partial => "user_menu", :project => @project %> 
-        
-        <nav class="app_logout"><%= link_to "logout", log_out_path %></nav>                 
+                     
     </header>	
 
 <%= yield %>

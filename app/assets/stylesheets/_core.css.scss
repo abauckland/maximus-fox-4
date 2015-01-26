@@ -95,9 +95,9 @@ $standard_font: Arial,Helvetica,sans-serif;
   }
 
 @mixin red-button{
-  background: #66aa00;
-  border: solid #66aa00 0px;
-  &:hover {background: #4b8533;}
+  background: #ff0000;
+  border: solid #ff0000 0px;
+  &:hover {background: #db817b;}
   }
 
 @mixin dark-grey-button {
@@ -230,7 +230,7 @@ figure {
   height: 30px;
   width: 100px;
   border: inset 1px #555;
-  background: image-url('specright_logo.png') no-repeat;
+  background: asset_url('specright_logo.png') no-repeat;
   background-size:100px 30px;
   }
   @media screen and (max-width: $medium_menu) {

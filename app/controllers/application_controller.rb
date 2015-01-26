@@ -1,13 +1,29 @@
 class ApplicationController < ActionController::Base
 
   helper :all # include all helpers, all the time
-  helper_method :current_user 
+#  helper_method :current_user 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
+  
+  before_action :authenticate_user!
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
+  layout :layout_by_resource
+
+  #root to admin index page after successfull sign in
+  def after_sign_in_path_for(resource)
+    projects_path
+  end
 
 
- protected 
+ protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :role, :company_id, :check_field, :company_attributes => [:name, :read_term]) }
+    devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :current_password, :role, :company_id, :company_attributes => [:name]) }
+  end  
+   
 
   def current_revision_render(project)
 
@@ -440,26 +456,26 @@ end
 
   private
  
-    def permission_denied
-      session[:user_id] = nil  
-      redirect_to home_path 
-    end
+#    def permission_denied
+#      session[:user_id] = nil  
+#      redirect_to home_path 
+#    end
   
-    def current_user  
-      @current_user ||= User.find(session[:user_id]) if session[:user_id]  
-    end
+#    def current_user  
+#      @current_user ||= User.find(session[:user_id]) if session[:user_id]  
+#    end
   
-    def authenticate
+#    def authenticate
       #@current_user ||= User.find(session[:user_id]) if session[:user_id]
       #if @current_user.role == 'user'
       #   redirect_to log_out_path
       #end    
-      redirect_to log_out_path unless current_user
-    end
+#      redirect_to log_out_path unless current_user
+#    end
   
-    def authenticate_owner
-      redirect_to log_out_path unless current_user.role == "owner"
-    end
+#    def authenticate_owner
+#      redirect_to log_out_path unless current_user.role == "owner"
+#    end
 
    
     def match_previous(specline, revision)
@@ -561,5 +577,27 @@ end
 #      specline_find_hash(specline, revision)      
 #      @match_old_line_content = Alteration.joins(:txt3, :txt4, :txt5, :txt6, :identity, :perform).where(@specline_match_hash).where.not(:event => ['changed', 'deleted']).first
 #    end
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :role, :company_id, :company_attributes => [:name]) }
+    devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :current_password, :role, :company_id, :company_attributes => [:name]) }
+  end
+
+  def layout_by_resource
+    if controller_name == 'sessions' && action_name == 'new'
+      'devise'
+    elsif  controller_name == 'passwords' && action_name == 'new'
+      'devise'
+    elsif  controller_name == 'passwords' && action_name == 'edit'
+      'devise'
+    elsif  controller_name == 'unlocks' #&& action_name == 'new'
+      'devise'
+    else
+      'application'
+    end
+  end
+
   
 end

@@ -1,18 +1,18 @@
 class CompaniesController < ApplicationController
-  before_filter :authenticate_owner, only: [:edit, :update]
-  before_action :set_company, only: [:show, :edit, :update, :destroy]
+#  before_filter :authenticate_owner, only: [:edit, :update]
+  before_action :set_company, only: [:show, :edit, :update]
 
   layout "users", only: [:edit]
 
   # GET /companies/new
-  def new
-    @company = Company.new
-    user = @company.users.build
-    respond_to do |format|
-      format.html { render layout: "websites" }
-    end
+#  def new
+#    @company = Company.new
+#    user = @company.users.build
+#    respond_to do |format|
+#      format.html { render layout: "websites" }
+#    end
 
-  end
+#  end
 
   # GET /companies/1/edit
   def edit
@@ -20,28 +20,28 @@ class CompaniesController < ApplicationController
 
   # POST /companies
   # POST /companies.json
-  def create
-    @company = Company.new(company_params)
-    
-    respond_to do |format|
-      if @company.save
-                
-        user = User.where(:company_id => @company.id).first
-        user.update(:role => "owner", :active => true)    
-        session[:user_id] = user.id
-
-        create_demo_project(@company)        
-        create_project_user(@project, user)    
-        set_current_revision(@project, user)  
+#  def create
+#    @company = Company.new(company_params)
+#    
+#    respond_to do |format|
+#      if @company.save
+#                
+#        user = User.where(:company_id => @company.id).first
+#        user.update(:role => "owner", :active => true)    
+#        session[:user_id] = user.id
+#
+#        create_demo_project(@company)        
+#        create_project_user(@project, user)    
+#        set_current_revision(@project, user)  
 
         
-        format.html { redirect_to projects_path }
-      else
-        format.html { render :new,  layout: "websites" }
-        format.json { render json: @company.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+#        format.html { redirect_to projects_path }
+#      else
+#        format.html { render :new,  layout: "websites" }
+#        format.json { render json: @company.errors, status: :unprocessable_entity }
+#      end
+#    end
+#  end
 
   # PATCH/PUT /companies/1
   # PATCH/PUT /companies/1.json
@@ -72,22 +72,22 @@ class CompaniesController < ApplicationController
     end
 
     
-    def create_demo_project(company)
-        #create demonstration project
-        @project = Project.create(:company_id => company.id,  :code => 'D1', :title => 'Demo Project', :parent_id => 1, :project_status => 'Draft', :ref_system => 'CAWS')
-        project_template = Project.where(:id => [1..10], :ref_system => @project.ref_system).first
-        @project.update(:parent_id => project_template.id)
-    end
+#   def create_demo_project(company)
+#        #create demonstration project
+#        @project = Project.create(:company_id => company.id,  :code => 'D1', :title => 'Demo Project', :parent_id => 1, :project_status => 'Draft', :ref_system => 'CAWS')
+#        project_template = Project.where(:id => [1..10], :ref_system => @project.ref_system).first
+#        @project.update(:parent_id => project_template.id)
+#    end
     
-    def create_project_user(project, user)
-        #set project_user for project
-        Projectuser.create(:project_id => project.id, :user_id => user.id, :role => "manage") 
-        Printsetting.create(:project_id => project.id)      
-    end
+#    def create_project_user(project, user)
+#        #set project_user for project
+#        Projectuser.create(:project_id => project.id, :user_id => user.id, :role => "manage") 
+#        Printsetting.create(:project_id => project.id)      
+#    end
     
-    def set_current_revision(project, user)        
-        #set current revision reference for demo project
-        Revision.create(:project_id => project.id, :user_id => user.id, :date => Date.today)
-    end
+#    def set_current_revision(project, user)        
+#        #set current revision reference for demo project
+#        Revision.create(:project_id => project.id, :user_id => user.id, :date => Date.today)
+#    end
     
 end

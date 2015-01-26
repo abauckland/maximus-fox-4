@@ -1,28 +1,42 @@
-<div class="page_title">Tutorials</div>
+<div class="row title_band">
+    <div class="page_title">
+        <h1>Listing Help Annotation</h1>            
+    </div>      
+    <div><%= link_to 'New Help Note', new_help_path, class: "title_button"%></div>
+</div>
 
-<div class="content">
-    <div class="column_1">
-		<div class="column_content">       
-			<div class="column_title">Screencasts</div>   
-    			
-    		<div class="column_sub_content">
-
-				<div class="column_guide">
-					To learn more about how the application works select one of the following tutorials:
-				</div> 
-
-  				<div class="column_link_list">
-  				<% @tutorials.each do |tutorial|%>  
-          			<div class="column_link help_link">
-        				<%= link_to "#{tutorial.title}", {:controller => "helps", :action => "show", :id => tutorial.id}, :target => "_blank" %>
-        			</div>
-        		<% end%>
-        		</div> 
-      		</div>
-      	</div>   
-	</div>
-	
-	<div class="column_2 column_blank"></div> 
-    <div class="column_3 column_blank"></div>
-     
+<div class="row">
+    <div class="col-1-1 column_1">
+        <div class="border">
+                                        
+        <%= render :partial => "flash_notice" %>                 
+                        
+            <div class="row">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Help Text</th>
+                            <th class="row_button no_buttons_1"></th>
+                        </tr>
+                    </thead>
+                </table>
+                
+                <table>
+                    <tbody>
+                        <% @helps.each do |help| %>
+                        <tr>
+                            <td class="mob_cell"><%= help.item %></td>
+                            <td class="mob_cell"><%= help.text.html_safe %></td>
+                            <td class="row_button no_buttons_1">
+                                <%= link_to "", edit_help_path(help), class: 'line_edit_icon', title: "edit help text" %>
+                            </td>
+                        </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+               
+            </div>
+        </div>
+    </div>
 </div>

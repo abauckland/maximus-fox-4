@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
-  before_filter :authenticate, only: [:edit, :update]
-  before_filter :authenticate_owner, only: [:index, :create]
+#  before_filter :authenticate, only: [:edit, :update]
+#  before_filter :authenticate_owner, only: [:index, :create]
   before_action :set_user, only: [:show, :edit, :update, :unlock_user]
-  before_action :set_users, only: [:index, :create, :update_licence_status]
-  before_action :set_active_users, only: [:index, :create, :update_status, :update_licence_status]
+  before_action :set_users, only: [:index, :update_licence_status]
+  before_action :set_active_users, only: [:index, :update_status, :update_licence_status]
 
   layout "users"
 
@@ -15,28 +15,28 @@ class UsersController < ApplicationController
     @user = User.new 
   end
 
-  def create 
+#  def create #
 
-    @user = User.new(user_params)  
+#    @user = User.new(user_params)  
 
-    if @user.save
+#    if @user.save
       
-        projects =  Project.where(:company_id => current_user.company_id)
-        projects.each do |project|
-          Projectuser.create(:project_id => project.id, :user_id => @user.id, :role => "manage")
-        end
+#        projects =  Project.where(:company_id => current_user.company_id)
+#        projects.each do |project|
+#          Projectuser.create(:project_id => project.id, :user_id => @user.id, :role => "manage")
+#        end
       
       
-      respond_to do |format| 
-        format.html { render :action => "index"}
-      end
-    else
-       respond_to do |format| 
-        format.html { render :action => "index"}
-        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity } 
-        end      
-    end  
-  end
+#      respond_to do |format| 
+#        format.html { render :action => "index"}
+#      end
+#    else
+#       respond_to do |format| 
+#        format.html { render :action => "index"}
+#        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity } 
+#        end      
+#    end  
+#  end
 
   
   def edit
@@ -82,12 +82,12 @@ class UsersController < ApplicationController
 
 
   #ajax event
-  def unlock_user
-    @user.update(:failed_attempts => 0, :locked_at => 0)
-    respond_to do |format|
-        format.js { render :unlock_user, :layout => false }
-    end    
-  end 
+#  def unlock_user
+#    @user.update(:failed_attempts => 0, :locked_at => 0)
+#    respond_to do |format|
+#        format.js { render :unlock_user, :layout => false }
+#    end    
+#  end 
 
 
   private

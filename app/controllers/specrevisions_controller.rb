@@ -1,5 +1,5 @@
 class SpecrevisionsController < ApplicationController
-  before_filter :authenticate
+#  before_filter :authenticate
   before_action :set_project, only: [:show, :show_rev_tab_content]
   before_action :set_revision, only: [:show, :show_rev_tab_content]
 
