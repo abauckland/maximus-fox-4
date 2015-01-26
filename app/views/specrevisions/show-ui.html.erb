@@ -22,21 +22,36 @@
 
 <!-- page content -->
 <% if @subsections.blank? %>
-    
-    <div class="content">
-        <div class="column_1">
-    		<div class="column_content">
-          		<div class="column_title">Revisions</div>             
-        		<div class="column_sub_content">    
-    				<div class="column_guide">
-    					<%= revision_help(@revision, @project) %>
-    				</div>	
-          		</div>
-          	</div>   
-    	</div>
-    	<div class="column_2 column_blank"></div>
-        <div class="column_3 column_blank"></div>      
-    </div> 						
+
+	<div class="row">
+	    <div class="col-1-3 column_1">
+	        <div class="border">
+	            <div class="row">
+
+	                <div class="row">
+	                    <div class="column_title">
+	                        <h3>Revisions</h3>
+	                    </div>
+	                </div>
+
+	                <div class="row">
+	                    <div class="column_text">
+	                        <%= revision_help(@revision, @project) %>
+	                    </div>
+	                </div>
+
+	            </div>
+	        </div>
+	    </div>
+
+	    <div class="col-1-3 column_2">
+	        <div class="border blank_column"></div>
+	    </div>
+	    <div class="col-1-3 column_3">
+	        <div class="border blank_column"></div>
+	    </div>
+	</div>
+
 
 <% else %>
 

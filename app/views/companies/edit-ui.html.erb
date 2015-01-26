@@ -2,6 +2,7 @@
     <div class="page_title">
         <h1><%=@company.name%></h1>
     </div>
+    <div class="title_help" id="company_edit"></div>
 </div>
 
 <div class="row">
@@ -47,20 +48,15 @@
                         <!-- form input[text] --> 
                         <div class="form_tooltip" id="company_logo"></div>
                         <label class="label_100">Company Logo:</label>
-                        <% if @company.logo? %>
-                            <span>
-                                <%= image_tag(@company.logo, {:height => "25px"}) %>
-                            </span></br>
-                            <!-- form input[text] --> 
-                            <label class="label_100"></label>
-                            <span>
-                                <%= f.file_field :logo %>
-                            </span></br>
-                        <% else %>
-                            <span>
-                                <%= f.file_field :logo %>
-                            </span></br>
-                        <% end %>
+                        <span>
+                            <%= image_tag(@company.logo, {:height => "25px"}) if @company.logo? %>
+                        </span></br>
+                        
+                        <!-- form input[text] --> 
+                        <label class="label_100"></label>
+                        <span>
+                            <%= f.file_field :logo %>
+                        </span></br>
 
                         <!-- form input[text] --> 
                         <div class="form_tooltip" id="company_phone"></div>
