@@ -1,0 +1,30 @@
+<div class="row title_band">
+    <div class="page_title">
+        <h1>Terms of Use</h1>
+    </div>
+</div>
+
+<div class="row">
+	<div class="col-1-1 column_1">
+		<div class="border">
+		   <div class="row">
+
+		        <table>
+		        <% @termcats.each_with_index do |cat, i|%>
+		        <tr>
+		            <td class="term_id_title"><%=h i +1 %>.</td>
+		            <td class="term_text_title" colspan =2><%=h cat.text.upcase %></td>
+		        </tr>
+		            <% cat.terms.each_with_index do |term, n|%>
+		            <tr>
+		                <td class="term_id"><%=h i +1 %>.<%= n +1 %>.</td>
+		                <td class="term_text"><%=h term.text%></td>
+		            </tr>
+		            <% end %>
+		        <% end %>
+		        </table>
+
+		   </div>
+		</div>
+	</div>
+</div>

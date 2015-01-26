@@ -1,0 +1,187 @@
+
+backup cron
+
+
+
+
+
+
+
+standard table
+code:string
+
+system:string
+prefix:string
+code:string
+suffix_1:string
+suffix_2:string
+
+year:string
+status:string
+search_string:string
+state:string
+
+Time.to_formatted_s(:iso8601) #=> "2007-01-18T06:06:06"
+
+<keynotesAttributes>
+<keynoteDatabase>
+<records>
+
+<keynote key="" edit="">
+
+<name>F10</name>
+<parent>key_value</parent>
+<title>Single Leaf Brickwork</title>
+
+</keynote>
+
+</records>
+</keynoteDatabase>
+</keynoteAttributes>
+
+
+@clauses =
+
+
+builder = Nokogiri::XML::Builder.new do |xml|
+  xml.keynoteAttributes {
+    xml.keynoteDatabase {
+      xml.records {
+      
+      @subsections.each do |subsection|
+        sub_key = subsection.id+"-0000-00"
+        xml.keynote(:key => sub_key, :edit => Time.now.to_formatted_s(:iso8601)) {
+          xml.name subsection.code
+          xml.title subsection.title
+        }      
+        @clauses.each do |clause|
+        clause_key = 
+        xml.keynote(:key => clause_ref, :edit => Time.now.to_formatted_s(:iso8601)) {
+          xml.name clause.code
+          xml.parent sub_ref
+          xml.title clause.title
+          }
+          
+          clause.where(clauseref.clausetype => [1,5,6,7,8], )
+          
+          @lines.each do |line|
+          line_key
+          xml.keynote(:key => line.id, :edit => Time.now.to_formatted_s(:iso8601)) {
+            xml.parent clause_ref
+            xml.description line.text
+            }
+          end        
+        end
+      end
+        
+      }
+    }
+  }
+end
+
+puts builder.to_xml
+
+
+@standards.each do |standard|
+
+ if !standard.pid?
+ 
+  get_pid_ref(standard)
+  
+  if pid_ref.blank?
+   standard.error!
+   next
+  end
+
+ end
+ 
+ lookup_pid(pid_ref)
+ 
+ #if look up fail check for new pid
+ 
+ if checked _status.blank?
+  standard.error!
+  next
+ else
+  unless standard.status == checked_status
+   standard.update(status => checked_status)
+   standard.changed!
+  end
+  standard.update(:updated_at => Time.now)
+ end
+ 
+end
+
+def get_pid_ref(standard)
+
+ go to 
+ url = "http://shop.bsigroup.com"
+ page = Nokogiri::HTML(open(url))
+ 
+ find search input
+ enter bs reference
+ submit
+
+ find correct bs in search results
+ get link address
+ strip out pid reference
+ save pid reference
+ 
+require 'mechanize'
+
+agent = Mechanize.new
+page = agent.get('http://shop.bsigroup.com')
+
+standard_string = standard+":"+year
+
+page = agent.get('http://shop.bsigroup.com/SearchResults/?q='+standard_string)
+
+status = page.at("div.resultsInd div nth:strong(4)").text.strip
+
+
+
+
+
+form = page.form('input#ct100_SearchBarControl_txtSearchBox')
+
+input[type=submit]#ct100_SearchBarControl_search
+
+form.searchString = standard.ref
+page = agent.submit(form)
+
+page.search("h2.H2SearchResultsTitle").each do |item|
+
+  title = item.search("a span").text.strip
+  
+  if standard.title == title
+   link = item.search ("a href").text.strip
+   pid_ref = link (last 20..38)
+  
+   break
+  end
+  
+end
+
+standard.pid = pid_ref
+standard.save
+
+end
+
+
+
+def lookup_pid(ref)
+
+go to pid reference url
+
+http://shop.bsigroup.com/ProductDetail/?pid=000000000030275705
+
+
+status = page.at(p.pad5 bhD strong.textBrightBlue).text.strip
+
+
+end
+
+
+
+
+div.resultInd 4th strong child .textBrightBlue

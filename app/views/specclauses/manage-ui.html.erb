@@ -1,0 +1,110 @@
+<div class="row title_band">
+    <div class="page_title">
+        <h1>Add/Delete Clauses</h1>
+    </div>
+    <div class="title_help" id="clauses_manage"></div>
+</div>
+
+
+<div class="row">
+    <div class="col-1-3 column_1">
+        <div class="border">
+
+			<div class="row">
+				<div class="column_title">
+					<h3>Copy Clauses into <%=h @subsection.full_code %><span class="form_tooltip"></span></h3>
+				</div>
+			</div>
+
+            <!-- form input[select -->
+            <div class="form_tooltip" id="clause_project_template"></div>
+            <label class="label_120">Project Template:</label>
+            <span>
+      			<%= select_tag "selected_template_id", options_from_collection_for_select(@templates, "id", "code_and_title", @template.id), {:onchange => "window.location='/specclauses/#{@project.id}/manage?project_id=#{@project.id}&subsection_id=#{@subsection.id}&template_id='+this.value;"} %>
+            </span></br>
+
+
+<!-- form column start-->
+            <div class="row">
+                <%= form_tag(:controller => "specclauses", :action => "add_clauses") do %>
+					<%= hidden_field_tag "project_id", @project.id%>
+            		<%= hidden_field_tag "template_id", @template.id%>
+            		<%= hidden_field_tag "subsection_id", @subsection.id %>
+            		
+                    <fieldset>
+
+			            <!-- form input[select] -->
+			            <div class="form_tooltip" id="clause_add_clauses"></div>
+			            <label class="label_120">Clause in Template:</label>
+			            <% if @template_project_clauses %>
+			            <span>
+			      			<%= select_tag "template_clauses", options_from_collection_for_select(@template_project_clauses, :id, :part_ref_title), multiple: true, size: 8  %>
+			            </span></br>
+			            <% else %>
+			            	<span>All clauses in the template already exist in the current project</span></br>
+			            <% end %>
+
+                        <!-- new clause link -->
+                        <div class="form_tooltip" id="project_customer"></div>
+                        <label class="label_80">Create New Clause:</label>
+                        <span>
+                            <%= link_to "Create New Clause", {:controller => "clauses", :action => "new", :id => @project.id, :subsection_id => @subsection.id}, class: "form_button" %>
+                        </span></br>
+
+
+                    </fieldset>
+            </div>
+<!-- column footer start--> 
+            <div class="row">
+                <div class="form_footer">
+                    <%= submit_tag "add clauses"%>
+                    <%= link_to "cancel", {:controller => "specifications", :action => "show", :id => @project.id, :subsection => @subsection.id} %>
+                </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-1-3 column_2">
+        <div class="border">
+
+			<div class="row">
+				<div class="column_title">
+					<h3>Delete Clauses from <%=h @subsection.full_code %><span class="form_tooltip"></span></h3>
+				</div>
+			</div>
+
+<!-- form column start-->
+            <div class="row">
+				<%= form_tag(:controller => "specclauses", :action => "delete_clauses") do %>
+					<%= hidden_field_tag "project_id", @project.id%>
+            		<%= hidden_field_tag "template_id", @template.id%>
+            		<%= hidden_field_tag "subsection_id", @subsection.id %>
+            		
+                    <fieldset>
+
+			            <!-- form input[select] -->
+			            <div class="form_tooltip" id="clause_delete_clauses"></div>
+			            <label class="label_120">Clauses in Project:</label>
+			            <span>
+			      			<%= select_tag "project_clauses", options_from_collection_for_select(@current_project_clauses, :id, :part_ref_title), multiple: true, size: 13%>
+			            </span></br>
+
+                    </fieldset>
+            </div>
+<!-- column footer start--> 
+            <div class="row">
+                <div class="form_footer">
+                    <%= submit_tag "delete clauses", :confirm => "Clauses moved from the Project will be deleted premanently, they are not copied to the template project. Do you wish to continue?"%>
+                    <%= link_to "cancel", {:controller => "specifications", :action => "show", :id => @project.id, :subsection => @subsection.id} %>
+                </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-1-3 column_3">
+        <div class="border blank_column"></div>
+    </div>
+</div>
