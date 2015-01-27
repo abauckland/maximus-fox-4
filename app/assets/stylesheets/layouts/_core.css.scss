@@ -29,12 +29,20 @@ $blank_column_colour: #eee;
 @mixin dark_grey_46_gradient {background: image-url('dark_grey_46.png') repeat-x};
 @mixin dark_grey_38_gradient {background: image-url('dark_grey_38.png') repeat-x};
 
-@mixin light_grey_32_gradient {background: image-url('light_grey_32.png') repeat-x};
+@mixin light_grey_32_gradient {
+  background: #c2c2c2;
+  background-image: -webkit-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -moz-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -ms-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -o-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: linear-gradient(to bottom, #c2c2c2, #adadad);
+};
 @mixin light_grey_24_gradient {background: image-url('light_grey_24.png') repeat-x};
 
 
 //border radius
 @mixin border-radius($var) {-moz-border-radius:$var; -webkit-border-radius:$var; border-radius:$var;}
+@mixin border-radius-top($var) {-moz-border-top-right-radius:$var; -webkit-border-top-right-radius:$var; border-top-right-radius:$var; -moz-border-top-left-radius:$var; -webkit-border-top-left-radius:$var; border-top-left-radius:$var;}
 
 //shadows
 @mixin shadow-all($shadows...) {-moz-box-shadow: $shadows; -webkit-box-shadow: $shadows; box-shadow: $shadows;}

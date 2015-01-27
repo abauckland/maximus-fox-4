@@ -1,0 +1,80 @@
+@import "layouts/core";
+
+
+/* begin css tabs */
+/* Style for tabs */
+ul.tabs{
+  float: left;
+  padding: 6px 0px 6px 0px;
+  border-bottom: 2px solid #dddddd;
+  list-style-type: none;
+  margin: 0px;
+  z-index: 9999;
+  li {
+    display: inline;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #fff;
+    a {  
+      color: #fff;
+      margin: 0;
+      text-decoration: none;
+      @include border-radius-top(0.4rem);
+      border: 2px solid #dddddd;
+      @include light_grey_32_gradient;
+      cursor:pointer;
+      padding: 6px 6px 6px 6px;
+      &:hover{
+        background: #fff;
+        color: #000;
+      }
+      &.active{
+        background: #fff;
+        color: #000;
+        border-bottom-color: white;
+      }
+    }
+  }  
+}
+  @media screen and (max-width: $phone-landscape) {
+    ul.tabs {
+      min-width:277px;
+      }
+  }
+
+ul.tabs_2{
+  float: left;
+  padding: 0px 0px 6px 0px;
+  list-style-type: none;
+  margin: 0px;
+  z-index: 9999;
+  li {
+    display: inline;
+    font-size: 1.4rem;
+    font-weight: bold;
+    line-height: 35px;
+    a {  
+      color: #fff;
+      text-decoration: none;
+      @include border-radius(0.4rem);
+      @include light_grey_32_gradient;
+      cursor:pointer;
+      padding: 6px 6px 6px 6px;
+      &:hover{
+        background: #fff;
+        color: #000;
+        border: 2px solid #dddddd;
+      }
+      &.active{
+        background: #fff;
+        color: #000;
+        border: 2px solid #dddddd;
+      }
+    }
+  }  
+}
+
+
+.tab_sub_menu{
+  float: right;
+}

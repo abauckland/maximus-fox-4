@@ -1,23 +1,24 @@
 <!-- project information bar -->
 <div class="row info_band">
 	<div class="info_right">
-		<div><h3>Status: <%=h @project.project_status %></h3></div>
-		<div><h3>Rev: <%=h current_revision_render(@project) %></div>
+		<div><h3>Status: <%= @project.project_status %></h3></div>
+		<div><h3>Rev: <%= current_revision_render(@project) %></div>
 	</div>
 	<div class="info_left">
-		<div class=""><h3>Project: <%=h @project.code_and_title %></h3></div>
+		<div class=""><h3><%= @project.code_and_title %></h3></div>
 	</div>
 </div>
 
 <!-- revision option bar -->
 <div class="row option_band">
-	<div class="option_left">
+	<div>
 		<div>
 			<label class="select_1">Revision:</label>
 			<%= revision_select(@revisions, @revision, @project, @subsections) %>
 		</div>
 	</div>
 </div>
+
 
 
 <!-- page content -->
@@ -55,13 +56,20 @@
 
 <% else %>
 
-    <div class="revision_tabs">
+<div class="row">
+    <div class="specline_col_tab">
         <ul class='tabs'>          
           <% @subsections.each do |subsection|%>
             <li id="<%=h subsection.id %>" class="non_prelim"><a href='#<%=h subsection.id %>rev_view'><%=h subsection.full_code %></a></li>
           <% end %>
         </ul>
+    </div>
+</div>      
 
+
+<div class="row">
+    <div class="specline_col_doc">      
+        <div class="document"> 
         <% @subsections.each_with_index do |subsection, i|%>
             <% if i == 0 %>
                 <div id="<%=h subsection.id%>rev_view" class="tab_content <%=h subsection.id%>">
@@ -73,11 +81,13 @@
                 </div>
             <% else %>
                 <div id="<%=h subsection.id%>rev_view" class="tab_content <%= subsection.id %>">
-                    <p>Loading...</p>
+                    <p class="loading_text">Loading...</p>
                 </div>
             <% end %> 
         <% end%>
+        </div>
     </div>
+</div>
 
 <% end %>
 

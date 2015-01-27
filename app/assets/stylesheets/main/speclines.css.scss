@@ -1,0 +1,182 @@
+@import "layouts/core";
+
+.specline_col_tab{
+    float: left;
+    width: 100%; 
+    padding: 12px 10px 0px 10px;
+}
+
+.specline_col_doc{
+    float: left;
+    width: 100%; 
+    padding: 0px 10px 0px 10px;
+}
+
+
+.document{
+  position:relative;
+  margin-top: -2px;
+  border-top: 2px solid #dddddd;
+  border-bottom: 2px solid #dddddd;
+  border-left: 2px solid #dddddd;
+  border-right: 2px solid #dddddd;
+  height: 400px;
+  overflow: auto;
+}
+  @media screen and (min-width: $phone-landscape) and (max-width: $tablet-protrait){
+    .document_tabs{
+
+    }  
+  } 
+  @media screen and (max-width: $phone-landscape) {
+    .document_tabs{
+
+    }
+  }
+
+////////////////////////////////////////////////////////////
+.specline_table{
+  border-spacing: 0px;
+}
+
+.specline_row{
+  font-size: 1.2rem;
+  font-family: $standard_font;
+}
+.new_specline_row{@extend .specline_row}
+
+
+.specline_data_row{
+  @extend .specline_row;
+  color: #006600;
+}
+
+.specline_xref_row{
+  @extend .specline_row;
+  color: purple;  
+}
+
+.edit_clause_code {
+  width: 75px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  padding: 10px 0px 5px 7px;
+}
+
+.edit_clause_title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  padding: 10px 0px 5px 0px;
+  text-align: left;
+}
+
+td.prefix{
+  width: 10px;
+  padding-top: 5px;
+  vertical-align: top;
+}
+
+td.text_prefix{
+  width: 15px;
+  padding-top: 5px;
+  vertical-align: top;
+}
+
+td.text_text{
+  padding-top: 5px;
+  padding-bottom: 5px;
+  vertical-align: top;
+}
+
+span.editable_text4{
+  vertical-align: top; 
+}
+
+span.editable_text5{@extend span.editable_text4}
+
+///////////////////////////////////
+.prefixed_line_menu{
+  display: table-cell;
+  visibility:hidden;
+  width: 75px;
+  padding: 5px 0px 0px 5px;  
+  }
+  @media screen and (max-width: $tablet-protrait) {
+    .prefixed_line_menu{
+      display: none;
+      visibility:hidden; 
+    } 
+  }
+
+.prefixed_line_space{
+  display: none;    
+  }
+  @media screen and (max-width: $tablet-protrait) {
+    .prefixed_line_space{
+    display: table-cell;
+    width: 70px;
+    padding: 5px 0px 0px 5px;    
+    } 
+  }
+  @media screen and (max-width: $phone-landscape) {
+    .prefixed_line_space{
+    display: table-cell;
+    width: 10px;
+    padding: 5px 0px 0px 5px;    
+    } 
+  }
+
+///////////////////////////////////
+.suffixed_line_menu{
+  display: table-cell;
+  visibility:hidden;
+  text-align: right;
+  width:120px;
+  padding: 5px 5px 0px 0px;
+  a{
+   padding: 0px 5px 0px 0px; 
+  }
+  } 
+  @media screen and (max-width: $tablet-protrait) {
+    .suffixed_line_menu{
+      display: none;
+      visibility:hidden; 
+    } 
+  }    
+     
+//menues for specline when smaller than mob
+.suffixed_line_menu_mob{
+  display: table-cell;
+  visibility:hidden;  
+  text-align: right;
+  width:25px;
+  padding: 5px 5px 0px 0px;
+  img{
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  }
+  @media screen and (min-width: $tablet-protrait) {     
+    .suffixed_line_menu_mob{
+      display: none;
+      visibility:hidden;
+    }
+  }
+
+.specline_mob_menu_popup{
+  display: none;
+  width: 100%;
+  border-spacing: 0px;  
+}
+
+.mob_line_menu{
+  a {
+    float:right;
+    margin-left: 10px
+    }
+  }
+
+.loading_text{
+  padding: 0px 0px 0px 10px;
+}

@@ -1,0 +1,70 @@
+// Place all the styles related to the Projects controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+//core-ui
+@import "layouts/core";
+
+
+.character_menu{
+  display: block;
+//  visibility: hidden;
+  float: right;
+  margin: -5px 0px 0px 0px;
+}
+  @media screen and (max-width: $tablet-protrait) {
+    .character_menu{
+      display: none;
+    }
+  }
+
+
+.character_menu_content{
+    float: right;
+    padding: 1px 2px 1px 2px;
+    border: 1px solid #aaaaaa;
+    @include border-radius(0.4rem);
+  color: #2a2a2a;
+    ul{
+      list-style-type: none;
+      margin: 3px 0px 3px 0px;
+      -webkit-padding-start: 0px;
+      li{
+        font-size: 1.4rem;
+      }
+    }
+}
+
+.character_menu_label{
+    float: right;
+    padding: 8px 5px 0px 0px;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: #2a2a2a;
+}
+  @media screen and (max-width: $tablet-landscape) {
+    .character_menu_label{
+      display: none;
+    }
+  }
+
+.character{
+  padding: 0px 3px 0px 3px;
+  margin: 0px 2px 0px 2px;
+  display: inline;
+  font-size: 1.4rem;
+  font-weight: bold;
+  border: 1px solid #aaa;
+  cursor: pointer;
+  @include border-radius(0.4rem);
+  background: #c2c2c2;
+  background-image: -webkit-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -moz-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -ms-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -o-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: linear-gradient(to bottom, #c2c2c2, #adadad);
+  &:hover{
+  background: #fff;
+    color: #000;
+  }
+}

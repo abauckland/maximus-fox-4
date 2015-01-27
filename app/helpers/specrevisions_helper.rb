@@ -113,9 +113,9 @@ module SpecrevisionsHelper
  
     last_clause_change = Alteration.where('project_id = ? AND clause_id = ? AND clause_add_delete =?', project.id, clause.id, 2).last
     if revision.id == last_clause_change[:revision_id]
-      "<table width='100%' class='rev_table'><tr id='#{clause.id.to_s}'class='clause_title_2'><td class='rev_clause_code'> #{clause_ref(clause)} </td><td class='rev_line_menu_mob'> #{rev_mob_menu(clause)} </td><td class ='rev_clause_title'> #{clause.clausetitle.text.to_s}</td><td class='rev_line_menu'>#{change_info_clause(clause, revision, project)}</td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{change_info_clause(clause, revision, project)}</td></tr></table>".html_safe   
+      "<table width='100%' class='rev_table'><tr id='#{clause.id.to_s}'class='clause_title_2'><td class='rev_clause_code'> #{clause_ref(clause)} </td><td class ='rev_clause_title'> #{clause.clausetitle.text.to_s}</td><td class='rev_line_menu'>#{change_info_clause(clause, revision, project)}</td><td class='rev_line_menu_mob'> #{rev_mob_menu(clause)} </td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{change_info_clause(clause, revision, project)}</td></tr></table>".html_safe   
     else
-      "<table width='100%' class='rev_table'><tr id='#{clause.id.to_s}'class='clause_title_2'><td class='rev_clause_code'> #{clause_ref(clause)} </td><td class='rev_line_menu_mob'> #{rev_mob_menu(clause)} </td><td class ='rev_clause_title'> #{clause.clausetitle.text.to_s} </td><td class='rev_line_menu'> #{change_info_clause(clause)} </td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{change_info_clause(clause, revision, project)}</td></tr></table>".html_safe    
+      "<table width='100%' class='rev_table'><tr id='#{clause.id.to_s}'class='clause_title_2'><td class='rev_clause_code'> #{clause_ref(clause)} </td><td class ='rev_clause_title'> #{clause.clausetitle.text.to_s} </td><td class='rev_line_menu'> #{change_info_clause(clause)} </td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{change_info_clause(clause, revision, project)}</td><td class='rev_line_menu_mob'> #{rev_mob_menu(clause)} </td></tr></table>".html_safe    
     end
  end
 
@@ -128,7 +128,7 @@ def clause_ref(clause)
 end
 
 def changed_clause_titles(changed_clause, action)
-      "<table width='100%' class='rev_table'><tr id='#{changed_clause.id.to_s}'class='clause_title_2'><td class='rev_clause_code'> #{clause_ref(changed_clause)} </td></tr></table>".html_safe  
+      "<table width='100%' class='rev_table'><tr id='#{changed_clause.id.to_s}'class='clause_title_2'><td class='rev_clause_code'> #{clause_ref(changed_clause)} </td><td class ='rev_clause_title'> #{changed_clause.clausetitle.text.to_s} </td></tr></table>".html_safe  
 end
 
 #prelim and non prelim
@@ -244,11 +244,11 @@ end
   end
   
   def change_info(line)
-    link_to image_tag("info.png", :mouseover =>"info_rollover.png", :border=>0), {:controller => "alterations", :action => "line_change_info", :id => line.id}, :class => "get", :title => "change info"
+    link_to "", line_change_info_alteration_path(line.id), :class => "get",  :remote => true, :class => "line_info_icon", :title => "change info"
   end
   
   def change_info_clause(clause, revision, project)
-    link_to image_tag("info.png", :mouseover =>"info_rollover.png", :border=>0), {:controller => "alterations", :action => "clause_change_info", :id => project, :rev_id => revision, :clause_id => clause.id}, :class => "get", :title => "change info"
+    link_to "", clause_change_info_alteration_path(:id => project, :rev_id => revision, :clause_id => clause.id), :class => "get",  :remote => true, :class => "line_info_icon", :title => "change info"
   end
 
   def revision_help(revision, project)

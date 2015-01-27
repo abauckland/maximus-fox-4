@@ -5,68 +5,62 @@
 		<div><h3>Rev: <%=h current_revision_render(@project) %></div>
 	</div>
 	<div class="info_left">
-		<div class=""><h3>Project: <%=h @project.code_and_title %></h3></div>
+		<div class=""><h3><%=h @project.code_and_title %></h3></div>
 	</div>
 </div>
 
 <!-- revision option bar -->
 <div class="row option_band">
-	 <div class="option_right">
-		<% if @project_user.manage? || @project_user.edit? %>
-		<div><%= link_to '+/- sections', manage_specsubsection_path(:id => @project.id, :template_id => @project.parent_id) %></div>
-		<% end %>
-	</div>
-	
-	<div class="option_left">
-		<div>
-			<label class="select_1">Subsection:</label>
-			<%= select_tag "section", options_from_collection_for_select(@project_subsections, :id, :full_code, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/specifications/#{@project.id}?subsection='+this.value;"}  %>
-		</div>
-	</div>
+    <div>
+        <div>
+            <label class="select_2">Subsection:</label>
+            <%= select_tag "section", options_from_collection_for_select(@project_subsections, :id, :full_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/specifications/#{@project.id}?subsection='+this.value;"} %>
+        </div>
+    </div>
+
+    <div class="float_right">
+        <% if @project_user.manage? || @project_user.edit? %>
+            <div>
+                <%= link_to '+/- sections', manage_specsubsection_path(:id => @project.id, :template_id => @project.parent_id), class: "option_button" %>
+            </div>
+        <% end %>
+    </div>
 </div>
 
 
-<% if @selected_section.id == 1 %>
-
-    <div class="document_tabs">
-    	<div class="prelim_show">
-    		<%= render "tab_specline_content", locals: {selected_specline_lines: @selected_specline_lines} %>     
-        	<table><tr class='specline_row'><td></td></tr></table>
-    	</div>
-        <div class="tab_sub_menu">
-            <%= clause_link(@project.id, @selected_subsection.id) %>
-			<%= render "special_character_menu" %>
-        </div>
-
-    </div>
-
-<% else %>
-
-    <div class="document_tabs">
-    	<div class="tab_sub_menu">
-    		<%= clause_link(@project.id, @selected_subsection.id) %>
-			<%= render "special_character_menu" %>
-    	</div>
-
+<div class="row">
+    <div class="specline_col_tab">
     	<ul class='tabs'>
     		<% @clausetypes.each_with_index do |clausetype, i|%>
           		<li id="<%=h clausetype.id %>"><a href='#<%=h clausetype.id %>000'><%=h clausetype.text %></a></li>
         	<%end%>
       	</ul>
-     	<% @clausetypes.each_with_index do |clausetype, i|%>
-    		<% if i == 0 %>
-    			<div id="<%=h clausetype.id %>000" class="tab_content <%=h clausetype.id %>"> 
-    				<%= render "tab_specline_content", locals: {selected_specline_lines: @selected_specline_lines} %>
-    			</div> 
-    		<% else %>
-    			<div id="<%=h clausetype.id %>000" class="tab_content <%=h clausetype.id %>">
-    				<p>Loading...</p>
-    			</div> 					
-    		<% end %>   
-    	<%end%> 
-    </div>
+        <div class="tab_sub_menu">
+            <%= render "special_character_menu" %>
+        </div>
 
-<% end %>
+    </div>
+</div>     	
+
+
+<div class="row">
+    <div class="specline_col_doc">    	
+        <div class="document">     	
+         	<% @clausetypes.each_with_index do |clausetype, i|%>
+        		<% if i == 0 %>
+        			<div id="<%=h clausetype.id %>000" class="tab_content <%=h clausetype.id %>"> 
+        				<%= render "tab_specline_content", locals: {selected_specline_lines: @selected_specline_lines} %>
+        			</div> 
+        		<% else %>
+        			<div id="<%=h clausetype.id %>000" class="tab_content <%=h clausetype.id %>">
+        				<p class="loading_text">Loading...</p>
+        			</div> 					
+        		<% end %>   
+        	<%end%> 
+        </div>
+    </div>
+</div>
+
 
 
 <!-- jquery to load tab content -->

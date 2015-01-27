@@ -1,0 +1,35 @@
+select#template_sections{
+  height: 270px;
+}
+
+select#project_sections{
+  height: 305px;
+}
+
+.no_form_input label{
+    float: left;
+    padding-top: 3px;
+    font-size: 1.2rem;
+    width: 110px;
+}
+
+.no_form_input select {
+  width: 100%; padding: 2px 0px 2px 0px;
+  &:disabled {background: #dddddd;}
+  font-size: 1.2rem;
+}
+
+.no_form_input span {
+    display: block;
+    overflow: hidden;
+    padding: 0px 5px 0px 0px;
+    margin-right: 10px;
+}
+
+.no_form_input div.form_tooltip{
+    float: right;
+    width: 10px; 
+    min-height: 10px;
+    cursor: pointer;
+    background: asset_url('tooltip_icon.png') no-repeat; 
+}

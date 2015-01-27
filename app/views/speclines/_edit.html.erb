@@ -1,14 +1,11 @@
 <div class="linetype_menu">
-<div class="linetype_menu_header">Select line format:</div>
-
-  <div class="linetype_menu_linetype_id">
+    <div class="list_header">Select line format:</div>
     <%= form_for @specline, :remote => true do |f| %>
       <%@linetypes.each do |linetype|%>
-        <div class="linetype_menu_button">
-        	<span><%= f.radio_button 'linetype_id', linetype.id, {:class=> 'submittable2'} %></span>
-        	<span class="linetype_menu_button_label"><%= linetype.description%></span>
+        <div class="linetype">
+            <%= f.radio_button 'linetype_id', linetype.id, {:class=> 'submittable2'} %>
+            <%= linetype.description%>
         </div>
       <% end %>
-    <% end %> 
-  </div>
+    <% end %>
 </div>

@@ -27,7 +27,7 @@ $('div.linetype_menu').hover(function (){
   $('table#<%=@specline.id%>').children('tbody').children('tr.specline_row, tr.new_specline_row, tr.specline_xref_row, tr.specline_data_row').css('background-color', '#fff');
 });
 
-$('span.button').click(function (){
+$('div.linetype_menu input').click(function (){
   $(this).parents('form:first').submit();
   $('div.linetype_menu').remove();
   $('table#<%=@specline.id%>').children('tbody').children('tr.specline_row, tr.new_specline_row, tr.specline_xref_row, tr.specline_data_row').css('background-color', '#fff');

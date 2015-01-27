@@ -1,0 +1,29 @@
+@import "layouts/core";
+
+.linetype_menu{
+  font-family: $standard_font;
+  font-size: 1.2rem;
+  position: absolute;
+  right: 30px;
+  width: 200px;
+  background: #000;
+  color: #fff;
+}
+
+
+.linetype_menu div.list_header{
+  float: left;
+  width: 185px;
+  color: #fff;
+  padding: 9px 10px 9px 5px;
+  margin-bottom: 10px;
+  border-bottom: 1pt solid #fff;
+  font-weight: bold;
+}
+
+.linetype_menu div.linetype{
+  float: left;
+  width: 100%;
+  padding: 0px 0px 10px 10px;
+  input{margin-top: 2px;}
+}

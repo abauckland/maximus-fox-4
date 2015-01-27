@@ -1,0 +1,218 @@
+// Place all the styles related to the Projects controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+//core-ui
+@import "layouts/core";
+@import "layouts/buttons";
+
+//css for revision page
+.revision_select{
+  width: 200px;  
+}
+
+
+.revision_selectBox{
+  top: 1px;  
+  left: 60px;  
+}
+
+.revision_select_draft{
+  padding: 1px 0px 0px 10px;
+  font-weight: bold;
+}
+
+.revision_tabs{
+  position: absolute;
+  top: 130px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;   
+}  
+  @media screen and (max-width: $tablet-protrait) {
+    .revision_tabs{
+      top: 145px;
+    }  
+  }
+  @media screen and (max-width: $phone-landscape) {
+    .revision_tabs{
+      top: 95px;
+    }  
+  }
+
+
+//type of revision that has been undertaken to subsequent list of subsections
+.rev_title{
+  font-family: $standard_font;
+  font-size: 1.4rem;
+  font-weight: bold;
+  padding: 15px 0px 0px 10px;
+}
+
+//code and title of subsections that have been changed
+.changed_subsection_code{
+  font-family: $standard_font;
+  font-size: 1.3rem;
+  font-weight: bold;
+  padding: 10px 0px 0px 20px;
+}
+
+//type of revision that has been undertaken to subsequent list of clauses
+.rev_title_2{
+  font-family: $standard_font;
+  font-size: 1.3rem;
+  font-weight: bold;
+  padding: 15px 0px 0px 10px;  
+}
+
+.rev_subsection_action{
+  font-family: $standard_font;
+  font-size: 1.3rem;
+  font-weight: bold;
+  padding: 15px 0px 0px 25px;
+}
+
+//clause code for those clauses that have been fully added or deleted
+.rev_clause_code{
+  font-family: $standard_font;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 5px 0px 0px 35px;
+  width: 65px;
+  height: 26px;
+}
+//clause code for those clauses where a change to their content has been made
+.changed_clause_code{@extend .rev_clause_code}
+
+
+//clause title for those clauses that have been fully added or deleted
+.rev_clause_title{
+  font-family: $standard_font;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 5px 0px 0px 5px;
+  height: 26px;
+}
+//clause title for those clauses where a change to their content has been made
+.changed_clause_title{@extend .rev_clause_title}
+
+
+.rev_table{
+  border-collapse: collapse;
+}
+
+.rev_row_padding{
+  padding-left: 120px;
+}
+  @media screen and (max-width: $phone-landscape) {
+    .rev_row_padding{
+      padding-left: 35px;
+    }  
+  }
+
+//text denoting the type of change made to clause, i.e. text deleted, added or changed
+.rev_subtitle, .rev_subtitle_strike{
+  font-family: $standard_font;
+  font-size: 1.2rem;
+  padding: 5px 0px 5px 100px;
+  text-decoration: underline;
+}
+  @media screen and (max-width: $phone-landscape) {
+    .rev_subtitle, .rev_subtitle_strike{
+      padding-left: 35px;
+    }  
+  }
+.rev_subtitle_strike{color: #b7b7b7}
+
+//row container for changed text where text has been changed within a clause
+.rev_row{
+  font-family: $standard_font;
+  font-size: 1.2rem; 
+}
+.rev_row_strike{@extend .rev_row; color: #b7b7b7}
+
+//where text has been changed indicated if it has been changed from or to the text
+.change_title{
+  font-family: $standard_font;
+  font-size: 1.1rem;
+  font-style: italic;
+}
+.change_title_strike{@extend .change_title; color: #b7b7b7}
+
+//text that has been changed, i.e. added, deleted or changed
+.change_line{
+  font-family: $standard_font;
+  font-size: 1.2rem;  
+}
+.change_line_strike{@extend .change_line; color: #b7b7b7}
+
+
+.rev_line_menu{
+  display: table-cell;
+  visibility: hidden;
+  text-align: right;
+  width: 80px;
+  vertical-align: middle;
+  padding: 5px 5px 0px 0px;
+  a {
+  padding: 0px 5px 0px 0px;
+  };
+  img {
+  margin: 0px 0px 0px 0px;
+  };
+}
+  @media screen and (max-width: $tablet-protrait) {
+    .rev_line_menu{
+      display: none;
+      visibility:hidden; 
+    } 
+  }
+  
+//menues for specline when smaller than mob
+.rev_line_menu_mob{
+  display: table-cell;
+  visibility:hidden;  
+  text-align: right;
+  width:25px;
+  padding: 5px 5px 0px 0px;
+  img{
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+  @media screen and (min-width: $tablet-protrait) {
+    .rev_line_menu_mob{
+      display: none;
+      visibility:hidden;
+    }
+  }
+
+.rev_mob_menu_popup{
+  display: none;
+  width: 100%;
+  border-spacing: 0px;  
+}
+
+.mob_rev_menu{
+  padding-right: 50px;
+  a {
+    float:right;
+    margin-left: 10px
+    }
+  }
+
+
+//popup change information
+.change_info{
+  position: absolute;
+  font-family: $standard_font;
+  font-size: 1.2rem;
+  right: 100px;
+  color: #fff;
+  padding: 4px 10px 4px 10px;
+  @include border-radius(0.5rem);
+  @include shadow-all(0px 0px 5px #aeaeae);
+  border: 1px solid #000;
+  background-color: #E5A323;
+}
