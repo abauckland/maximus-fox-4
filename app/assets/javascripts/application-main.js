@@ -8,15 +8,15 @@
 //= require jquery_ujs
 //= require jquery-ui/sortable
 //= require jquery-ui/draggable
-//= require core
+//= require tabs
 //= require projects
-//= require symbols
 //= require layouts/help.js
 //= require layouts/nav.js
 //= require layouts/grid.js
 //= require layouts/columns.js
 //= require layouts/editable_tables.js
 //= require plugins/autogrow.js
+//= require plugins/symbols
 //= require plugins/jquery.jeditable.js
 //= require plugins/jeditable_extensions.js
 //= require plugins/qtip2.js
