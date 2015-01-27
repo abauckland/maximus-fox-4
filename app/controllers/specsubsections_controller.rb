@@ -1,7 +1,7 @@
 class SpecsubsectionsController < ApplicationController
 
 
-  before_filter :authenticate
+#  before_filter :authenticate
   before_filter :authorise_project_manager_editor, only: [:manage, :add, :delete]
   before_action :set_project, only: [:manage, :add, :delete]
 

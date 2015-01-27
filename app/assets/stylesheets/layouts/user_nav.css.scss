@@ -1,0 +1,87 @@
+ .user_menu{
+    display: block;
+    float: right;
+    margin: 16px 10px 0px 0px;
+    padding: 0px 20px 16px 0px;  
+    background: image-url('settings-icon-white.png') no-repeat;
+    background-position: 100% 0%;  
+    font-family: "Trebuchet MS", Trebuchet, "Liberation Sans", sans-serif;
+    font-size: 1.2rem;
+    color: #fff;
+    cursor: pointer;
+    &:hover{
+      text-decoration: underline;    
+    }
+  }  
+
+  ul.right_menu{
+      visibility: hidden;
+      position: absolute;
+      top: 38px;
+      right: 28px;
+      z-index: 1000;
+      padding: 0px 0px 0px 0px;
+      background: #000;
+      list-style-type: none;
+      li{
+        height:36px;
+        clear: both;
+        width:100%;
+        border-top: 1px solid #555;
+        &:hover{background: #555;}
+        a{
+          float: left;
+          height:25px;
+          font-family: "Trebuchet MS", Trebuchet, "Liberation Sans", sans-serif;
+          font-weight: bold;
+          font-size: 1.1rem;
+          text-decoration: none; 
+          padding: 11px 10px 0px 10px;
+          color: #fff;
+          width:100%;
+          &:hover {
+            text-decoration: underline;
+            color: #fff;
+          }  
+        }
+      }
+  }
+
+
+@media all and (max-width: 800px){//, only screen and (-webkit-min-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (min--moz-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (-o-min-device-pixel-ratio: 2/1) and (max-width: 1024px), only screen and (min-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (min-resolution: 192dpi) and (max-width: 1024px), only screen and (min-resolution: 2dppx) and (max-width: 1024px) {
+
+
+  //mobile drop down menu     
+  ul.right_menu{
+      display: none;
+      position: absolute;
+      top: 38px;
+      left: 30px;   //set to suit size of MyHq logo
+      right:30px;
+      list-style-type: none;
+      z-index: 1000;
+      li{
+         background: #000;
+         border-top: 1px solid #555;
+         width: 100%;
+         &:hover{background: #555;}
+        a{
+          display: block;
+          font-family: "Trebuchet MS", Trebuchet, "Liberation Sans", sans-serif;
+          font-weight: bold;
+          font-size: 1.1rem;
+          text-decoration: none;
+          text-align: right;
+          line-height: 40px;
+          padding: 0px 20px 0px 0px;
+          color: #fff;
+          &:hover {
+            text-decoration: underline;
+            background: #333;
+            color: #fff;
+          }
+        }          
+      }
+  } 
+
+}

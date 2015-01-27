@@ -1,0 +1,73 @@
+@import "core";
+@import "buttons";
+
+
+.blank_column{
+  background: $blank_column_colour;  
+}
+
+.column_title{
+  margin: 0px 0 10px 0;
+  padding: 5px 0px 5px 0px; 
+  border-bottom: solid 1px $column_border_colour;
+  color: $column_title_text;
+}
+
+.column_title span.form_tooltip{
+    float: right;
+    width: 10px; 
+    min-height: 10px;
+    cursor: pointer;
+    background: asset_url('tooltip_icon.png') no-repeat; 
+}
+
+.column_text p{
+  margin: 5px 0px 15px 0px;
+  color: $guide_text_color;
+}
+
+.column_line {
+  margin: 0px 0px 20px 0px;
+  height: 1px;
+  border-top: solid 1px $column_border_colour;
+}
+
+.form_footer {
+  margin: 10px 0 0 0;
+  padding: 5px 0px 0px 0px; 
+  border-top: solid 1px $column_border_colour;
+}
+
+
+.form_notice{
+  margin: 0px 0 10px 0;
+  padding: 12px; 
+  border: solid 1px $notice_text_colour;
+  @include border-radius(0.5rem);
+  color: $notice_text_colour;
+  p{margin: 0;}
+}
+
+
+.form_footer a{
+  @include form-button; //override default settings
+  float: right;
+  color: $cancel_text_colour;
+  padding-top: 3px;
+  padding-right: 0px;
+  @include form_icons(-160px);
+  &:hover{text-decoration:underline;}
+  &:visited{color: $cancel_text_colour;}  
+}
+
+.form_footer a.left_edit_button{
+  @include form-button; //override default settings
+  float: left;
+  color: $save_text_colour;
+  padding-top: 3px;
+  padding-right: 0px;
+  @include form_icons(-80px);
+  &:hover{text-decoration:underline;}
+  &:visited{color: $save_text_colour;}  
+}
+

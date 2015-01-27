@@ -1,0 +1,74 @@
+@import "core";
+@import "buttons";
+
+.option_band{
+  font-size: 1.2rem;
+  @include border-radius(0.5rem);
+//  @include shadow-all(0px 0px 5px #aeaeae);  
+//  @include light_grey_32_gradient; 
+  margin: 5px 10px 0px 10px;
+  padding: 1px 10px 0px 10px; 
+
+  background: #c2c2c2;
+  background-image: -webkit-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -moz-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -ms-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -o-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: linear-gradient(to bottom, #c2c2c2, #adadad);
+
+}
+
+.option_band .float_right{float: right;}
+
+.float_right a.option_button{
+  float: right;
+  margin: 0px 0px 0px 10px;
+  @include title-button-green;
+}
+
+
+.option_band div div{
+  float: left;
+  margin: 3px 0px 4px 0px;  
+}
+
+.option_left{
+  overflow: hidden;
+}
+
+.option_left div{
+  float: left;
+  width: 385px;
+  margin: 4px 10px 4px 0px;
+}
+
+.option_band label.select_1{
+  float: left;
+  padding-top: 4px;
+  margin-right:2px;
+  font-weight: bold;
+  width: 45px;
+}
+
+.option_band label.select_2{
+  float: left;
+  padding-top: 4px;
+  margin-right:2px;
+  font-weight: bold;
+  width: 65px;
+}
+
+
+//form footer submit and cancel buttons
+.option_band select{
+  float: left;
+  margin: 0px 10px 0px 2px;
+  padding: 2px 0px 2px 0px;
+  width: 320px;
+}
+  @media screen and (max-width: $phone-landscape) {
+    .option_band select{
+      margin: 0px 0px 0px 2px;
+    }
+  }
+

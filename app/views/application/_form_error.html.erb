@@ -1,8 +1,12 @@
-
-<div class="row">
-    <div class="form_error">
-        <p>form error</p>
-        <ul><li>error text 1</li></ul>
+<% if item.errors.any? %>
+    <div class="row">
+        <div class="form_error">
+            <p><%= pluralize(item.errors.count, "error") %> prohibited item from being created</p>
+            <ul>
+            <% item.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+            </ul>
+        </div>
     </div>
-</div>
-
+<% end %>

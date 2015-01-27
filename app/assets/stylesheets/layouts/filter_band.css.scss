@@ -1,0 +1,94 @@
+@import "core";
+@import "buttons";
+
+.filter_band{
+  @include border-radius(0.5rem);
+//  @include shadow-all(0px 0px 5px #aeaeae);  
+//  @include light_grey_32_gradient; 
+  margin: 5px 10px 0px 10px;
+  padding: 1px 10px 0px 10px; 
+
+  background: #c2c2c2;
+  background-image: -webkit-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -moz-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -ms-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: -o-linear-gradient(top, #c2c2c2, #adadad);
+  background-image: linear-gradient(to bottom, #c2c2c2, #adadad);
+
+}
+
+.filter_band .float_right{float: right;}
+
+.filter_band div div{
+  float: left;
+  margin: 3px 0px 4px 0px;  
+}
+
+.filter_band label.select{
+  padding-top: 4px;
+  margin-right:2px;
+  font-weight: bold;
+  width: 60px;
+}
+
+.filter_band label.date{
+  padding-top: 4px;
+  margin-right:2px;
+  font-weight: bold;
+  width: 63px;
+  text-align: right;
+}
+
+//form footer submit and cancel buttons
+.filter_band select{
+  float: left;
+  margin: 0px 10px 0px 2px;
+  padding: 2px 0px 2px 0px;
+  width: 320px;
+}
+  @media screen and (max-width: $phone-landscape) {
+    .filter_band select{
+      margin: 0px 0px 0px 2px;
+    }
+  }
+
+
+//form footer submit and cancel buttons
+.filter_band input[type="date"]{
+  float: left;
+  width: 127px;
+}
+
+//form footer submit and cancel buttons
+.filter_band input[type="submit"]{
+  float: left;
+  margin: 3px 0px 0px 10px;
+  width: auto;
+  @include title-button-orange;
+}
+  @media screen and (max-width: 898px) {
+    .filter_band input[type="submit"]{
+      margin: 0px 0px 0px 0px;
+    }
+  }
+  @media screen and (max-width: 850px) {
+    .filter_band input[type="submit"]{
+      margin: 3px 0px 0px 10px;
+    }
+  }
+  @media screen and (max-width: 503px) {
+    .filter_band input[type="submit"]{
+      margin: 0px 0px 0px 0px;
+    }
+  }
+
+.float_right input[type="submit"] {  
+  float: right;
+  @include menu_icons(-1000px);
+  border: 0px;
+  margin: 1px 0px 0px 5px;
+  padding: 0px 0px 0px 0px;
+  cursor: pointer;
+  font-size: 0px;
+}
+

@@ -10,4 +10,4 @@
 //= require core
 //= require products
 //= require dataTables/jquery.dataTables
-//= require jquery.tipsy
+

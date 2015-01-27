@@ -6,4 +6,6 @@
 
 *= require_self
 *= require_tree ./main
+*= require_tree ./layouts
+*= require_tree ./plugins
 */

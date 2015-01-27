@@ -595,7 +595,7 @@ end
     elsif  controller_name == 'unlocks' #&& action_name == 'new'
       'devise'
     else
-      'application'
+      'projects'
     end
   end
 

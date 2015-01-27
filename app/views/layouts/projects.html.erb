@@ -10,29 +10,24 @@
 	<%= csrf_meta_tags %>
 </head>
 
-<body>
+	<body>
 
-<div class="app_page_container">
+        <div class="grid-container outline">
 
-<% if notice %>
-  <p class="alert alert-success"><%= notice %></p>
-<% end %>
-<% if alert %>
-  <p class="alert alert-danger"><%= alert %></p>
-<% end %>
+            <div class="row header">
+                <figure><%= image_tag("header_logo.png", height: "30px") %></figure>
 
+                <%= render :partial => "spec_menu", :project => @project %>
 
-    <header class="app_page_header">
-        <figure class="app_logo"></figure>	
-	                               
-        <%= render :partial => "spec_menu", :project => @project %>              
-             
-        <%= render :partial => "user_menu", :project => @project %> 
-                     
-    </header>	
+                <%= render :partial => "user_menu"%>
+            </div>
 
-<%= yield %>
+            <!--     <div  class="header_message">Success or Error Message Here</div> -->
 
-</body>
+            <%= yield %>
+
+        </div>
+
+	</body>
 
 </html>

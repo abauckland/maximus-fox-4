@@ -1,0 +1,12 @@
+@import "core";
+
+.notice_band{
+  padding: 5px 10px 5px 10px;
+  margin:  5px 10px 5px 10px;
+  border: solid 1px $notice_text_colour;
+  @include border-radius(0.5rem);
+  color: $notice_text_colour;
+  p{margin: 0;}
+}
+
+

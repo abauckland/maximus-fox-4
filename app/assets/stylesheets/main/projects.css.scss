@@ -3,279 +3,57 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 //core-ui
-@import "core";
-
-html {
-  font-size: 62.5%; 
-  font-family: $standard_font;
-  //background-color: #fbfbfb;
-  }
+@import "layouts/core";
+@import "layouts/buttons";
 
 
 
+select#template_sections{
+  height: 270px;
+}
 
-.mob_spec_menu{
-  display: none; 
-  position: absolute;
-  top: 38px;
-  left: 95px;
-  width: 110px;
-  background: #000;
-  padding:0px 5px 0px 10px;
-  z-index: 1000;
-  ul{
-    list-style-type: none; 
-    -webkit-padding-start: 0px;
-    margin: 0px; //require so displays properly in firefox, ie
-    padding: 0px; //require so displays properly in firefox, ie
-    li{
-      padding: 2px 0px 2px 0px;     
-    }
-  }
-  a{
-    text-align: left;
-    font-size: 1.4rem;
-    line-height: 2.4rem;
-    color: #fff;
-    text-decoration: none;
-    &:hover{    
-      text-decoration: underline; 
-    }
-  }
-  }
+select#project_sections{
+  height: 305px;
+}
 
-.tutorial_link a{
-  color: blue;
+select#template_clauses{
+  height: 270px;
+}
+
+select#project_clauses{
+  height: 345px;
 }
 
 
-/*project index page - information css*/  
-.project_info {
-  position: absolute;
-  width:100%;
-  top:60px;
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #777777;
-  padding: 4px 0px 0px 0px;
-  min-width:310px
-  }
-  @media screen and (max-width: $medium_menu) {
-    .project_info {
-      top:78px;
-      font-size: 1.2rem;
-      }
-  }
-  @media screen and (max-width: $small_menu) {
-    .project_info {
-      display:none;
-      }
-  }
-
-
-.project_title{
-  position: absolute;
-  left: 10px;
+.no_form_input label{
+    float: left;
+    padding-top: 3px;
+    font-size: 1.2rem;
+    width: 110px;
 }
 
-.project_code{
-  float: left;
+.no_form_input select {
+  width: 100%; padding: 2px 0px 2px 0px;
+  &:disabled {background: #dddddd;}
+  font-size: 1.2rem;
 }
 
-.project_code_title{
-  float: left;
-  padding: 0px 0px 0px 3px;
-  max-width: 350px;
-  text-overflow:ellipsis;
-  overflow: hidden;
-  white-space:nowrap;
+.no_form_input span {
+    display: block;
+    overflow: hidden;
+    padding: 0px 5px 0px 0px;
+    margin-right: 10px;
 }
-  @media screen and (max-width: $medium_menu) {
-    .project_code_title{
-      max-width: 200px;
-      overflow:hidden;}  
-  }
-  @media screen and (max-width: $small_menu) {
-    .project_code_title{display: none;}  
-  }
 
-.project_name{
-  float: left;
-  padding: 0px 0px 0px 10px;
-  overflow:hidden;
-  height: 20px;
-  max-width: 550px;
-  }
-  @media screen and (max-width: $s_tab) {
-    .project_name {
-      display: none;
-      }
-  }
-
-.project_status{
-position: absolute;
-right: 100px;
-}
-  @media screen and (max-width: $medium_menu) {
-    .project_status {
-      display: none;
-      }
-  }
-
-.project_rev{
-position: absolute;
-right: 30px;
+.no_form_input div.form_tooltip{
+    float: right;
+    width: 10px; 
+    min-height: 10px;
+    cursor: pointer;
+    background: asset_url('tooltip_icon.png') no-repeat; 
 }
 
 
-//project select in option band
-.project_select{
-  position: absolute;
-  top: 1px;
-  left: 2px;
-  padding: 0px 0px 0px 5px;
-  }
-
-.project_label_select{  
-  padding: 5px 5px 0px 0px;
-}
- 
-.project_index_select_large{  
-  position: absolute;
-  top: 1px;
-  left: 55px;
-}
-
-.project_index_select_small{  
-  position: absolute;
-  top: 1px;
-  left:27px;
-}
-
-.project_option_select{  
-  position: absolute;
-  top: 1px;
-  left: 55px;
-}
-
-
-.project_selectBox{
-  top: 0px;  
-  left: 0px;  
-} 
-
-//button to righthand side of single option band  
-.project_create_button{
-  position: absolute;
-  top: 2px;
-  right: 7px;
-  @include small-button;
-  @include green-button;
-  border: 1px solid #878787;
-  }
-///////////////////////////////////////////////////////
-//document show page
-
-.section_select_desktop{display: none}  
-  @media screen and (min-width: 1050px) {
-    .section_select_desktop{display: block}
-  }
-
-.section_select_tablet{display: none}
-  @media screen and (min-width: 600px) and (max-width: 1050px){  
-    .section_select_tablet{display: block}
-  }
-
-.section_select_mobile{display: none}
-  @media screen and (max-width: 600px) {
-    .section_select_mobile{display: block}
-  }
-
-.select_1 {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  padding: 0px 0px 0px 5px;
-  }
-  
-.select_2 {
-  position: absolute;
-  top: 0px;
-  left: 100px;
-  }
-
-
-.label_select_1{  
-  padding: 5px 5px 0px 0px;
-}
-
-.option_select_1{  
-  position: absolute;
-  top: 2px;
-  left: 60px;
-}
-  @media screen and (max-width: 1050px) {
-    .option_select_1 {
-      left: 80px;
-      }
-  }
-
-.option_select_2{  
-  position: absolute;
-  top: 2px;
-  left: 75px;
-  }
-  
-
-.subsection_button_small{
-  display:none;
-  position: absolute;
-  top: 2px;
-  right: 7px;
-  @include small-button;
-  @include green-button;
-  border: 1px solid #878787;
-  }
-  @media screen and (max-width: 600px) {
-    .subsection_button_small{display: block}
-  }  
-  
-.subsection_button_medium{
-  display:none;
-  position: absolute;
-  top: 2px;
-  right: 7px;
-  @include small-button;
-  @include green-button;
-  border: 1px solid #878787;
-  }
-  @media screen and (min-width: 600px) and (max-width: 1050px){
-    .subsection_button_medium{display: block}
-  }   
-
-.subsection_button_large{
-  display:none;
-  position: absolute;
-  top: 2px;
-  right: 7px;
-  @include small-button;
-  @include green-button;
-  border: 1px solid #878787;
-  }
-  @media screen and (min-width: 1050px) {
-    .subsection_button_large{display: block}
-  } 
-
-
-.document_selectBox_1{
-  top: 0px;  
-  left: -5px;  
-} 
-
-.document_selectBox_2{
-  top: 0px;  
-  left: -5px;  
-}
 
 .document_tabs{
   position: absolute;
@@ -284,30 +62,17 @@ right: 30px;
   right: 0px;
   bottom: 0px;   
 }
-  @media screen and (min-width: $small_menu) and (max-width: $medium_menu){
+  @media screen and (min-width: $phone-landscape) and (max-width: $tablet-protrait){
     .document_tabs{
       top: 140px;
     }  
   } 
-  @media screen and (max-width: $small_menu) {
+  @media screen and (max-width: $phone-landscape) {
     .document_tabs{
       top: 92px;
     }  
   }
-  
-  
-.guide_download_button{
-  float: right;
-  margin: 0px 5px 0px 5px;
-  @include small-button;
-  @include green-button;
-  border: 2px solid #b0db64;
-  }
-  @media screen and (max-width: $large_menu) {
-    .guide_download_button{
-      display: none;
-    }  
-  }
+
 
 .character_menu{
   display: block;
@@ -315,7 +80,7 @@ right: 30px;
   float: right;
   margin: -2px 0px 0px 0px;
 }
-  @media screen and (max-width: $medium_menu) {
+  @media screen and (max-width: $tablet-protrait) {
     .character_menu{
       display: none;
     }  
@@ -345,7 +110,7 @@ right: 30px;
     font-style: italic;
     color: #2a2a2a;      
 }
-  @media screen and (max-width: $large_menu) {
+  @media screen and (max-width: $tablet-landscape) {
     .character_menu_label{
       display: none;
     }  
@@ -360,9 +125,9 @@ right: 30px;
     border: 1px solid #aaa;
   @include border-radius(0.4rem);
   cursor: pointer;
-  @include grey_28_gradient;
+  @include light_grey_32_gradient;
   &:hover{
-    @include inverted_grey_28_gradient;
+    @include light_grey_32_gradient;
     color: #000;
   }   
 }  
@@ -447,7 +212,7 @@ span.editable_text5{@extend span.editable_text4}
   width: 75px;
   padding: 5px 0px 0px 5px;  
 }
-  @media screen and (max-width: $medium_menu) {
+  @media screen and (max-width: $tablet-protrait) {
     .prefixed_line_menu{
       display: none;
       visibility:hidden; 
@@ -457,14 +222,14 @@ span.editable_text5{@extend span.editable_text4}
 .prefixed_line_space{
   display: none;    
   }
-@media screen and (max-width: $medium_menu) {
+@media screen and (max-width: $tablet-protrait) {
   .prefixed_line_space{
   display: table-cell;
   width: 70px;
   padding: 5px 0px 0px 5px;    
   } 
 }
-@media screen and (max-width: $small_menu) {
+@media screen and (max-width: $phone-landscape) {
   .prefixed_line_space{
   display: table-cell;
   width: 10px;
@@ -483,7 +248,7 @@ span.editable_text5{@extend span.editable_text4}
    padding: 0px 5px 0px 0px; 
   }
 } 
-  @media screen and (max-width: $medium_menu) {
+  @media screen and (max-width: $tablet-protrait) {
     .suffixed_line_menu{
       display: none;
       visibility:hidden; 
@@ -503,7 +268,7 @@ span.editable_text5{@extend span.editable_text4}
     cursor: pointer;
   }
 }
-  @media screen and (min-width: $medium_menu) {     
+  @media screen and (min-width: $tablet-protrait) {     
     .suffixed_line_menu_mob{
       display: none;
       visibility:hidden;
@@ -549,12 +314,12 @@ span.editable_text5{@extend span.editable_text4}
   right: 0px;
   bottom: 0px;   
 }  
-  @media screen and (max-width: $medium_menu) {
+  @media screen and (max-width: $tablet-protrait) {
     .revision_tabs{
       top: 145px;
     }  
   }
-  @media screen and (max-width: $small_menu) {
+  @media screen and (max-width: $phone-landscape) {
     .revision_tabs{
       top: 95px;
     }  
@@ -624,7 +389,7 @@ span.editable_text5{@extend span.editable_text4}
 .rev_row_padding{
   padding-left: 120px;
 }
-  @media screen and (max-width: $small_menu) {
+  @media screen and (max-width: $phone-landscape) {
     .rev_row_padding{
       padding-left: 35px;
     }  
@@ -637,7 +402,7 @@ span.editable_text5{@extend span.editable_text4}
   padding: 5px 0px 5px 100px;
   text-decoration: underline;
 }
-  @media screen and (max-width: $small_menu) {
+  @media screen and (max-width: $phone-landscape) {
     .rev_subtitle, .rev_subtitle_strike{
       padding-left: 35px;
     }  
@@ -681,7 +446,7 @@ span.editable_text5{@extend span.editable_text4}
   margin: 0px 0px 0px 0px;
   };  
 }
-  @media screen and (max-width: $medium_menu) {
+  @media screen and (max-width: $tablet-protrait) {
     .rev_line_menu{
       display: none;
       visibility:hidden; 
@@ -701,7 +466,7 @@ span.editable_text5{@extend span.editable_text4}
     cursor: pointer;
   }
 }
-  @media screen and (min-width: $medium_menu) {     
+  @media screen and (min-width: $tablet-protrait) {     
     .rev_line_menu_mob{
       display: none;
       visibility:hidden;
@@ -735,12 +500,12 @@ span.editable_text5{@extend span.editable_text4}
   @include shadow-all(0px 0px 5px #aeaeae);
   border: 1px solid #000;
 }
-  @media screen and (min-width: $medium_menu) {
+  @media screen and (min-width: $tablet-protrait) {
     .change_info{
-      @include orange_28_gradient;
+      @include light_grey_32_gradient;
     } 
   } 
-  @media screen and (max-width: $medium_menu) {
+  @media screen and (max-width: $tablet-protrait) {
     .change_info{
       left: 20px;
       background-color: #E5A323; 
@@ -763,11 +528,11 @@ span.editable_text5{@extend span.editable_text4}
   text-align: left;   
 }
 
-  @media screen and (min-width: $medium_menu) {
+  @media screen and (min-width: $tablet-protrait) {
     .small_show{display:none;} 
   }
   
-  @media screen and (max-width: $medium_menu) {
+  @media screen and (max-width: $tablet-protrait) {
     .small_hide{display:none;}  
   }
   
@@ -777,7 +542,7 @@ span.editable_text5{@extend span.editable_text4}
   font-size: 1.2rem;
   font-weight: bold;
   float:left;  
-  color: $bold_text_color;    
+  color: title_band_text_colour;    
   width: 80px;
   padding: 10px 5px 0px 0px;
   text-align: left;   
@@ -795,11 +560,11 @@ span.editable_text5{@extend span.editable_text4}
 #clone_clause_id{
   width: 300px;
 }
-  @media screen and (min-width: $medium_menu) {
+  @media screen and (min-width: $tablet-protrait) {
     #clone_clause_id{width: 200px;} 
   }
   
-  @media screen and (max-width: $small_menu) {
+  @media screen and (max-width: $phone-landscape) {
     #clone_clause_id{width: 100px;}
   }
   
@@ -828,7 +593,7 @@ span.editable_text5{@extend span.editable_text4}
   padding: 4px 5px 10px 10px;
   @include shadow-all(0px 0px 5px #aeaeae);
 }
-  @media screen and (max-width: $small_menu) {
+  @media screen and (max-width: $phone-landscape) {
     .linetype_menu{right: 100px;}  
   }
 
@@ -881,7 +646,7 @@ span.editable_text5{@extend span.editable_text4}
   left: 4px;
   right: 4px;
   height: 28px;
-  @include dark_grey_28_gradient;
+  @include dark_grey_38_gradient;
   @include border-radius(0.4rem);
   border: 1px solid #888;    
 }
@@ -894,7 +659,7 @@ span.editable_text5{@extend span.editable_text4}
   font-size: 1.4rem;
   color: #fff;
 }
-  @media screen and (max-width: $medium_menu) {
+  @media screen and (max-width: $tablet-protrait) {
     .guide_title {display: none;}  
   }
 
@@ -906,7 +671,7 @@ span.editable_text5{@extend span.editable_text4}
   font-size: 1.4rem;
   color: #fff;
 }
-  @media screen and (max-width: $medium_menu) {
+  @media screen and (max-width: $tablet-protrait) {
     .guide_title_mob {display: block;}  
   }
 
@@ -915,8 +680,7 @@ span.editable_text5{@extend span.editable_text4}
   position: absolute;
   top: 2px;
   right: 7px;
-  @include small-button;
-  @include red-button;
+  @include title-button-orange;
   border: 1px solid #878787;
   }
 

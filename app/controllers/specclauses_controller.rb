@@ -1,7 +1,7 @@
 class SpecclausesController < ApplicationController
 
 
-  before_filter :authenticate  
+#  before_filter :authenticate  
   before_action :set_project, only: [:manage, :add_clauses, :delete_clauses]
 
   layout "projects"

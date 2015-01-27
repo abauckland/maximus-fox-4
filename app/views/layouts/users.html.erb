@@ -10,24 +10,24 @@
 	<%= csrf_meta_tags %>
 </head>
 
-<body>
+	<body>
 
-<div class="app_page_container">
-	
-	<!-- menu header-->
-	<header class="app_page_header">
-   
-		<figure class="app_logo"></figure>
+        <div class="grid-container outline">
 
-        <%= render :partial => "dashboard_menu", :project => @project %>
+            <div class="row header">
+                <figure><%= image_tag("header_logo.png", height: "30px") %></figure>
 
-        <%= render :partial => "user_menu", :project => @project %> 
-        
-        <nav class="app_logout"><%= link_to "logout", log_out_path %></nav>  
-	</header>
+                <%= render :partial => "spec_menu", :project => @project %>
 
-	<%= yield %>
-	
-</div>
-</body>
+                <%= render :partial => "user_menu"%>
+            </div>
+
+            <!--     <div  class="header_message">Success or Error Message Here</div> -->
+
+            <%= yield %>
+
+        </div>
+
+	</body>
+
 </html>

@@ -1,0 +1,13 @@
+<%- unless flash.empty? %>
+    <div class="row">
+        <div class="notice_band">
+            <%- if flash.key?("notice") %>
+                <p>Notice: <%= flash.notice %></p>
+            <% end %>
+    
+            <%- if flash.key?("alert") %>
+                <p>Error: <%= flash.alert  %></p>
+            <% end %>
+        </div>
+    </div>
+<% end -%>

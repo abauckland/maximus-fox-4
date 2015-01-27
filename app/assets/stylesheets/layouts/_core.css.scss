@@ -1,0 +1,41 @@
+///note
+//have last item as 100% on smaller screens?
+
+$tablet-landscape: 960px;
+$tablet-protrait: 760px;
+$phone-landscape: 480px;
+$phone-protrait: 320px;
+
+//text stlye and colour
+$heading_font: "Trebuchet MS", Trebuchet, "Liberation Sans", sans-serif;
+$standard_font: Arial,Helvetica,sans-serif;
+$guide_text_color: #006699;
+
+//$confirm_text_color: #404040;
+//$bold_text_color: #404040;
+$title_band_text_colour:#111;
+$info_band_text_colour:#888;
+
+$column_title_text:#66aa00; 
+$save_text_colour: #66aa00;
+$cancel_text_colour: #ff3300;
+$error_text_colour: #ff3300;
+$notice_text_colour: #66aa00;
+
+$column_border_colour: #888;
+$blank_column_colour: #eee;
+
+//background gradient image
+@mixin dark_grey_46_gradient {background: image-url('dark_grey_46.png') repeat-x};
+@mixin dark_grey_38_gradient {background: image-url('dark_grey_38.png') repeat-x};
+
+@mixin light_grey_32_gradient {background: image-url('light_grey_32.png') repeat-x};
+@mixin light_grey_24_gradient {background: image-url('light_grey_24.png') repeat-x};
+
+
+//border radius
+@mixin border-radius($var) {-moz-border-radius:$var; -webkit-border-radius:$var; border-radius:$var;}
+
+//shadows
+@mixin shadow-all($shadows...) {-moz-box-shadow: $shadows; -webkit-box-shadow: $shadows; box-shadow: $shadows;}
+@mixin button-box-shadow($colour) {-moz-box-shadow:inset 0px 1px 0px 0px $colour; -webkit-box-shadow:inset 0px 1px 0px 0px $colour; box-shadow:inset 0px 1px 0px 0px $colour;} 

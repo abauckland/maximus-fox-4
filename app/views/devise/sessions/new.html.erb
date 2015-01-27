@@ -8,7 +8,7 @@
 
                     <div class="row">
                         <div class="column_title">
-                            <h3>Login</h3>
+                            <h4>Sign In</h4>
                         </div>
                     </div>
 
@@ -41,25 +41,30 @@
     <div class="col-1-3 column_2">
         <div class="border">
 
-            <div class="row">
-                <div class="column_title">
-                    <h3>Create an Account</h3>
+            <article>
+                <div class="article-set">
+
+                <div class="row">
+                    <div class="column_title">
+                        <h4>Sign Up</h4>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- show text line --> 
-            <label class="label_icon"></label>
-            <span><h3>Line of text to displayed - may be longer than the available width</h3></span></br>        
+                
+                <!-- show text line --> 
+                <label class="label_icon"></label>
+                <span><h3>Line of text to displayed - may be longer than the available width</h3></span></br>        
+    
+                <!-- show text line --> 
+                <label class="label_icon"></label>
+                <span><h3>Line of text to displayed - may be longer than the available width</h3></span></br> 
+    
+                <label class="label_80"></label>
+                <span>
+                    <%= link_to 'Create Account', new_user_registration_path, class: "form_button_full" %>
+                </span></br>
 
-            <!-- show text line --> 
-            <label class="label_icon"></label>
-            <span><h3>Line of text to displayed - may be longer than the available width</h3></span></br> 
-
-            <label class="label_80"></label>
-            <span>
-                <%= link_to 'Create Account', new_user_registration_path, class: "form_button_full" %>
-            </span></br>
-            
+                </div>
+            </article>
         </div>
     </div>
     <div class="col-1-3 column_3">

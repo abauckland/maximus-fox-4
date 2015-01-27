@@ -1,7 +1,7 @@
 class ClausesController < ApplicationController
 
 
-  before_filter :authenticate
+#  before_filter :authenticate
   before_action :set_project, only: [:new, :create, :new_clone_project_list, :new_clone_subsection_list, :new_clone_clause_list]
 
   layout "projects"

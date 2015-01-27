@@ -1,105 +1,154 @@
-<div class="page_title"><%= current_user.company.name %></div>
+<div class="row title_band">
+    <div class="page_title">
+        <h1><%= current_user.company.name %></h1>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+	<div class="col-2-3 column_1">
+		<div class="border">
+			<%= render :partial => "flash_notice" %>
+			<div class="row">
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th class="user_email">Email</th>
+							<th class="user_role">Role</th>
+							<th class="user_last_login">Last Log-in</th>
+							<th class="row_button no_buttons_2"></th>
+						</tr>
+					</thead>
+				</table>
+				<table>
+					<tbody>
+						<% @users.each do |user|%>
+						<tr>
+							<td><%=h user.name %></td>
+							<td class="user_email"><%=h user.email %></td>
+							<td class="user_role"><%=h user.role.capitalize %></td>
+							<td class="user_last_login"><%= last_seen(user) %></td>
+                            <td id="<%= user.id %>_links" class="row_button no_buttons_2">
+                            	<% if user.active? %>
+	                            	<%= row_activate_link(user, 'hidden') %>
+	                            	<%= row_deactivate_link(user, 'show') %>
+                            	<% else %>
+	                            	<%= row_activate_link(user, 'show') %>
+	                            	<%= row_deactivate_link(user, 'hidden') %>
+                            	<% end %>
+                            	
+                            	<% if user.locked? %>
+                            		<%= row_unlock_link(user, 'show') %>
+                            	<% else %>
+                            		<%= row_unlock_link(user, 'hidden') %>
+                            	<% end %>
+                            </td>
+						</tr>
+						<%end%> 
+					</tbody>
+				</table>
+			</div>	
+		</div>
+	</div>
+
+
+	 <div class="col-1-3 column_2">
+		<div class="border">
+			
+		<% if current_user.company.no_licence > @active_users.count %>
+						
+			<%= render :partial => "form_error", :locals => {:item => @user} %>
+			
+			<div class="row">
+				<%= form_for @user do |f| %>
+    				<%= f.hidden_field(:role, {:value => 'employee'})%>
+  					<%= f.hidden_field(:company_id, {:value => current_user.company_id})%> 			
+
+                    <fieldset>
+                    	
+					<!-- column title start-->
+					<div class="row">
+						<div class="column_title">
+							<h3>Add New User</h3>
+						</div>
+					</div>
+
+					<!-- column title start-->
+					<div class="row">
+						<div class="column_text">
+							<p><%= licence_status(@active_users.count, current_user.company.no_licence) %></p>
+						</div>
+					</div>
+
+                        <!-- form input[text] --> 
+                        <div class="form_tooltip" id="user_first_name"></div>
+                        <label class="label_100">First Name:*</label>
+                        <span>
+                            <%= f.text_field :first_name %>
+                        </span></br>
+
+                        <!-- form input[text] --> 
+                        <div class="form_tooltip" id="user_surname"></div>
+                        <label class="label_100">Surname:*</label>
+                        <span>
+                            <%= f.text_field :surname %>
+                        </span></br>
+
+                        <!-- form input[email] --> 
+                        <div class="form_tooltip" id="user_surname"></div>
+                        <label class="label_100">Email Address:*</label>
+                        <span>
+                            <%= f.email_field :email %>
+                        </span></br>
+
+                        <!-- form input[password] --> 
+                        <div class="form_tooltip" id="user_password"></div>
+                        <label class="label_100">Password:*</label>
+                        <span>
+                            <%= f.password_field :password %>
+                        </span></br>
+
+                        <!-- form input[password] --> 
+                        <div class="form_tooltip" id="user_confirm_password"></div>
+                        <label class="label_100">Confirm Password:*</label>
+                        <span>
+                            <%= password_field_tag :password_confirmation %>
+                        </span></br>
+
+                    </fieldset>
+            </div>
+<!-- column footer start--> 
+            <div class="row">
+                <div class="form_footer">
+                    <%= f.submit "add new user"%>
+                </div>
+                <% end %>
+            </div>
+            
+            <% end %>
+        </div>
+    </div>
+
+	
+</div>
+
+
+
+
 
 <div class="content">
     <div class="column_1_2">
 		<div class="column_content">       
 			    			
-			<table class="users">
-				<tr>
-					<th>Name</th>
-					<th class="mob_cell">Email</th>
-					<th class="mob_cell">Role</th>
-					<th class="mob_cell">Created</th>
-					<th class="s_tab">Log-ins</th>
-					<th class="s_tab">Last Log-in</th>
-					<th width="60px">Status</th>
-					<th width="60px"></th>
-				</tr>
-				<% @users.each do |user|%>
-				<tr>
-					<td><%=h user.name %></td>
-					<td class="mob_cell"><%=h user.email %></td>
-					<td class="mob_cell"><%=h user.role.capitalize %></td>
-					<td class="mob_cell"><%= created(user) %></td>
-					<td class="s_tab"><%=h user.number_times_logged_in %></td>
-					<td class="s_tab"><%= last_seen(user) %></td>
-					<td  id="<%=h user.id%> class="active_licence"><%= check_active(user) %></td> 
-					<td id="<%=h user.id%>-unlock"><%= locked_at(user) %></td>    
-				</tr>
-				<%end%>  
-			</table>           
+          
     	</div>
 	</div>
 
 
-    <div class="column_3">
-		<div class="column_content">       
-			<div class="column_title">Add new user</div>   
-    			<div class="column_sub_content">
-    				
-    				<div class="column_guide">
-						<p class="information"><%= licence_status(@active_users.count, current_user.company.no_licence) %></p>
-      				</div>
-					
-					<% if @user.errors.any? %> 
-					<div class="column_error">      		    
-        				<div class="column_error_heading">
-        					<p>A number of errors prohibited this user from being created:</p>
-        				</div>
-        				<div class="column_error_content">
-        					<ul>
-        						<%@user.errors.each do |attribute, message|%>
-								<li><%= "#{attribute}: #{message}" %></li>
-								<%end%>
-        					</ul>
-        				</div>
-					</div>
-					<% end %>
-					
-					<% if current_user.company.no_licence > @active_users.count %>
-					<div class="column_guide">   			
-      					<p>Please note passwords must be a miniumum of 8 characters long and all fields must be complete.</p>
-      				</div>					
-										
-					<div class="column_form">
-						<%= form_for @user do |f| %>   
-    						<%= f.hidden_field(:role, {:value => 'employee'})%>
-  							<%= f.hidden_field(:company_id, {:value => current_user.company_id})%> 			
-						<table>
-						<tr><td>
-							<div class="user_form_label form_input_label"><%= label_error_check(@user, 'first_name', 'First Name')%></div>
-							<div class="new_user_form form_input"><%= f.text_field :first_name %></div>					
-						</td></tr>
-						<tr><td>
-							<div class="user_form_label form_input_label"><%= label_error_check(@user, 'surname', 'Surname')%></div>
-							<div class="new_user_form form_input"><%= f.text_field :surname %></div>				
-						</td></tr>
-						<tr><td>
-							<div class="user_form_label form_input_label"><%= label_error_check(@user, 'email', 'Email')%></div>
-							<div class="new_user_form form_input"><%= f.email_field :email %></div>					
-						</td></tr>
-						<tr><td>
-							<div class="user_form_label form_input_label"><%= label_error_check(@user, 'password', 'Password')%></div>
-							<div class="new_user_form form_input"><%= f.password_field :password %></div>				
-						</td></tr>
-						</td></tr>
-						<tr><td>
-							<div class="user_form_label form_input_label"><%= label_error_check(@user, 'password', 'Confirm Password')%></div>
-							<div class="new_user_form form_input"><%= f.password_field :password_confirmation %></div>				
-						</td></tr>												
-						</table>    			
-    				</div>
-				</div>    		      				
-      			<div class="column_footer">
-        			<div>
-        				<div class="column_submit"><%= f.submit "add new user"%></div>              
-        			</div>
-        			<% end %>   
-      			</div>
-        		<% end %>       		      		
-      		</div> 
-		</div> 
-	</div>	
+
 </div>
 
 

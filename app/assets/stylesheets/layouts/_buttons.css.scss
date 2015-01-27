@@ -1,0 +1,167 @@
+//core-ui
+@import "core";
+
+//form_buttons
+@mixin form-button {
+  font-size:1.2rem;
+  font-weight: bold;
+  height:20px; //height of icon
+  padding: 0px 20px 0px 25px; //padding to show icon
+  border: none; //override default settings
+  text-decoration:none;    
+  cursor: pointer;
+}
+
+@mixin button-box-shadow($colour) {
+  -moz-box-shadow: 0px 1px 2px $colour;
+  -webkit-box-shadow: 0px 1px 2px $colour;
+  box-shadow: 0px 1px 2px $colour;
+} 
+
+@mixin title-button {
+  @include border-radius(0.3rem);
+  @include button-box-shadow(#666666);
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 4px 8px 4px 8px;
+  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+  }
+  a{
+    color: #fff;
+    text-decoration: none;
+    &:hover{color: #fff;}
+    &:visited{color: #fff;}
+    }
+}
+                                      
+@mixin title-button-green {
+  @include title-button;
+  background: #66aa00;
+  border: solid #66aa00 0px;
+  &:hover {
+    background: #4b8533;
+  }
+}
+
+@mixin title-button-orange {
+  @include title-button;
+  background: #f78014;
+  border: solid #f78014 0px;
+  &:hover {
+    background: #df6d05;
+  }
+}
+
+@mixin title-button-red {
+  @include title-button;
+  background: #66aa00;
+  border: solid #66aa00 0px;
+  &:hover {
+    background: #4b8533;
+  }
+}
+
+@mixin title-button-grey {
+  @include title-button;
+  background: #555;
+  border: solid #555 0px;
+  &:hover {
+    background: #333;
+  }
+}
+
+                      
+//table row icons
+@mixin menu_icons($var) {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 0px 0px 0px 5px;
+    background: asset_url('line_menu_icons.png') 0px $var no-repeat;
+    &:hover{
+      background: asset_url('line_menu_icons.png') -0px $var - 20px no-repeat;
+    }
+}
+
+@mixin form_icons($var) {
+    background: asset_url('line_menu_icons.png') 0px $var no-repeat;
+    &:hover{
+      background: asset_url('line_menu_icons.png') -0px $var - 20px no-repeat;
+    }
+}
+
+.line_insert_icon {@include menu_icons(-560px);}
+.line_new_icon {@include menu_icons(-520px); float: right; padding: 0px;}
+.line_edit_icon {@include menu_icons(-80px); float: right; padding: 0px;}
+.line_delete_icon {@include menu_icons(-120px); float: right; padding: 0px;}
+.line_move_icon {@include menu_icons(-0px);}
+.line_menu_icon {@include menu_icons(-40px); float: right; padding: 0px;}
+
+.line_mileage_icon {@include menu_icons(-920px); float: right; padding: 0px;}
+
+.line_up_icon {@include menu_icons(-680px); float: right; padding: 0px;}
+.line_down_icon {@include menu_icons(-720px); float: right; padding: 0px;}
+
+.line_view_icon {@include menu_icons(-760px); float: right; padding: 0px;}
+.line_show_icon {@include menu_icons(-800px); float: right; padding: 0px;}
+
+
+.line_show_icon_show {@include menu_icons(-800px); float: right; padding: 0px;}
+.line_show_icon_hidden {@include menu_icons(-800px); display: none; float: right; padding: 0px;}
+
+.line_edit_icon_show {@include menu_icons(-80px); float: right; padding: 0px;}
+.line_edit_icon_hidden {@include menu_icons(-80px); display: none; float: right; padding: 0px;}
+
+.line_delete_icon_show {@include menu_icons(-120px); float: right; padding: 0px;}
+.line_delete_icon_hidden {@include menu_icons(-120px); display: none; float: right; padding: 0px;}
+
+.line_accept_icon_show {@include menu_icons(-840px); float: right; padding: 0px;}
+.line_accept_icon_hidden {@include menu_icons(-840px); display: none; float: right; padding: 0px;}
+
+.line_reject_icon_show {@include menu_icons(-880px); float: right; padding: 0px;}
+.line_reject_icon_hidden {@include menu_icons(-880px); display: none; float: right; padding: 0px;}
+
+.line_invoice_icon_show {@include menu_icons(-1080px); float: right; padding: 0px;}
+.line_invoice_icon_hidden {@include menu_icons(-1080px); display: none; float: right; padding: 0px;}
+
+.line_payment_icon_show {@include menu_icons(-1080px); float: right; padding: 0px;}
+.line_payment_icon_hidden {@include menu_icons(-1080px); display: none; float: right; padding: 0px;}
+
+.line_reconcile_icon_show {@include menu_icons(-1040px); float: right; padding: 0px;}
+.line_reconcile_icon_hidden {@include menu_icons(-1040px); display: none; float: right; padding: 0px;}
+
+.line_unreconcile_icon_show {@include menu_icons(-1120px); float: right; padding: 0px;}
+.line_unreconcile_icon_hidden {@include menu_icons(-1120px); display: none; float: right; padding: 0px;}
+
+.line_email_icon_show {@include menu_icons(-1160px); float: right; padding: 0px;}
+.line_email_icon_hidden {@include menu_icons(-1160px); display: none; float: right; padding: 0px;}
+
+.line_receipt_icon_show {@include menu_icons(-1200px); float: right; padding: 0px;}
+.line_receipt_icon_hidden {@include menu_icons(-1200px); display: none; float: right; padding: 0px;}
+
+.line_pdf_icon {@include menu_icons(-1000px); float: right; padding: 0px;}
+.line_pdf_icon_show {@include menu_icons(-1000px); float: right; padding: 0px;}
+.line_pdf_icon_hidden {@include menu_icons(-1000px); display: none; float: right; padding: 0px;}
+
+
+.line_menu_icon {@include menu_icons(-40px); float: right; padding: 0px;}
+
+.table_pdf_icon {@include menu_icons(-1000px); float: right; padding: 0px;}
+.table_csv_icon {@include menu_icons(-960px); float: right; padding: 0px;}
+
+.line_unlock_icon_show {@include menu_icons(-1240px); float: right; padding: 0px;}
+.line_unlock_icon_hidden {@include menu_icons(-1240px); display: none; float: right; padding: 0px;}
+
+.line_activate_icon_show {@include menu_icons(-1320px); float: right; padding: 0px;}
+.line_activate_icon_hidden {@include menu_icons(-1320px); display: none; float: right; padding: 0px;}
+
+.line_deactivate_icon_show {@include menu_icons(-1280px); float: right; padding: 0px;}
+.line_deactivate_icon_hidden {@include menu_icons(-1280px); display: none; float: right; padding: 0px;}
+
+
+//form action icons
+
+@mixin form_save_icon {@include form_icons(-320px);}

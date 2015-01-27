@@ -1,0 +1,60 @@
+//core-ui
+@import "core";
+
+
+body, html {
+  height: 100%;
+  padding: 0px;
+  margin-top: 5px;
+}
+
+html {
+  font-size: 62.5%; 
+  font-family: $heading_font;
+  //background-color: #fbfbfb;
+  } 
+  
+//used for page titles  
+ h1{
+  font-family: $heading_font;
+  font-size: 2.6rem;
+  color: $title_band_text_colour;
+  margin: 0px 0px 0px 0px;
+ }
+ @media screen and (max-width: $tablet-landscape) {h1{font-size: 2.2rem;}}
+ @media screen and (max-width: $phone-landscape) {h1{font-size: 1.8rem;}}
+
+ h2{
+  font-family: $heading_font;
+  font-size: 1.4rem;
+  margin: 0px 0px 0px 0px;
+ }
+ @media screen and (max-width: $phone-landscape) {h3{font-size: 1.2rem;}}
+
+//used for infor band titles 
+ h3{
+  font-family: $heading_font;
+  font-size: 1.4rem;
+  color: $info_band_text_colour;
+  margin: 0px 0px 0px 0px;
+  width: auto;
+ }
+ 
+ h4{
+  font-family: $heading_font;
+  font-size: 1.4rem;
+  color: $column_title_text;
+  margin: 0px 0px 0px 0px;
+  width: auto;
+ }
+ 
+
+
+p{font-size: 1.2rem;}
+ul{font-size: 1.2rem;}
+
+textarea, select, input{
+  font-family: inherit;
+  font-size: inherit;  
+}
+

@@ -1,0 +1,44 @@
+@import "core";
+@import "buttons";
+
+
+table{
+  width: 100%;
+  border-spacing: 0;
+  border-collapse:collapse;
+  border: 0px;
+  font-size: 1.2rem;
+  text-align: left;
+}
+
+
+table thead{
+  font-weight: bold;  
+  tr{
+    border-bottom: 1px solid #000;
+    th{padding: 10px 5px 2px 5px;
+      span{font-size: 0.8rem; font-weight: normal;}
+    }
+    th.row_button{padding: 2px 2px 2px 2px;}
+  } 
+}
+
+
+table tbody{
+  tr{
+    &:hover{background: #eee;}
+    td{padding: 5px 5px 5px 5px;
+      p{margin: 0px;}
+    }
+    td.row_button{
+      padding: 5px 2px 5px 2px;
+      vertical-align: top;
+    }              
+  }  
+}
+
+.no_buttons_1 {width: 27px;}
+.no_buttons_2 {width: 54px;}
+.no_buttons_3 {width: 79px;}
+.no_buttons_4 {width: 108px;}
+.no_buttons_5 {width: 135px;}

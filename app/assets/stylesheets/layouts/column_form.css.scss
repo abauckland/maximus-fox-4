@@ -1,0 +1,174 @@
+@import "core";
+@import "buttons";
+
+form {font-size: 1.2rem;}
+
+form fieldset{
+  border: none;
+  margin: 0px;
+  padding: 0px;  
+}
+
+form label{
+    float: left;
+    padding-top: 3px;
+}
+
+form label.label_60 {width: 60px;}
+form label.label_70 {width: 70px;}
+form label.label_80 {width: 80px;}
+form label.label_90 {width: 90px;}
+form label.label_100 {width: 100px;}
+form label.label_110 {width: 110px;}
+form label.label_120 {width: 120px;}
+
+form input {
+  width: 100%;
+  &:disabled {background: #dddddd;}
+}
+form select {
+  width: 100%; padding: 2px 0px 2px 0px;
+  &:disabled {background: #dddddd;}
+}
+form textarea {
+  width: 100%;
+  &:disabled {background: #dddddd;}
+}
+
+form input[type="radio"]{
+  float: left;
+  width: 10px;
+  margin: 4px 5px 0px 0px;
+  padding: 2px 5px 0px 0px;
+  }
+
+//form footer submit and cancel buttons
+form a.form_button{
+  float: left;
+  margin: 0px 0px 4px 0px;
+  width: auto;
+  @include title-button-grey;
+}
+
+form input.form_button_full{
+  float: left;
+  margin: 0px 0px 4px 0px;
+  width: 100%;
+  @include title-button-green;
+}
+
+form a.form_button_full_orange{
+  float: left;
+  margin: 0px;
+  width: 100%;
+  border: solid #f78014 1px;
+  text-decoration: none;
+  text-align: center;
+  &:hover {
+  text-decoration: none;
+    background: #f78014;
+    color: #ffffff;
+  }
+  &:visited{color: #f78014;}
+  @include border-radius(0.3rem);
+  color: #f78014;
+  font-size: 1.2rem;
+  font-weight: normal;
+  padding: 4px 8px 4px 8px;
+}
+
+
+form span {
+    display: block;
+    overflow: hidden;
+    padding: 0px 5px 0px 0px;
+    margin-right: 10px;
+}
+
+form span span {
+  float: left;
+  padding: 3px 5px 0px 0px; 
+}
+
+form p.input_note{
+  font-size: 10px;
+  padding: 0px;
+  margin: 0px;
+}
+
+form div.form_tooltip{
+    float: right;
+    width: 10px; 
+    min-height: 10px;
+    cursor: pointer;
+    background: asset_url('tooltip_icon.png') no-repeat; 
+}
+
+.form_error{
+  margin: 0px 0 10px 0;
+  padding: 12px; 
+  border: solid 1px $error_text_colour;
+  @include border-radius(0.5rem);
+  color: $error_text_colour;
+  p{margin: 0;}
+  ul{margin: 5px 0px 0px 0px;}
+}
+
+//form footer submit and cancel buttons
+.form_footer input[type=submit]{
+  @include form_icons(-320px);
+  @include form-button; //override default settings
+  width: auto;
+  color: $save_text_colour;
+  &:hover{text-decoration:underline;}
+}
+
+//inline form
+.column_inline_form div{
+  float: left;
+  font-size: 1.2rem;
+  margin: 0px 0 10px 0;
+}
+
+div.header_80{
+  width: 80px;
+  font-weight: bold;
+}
+
+div.header_90{
+  width: 90px;
+  font-weight: bold;
+}
+
+div.label_80{width: 80px;}
+div.label_90{width: 90px;}
+
+.column_inline_form span {
+  display: block;
+  overflow: hidden;
+  padding: 0px 5px 0px 0px;
+  margin-right: 20px;
+}
+
+.column_inline_form input[type=submit]{
+  float: right;
+  width: 20px;
+  min-height: 20px;
+  @include form_icons(-320px);
+  @include form-button;
+  padding-left: 0px; //override default settings
+}
+
+
+//image drop down select
+.form_image_select {
+    content:"";
+    height: 60px;
+    clear:both;
+    padding-bottom: 10px;
+}
+
+
+
+.blank_select{}
+.clone_select{disabled: disabled}

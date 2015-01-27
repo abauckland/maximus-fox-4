@@ -1,87 +1,94 @@
-<div class="page_title"><%=@company.name%></div>
+<div class="row title_band">
+    <div class="page_title">
+        <h1><%=@company.name%></h1>
+    </div>
+    <div class="title_help" id="company_edit"></div>
+</div>
 
-<div class="content">
-    <div class="column_1">
-		<div class="column_content">       
-			<div class="column_title">Update details</div>   
-    			
-    		<div class="column_sub_content">  
-  
-				<% if @company.errors.any? %> 
-				<div class="column_error">      		    
-        			<div class="column_error_heading">
-        				<p><%=h pluralize(@company.errors.count, "error") %> prohibited this account from being updated :</p>
-        			</div>
-        			<div class="column_error_content">
-        				<ul>
-    					<% @company.each_with_index do |error, i| %> 
-							<li><%=h error %></li>
-    					<% end %>  
-        				</ul>
-					</div>  
-  				</div>
-  				<% end %>
-  				
-				<div class="column_guide">
-					<p>Company details are printed on the cover of specification documents.</p>
-					<p>The uploaded compmany logo will be scaled proportionally to maximum 9mm high x 90mm wide.</p>
-					<p>Image files must be either png or jpeg format and files must be no bigger than 1Mb in size.</p>
-      			</div>  				  
-  
-				<div class="column_form">
+<div class="row">
+    <div class="col-1-3 column_1">
+        <div class="border">
+
+<!-- error messages - associated with form start-->
+            <%= render :partial => "form_error", :locals => {:item => @company} %>
+
+<!-- form column start-->
+            <div class="row">
 				<%= form_for @company, :html => { :multipart => true } do |f| %>
-	
-						<table>
-						<tr><td>
-							<div class="company_form_label form_input_label">Registered Name:</div>
-							<div class="form_input"><%= f.text_field :reg_name %></div>					
-						</td></tr>
-						<tr><td>
-							<div class="company_form_label form_input_label">Company Number:</div>
-							<div class="form_input"><%= f.text_field :reg_number %></div>				
-						</td></tr>
-						<tr><td>
-							<div class="company_form_label form_input_label">Registered Address:</div>
-							<div class="form_input"><%= f.text_field :reg_address %></div>				
-						</td></tr>
-						<tr><td>
-							<div class="company_form_label form_input_label">Registered Location:</div>
-							<div class="form_input"><%= f.text_field :reg_location %></div>					
-						</td></tr>
-						<tr><td>
-							<div class="company_form_label form_input_label">Telephone No:</div>
-							<div class="form_input"><%= f.telephone_field :tel %>
-								<div class="form_input_error"><%= error_check(@company, :tel)%></div>
-							</div>					
-						</td></tr>												
-						<tr><td>
-							<div class="company_form_label form_input_label">Website Address:</div>
-							<div class="form_input"><%= f.text_field :www %></div>					
-						</td></tr>
-						<% if @company.logo %>
-    						<tr><td>
-    							<div class="company_form_label form_input_label">Company Logo:</div>
-    							<div class="form_input"><%= image_tag(@company.logo, :height=> 30) %></div>					
-    						</td></tr>
-						<% end %>
-						<tr><td>
-							<div class="company_form_label form_input_label">Change Logo:<br><span class="form_label_note"> (1Mb max)</span></div>
-							<div class="form_input"><%= f.file_field :logo %></div>			
-						</td></tr>	
-						</table>	      	
-      			</div>
-    		</div>
-    	
-      		<div class="column_footer">
-        		<div>
-        		<div class="column_submit"><%= f.submit "update" %></div>
-        			<% end %>               
-        		</div>   
-      		</div>
-      	</div>   
-	</div>
-	
-	<div class="column_2 column_blank"></div> 
-    <div class="column_3 column_blank"></div>
-     
+                    <fieldset>
+
+                        <!-- form input[text] --> 
+                        <div class="form_tooltip" id="company_reg_name"></div>
+                        <label class="label_120">Registered Name:</label>
+                        <span>
+                            <%= f.text_field :reg_name %>
+                        </span></br>
+
+                        <!-- form input[text] --> 
+                        <div class="form_tooltip" id="company_number"></div>
+                        <label class="label_120">Company Number:</label>
+                        <span>
+                            <%= f.text_field :reg_number %>
+                        </span></br>
+
+                        <!-- form input[text] --> 
+                        <div class="form_tooltip" id="company_reg_address"></div>
+                        <label class="label_120">Registered Address:</label>
+                        <span>
+                            <%= f.text_field :reg_address %>
+                        </span></br>
+
+                        <!-- form input[text] --> 
+                        <div class="form_tooltip" id="company_reg_location"></div>
+                        <label class="label_120">Registered Location:</label>
+                        <span>
+                            <%= f.text_field :reg_location %>
+                        </span></br>
+
+                        <!-- form input[text] --> 
+                        <div class="form_tooltip" id="company_logo"></div>
+                        <label class="label_120">Company Logo:</label>
+                        <span>
+                            <%= image_tag(@company.logo, {:height => "25px"}) if @company.logo? %>
+                        </span></br>
+                        
+                        <!-- form input[text] --> 
+                        <label class="label_120"></label>
+                        <span>
+                            <%= f.file_field :logo %>
+                        </span></br>
+
+                        <!-- form input[text] --> 
+                        <div class="form_tooltip" id="company_phone"></div>
+                        <label class="label_120">Tel:</label>
+                        <span>
+                            <%= f.text_field :tel %>
+                        </span></br>
+    
+                        <!-- form input[email] --> 
+                        <div class="form_tooltip" id="company_website"></div>
+                        <label class="label_120">Website Url:</label>
+                        <span>
+                            <%= f.url_field :www, {placeholder: 'e.g. www.example.com'} %>
+                        </span></br>				
+             
+                    </fieldset>
+            </div>
+<!-- column footer start--> 
+            <div class="row">
+                <div class="form_footer">
+                    <%= f.submit "update"%>
+                    <%= link_to "cancel", projects_path %>
+                </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-1-3 column_2">
+        <div class="border blank_column"></div>
+    </div>
+    <div class="col-1-3 column_3">
+        <div class="border blank_column"></div>
+    </div>
 </div>

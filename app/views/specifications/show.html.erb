@@ -1,52 +1,30 @@
 <!-- project information bar -->
-<%= render "project_info_bar", locals: {project: @project} %>
+<div class="row info_band">
+	<div class="info_right">
+		<div><h3>Status: <%=h @project.project_status %></h3></div>
+		<div><h3>Rev: <%=h current_revision_render(@project) %></div>
+	</div>
+	<div class="info_left">
+		<div class=""><h3>Project: <%=h @project.code_and_title %></h3></div>
+	</div>
+</div>
 
-<div class="option_band_single">	
-<!-- subsection select and add/delete link for MOBILE -->
-	<div class="section_select_mobile">
-		<div class="select_1">
-			<div class="label_select_1">Subsection:</div>
-			<div class="option_select_1">
-      			<%= select_tag "section", options_from_collection_for_select(@project_subsections, :id, :full_code, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/specifications/#{@project.id}?subsection='+this.value;"}  %>	
-			</div>
-		</div>
+<!-- revision option bar -->
+<div class="row option_band">
+	 <div class="option_right">
 		<% if @project_user.manage? || @project_user.edit? %>
-		  <div class="subsection_button_small"><%= link_to '+/-', manage_specsubsection_path(:id => @project.id, :template_id => @project.parent_id) %></div> 
+		<div><%= link_to '+/- sections', manage_specsubsection_path(:id => @project.id, :template_id => @project.parent_id) %></div>
 		<% end %>
 	</div>
 	
-<!-- subsection select and add/delete link for TABLET-->
-	<div class="section_select_tablet">
-		<div class="select_1">
-			<div class="label_select_1">Subsection:</div>
-			<div class="option_select_1">
-      			<%= select_tag "section", options_from_collection_for_select(@project_subsections, :id, :full_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/specifications/#{@project.id}?subsection='+this.value;"}  %>	
-			</div>
+	<div class="option_left">
+		<div>
+			<label class="select_1">Subsection:</label>
+			<%= select_tag "section", options_from_collection_for_select(@project_subsections, :id, :full_code, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/specifications/#{@project.id}?subsection='+this.value;"}  %>
 		</div>
-		<% if @project_user.manage? || @project_user.edit? %>
-		  <div class="subsection_button_medium"><%= link_to '+/- sections', manage_specsubsection_path(:id => @project.id, :template_id => @project.parent_id) %></div> 
-	    <% end %>
 	</div>
-
-<!-- subsection select and add/delete link for DESKTOP -->
-	<div class="section_select_desktop">
-		<div class="select_1">
-			<div class="label_select_1">Section:</div>
-			<div class="option_select_1">
-      			<%= select_tag "section", options_from_collection_for_select(@project_sections, :id, :code_and_title, @selected_section.id), {:class => 'document_selectBox_1', :onchange => "window.location='/specifications/#{@project.id}?section='+this.value;"}  %>	
-			</div>
-		</div>
-		<div class="select_2">
-			<div class="label_select_1">Subsection:</div>
-			<div class="option_select_2">
-      			<%= select_tag "subsection", options_from_collection_for_select(@selected_section_subsections, :id, :part_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_2', :onchange => "window.location='/specifications/#{@project.id}?subsection='+this.value;"}  %>	
-			</div>
-		</div>
-		<% if @project_user.manage? || @project_user.edit? %>
-		  <div class="subsection_button_large"><%= link_to 'add/delete sections', manage_specsubsection_path(:id => @project.id, :template_id => @project.parent_id) %></div>
-	    <% end %>
-	</div>			
 </div>
+
 
 <% if @selected_section.id == 1 %>
 
@@ -55,55 +33,27 @@
     		<%= render "tab_specline_content", locals: {selected_specline_lines: @selected_specline_lines} %>     
         	<table><tr class='specline_row'><td></td></tr></table>
     	</div>
-        <div class="tab_sub_menu">      
-
+        <div class="tab_sub_menu">
             <%= clause_link(@project.id, @selected_subsection.id) %>
+			<%= render "special_character_menu" %>
+        </div>
 
-            <div class="character_menu">
-                <div class="character_menu_content">
-                    <ul>
-                        <li class="character" id="symbol_0">'º'</li>
-                        <li class="character" id="symbol_1">'²'</li>
-                        <li class="character" id="symbol_2">'³'</li>
-                        <li class="character" id="symbol_3">'±'</li>
-                        <li class="character" id="symbol_4">'≤'</li>
-                        <li class="character" id="symbol_5">'≥'</li>
-                    </ul>
-                </div>
-                <div class="character_menu_label">insert symbol:</div>
-            </div>      
-        </div>      	
-    	
     </div>
 
 <% else %>
 
     <div class="document_tabs">
-    	<div class="tab_sub_menu">		
-
+    	<div class="tab_sub_menu">
     		<%= clause_link(@project.id, @selected_subsection.id) %>
+			<%= render "special_character_menu" %>
+    	</div>
 
-    		<div class="character_menu">
-    			<div class="character_menu_content">
-    				<ul>
-    					<li class="character" id="symbol_0">'º'</li>
-    					<li class="character" id="symbol_1">'²'</li>
-    					<li class="character" id="symbol_2">'³'</li>
-    					<li class="character" id="symbol_3">'±'</li>
-    					<li class="character" id="symbol_4">'≤'</li>
-    					<li class="character" id="symbol_5">'≥'</li>
-    				</ul>
-    			</div>
-    			<div class="character_menu_label">insert symbol:</div>
-    		</div>		
-    	</div>	
-    	
     	<ul class='tabs'>
     		<% @clausetypes.each_with_index do |clausetype, i|%>
           		<li id="<%=h clausetype.id %>"><a href='#<%=h clausetype.id %>000'><%=h clausetype.text %></a></li>
         	<%end%>
       	</ul>
-     	<% @clausetypes.each_with_index do |clausetype, i|%>	   
+     	<% @clausetypes.each_with_index do |clausetype, i|%>
     		<% if i == 0 %>
     			<div id="<%=h clausetype.id %>000" class="tab_content <%=h clausetype.id %>"> 
     				<%= render "tab_specline_content", locals: {selected_specline_lines: @selected_specline_lines} %>

@@ -1,0 +1,25 @@
+//core-ui
+@import "core";
+
+.header{
+  margin: 0px 10px 0px 10px;
+  @include border-radius(0.5rem);
+  @include shadow-all(0px 0px 5px #aeaeae);  
+  @include dark_grey_46_gradient;
+}
+
+
+.header figure{
+  float: left;
+  margin: 7px 0px 0px 8px;
+  padding: 0px;
+  }
+
+.header_text{
+  float: left;
+  margin: 13px 0px 0px 8px;
+  font-family: "Trebuchet MS", Trebuchet, "Liberation Sans", sans-serif;
+  font-weight: bold;
+  font-size: 1.4rem;
+  color: #fff;
+  }
