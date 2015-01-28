@@ -7,6 +7,7 @@ class CreateUsers < ActiveRecord::Migration
 #      t.string :email, null: false, default: ""
       t.integer :role
       t.string :api_key
+      t.string :state
 #      t.string :password_hash
 #      t.string :password_salt
 #      t.string :password_reset_token

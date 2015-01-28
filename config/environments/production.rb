@@ -81,11 +81,29 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
   
-  #custom added for password reset action
-  config.action_mailer.default_url_options = { :host => 'www.specright.co.uk' }
-  config.action_mailer.sendmail_settings = {
-          :location => '/usr/sbin/sendmail',
-          :arguments => '-i'
-        }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+
+  config.action_mailer.smtp_settings = {
+    :tls => true,
+    :address => "secure.emailsrvr.com",
+    :port => 465,
+    :domain => "specright.co.uk",
+    :user_name => "no-reply@specright.co.uk",
+    :password => "specright1707",
+    :authentication => :login
+  }
+
+
+  # Always generate canonical URLs with HTTPS
+  routes.default_url_options = {
+    protocol:  "http",
+    host:      "www.specright.co.uk"
+  }
+
+  config.action_mailer.default_url_options = routes.default_url_options.dup  
+  config.action_mailer.default_options = { from: "no-reply@specright.co.uk" } 
+  
   
 end

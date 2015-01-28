@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   root :to => "projects#index"  
 
   resources :users, :only => [:index, :show] do
-    get :update_status, :on => :member
+    get :activate, :on => :member
+    get :deactivate, :on => :member
   end
 
   devise_for :users,

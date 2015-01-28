@@ -1,0 +1,5 @@
+$('td#'+<%= @user.id %>+'_status').html('active');
+
+$('td#'+<%= @user.id %>+'_links').children('a.line_deactivate_icon_hidden').attr('class', 'line_deactivate_icon_show');
+
+$('td#'+<%= @user.id %>+'_links').children('a.line_activate_icon_show').attr('class', 'line_activate_icon_hidden');

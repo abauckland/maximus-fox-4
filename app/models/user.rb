@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
 
+  include AASM
+
   has_many :projectusers
   has_many :projects, :through => :projectusers
   has_many :prints
@@ -10,7 +12,10 @@ class User < ActiveRecord::Base
    # :encryptable, :encryptor => "authlogic_sha512"
   attr_accessor :check_field
   accepts_nested_attributes_for :company
-  
+
+  before_validation :custom_validation_check_field, on: :create 
+   after_create :default_settings
+
   #declare an enum attribute where the values map to integers in the database, but can be queried by name
   enum role: [:admin, :owner, :employee]
 
@@ -18,8 +23,21 @@ class User < ActiveRecord::Base
  
 #  before_save :encrypt_password
 
-  before_validation :custom_validation_check_field, on: :create 
-   after_create :default_settings
+  aasm :column => 'state' do
+
+    state :active, :initial => true
+    state :inactive
+
+    event :deactivate do
+      transitions :from => :active, :to => :inactive
+    end
+
+    event :activate do
+      transitions :from => :inactive, :to => :active
+    end
+  end
+
+
 #  after_create :add_user_to_mailchimp
 
     validates :first_name,
