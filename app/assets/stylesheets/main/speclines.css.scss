@@ -25,12 +25,10 @@
 }
   @media screen and (min-width: $phone-landscape) and (max-width: $tablet-protrait){
     .document_tabs{
-
-    }  
-  } 
+    }
+  }
   @media screen and (max-width: $phone-landscape) {
     .document_tabs{
-
     }
   }
 
@@ -53,7 +51,7 @@
 
 .specline_xref_row{
   @extend .specline_row;
-  color: purple;  
+  color: purple;
 }
 
 .edit_clause_code {
@@ -89,7 +87,7 @@ td.text_text{
 }
 
 span.editable_text4{
-  vertical-align: top; 
+  vertical-align: top;
 }
 
 span.editable_text5{@extend span.editable_text4}
@@ -99,31 +97,37 @@ span.editable_text5{@extend span.editable_text4}
   display: table-cell;
   visibility:hidden;
   width: 75px;
-  padding: 5px 0px 0px 5px;  
+  padding: 5px 0px 0px 5px;
   }
   @media screen and (max-width: $tablet-protrait) {
     .prefixed_line_menu{
       display: none;
-      visibility:hidden; 
-    } 
+      visibility:hidden;
+    }
+  }
+
+.line_drag_prefix{
+  @include menu_icons(-1080px);
+  float: right;
+  padding: 0px;
   }
 
 .prefixed_line_space{
-  display: none;    
+  display: none;
   }
   @media screen and (max-width: $tablet-protrait) {
     .prefixed_line_space{
     display: table-cell;
     width: 70px;
-    padding: 5px 0px 0px 5px;    
-    } 
+    padding: 5px 0px 0px 5px;
+    }
   }
   @media screen and (max-width: $phone-landscape) {
     .prefixed_line_space{
     display: table-cell;
     width: 10px;
-    padding: 5px 0px 0px 5px;    
-    } 
+    padding: 5px 0px 0px 5px;
+    }
   }
 
 ///////////////////////////////////
@@ -134,16 +138,16 @@ span.editable_text5{@extend span.editable_text4}
   width:120px;
   padding: 5px 5px 0px 0px;
   a{
-   padding: 0px 5px 0px 0px; 
+   padding: 0px 5px 0px 0px;
   }
-  } 
+  }
   @media screen and (max-width: $tablet-protrait) {
     .suffixed_line_menu{
       display: none;
-      visibility:hidden; 
+      visibility:hidden;
     } 
-  }    
-     
+  }
+
 //menues for specline when smaller than mob
 .suffixed_line_menu_mob{
   display: table-cell;
@@ -167,7 +171,7 @@ span.editable_text5{@extend span.editable_text4}
 .specline_mob_menu_popup{
   display: none;
   width: 100%;
-  border-spacing: 0px;  
+  border-spacing: 0px;
 }
 
 .mob_line_menu{
