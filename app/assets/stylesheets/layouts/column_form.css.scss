@@ -44,6 +44,17 @@ form input[type="radio"]{
   padding: 2px 5px 0px 0px;
   }
 
+form input[type="checkbox"]{
+  float: left;
+  width: 20px;
+  /* All browsers except webkit*/
+  transform: scale(1);
+  /* Webkit browsers*/
+  -webkit-transform: scale(1);
+  margin: 4px 5px 0px 0px;
+  padding: 2px 5px 0px 0px;
+  }
+
 //form footer submit and cancel buttons
 form a.form_button{
   float: left;
@@ -59,6 +70,32 @@ form a.form_button_full{
   @include title-button-green;
 }
 
+form input.form_button_full{
+  float: left;
+  margin: 0px 0px 4px 0px;
+  width: 100%;
+  @include title-button-green;
+}
+
+form a.form_button_full_orange{
+  float: left;
+  margin: 0px;
+  width: 100%;
+  border: solid #f78014 1px;
+  text-decoration: none;
+  text-align: center;
+  &:hover {
+  text-decoration: none;
+    background: #f78014;
+    color: #ffffff;
+  }
+  &:visited{color: #f78014;}
+  @include border-radius(0.3rem);
+  color: #f78014;
+  font-size: 1.2rem;
+  font-weight: normal;
+  padding: 4px 8px 4px 8px;
+}
 
 form span {
     display: block;
