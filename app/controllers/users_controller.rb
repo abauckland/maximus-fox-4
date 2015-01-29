@@ -1,22 +1,26 @@
 class UsersController < ApplicationController
 
-  before_action :set_user, only: [:show, :activate, :deactivate]
+  before_action :set_user, only: [:show]
 
   layout "users"
 
   def index
     #company licence management
     #create new User object for form
-    @user = User.new 
+    @users = User.where(:company_id => current_user.company_id) 
+
+    @licences_used = User.where(:company_id => current_user.company_id, :state => "active").count
+    @licences_total = Company.joins(:users).where('users.company_id' => current_user.company_id).pluck(:no_licence).first
   end
 
   def show
     #if current_user.company_id == @user.company_id
-    authorize @user   
+#    authorize @user
   end
 
   def activate
-    authorize @user
+    @user = User.where(:id => params[:id]).first
+#    authorize @user
     if @user.activate!
       respond_to do |format|
         format.js   { render :activate, :layout => false }
@@ -25,7 +29,8 @@ class UsersController < ApplicationController
   end
 
   def deactivate
-    authorize @user
+    @user = User.where(:id => params[:id]).first
+#    authorize @user
     if @user.deactivate!
       respond_to do |format|
         format.js   { render :deactivate, :layout => false }
