@@ -588,6 +588,8 @@ end
   def layout_by_resource
     if controller_name == 'sessions' && action_name == 'new'
       'devise'
+    elsif  controller_name == 'registrations' && action_name == 'new'
+      'devise'
     elsif  controller_name == 'passwords' && action_name == 'new'
       'devise'
     elsif  controller_name == 'passwords' && action_name == 'edit'
