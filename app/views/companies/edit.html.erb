@@ -1,6 +1,6 @@
 <div class="row title_band">
     <div class="page_title">
-        <h1><%=@company.name%></h1>
+        <h1>Edit Company Details</h1>
     </div>
     <div class="title_help" id="company_edit"></div>
 </div>
@@ -45,18 +45,22 @@
                             <%= f.text_field :reg_location %>
                         </span></br>
 
-                        <!-- form input[text] --> 
                         <div class="form_tooltip" id="company_logo"></div>
-                        <label class="label_120">Company Logo:</label>
-                        <span>
-                            <%= image_tag(@company.logo, {:height => "25px"}) if @company.logo? %>
-                        </span></br>
-                        
-                        <!-- form input[text] --> 
-                        <label class="label_120"></label>
-                        <span>
-                            <%= f.file_field :logo %>
-                        </span></br>
+                        <label class="label_120">Logo:</label>
+                        <% if @company.logo? %>
+                            <span>
+                                <%= image_tag(@company.logo_url, {:height => "25px"}) %>
+                            </span></br>
+                            <!-- form input[text] --> 
+                            <label class="label_120"></label>
+                            <span>
+                                <%= f.file_field :logo %>
+                            </span></br>
+                        <% else %>
+                            <span>
+                                <%= f.file_field :logo %>
+                            </span></br>
+                        <% end %>
 
                         <!-- form input[text] --> 
                         <div class="form_tooltip" id="company_phone"></div>
@@ -67,7 +71,7 @@
     
                         <!-- form input[email] --> 
                         <div class="form_tooltip" id="company_website"></div>
-                        <label class="label_120">Website Url:</label>
+                        <label class="label_120">Website Address:</label>
                         <span>
                             <%= f.url_field :www, {placeholder: 'e.g. www.example.com'} %>
                         </span></br>				
