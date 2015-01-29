@@ -1,9 +1,16 @@
 <div class="row title_band">
     <div class="page_title">
-        <h1>List of Employees</h1>
+        <h1>List of User Licences</h1>
     </div>
     <div class="title_help" id="user_index"></div>
-    <div><%= link_to 'Add Employee', new_employee_path, class: "title_button"%></div>
+    <div><%= link_to 'Add User', new_employee_path, class: "title_button"%></div>
+</div>
+
+
+<div class="row info_band">
+    <div class="info_left">
+        <div class=""><h3>Licence Allocation: <%= @licences_used %> of <%= @licences_total %> licences are in use</h3></div>
+    </div>
 </div>
 
 
@@ -19,8 +26,6 @@
                         <tr>
                             <th class="user_name">Name</th>
                             <th class="user_email">E-mail</th>
-                            <th class="user_phone">Telephone</th>
-                            <th class="user_last_login">Last Login</th>
                             <th class="user_status">Status</th>
                             <th class="row_button no_buttons_2"></th>
                         </tr>
@@ -33,8 +38,6 @@
                         <tr>
                             <td class="user_name"><%= user.name %></td>
                             <td class="user_email"><%= user.email %></td>
-                            <td class="user_phone"><%= user.phone_number if user.tel? %></td>
-                            <td class="user_last_login"><%= user.last_sign_in_at.strftime("%d/%m/%y") %></td>
                             <td id="<%= user.id %>_status" class="user_status"><%= user.state %></td>
                             <td id="<%= user.id %>_links" class="row_button no_buttons_2">
                             	<% if user.active? %>
