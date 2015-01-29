@@ -1,6 +1,8 @@
 class TermcatsController < ApplicationController
 
-  layout "websites"
+  skip_before_filter :authenticate_user!
+
+  layout "devise"
 
   # GET /terms
   # GET /terms.json

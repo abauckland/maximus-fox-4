@@ -99,6 +99,8 @@ Rails.application.routes.draw do
   
   resources :helps
 
+  resources :termcats, :only => [:index]
+
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       resources :downloadguides
