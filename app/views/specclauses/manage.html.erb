@@ -2,7 +2,6 @@
     <div class="page_title">
         <h1>Add/Delete Clauses to/from <%=h @subsection.full_code %></h1>
     </div>
-    <div class="title_help" id="clauses_manage"></div>
 </div>
 
 
@@ -46,7 +45,7 @@
 			            <% end %>
 
                         <!-- new clause link -->
-                        <div class="form_tooltip" id="project_customer"></div>
+                        <div class="form_tooltip" id="clause_add_clause"></div>
                         <label class="label_110"></label>
                         <span>
                             <%= link_to "Create Project Clause", {:controller => "clauses", :action => "new", :id => @project.id, :subsection_id => @subsection.id}, class: "form_button" %>
