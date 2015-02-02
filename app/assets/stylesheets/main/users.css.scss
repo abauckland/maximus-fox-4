@@ -1,0 +1,28 @@
+@import "table_headers";
+
+$lrg_menu: 1300px;
+$tab_lrg_menu: 780px;
+$tab_sml_menu: 640px;
+$mob_menu: 480px;
+
+//index table 
+.user_name  {@include name;}
+.user_email {display: table-cell;}
+.user_role  {@include role;}
+.user_status{@include state;}
+
+@media screen and (max-width: $lrg_menu) {}
+
+@media screen and (max-width: $tab_lrg_menu) {
+  .user_name {display: none}
+}
+
+
+@media screen and (max-width: $tab_sml_menu) {
+  .user_role {display: none}
+}
+
+
+@media screen and (max-width: $mob_menu) { 
+  .user_status{display: none}
+}

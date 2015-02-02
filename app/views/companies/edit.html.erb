@@ -11,7 +11,7 @@
 
 <!-- error messages - associated with form start-->
             <%= render :partial => "form_error", :locals => {:item => @company} %>
-
+            <%= render :partial => "flash_notice" %>
 <!-- form column start-->
             <div class="row">
 				<%= form_for @company, :html => { :multipart => true } do |f| %>
@@ -73,7 +73,7 @@
                         <div class="form_tooltip" id="company_website"></div>
                         <label class="label_120">Website Address:</label>
                         <span>
-                            <%= f.url_field :www, {placeholder: 'e.g. www.example.com'} %>
+                            <%= f.text_field :www, {placeholder: 'e.g. www.example.com'} %>
                         </span></br>				
              
                     </fieldset>

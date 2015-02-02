@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
 
   aasm :column => 'state' do
 
-    state :active, :initial => true
+    state :active
     state :inactive
 
     event :deactivate do

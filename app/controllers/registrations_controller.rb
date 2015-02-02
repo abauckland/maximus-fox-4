@@ -29,12 +29,12 @@ class RegistrationsController < Devise::RegistrationsController
     if resource.save
       #yield resource if block_given?
       if resource.active_for_authentication?
-        set_flash_message :notice, :signed_up if is_flashing_format?
        # sign_up(resource_name, resource)
         if resource.owner?
+          set_flash_message :notice, :signed_up if is_flashing_format?
           respond_with current_user, location: projects_path
         else
-          respond_with current_user, location: projects_path
+          respond_with current_user, location: users_path, notice: "New user has been successfully added"
         end
       else
         set_flash_message :notice, :"signed_up_but_#{resource.inactive_message}" if is_flashing_format?

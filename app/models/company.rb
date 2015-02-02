@@ -15,7 +15,7 @@ class Company < ActiveRecord::Base
    presence: true,
    length: {:minimum => 3, :maximum => 254},
    uniqueness: { case_sensitive: false, message: "An account for a company with the same name already exists, please contact us for details" },
-   format: { with: NAME_REGEXP, message: "please enter a valid name" }
+   format: { with: COMPANY_NAME_REGEXP, message: "please enter a valid name" }
 
   validates :read_term,
             on: :create,

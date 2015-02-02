@@ -20,8 +20,19 @@ class UsersController < ApplicationController
 
   def activate
     @user = User.where(:id => params[:id]).first
+
+    no_licences = Company.where(:id => current_user.company_id).pluck(:no_licence).first
+    active_licences = User.where(:company_id => current_user.company_id, :state => "active").length
+
+    if no_licences == active_licences
+      respond_to do |format|
+        format.js   { render :insufficient_licences, :layout => false }
+      end
+    else
 #    authorize @user
-    if @user.activate!
+      @user.activate!
+      @licences_used = User.where(:company_id => current_user.company_id, :state => "active").count
+      @licences_total = Company.joins(:users).where('users.company_id' => current_user.company_id).pluck(:no_licence).first
       respond_to do |format|
         format.js   { render :activate, :layout => false }
       end 
@@ -29,9 +40,12 @@ class UsersController < ApplicationController
   end
 
   def deactivate
+
     @user = User.where(:id => params[:id]).first
 #    authorize @user
     if @user.deactivate!
+      @licences_used = User.where(:company_id => current_user.company_id, :state => "active").count
+      @licences_total = Company.joins(:users).where('users.company_id' => current_user.company_id).pluck(:no_licence).first
       respond_to do |format|
         format.js   { render :deactivate, :layout => false }
       end 

@@ -581,7 +581,7 @@ end
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :role, :company_id, :company_attributes => [:name]) }
+    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :role, :check_field, :company_id, :company_attributes => [:name, :read_term]) }
     devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :current_password, :role, :company_id, :company_attributes => [:name]) }
   end
 
@@ -589,6 +589,8 @@ end
     if controller_name == 'sessions' && action_name == 'new'
       'devise'
     elsif  controller_name == 'registrations' && action_name == 'new'
+      'devise'
+    elsif  controller_name == 'registrations' && action_name == 'create'
       'devise'
     elsif  controller_name == 'passwords' && action_name == 'new'
       'devise'

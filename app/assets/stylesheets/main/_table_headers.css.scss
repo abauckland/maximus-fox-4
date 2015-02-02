@@ -1,0 +1,31 @@
+@mixin name {width: 140px; display: table-cell; text-align: left}
+@mixin role {width: 140px; display: table-cell; text-align: left}
+@mixin account {width: 140px; display: table-cell; text-align: left}
+@mixin title {width: 140px; display: table-cell; text-align: left}
+
+@mixin address {width: 160px; display: table-cell; text-align: left}
+@mixin email {width: 200px; display: table-cell; text-align: left}
+@mixin phone {width: 70px; display: table-cell; text-align: left}
+@mixin vat {width: 90px; display: table-cell; text-align: left}
+@mixin reg {width: 90px; display: table-cell; text-align: left}
+
+
+@mixin ref {width: 60px; display: table-cell; text-align: left}
+
+@mixin quantity {width: 40px; display: table-cell; text-align: right}
+@mixin unit {width: 40px; display: table-cell; text-align: right}
+@mixin vat {width: 40px; display: table-cell; text-align: right}
+@mixin pounds {width: 75px; display: table-cell; text-align: right}
+@mixin state {width: 60px; display: table-cell; text-align: left}
+
+@mixin mode {width: 60px; display: table-cell; text-align: left}
+@mixin return {width: 60px; display: table-cell; text-align: left}
+@mixin distance {width: 40px; display: table-cell; text-align: left}
+
+@mixin method {width: 80px; display: table-cell; text-align: left}
+@mixin receipt {width: 40px; display: table-cell; text-align: left}
+
+@mixin date {width: 60px; display: table-cell; text-align: left}
+@mixin time {width: 60px; display: table-cell; text-align: left}
+
+@mixin note {width: 200px; display: table-cell; text-align: left}

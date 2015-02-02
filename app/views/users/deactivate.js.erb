@@ -1,5 +1,10 @@
 $('td#'+<%= @user.id %>+'_status').html('inactive');
 
+$('h3').html('Licence Allocation: '+<%= @licences_used %>+' of '+<%= @licences_total %>+' licences are in use');
+
 $('td#'+<%= @user.id %>+'_links').children('a.line_activate_icon_hidden').attr('class', 'line_activate_icon_show');
 
 $('td#'+<%= @user.id %>+'_links').children('a.line_deactivate_icon_show').attr('class', 'line_deactivate_icon_hidden');
+
+
+$('div.form_error').hide();

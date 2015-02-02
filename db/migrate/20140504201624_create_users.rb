@@ -15,7 +15,7 @@ class CreateUsers < ActiveRecord::Migration
 #      t.integer :failed_attempts
 #      t.integer :locked_at
 #      t.integer :number_times_logged_in
-#      t.integer :active
+      t.integer :active
 #      t.timestamp :last_sign_in
 #      t.string :ip
 

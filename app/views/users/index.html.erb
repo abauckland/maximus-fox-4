@@ -1,6 +1,6 @@
 <div class="row title_band">
     <div class="page_title">
-        <h1>List of User Licences</h1>
+        <h1>User & Licence Allocation</h1>
     </div>
     <div class="title_help" id="user_index"></div>
     <div><%= link_to 'Add User', new_employee_path, class: "title_button"%></div>
@@ -26,6 +26,7 @@
                         <tr>
                             <th class="user_name">Name</th>
                             <th class="user_email">E-mail</th>
+                            <th class="user_role">Role</th>
                             <th class="user_status">Status</th>
                             <th class="row_button no_buttons_2"></th>
                         </tr>
@@ -38,15 +39,18 @@
                         <tr>
                             <td class="user_name"><%= user.name %></td>
                             <td class="user_email"><%= user.email %></td>
+                            <td class="user_role"><%= user.role %></td>
                             <td id="<%= user.id %>_status" class="user_status"><%= user.state %></td>
                             <td id="<%= user.id %>_links" class="row_button no_buttons_2">
-                            	<% if user.active? %>
-                            		<%= row_deactivate_link(user, 'show') %>
-                            		<%= row_activate_link(user, 'hidden') %>
-                            	<% else %>
-                            		<%= row_deactivate_link(user, 'hidden') %>
-                            		<%= row_activate_link(user, 'show') %>
-                            	<% end %>
+                                <% if user.role != "owner" %>
+                                	<% if user.active? %>
+                                		<%= row_deactivate_link(user, 'show') %>
+                                		<%= row_activate_link(user, 'hidden') %>
+                                	<% else %>
+                                		<%= row_deactivate_link(user, 'hidden') %>
+                                		<%= row_activate_link(user, 'show') %>
+                                	<% end %>
+                                <% end %>	
                                 <%= link_to "", user_path(user), class: 'line_show_icon', title: "show full details" %>
                             </td>
                         </tr>

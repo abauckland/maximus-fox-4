@@ -25,13 +25,11 @@
                         <label class="label_80">Email:</label>
                         <span><%= @user.email %></span></br>
 
-                        <!-- show text line -->
-                        <label class="label_80">Tel:</label>
-                        <span><%= @user.tel %></span></br>
 
                         <!-- show text line -->
-                        <label class="label_80">Last Sign In:</label>
-                        <span><%= @user.last_sign_in_at.strftime("%A %-d %B %Y") %></span></br>
+                        <label class="label_80">Role:</label>
+                        <span><%= @user.role %></span></br>
+                        
 
                         <!-- show text line -->
                         <label class="label_80">Status:</label>
@@ -44,7 +42,7 @@
 <!-- column footer start--> 
                 <div class="row">
                     <div class="form_footer">
-                        <%= link_to 'Cancel', users_path %>
+                        <%= link_to 'Back', users_path %>
                     </div>
                 </div>
 
