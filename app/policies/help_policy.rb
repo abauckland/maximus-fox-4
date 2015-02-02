@@ -6,7 +6,7 @@ class HelpPolicy < Struct.new(:user, :help)
     end
     
     def show?
-      index?
+      true
     end
     
     def new?
