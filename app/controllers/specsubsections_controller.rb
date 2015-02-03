@@ -12,9 +12,13 @@ class SpecsubsectionsController < ApplicationController
     #only users with role 'manage' and 'edit' have access to action    
     #only those projects that the current user is a 'projectuser' of are available as a template
     #users also have access to standard (specright) templates                                 
-    user_templates = Project.project_templates(@project, current_user).ids
-    standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system).ids
-    template_ids = user_templates+standard_templates
+    user_project_ids = Specline.joins(:project => :projectusers
+                            ).where('projectusers.user_id' => current_user.id, 'projects.ref_system' => @project.ref_system
+                            ).where.not('projects.id' => params[:id]
+                            ).pluck(:project_id).uniq.sort
+    user_projects = Project.where(:id => user_project_ids)
+    standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system).order("code")
+    template_ids = user_projects + standard_templates
 
     @templates = Project.where(:id => template_ids).order("code")
 
