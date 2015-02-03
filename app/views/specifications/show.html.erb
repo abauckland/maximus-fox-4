@@ -14,7 +14,7 @@
     <div>
         <div>
             <label class="select_2">Subsection:</label>
-            <%= select_tag "section", options_from_collection_for_select(@project_subsections, :id, :full_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/specifications/#{@project.id}?subsection='+this.value;"} %>
+            <span><%= select_tag "section", options_from_collection_for_select(@project_subsections, :id, :full_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/specifications/#{@project.id}?subsection='+this.value;"} %></span>
         </div>
     </div>
 

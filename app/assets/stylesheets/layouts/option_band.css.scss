@@ -58,6 +58,10 @@
   width: 65px;
 }
 
+ .option_band div div span {
+    display: block;
+    overflow: hidden;
+}
 
 //form footer submit and cancel buttons
 .option_band select{
@@ -69,6 +73,7 @@
   @media screen and (max-width: $phone-landscape) {
     .option_band select{
       margin: 0px 0px 0px 2px;
+  width: 100%;
     }
   }
 
