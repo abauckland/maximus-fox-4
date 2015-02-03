@@ -468,7 +468,7 @@ form.css('display', 'inline');
                 element : function(settings, original) {
                     var input = $('<input />');
                     if (settings.width  != 'none') { input.width(settings.width);  }
-                    if (settings.height != 'none') { input.height(settings.height); }
+                    if (settings.height != 'none') { input.height(settings.height + 8); }
                     /* https://bugzilla.mozilla.org/show_bug.cgi?id=236791 */
                     //input[0].setAttribute('autocomplete','off');
                     input.attr('autocomplete','off');
@@ -482,7 +482,7 @@ form.css('display', 'inline');
                     if (settings.rows) {
                         textarea.attr('rows', settings.rows);
                     } else if (settings.height != "none") {
-                        textarea.height(settings.height);
+                        textarea.height(settings.height + 8);
                     }
                     if (settings.cols) {
                         textarea.attr('cols', settings.cols + 15);

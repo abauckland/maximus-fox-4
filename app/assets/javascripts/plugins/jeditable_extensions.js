@@ -4,7 +4,7 @@ $.editable.addInputType('autogrow', {
                     if (settings.rows) {
                         textarea.attr('rows', settings.rows);
                     } else if (settings.height != "none") {
-                        textarea.height(settings.height);
+                        textarea.height(settings.height + 8);
                     }
 
                    	textarea.width(settings.width);	                       	                       	
