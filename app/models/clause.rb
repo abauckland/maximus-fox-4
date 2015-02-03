@@ -20,6 +20,7 @@ accepts_nested_attributes_for :clausetitle
 
 attr_accessor :title_text
 
+before_validation :custom_validation_1
 before_validation :custom_validation_2
 before_save :assign_title
 
@@ -78,6 +79,13 @@ end
 #  return clauseref.subsection.section.ref.to_s + sprintf("%02d", clauseref.subsection.ref).to_s + '.' + clauseref.clausetype_id.to_s + sprintf("%02d", clauseref.clause).to_s + clauseref.subclause.to_s + ' (' + clausetitle.text.to_s + ')'
 #end
 
+def custom_validation_1
+    if @clause_content == "clone_content"
+      if @clone_template_id.blank? || @clone_section_id.blank? || @clone_clause_id.blank?
+        errors.add(:clause_content, "A clause to clone information from must be selected")
+      end
+    end 
+end
 
 def custom_validation_2
     if @title_text.blank?
