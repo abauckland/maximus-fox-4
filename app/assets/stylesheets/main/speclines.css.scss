@@ -107,12 +107,6 @@ span.editable_text5{@extend span.editable_text4}
     }
   }
 
-.line_drag_prefix{
-  @include menu_icons(-1080px);
-  float: right;
-  padding: 0px;
-  }
-
 .prefixed_line_space{
   display: none;
   }

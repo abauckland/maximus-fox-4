@@ -12,7 +12,7 @@
                         </div>
                     </div>
 
-                    <!-- form input[email] --> 
+                    <!-- form input[email] -->
                     <label class="label_80">E-mail:*</label>
                     <span>
                         <%= f.email_field :email, autofocus: true %>
@@ -30,7 +30,7 @@
                         <%= f.submit "Sign in", class: "form_button_full"%>
                     </span></br>
                     <% end %>
-                                        
+
                     <%= render "devise/shared/links" %>
 
                </fieldset>
@@ -49,15 +49,19 @@
                         <h4>Sign Up</h4>
                     </div>
                 </div>
-                
+
                 <!-- show text line --> 
                 <label class="label_icon"></label>
-                <span><h3>Line of text to displayed - may be longer than the available width</h3></span></br>        
-    
+                <span><h3>Create a free account with 3 free user licences</h3></span></br>
+
                 <!-- show text line --> 
                 <label class="label_icon"></label>
-                <span><h3>Line of text to displayed - may be longer than the available width</h3></span></br> 
-    
+                <span><h3>No IT or training costs, works with all operating systems and devices.</h3></span></br> 
+
+                <!-- show text line --> 
+                <label class="label_icon"></label>
+                <span><h3>Access specification templates for over 80 CAWS sections and 4,000 clauses</h3></span></br> 
+
                 <label class="label_80"></label>
                 <span>
                     <%= link_to 'Create Account', new_user_registration_path, class: "form_button_full" %>

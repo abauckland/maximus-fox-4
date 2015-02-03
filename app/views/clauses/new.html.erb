@@ -24,16 +24,17 @@
 							
 	                    <!-- form input[text] --> 
 	                    <div class="form_tooltip" id="clause_reference"></div>
-	                    <label class="label_120">Clause Reference:*</label>
+	                    <label class="label_110">Clause Reference:*</label>
+	                    <label class="label_24"><%=h @subsection.full_code %>.</label>
 	                    <span>
-	                        <%=h @subsection.full_code %><%= ref.text_field :full_clause_ref, {placeholder: 'XXXX'} %>
+	                        <%= ref.text_field :full_clause_ref, {placeholder: 'XXXX'} %>
 	                    </span></br>
 
 					<% end %>
 
                     <!-- form input[text] -->
                     <div class="form_tooltip" id="clause_title"></div>
-                    <label class="label_120">Clause Title:*</label>
+                    <label class="label_110">Clause Title:*</label>
                     <span>
                         <%= f.text_field :title_text %>
                     </span></br>
@@ -44,37 +45,37 @@
 
                     <!-- form input[radio] -->
                     <div class="form_tooltip" id="clause_blank_content"></div>
-                    <label class="label_120">Clause Content:</label>
+                    <label class="label_110">Clause Content:*</label>
                     <span>
                         <%= radio_button_tag :clause_content, 'blank_content', {checked: true} %>
-                    <span>Blank content suitable for editing</span>
+                    <span>Blank content</span>
                     </span></br>
 
                     <!-- form input[radio] -->
                     <div class="form_tooltip" id="clause_clone_content"></div>
-                    <label class="label_120"></label>
+                    <label class="label_110"></label>
                     <span>
                         <%= radio_button_tag :clause_content, 'clone_content'%>
-                        <span>Clone content from existing</span>
+                        <span>Clone content from:</span>
                     </span></br>
 
                     <!-- form input[select] -->
-                    <label class="label_120"></label>
-                    <label class="label_60">Project:*</label>
+                    <label class="label_110"></label>
+                    <label class="label_50">Project:</label>
                     <span class="clone_project">
       					<%= select_tag "clone_template_id", nil, {prompt: 'Select Project', disabled: true} %>
                     </span></br>
 
                     <!-- form input[select] -->
-                    <label class="label_120"></label>
-                    <label class="label_60">Section:*</label>
+                    <label class="label_110"></label>
+                    <label class="label_50">Section:</label>
                     <span class="clone_section">
       						<%= select_tag "clone_section_id", nil, {prompt: 'Select Section', disabled: true} %>
                     </span></br>
 
                     <!-- form input[select] -->
-                    <label class="label_120"></label>
-                    <label class="label_60">Clause:*</label>
+                    <label class="label_110"></label>
+                    <label class="label_50">Clause:</label>
                     <span class="clone_clause">
       						<%= select_tag "clone_clause_id", nil, {prompt: 'Select Clause', disabled: true} %>
                     </span></br>

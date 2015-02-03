@@ -49,7 +49,7 @@ module SpecificationsHelper
 
   def prefix_menu(specline)
   #    if authorise_specline_view(['manage', 'edit', 'write'])
-      "<td class='prefixed_line_space'></td><td class='prefixed_line_menu'><span class='line_drag_prefix'></span></td>".html_safe
+      "<td class='prefixed_line_space'></td><td class='prefixed_line_menu'>#{specline_move}</td>".html_safe
   #  else
   #    "<td class='prefixed_line_space'></td><td class='prefixed_line_menu'></td>".html_safe
   #  end
@@ -197,28 +197,29 @@ module SpecificationsHelper
   end
 
   def clause_new_link(specline)
-    link_to "", manage_specclause_path(:id => specline.project_id, :project_id => specline.project_id, :subsection_id => specline.clause.clauseref.subsection_id), :method => :get,  :remote => true, :class => "line_new_icon", :title => "add/delete clauses"
+    link_to "", manage_specclause_path(:id => specline.project_id, :project_id => specline.project_id, :subsection_id => specline.clause.clauseref.subsection_id), :class => "line_new_icon", :title => "add/delete clauses"
+
   end
 
   def clause_delete_link(specline)
-    link_to "", delete_clause_specline_path(specline.id), :class => "get",  :remote => true, :class => "line_delete_icon", :title => "delete clause"
+    link_to "", delete_clause_specline_path(specline.id), method: :delete, :remote => true, :class => "line_delete_icon", :title => "delete clause"
   end
 
   def specline_line_new_link(specline)
-    link_to "", new_specline_specline_path(specline.id), :class => "get",  :remote => true, :class => "line_insert_icon", :title => "insert clause line"
+    link_to "", new_specline_specline_path(specline.id), :remote => true, :class => "line_insert_icon", :title => "insert clause line"
   end
 
   def specline_line_edit_link(specline)
-    link_to "", edit_specline_path(specline.id), :class => "get",  :remote => true, :class => "line_edit_icon", :title => "change line format"
+    link_to "", edit_specline_path(specline.id), :remote => true, :class => "line_edit_icon", :title => "change line format"
   end
 
   def specline_line_delete_link(specline)
-    link_to "", delete_specline_specline_path(specline.id), :class => "get",  :remote => true, :class => "line_delete_icon", :title => "delete line"
+    link_to "", delete_specline_specline_path(specline.id), method: :delete, :remote => true, :class => "line_delete_icon", :title => "delete line"
   end
 
   def clause_help_link(specline)  
     if !specline.clause.guidenote.nil?
-      link_to "", guidance_specline_path(specline.id), :class => "get",  :remote => true, :class => "line_info_icon", :title => "clause guidance"
+      link_to "", guidance_specline_path(specline.id), :remote => true, :class => "line_info_icon", :title => "clause guidance"
     end
   end
 

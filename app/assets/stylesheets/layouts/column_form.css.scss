@@ -14,8 +14,10 @@ form label{
     padding-top: 3px;
 }
 
-form label.label_40 {width: 60px;}
-form label.label_50 {width: 70px;}
+form label.label_24 {width: 24px;}
+form label.label_30 {width: 30px;}
+form label.label_40 {width: 40px;}
+form label.label_50 {width: 50px;}
 form label.label_60 {width: 60px;}
 form label.label_70 {width: 70px;}
 form label.label_80 {width: 80px;}
@@ -64,6 +66,13 @@ form a.form_button{
 }
 
 form a.form_button_full{
+  float: left;
+  margin: 0px 0px 4px 0px;
+  width: 100%;
+  @include title-button-green;
+}
+
+a.form_button_full{
   float: left;
   margin: 0px 0px 4px 0px;
   width: 100%;
