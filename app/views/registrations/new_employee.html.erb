@@ -23,20 +23,20 @@
                     <fieldset>
 
                         <!-- form input[text] --> 
-                        <label class="label_100">First Name:*</label>
+                        <label class="label_110">First Name:*</label>
                         <span>
                             <%= f.text_field :first_name, autofocus: true %>
                         </span></br>
 
                         <!-- form input[textarea] -->    
-                        <label class="label_100">Surname:*</label>
+                        <label class="label_110">Surname:*</label>
                         <span>
                             <%= f.text_field :surname %>
                         </span></br>
 
                         <!-- form input[email] --> 
                         <div class="form_tooltip" id="registration_email"></div>
-                        <label class="label_100">E-mail:*</label>
+                        <label class="label_110">E-mail:*</label>
                         <span>
                             <%= f.email_field :email, {placeholder: 'e.g. demo@example.com'} %>
                         </span></br>
@@ -44,13 +44,13 @@
 
                         <!-- form input[text] --> 
                         <div class="form_tooltip" id="registration_password"></div>
-                        <label class="label_100">New password:*</label>
+                        <label class="label_110">New password:*</label>
                         <span>
                             <%= f.password_field :password, autocomplete: "off" %>
                         </span></br>
 
                         <!-- form input[textarea] -->    
-                        <label class="label_100">Confirm new password:*</label>
+                        <label class="label_110">Confirm password:*</label>
                         <span>
                             <%= f.password_field :password_confirmation, autocomplete: "off" %>
                         </span></br>
