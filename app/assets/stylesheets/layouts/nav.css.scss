@@ -17,7 +17,7 @@
           text-decoration: none; 
           padding: 0px 9px 0px 9px;
           color: #fff;
-          &:hover {text-decoration: underline;}   
+          &:hover {text-decoration: underline;}
         }
         ul.sub_menu{
           visibility: hidden;
@@ -42,11 +42,11 @@
               &:hover {
                 text-decoration: underline;
                 color: #fff;
-              }             
+              }
             }
           }
         }
-      }  
+      }
   }
 
   ul.left_menu li:first-child a{
@@ -57,11 +57,19 @@
   .left_menu_mob_select{
     display: none;
   } 
+  
+  ul.left_menu_mob {
+    display: none;
+  } 
 
 @media all and (max-width: 800px){//, only screen and (-webkit-min-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (min--moz-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (-o-min-device-pixel-ratio: 2/1) and (max-width: 1024px), only screen and (min-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (min-resolution: 192dpi) and (max-width: 1024px), only screen and (min-resolution: 2dppx) and (max-width: 1024px) {
   
-  //mobile menu item  
-  .left_menu_mob_select {  
+  ul.left_menu {
+    display: none;
+  } 
+  
+  //mobile menu item
+  .left_menu_mob_select {
     display: block;
     float: left;
     padding: 0px;
@@ -74,56 +82,59 @@
     color: #fff;
     cursor: pointer;
     &:hover{
-      text-decoration: underline;    
+      text-decoration: underline;
     }
   }
   
   
-  //mobile drop down menu     
-  ul.left_menu {
+  //mobile drop down menu
+  ul.left_menu_mob {
       display: none;
       position: absolute;
       top: 42px;
-      left: 30px;
+      left: 0px;
       right: 30px;
       list-style-type: none;
       z-index: 1000;
       li{
-         background: #000;
          border-top: 1px solid #555;
          width: 100%;
-        a{
-          display: block;
-          font-family: "Trebuchet MS", Trebuchet, "Liberation Sans", sans-serif;
-          font-weight: bold;
-          font-size: 1.4rem;
-          text-decoration: none;
-          line-height: 40px;
-          padding: 0px 9px 0px 9px;
-          color: #fff;
-          width: 100%;
-          &:hover {
-            text-decoration: underline;
-            background: #333;
-          }
-        }  
-        ul{
+         text-decoration: none;
+         color: #fff;
+         p{
+           font-family: "Trebuchet MS", Trebuchet, "Liberation Sans", sans-serif;
+           font-weight: bold;
+           font-size: 1.4rem;
+           padding: 10px;
+           margin: 0px;
+           background: #000;
+           &:hover {
+             background: #555;
+             cursor: pointer;}
+         }
+        ul.sub_menu_mob{
+          position: relative;
           display: none; //add to stop submenus showing in small screens
-          padding: 0px 0px 0px 0px;        
+          padding: 0px 0px 0px 0px;
           list-style-type: none;
-          li{     
+          top: 0px;
+          li{
             border-top: 1px solid #555;
-            background: #222;
+            background: #333;
             &:hover{background: #555;}
-            a{           
-              display: block; 
-              padding: 0px 0px 0px 20px;
-              font-size: 1.1rem;
+            a{
+              display: block;
+              height:35px;
+              padding: 11px 10px 0px 20px;
+              width:100%;
+              font-size: 1.2rem;
+              font-weight: bold;
               color: #fff;
+              text-decoration: none;
               &:hover {
                 text-decoration: underline;
                 color: #fff;
-              }             
+              }
             }
           }
         }
