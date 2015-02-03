@@ -1,22 +1,4 @@
-$.editable.addInputType('autogrow', {
-                element : function(settings, original) {
-                    var textarea = $('<textarea />');
-                    if (settings.rows) {
-                        textarea.attr('rows', settings.rows);
-                    } else if (settings.height != "none") {
-                        textarea.height(settings.height + 8);
-                    }
 
-                   	textarea.width(settings.width);	                       	                       	
-
-                    textarea.css("font", "normal 12px arial").css("padding-top", "0px");
-                    $(this).append(textarea);
-                    return(textarea);
-                },
-    			plugin : function(settings, original) {
-        			$('textarea', this).autogrow();
-    			},
-});
 
 $.editable.addInputType('comboselect', {
 				element : function(settings, original) {

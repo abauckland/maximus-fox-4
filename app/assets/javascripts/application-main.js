@@ -9,16 +9,16 @@
 //= require jquery-ui/sortable
 //= require jquery-ui/draggable
 //= require tabs
-//= require projects
 //= require layouts/help.js
 //= require layouts/nav.js
 //= require layouts/grid.js
 //= require layouts/columns.js
-//= require layouts/editable_tables.js
-//= require plugins/autogrow.js
-//= require plugins/symbols
+//= require projects
 //= require plugins/jquery.jeditable.js
 //= require plugins/jeditable_extensions.js
+//= require plugins/jquery.selection.js
+//= require plugins/autogrow.js
+//= require plugins/symbols.js
 //= require plugins/qtip2.js
 //= require_tree .
 

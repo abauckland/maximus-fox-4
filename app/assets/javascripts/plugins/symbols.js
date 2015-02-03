@@ -13,7 +13,7 @@
             
             
             $('.character_menu_content').children('ul').children('li#symbol_0').click(function(event){
-        		textarea.selection('replace', {text: 'º'});        					            
+        		textarea.selection('replace', {text: 'FOOBAR'});        					            
 				t = setTimeout(function() {
 					$('.character_menu').css('visibility', 'hidden'); 
 				}, 200);
