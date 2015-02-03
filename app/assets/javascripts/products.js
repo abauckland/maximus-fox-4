@@ -37,7 +37,7 @@ jQuery.fn.postWithAjax = function() {
   this.click(function() {
     $.post($(this).attr("href"), $(this).serialize(), null, "script");
     return false;
-  })
+  });
   return this;
 };
 
@@ -47,7 +47,7 @@ jQuery.fn.putWithAjax = function(){
   this.click(function(){
     $.put($(this).attr("href"), $(this).serialize(), null, "script");
     return false;
-    })
+   });
   return this;
 };
 
@@ -60,7 +60,7 @@ jQuery.fn.deleteWithAjax = function(){
   this.click(function(){
     $.delete_($(this).attr("href"), $(this).serialize(), null, "script");
     return false;
-    })
+   });
   return this;
 };
 
@@ -70,7 +70,7 @@ jQuery.fn.getWithAjax = function() {
   this.click(function() {
     $.get($(this).attr("href"), $(this).serialize(), null, "script");
     return false;
-  })
+  });
   return this;
 };
 
@@ -116,7 +116,7 @@ function section_select_location(){
 $(document).ready(function(){
 
 
-$('#products').dataTable()
+$('#products').dataTable();
 
 
 //loads ajax functionality to links with specified class

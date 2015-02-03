@@ -36,9 +36,9 @@ function tab_2_label_width(){
 //limit label size in document end tabs
 	if ($(window).width()<400){
 		$('.document_tabs ul').find('a').each(function(){
-			var text=$(this).text()
+			var text=$(this).text();
 			if (text.length>14)
-				$(this).val(text).text(text.substr(0,11)+'..')
+				$(this).val(text).text(text.substr(0,11)+'..');
 		});
 	}	
 }

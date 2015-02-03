@@ -10,7 +10,7 @@ $(document).ready(function(){
     	mouseleave:function(){ 
   			$(this).css('background-color', '#fff');
 			$(this).find('td.line_menu').css('visibility', 'hidden');
-			$(this).find('td.line_menu_mob').css('visibility', 'hidden')
+			$(this).find('td.line_menu_mob').css('visibility', 'hidden');
     	}
 	});
 

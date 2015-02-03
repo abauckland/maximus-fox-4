@@ -71,7 +71,7 @@ $('ul.tabs, ul.tabs_2').each(function(){
   		$(this).css('background-color', '#fff');
 		$(this).find('td.prefixed_line_menu').css('visibility', 'hidden');
 		$(this).find('td.suffixed_line_menu').css('visibility', 'hidden');
-		$(this).find('td.suffixed_line_menu_mob').css('visibility', 'hidden')
+		$(this).find('td.suffixed_line_menu_mob').css('visibility', 'hidden');
     }
   });
 
