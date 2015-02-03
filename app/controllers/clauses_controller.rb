@@ -86,7 +86,7 @@ class ClausesController < ApplicationController
 
   def new_clone_project_list
     #projects must contain something
-    user_projects = Speclines.joins(:projects => :projectusers
+    user_projects = Specline.joins(:project => :projectusers
                             ).where('projectusers.user_id' => current_user.id, 'projects.ref_system' => @project.ref_system
                             ).pluck(:project_id).uniq.sort
 #    user_projects = Project.user_projects_access(current_user).ref_system(@project).order("code").ids
