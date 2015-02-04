@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-	$("div.form_tooltip").qtip({ // Grab some elements to apply the tooltip to
+	$(".form_tooltip").qtip({ // Grab some elements to apply the tooltip to
 	
    		show: 'mouseover',
    		hide: 'mouseout',
@@ -29,7 +29,7 @@ $(document).ready(function(){
 	});
 
 
-	$("div.title_help").qtip({ // Grab some elements to apply the tooltip to
+	$(".title_help").qtip({ // Grab some elements to apply the tooltip to
 	
    		show: 'mouseover',
    		hide: 'mouseout',

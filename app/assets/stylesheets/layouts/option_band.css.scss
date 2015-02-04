@@ -32,13 +32,11 @@
   margin: 3px 0px 4px 0px;  
 }
 
-.option_left{
-  overflow: hidden;
-}
+.option_left{}
 
 .option_left div{
   float: left;
-  width: 385px;
+
   margin: 4px 10px 4px 0px;
 }
 
@@ -55,20 +53,22 @@
   padding-top: 4px;
   margin-right:2px;
   font-weight: bold;
-  width: 65px;
 }
 
  .option_band div div span {
-    display: block;
-    overflow: hidden;
 }
+  @media screen and (max-width: $phone-landscape) {
+    .option_band div div span {
+      display: block;
+      overflow: hidden;
+    }
+  }
 
 //form footer submit and cancel buttons
 .option_band select{
   float: left;
   margin: 0px 10px 0px 2px;
   padding: 2px 0px 2px 0px;
-  width: 320px;
 }
   @media screen and (max-width: $phone-landscape) {
     .option_band select{
