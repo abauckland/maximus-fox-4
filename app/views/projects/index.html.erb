@@ -9,7 +9,7 @@
     <div>
         <div>
             <label class="select_1">Project:</label>
-            <%= select_tag "project", options_from_collection_for_select(@projects, :id, :code_and_title), {:prompt => "Select project to view/edit", :onchange => "window.location='/specifications/'+this.value;"} %>
+            <span><%= select_tag "project", options_from_collection_for_select(@projects, :id, :code_and_title), {:prompt => "Select project to view/edit", :onchange => "window.location='/specifications/'+this.value;"} %></span>
         </div>
     </div>
 

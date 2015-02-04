@@ -40,11 +40,14 @@ class ClausesController < ApplicationController
     end
 
     if !current_clauseref.blank?
-      flash.now[:error] = 'A clause with the same reference already exists in this Work Section'        
-      respond_to do |format|
-        format.html { render :action => "new"}
-        format.xml  { render :xml => @clause.errors, :status => :unprocessable_entity }
-      end
+
+      render :new
+
+#      respond_to do |format|
+#      flash[:error] = 'A clause with the same reference already exists in this Work Section'
+#        format.html { render :new}
+#        format.xml  { render :xml => @clause.errors, :status => :unprocessable_entity }
+#      end
     else
 
       if @clause.save

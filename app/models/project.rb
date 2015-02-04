@@ -16,14 +16,13 @@ class Project < ActiveRecord::Base
   enum project_status: [:Draft, :Preliminary, :Tender, :Contract, :As_Built]
   enum ref_system: [:CAWS, :Uniclass_2]
 
-  validates_presence_of :code
-  validates_presence_of :title
-  
+  validates :code, presence: true,
+    uniqueness: {:scope => [:company_id, :title], message: ": A project with the same code and title already exists for the company" }
+  validates :title, presence: true
 
-  
 
   scope :user_projects, ->(current_user) { joins(:projectusers).where('projectusers.user_id' => current_user.id).order("code")} 
-   
+
   scope :user_projects_access, ->(current_user) { joins(:projectusers
                                 ).where('projectusers.user_id' => current_user.id).order('code'
                                 )#.each_with_object({ }){ |c, hsh| hsh[c.id] = '#{c.projectcode_and_title} +' '+#{c.projectusers.role}'}

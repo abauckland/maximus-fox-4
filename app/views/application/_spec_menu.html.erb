@@ -1,5 +1,5 @@
 <ul class="left_menu">
-    <% if request.path_parameters[:action] == "new" %>
+    <% if request.path_parameters[:action] == "new"%>
         <li class="has_sub"><%= link_to "PROJECTS", projects_path, :class => check_current('project') %>
             <ul class="sub_menu">
                 <li><%= link_to "Select Project", projects_path %></li>
@@ -10,12 +10,15 @@
             <ul class="sub_menu">
                 <li><%= link_to "Select Project", projects_path %> </li>
                 <li><%= link_to "Create Project", new_project_path %> </li>
-                <% if @project %> 
+        <% if @project %>
+                <% unless @project.id == nil %> 
                     <li><%= link_to "Edit Project Details", edit_project_path(@project.id) %> </li>
+                <% end %>
                 <% end %>
             </ul>
         </li>
         <% if @project %>
+        <% unless @project.id == nil %>
             <li><%= link_to "DOCUMENT", specification_path(@project.id), :class => check_current('revision') %></li>
             <li><%= link_to "REVISIONS", specrevision_path(@project.id), :class => check_current('revision') %></li>
             <li class="has_sub"><%= link_to "PUBLISH", print_path(@project.id), :class => check_current('revision') %> 
@@ -25,6 +28,7 @@
                     <li><%= link_to "Download Keynote Files", keynote_path(@project.id) %> </li>
                 </ul>
             </li>
+        <% end %>
         <% end %>
     <% end %>
 </ul>
@@ -44,12 +48,15 @@
             <ul class="sub_menu_mob">
                 <li><%= link_to "Select Project", projects_path %> </li>
                 <li><%= link_to "Create Project", new_project_path %> </li>
-                <% if @project %> 
+        <% if @project %>
+                <% unless @project.id == nil %> 
                     <li><%= link_to "Edit Project Details", edit_project_path(@project.id) %> </li>
+                <% end %>
                 <% end %>
             </ul>
         </li>
         <% if @project %>
+        <% unless @project.id == nil %>
             <li><p class="mob_menu">DOCUMENT</p>
             	<ul class="sub_menu_mob">
                 	<li><%= link_to "Edit Document", specification_path(@project.id) %></li>
@@ -68,5 +75,6 @@
                 </ul>
             </li>
         <% end %>
+                <% end %>
     <% end %>
 </ul>

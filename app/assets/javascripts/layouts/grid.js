@@ -10,10 +10,15 @@ function separate_column_height(tab_lndscp, tab_prtrt) {
 
 	if(window_width <= tab_prtrt) {
 		$('.column_1, .column_2, .column_3').css('height','auto');
+		if($('.column_2').children('.row').length){
+		$('.column_3').find('.border').css('border','none').css('padding','0px');
+		}else{
 		$('.column_2, .column_3').find('.border').css('border','none').css('padding','0px');
+		}
+
 	}else if(window_width <= tab_lndscp && window_width > tab_prtrt) {
 		$('.column_1, .column_2').height(highestCol+'px');
-		$('.column_1, .column_2').find('.border').css('border','solid 1px #888888').css('padding','12px');		
+		$('.column_1, .column_2').find('.border').css('border','solid 1px #888888').css('padding','12px');
 
 		$('.column_3').css('height','auto');
 		$('.column_3').find('.border').css('border','none').css('padding','0px');
@@ -28,8 +33,8 @@ function separate_column_height(tab_lndscp, tab_prtrt) {
 $(document).ready(function(){
 
 	var tab_lndscp = '960';
-	var tab_prtrt = '760';
-	var mob_lndscp = '480';
+	var mob_lndscp = '760';
+	var tab_prtrt = '480';
 	var mob_prtrt = '320';
 	
 	separate_column_height(tab_lndscp, tab_prtrt);

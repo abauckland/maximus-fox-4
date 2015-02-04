@@ -3,6 +3,10 @@ class ProjectsController < ApplicationController
 
   before_filter :authorise_project_manager, only: [:update]
   before_action :set_project, only: [:empty_project, :show, :edit, :update]
+  before_action :set_projects, only: [:edit, :update]
+  before_action :set_templates, only: [:edit, :update]
+  before_action :set_templates, only: [:edit, :update]
+  before_action :set_available_status_array, only: [:edit, :update]
   before_action :set_project_user, only: [:show, :edit]
 #  before_action :set_project_user, only: [:index]
 
@@ -40,8 +44,8 @@ class ProjectsController < ApplicationController
 
 
   # GET /projects/new
-  def new     
-    @project = Project.new   
+  def new
+    @project = Project.new
   end
 
 
@@ -51,31 +55,20 @@ class ProjectsController < ApplicationController
   def create
     @project = Project.new(project_params)
 
-    respond_to do |format|
+
       if @project.save
         Revision.create(:project_id => @project.id, :user_id => current_user.id, :date => Date.today)
         Printsetting.create(:project_id => @project.id)
 
-        #Projectuser.create(:project_id => @project.id, :user_id => current_user.id, :role => "manage")
-#get all users for the company
         new_project_users =  User.where(:company_id => current_user.company_id)
         new_project_users.each do |user|
           Projectuser.create(:project_id => @project.id, :user_id => user.id, :role => "manage")
         end
 
-        #set defuault project template
-#        project_template = Project.where(:id => [1..10], :ref_system => @project.ref_system).first
-#        @project.update(:parent_id => project_template.id)
-
-        #format.html { redirect_to(:controller => "projects", :action => "manage_subsections", :id => @project.id) }
-        format.html { redirect_to specification_path(@project), notice: 'Project was successfully created.' }
-        format.json { render :show, status: :created, location: @project }
+        redirect_to specification_path(@project), notice: 'Project was successfully created.'
       else
-        @project = Project.user_projects.first 
-        format.html { render :new }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
+        render :new
       end
-    end
   end
 
 
@@ -89,49 +82,30 @@ class ProjectsController < ApplicationController
       redirect_to project_path(@project.id)
     end
 
-    @projects = Project.user_projects(current_user)
-    @template = Project.project_template(@project)
-
-    user_project_ids = Specline.joins(:project => :projectusers
-                            ).where('projectusers.user_id' => current_user.id, 'projects.ref_system' => @project.ref_system
-                            ).where.not('projects.id' => params[:id]
-                            ).pluck(:project_id).uniq.sort
-    user_projects = Project.where(:id => user_project_ids)
-    standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system).order("code")
-    template_ids = user_projects + standard_templates
-
-    @templates = user_projects + standard_templates
-
-    project_status_array = ['Draft', 'Preliminary', 'Tender', 'Contract', 'As Built']
-    current_status_index = project_status_array.index(@project.project_status)
-    project_status_array_last_index = project_status_array.length
-#update in view to make sure select box works correctly
-    @available_status_array = project_status_array[current_status_index..project_status_array_last_index]
-
   end
 
 
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   def update
-    @project.update(project_params)
-    #after new project status set, check if status is 'draft' 
-    if @project.project_status != 'Draft'
-      #if status is not draft, check if revisions status has been changed to '-'
-      revision = Revision.where('project_id = ?', @project.id).first
-      #if status has not been changed previously, change to '-' and record project status for revision
-      if revision.rev.blank?
-        revision.update(:project_status => @project.project_status, :rev => '-')
-      #else just update with current project status in last revision record
-      else
-        last_revision = Revision.where('project_id = ?', @project.id).last
-        last_revision.update(:project_status => @project.project_status)
-      end
-    end
 
-    respond_to do |format|
-        format.html { redirect_to edit_project_path(@project)}
-        format.json { render json: @project.errors, status: :unprocessable_entity }
+    if @project.update(project_params)
+    #after new project status set, check if status is 'draft' 
+      if @project.project_status != 'Draft'
+        #if status is not draft, check if revisions status has been changed to '-'
+        revision = Revision.where('project_id = ?', @project.id).first
+        #if status has not been changed previously, change to '-' and record project status for revision
+        if revision.rev.blank?
+          revision.update(:project_status => @project.project_status, :rev => '-')
+        #else just update with current project status in last revision record
+        else
+          last_revision = Revision.where('project_id = ?', @project.id).last
+          last_revision.update(:project_status => @project.project_status)
+        end
+      end
+      redirect_to edit_project_path(@project)
+    else
+      render :edit
     end
   end
 
@@ -140,6 +114,34 @@ class ProjectsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_project
       @project = Project.find(params[:id])
+    end
+
+    def set_projects
+      @projects = Project.user_projects(current_user)
+    end
+
+    def set_template
+      @template = Project.project_template(@project)
+    end
+
+    def set_templates
+      user_project_ids = Specline.joins(:project => :projectusers
+                              ).where('projectusers.user_id' => current_user.id, 'projects.ref_system' => @project.ref_system
+                              ).where.not('projects.id' => params[:id]
+                              ).pluck(:project_id).uniq.sort
+      user_projects = Project.where(:id => user_project_ids)
+      standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system).order("code")
+      template_ids = user_projects + standard_templates
+  
+      @templates = user_projects + standard_templates
+    end
+
+    def set_available_status_array
+      project_status_array = ['Draft', 'Preliminary', 'Tender', 'Contract', 'As_Built']
+      current_status_index = project_status_array.index(@project.project_status)
+      project_status_array_last_index = project_status_array.length
+  #update in view to make sure select box works correctly
+      @available_status_array = project_status_array[current_status_index..project_status_array_last_index]
     end
 
     def set_project_user

@@ -247,7 +247,7 @@ require "nokogiri"
 
     def set_sections(project)
       if project.CAWS?
-        @sections = Cawssection.project_sections(project)
+        @sections = Cawssection.project_sections(project)#.where.not(:id => 1)
       else
         ##
       end
@@ -255,7 +255,7 @@ require "nokogiri"
 
     def set_subsections(project)
       if project.CAWS?
-        @subsections = Cawssubsection.project_subsections(project).where.not(:cawssection_id => 1)
+        @subsections = Cawssubsection.project_subsections(project)
       else
         ##
       end
@@ -263,7 +263,7 @@ require "nokogiri"
 
     def set_section_subsections(project, section)
       if project.CAWS?
-        @subsections = Cawssubsection.section_subsections(project, section).where.not(:cawssection_id => 1)
+        @subsections = Cawssubsection.section_subsections(project, section)
       else
         ##
       end
