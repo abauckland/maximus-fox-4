@@ -23,5 +23,10 @@ test:
   database: specification_test
 
 production:
-  <<: *default
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  username: manager
+  host: specmysql
   database: specification_prod
+  password: ~specright~!&)&
