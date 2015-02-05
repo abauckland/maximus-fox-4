@@ -20,9 +20,9 @@
 //product data import
 .error_print_link a{
   color: #ff3300;
-  @include icon-error-report-download;
+
   &:hover{
-    @include icon-error-report-download-rollover;
+
   }   
 }
 
