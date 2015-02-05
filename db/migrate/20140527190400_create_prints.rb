@@ -4,7 +4,7 @@ class CreatePrints < ActiveRecord::Migration
       t.integer :project_id
       t.integer :revision_id
       t.integer :user_id
-      t.string :issued
+      t.string :print
 
       t.timestamps
     end

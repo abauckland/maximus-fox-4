@@ -6,5 +6,9 @@ class CreateCharcs < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :charcs, :instance_id, name: "INSTANCE", using: :btree
+    add_index :charcs, :perform_id, name: "PERFORM", using: :btree
+
   end
 end

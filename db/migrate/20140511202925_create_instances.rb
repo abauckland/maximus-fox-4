@@ -6,5 +6,8 @@ class CreateInstances < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :instances, :product_id, name: "PRODUCT", using: :btree
+
   end
 end

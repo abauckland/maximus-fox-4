@@ -15,5 +15,8 @@ class CreateCompanies < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :companies, :name, name: "COMPANY_NAME", using: :btree
+
   end
 end

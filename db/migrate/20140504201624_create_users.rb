@@ -4,21 +4,11 @@ class CreateUsers < ActiveRecord::Migration
       t.integer :company_id
       t.string :first_name
       t.string :surname
-#      t.string :email, null: false, default: ""
       t.integer :role
+      t.string :ip
       t.string :api_key
       t.string :state
-#      t.string :password_hash
-#      t.string :password_salt
-#      t.string :password_reset_token
-#      t.timestamp :password_reset_sent_at
-#      t.integer :failed_attempts
-#      t.integer :locked_at
-#      t.integer :number_times_logged_in
       t.integer :active
-#      t.timestamp :last_sign_in
-#      t.string :ip
-
       t.timestamps
     end
   end

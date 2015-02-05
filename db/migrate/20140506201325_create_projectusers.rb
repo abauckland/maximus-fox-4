@@ -7,5 +7,9 @@ class CreateProjectusers < ActiveRecord::Migration
       
       t.timestamps
     end
+
+    add_index :projectusers, :user_id, name: "USER", using: :btree
+    add_index :projectusers, :project_id, name: "PROJECT", using: :btree
+
   end
 end

@@ -8,5 +8,9 @@ class CreateClauses < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :clauses, [:project_id], name: "PROJECT", using: :btree
+    add_index :clauses, [:clauseref_id], name: "CLAUSEREF", using: :btree
+
   end
 end

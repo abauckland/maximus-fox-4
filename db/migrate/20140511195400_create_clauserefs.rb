@@ -8,5 +8,10 @@ class CreateClauserefs < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :clauserefs, [:subsection_id], name: "SUBSECTION", using: :btree
+    add_index :clauserefs, [:clausetype_id], name: "CLAUSETYPE", using: :btree
+    add_index :clauserefs, [:subsection_id, :clausetype_id], name: "SUBECTION_CLAUSETYPE", using: :btree
+
   end
 end

@@ -6,5 +6,9 @@ class CreateDescripts < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :descripts, :identity_id, name: "IDENTITY", using: :btree
+    add_index :descripts, :product_id, name: "PRODUCT", using: :btree
+
   end
 end

@@ -21,5 +21,9 @@ class CreateAlterations < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :alterations, [:revision_id, :project_id], name: "PROJECT", using: :btree
+    add_index :alterations, [:revision_id, :project_id, :event, :clause_id], name: "CLAUSE", using: :btree
+
   end
 end

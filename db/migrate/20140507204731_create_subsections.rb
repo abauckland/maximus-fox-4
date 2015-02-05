@@ -6,5 +6,9 @@ class CreateSubsections < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :subsections, :cawssubsection_id, name: "CAWS", using: :btree
+    add_index :subsections, :unisubsection_id, name: "UNI", using: :btree
+
   end
 end

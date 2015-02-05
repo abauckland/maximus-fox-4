@@ -5,5 +5,9 @@ class CreateTxt5s < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :txt5s, :id, name: "id_UNIQUE", unique: true, using: :btree
+    add_index :txt5s, :text, name: "text_UNIQUE", unique: true, using: :btree
+
   end
 end

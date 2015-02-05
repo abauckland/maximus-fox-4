@@ -6,5 +6,9 @@ class CreateSubsectionusers < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :subsectionusers, :projectuser_id, name: "PROJECT", using: :btree
+    add_index :subsectionusers, :subsection_id, name: "SUBSECTION", using: :btree
+
   end
 end

@@ -16,5 +16,9 @@ class CreateSpeclines < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :speclines, :id, name: "id_UNIQUE", unique: true, using: :btree
+    add_index :speclines, [:project_id, :clause_id], name: "SPEC", using: :btree
+
   end
 end

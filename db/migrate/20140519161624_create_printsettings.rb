@@ -19,7 +19,7 @@ class CreatePrintsettings < ActiveRecord::Migration
       t.integer :footer_detail
       t.integer :footer_author
       t.integer :footer_date
-
+      t.string  :section_cover
       t.timestamps
     end
   end

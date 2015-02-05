@@ -6,5 +6,9 @@ class CreateClauseproducts < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :clauseproducts, :clause_id, name: "CLAUSE", using: :btree
+    add_index :clauseproducts, :product_id, name: "PRODUCT", using: :btree
+
   end
 end

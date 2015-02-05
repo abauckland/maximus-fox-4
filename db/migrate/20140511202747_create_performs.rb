@@ -6,5 +6,8 @@ class CreatePerforms < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :performs, :performkey_id, name: "PERFORMKEY", using: :btree
+
   end
 end

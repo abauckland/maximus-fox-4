@@ -8,8 +8,14 @@ class CreateProjects < ActiveRecord::Migration
       t.integer :project_status
       t.integer :ref_system
       t.string :image
+      t.string :project_image
+      t.string :client_logo
+      t.string :client_name
 
       t.timestamps
     end
+
+    add_index :projects, :company_id, name: "COMPANY", using: :btree
+
   end
 end

@@ -6,5 +6,9 @@ class CreateIdentities < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :identities, :identkey_id, name: "KEY", using: :btree
+    add_index :identities, :identvalue_id, name: "VALUE", using: :btree
+
   end
 end

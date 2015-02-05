@@ -6,5 +6,9 @@ class CreateIdentvalues < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :identvalues, :company_id, name: "COMPANY", using: :btree
+    add_index :identvalues, :identtxt_id, name: "TEXT", using: :btree
+
   end
 end
