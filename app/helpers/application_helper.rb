@@ -1,39 +1,43 @@
 module ApplicationHelper
 
-  def check_current(item)
+  def check_current(menu_controller)
 
     controller = request.path_parameters[:controller]
     action = request.path_parameters[:action]
 
-    if controller == 'projects'
-        check = 'project'
+    if menu_controller == 'projects'
+      if controller == menu_controller
+          return "nav_underline"
+      else
+          return "nav_no_underline"
+      end
     end
 
-    if controller == 'specifications'
-        check = 'document'
+    if menu_controller == 'specifications'
+      if controller == 'specifications' || controller == 'specsubsections' || controller == 'specclauses'
+          return "nav_underline"
+      else
+          return "nav_no_underline"
+      end
     end
 
-    if controller == 'specsubsections'
-        check = 'document'
-    end
-    
-    if controller == 'clauses'
-        check = 'document'
-    end
-    
-    if controller == 'specrevisions'
-        check = 'revision'
-    end    
-
-    if controller == 'prints'
-        check = 'publish'
+    if menu_controller == 'revisions'
+      if controller == 'specrevisions'
+          return "nav_underline"
+      else
+          return "nav_no_underline"
+      end
     end
 
-    if check == item
-      return 'current_link'
-    else
-      return 'not_link'          
-    end       
+    if menu_controller == 'prints'
+      if controller == 'prints' || controller == 'printsettings' || controller == 'keynotes'
+          return "nav_underline"
+      else
+          return "nav_no_underline"
+      end
+    end
+
+
   end
 
 

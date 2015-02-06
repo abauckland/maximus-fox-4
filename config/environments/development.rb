@@ -44,19 +44,19 @@ Rails.application.configure do
     :tls => true,
     :address => "secure.emailsrvr.com",
     :port => 465,
-    :domain => "myhq.org.uk",
-    :user_name => "admin@myhq.org.uk",
-    :password => "bubble",
+    :domain => "specright.co.uk",
+    :user_name => "no-reply@specright.co.uk",
+    :password => "karaka1707",
     :authentication => :login
   }
 
   # Always generate canonical URLs with HTTPS
   routes.default_url_options = {
-    protocol:  "https",
-    host:      "www.myhq.org.uk"
+    protocol:  "http",
+    host:      "www.specright.co.uk"
   }
 
   config.action_mailer.default_url_options = routes.default_url_options.dup  
-  config.action_mailer.default_options = { from: "admin@myhq.org.uk" }   
+  config.action_mailer.default_options = { from: "no-reply@specright.co.uk" } 
   
 end

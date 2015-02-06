@@ -1,12 +1,12 @@
 <ul class="left_menu">
     <% if request.path_parameters[:action] == "new"%>
-        <li class="has_sub"><%= link_to "PROJECTS", projects_path, :class => check_current('project') %>
+        <li class="has_sub"><%= link_to "PROJECTS", projects_path, :class => check_current('projects') %>
             <ul class="sub_menu">
                 <li><%= link_to "Select Project", projects_path %></li>
             </ul>
         </li>
     <% else %>
-        <li class="has_sub"><%= link_to "PROJECTS", projects_path, :class => check_current('project') %>
+        <li class="has_sub"><%= link_to "PROJECTS", projects_path, :class => check_current('projects') %>
             <ul class="sub_menu">
                 <li><%= link_to "Select Project", projects_path %> </li>
                 <li><%= link_to "Create Project", new_project_path %> </li>
@@ -19,9 +19,9 @@
         </li>
         <% if @project %>
         <% unless @project.id == nil %>
-            <li><%= link_to "DOCUMENT", specification_path(@project.id), :class => check_current('revision') %></li>
-            <li><%= link_to "REVISIONS", specrevision_path(@project.id), :class => check_current('revision') %></li>
-            <li class="has_sub"><%= link_to "PUBLISH", print_path(@project.id), :class => check_current('revision') %> 
+            <li><%= link_to "DOCUMENT", specification_path(@project.id), :class => check_current('specifications') %></li>
+            <li><%= link_to "REVISIONS", specrevision_path(@project.id), :class => check_current('revisions') %></li>
+            <li class="has_sub"><%= link_to "PUBLISH", print_path(@project.id), :class => check_current('prints') %> 
                 <ul class="sub_menu">
                     <li><%= link_to "Create/Download PDF", print_path(@project.id) %> </li>
                     <li><%= link_to "Document Settings", edit_printsetting_path(@project.id) %> </li>

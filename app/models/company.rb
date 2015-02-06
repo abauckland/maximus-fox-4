@@ -2,6 +2,7 @@ class Company < ActiveRecord::Base
   
   has_many :users
   has_many :identvalues
+  has_many :projects
 
   mount_uploader :logo, LogoUploader
 

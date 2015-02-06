@@ -11,6 +11,8 @@
 <!-- error messages - associated with form start-->
             <%= render :partial => "form_error", :locals => {item: @clause} %>
 
+        <%= render :partial => "flash_custom_error" %>
+
 <!-- form column start-->
             <div class="row">
                 <%= form_for(@clause) do |f| %>

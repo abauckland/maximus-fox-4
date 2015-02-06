@@ -1,0 +1,9 @@
+<% unless flash.empty? %>
+    <div class="row">
+    	<% if flash.key?("custom") %>
+        <div class="form_error">
+            <p>A clause with the same reference already exists in the specification.</p>
+        </div>
+        <% end %>
+    </div>
+<% end %>
