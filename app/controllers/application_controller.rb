@@ -24,38 +24,43 @@ class ApplicationController < ActionController::Base
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :role, :company_id, :check_field, :company_attributes => [:name, :read_term]) }
     devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :current_password, :role, :company_id, :company_attributes => [:name]) }
-  end  
-   
+  end
+
 
   def current_revision_render(project)
 
-    revisions = Revision.where(:project_id => project.id).order('created_at')         
+    revisions = Revision.where(:project_id => project.id).order('created_at')
     last_rev_check = Alteration.where(:project_id => project.id, :revision_id => revisions.last.id).first
     if last_rev_check.blank?
       #count of revision records indicates the revision rev no
       #first revision record, when document is in draft - rev == NULL
       #second revision records, when document has been issued for the first time - rev == '-'
       #third revision record, when document has been issued and then revised - rev =='a'
-      
+
       #if no changes recorded for current revision record then last record still applies
       #reduce record count by 1 to indicate this
       rev_number = revisions.count
       current_rev_number = rev_number-1
-    end  
-    
-    if current_rev_number == 0 #revision rev == NULL
-      @current_revision_rev = "n/a"
-    else  
-      if current_rev_number == 1 #revision rev == '-'
-       @current_revision_rev = "-"
-      else    
-        @current_revision_rev = revisions.last.rev.capitalize
+
+      if current_rev_number == 0 #revision rev == NULL
+        @current_revision_rev = "n/a"
+      elsif current_rev_number == 1 #revision rev == '-'
+        @current_revision_rev = "-"
+      else
+        revision_rev_array = revisions.collect{|i| i.rev}.sort
+        last_revs = revision_rev_array.pop(2)
+        if last_rev_check.blank?              
+          @current_revision_rev = last_revs.first.capitalize
+        else
+          @current_revision_rev = last_revs.last.capitalize
+        end
       end
-    end
+    else
+      @current_revision_rev = revisions.last.rev.capitalize       
+    end   
   end
 
 
- 
   def check_project_status_change(project, revision)
     previous_statuses = Revision.where(:project_id => project.id).pluck(:project_status)
     
