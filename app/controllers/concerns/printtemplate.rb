@@ -11,7 +11,7 @@ module Printtemplate
   include Printoutline
   include Printnumbers
 
-def print_caws_document(project, revision, pdf)
+def print_caws_document(project, revision, issue, pdf)
 
   settings = Printsetting.where(:project_id => project.id).first
   #array for storing content page numbers
@@ -138,7 +138,7 @@ def print_caws_document(project, revision, pdf)
   footer(project, revision, settings, header_page_start, header_page_end, pdf)  
 
 #WATERMARKS
-  watermark_helper(project, revision, pdf)
+  watermark_helper(project, revision, issue, pdf)
 
 ##PAGE NUMBERING
   page_numbers(document_page_start, document_page_end, settings, pdf)

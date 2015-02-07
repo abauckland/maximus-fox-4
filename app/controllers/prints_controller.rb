@@ -83,17 +83,17 @@ class PrintsController < ApplicationController
 
     if current_revision == last_revision && @project.project_status != 'Draft'      
     #update revision status of project if document is not if draft status
-      update_revision(@project, current_revision) unless params[:issue].present?
+      update_revision(@project, current_revision) if params[:issue] == "final"
     else
       check_project_status_change(@project, current_revision)
       if @project_status_changed == true  
-        update_revision(@project, current_revision) unless params[:issue].present?
+        update_revision(@project, current_revision) if params[:issue] == "final"
       end
     end
 
 
     if selected_revision.blank? || selected_revision == current_revision
-      print_download(current_revision)
+      print_download(current_revision, params[:issue])
     else
       @print = Print.where(:project_id => @project.id, :revision_id => @revision.id).first
 
@@ -104,7 +104,7 @@ class PrintsController < ApplicationController
   end
 
   
-  def print_download(revision)
+  def print_download(revision, issue)
 
    document = Prawn::Document.new(
     :page_size => "A4",
@@ -112,9 +112,9 @@ class PrintsController < ApplicationController
     :info => {:title => @project.title}
     ) do |pdf|
         if @project.CAWS?
-            print_caws_document(@project, revision, pdf)
+            print_caws_document(@project, revision, issue, pdf)
         else
-            print_uni_document(@project, revision, pdf)
+            print_uni_document(@project, revision, issue, pdf)
         end
     end
 
@@ -146,7 +146,7 @@ class PrintsController < ApplicationController
   
     # Never trust parameters from the scary internet, only allow the white list through.
     def print_params
-      params.require(:print).permit(:project_id, :revision_id, :user_id, :print, :document, :created_at, :updated_at)
+      params.require(:print).permit(:project_id, :revision_id, :user_id, :print, :issue, :created_at, :updated_at)
     end
   
     
