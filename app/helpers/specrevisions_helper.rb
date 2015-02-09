@@ -5,7 +5,7 @@ module SpecrevisionsHelper
     if project.Draft?
       "<div class='revision_select_draft'>n/a</div>".html_safe
     else
-      "<div class='revision_select_draft'>#{revision.rev.capitalize}</div>".html_safe
+      "<div class='revision_select_draft'>#{current_revision_render(project)}</div>".html_safe
 #      if subsections.blank? && revision.rev == '-'
 #        "<div class='revision_select_draft'>-</div>".html_safe
 #      else

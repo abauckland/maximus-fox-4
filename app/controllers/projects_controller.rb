@@ -103,11 +103,21 @@ class ProjectsController < ApplicationController
           last_revision.update(:project_status => @project.project_status)
         end
       end
-      redirect_to edit_project_path(@project)
+      respond_to do |format|
+        flash.now[:notice] = 'Project details have been updated'
+        format.html { render :edit}
+      end
     else
       render :edit
     end
   end
+
+#      respond_to do |format|
+#      #customer error flash set in application controller
+#      flash.now[:custom] = 'A clause with the same reference already exists in this Work Section'
+#        format.html { render :new}
+#        format.xml  { render :xml => @clause.errors, :status => :unprocessable_entity }
+#      end
 
 
   private

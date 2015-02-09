@@ -20,7 +20,6 @@ class Project < ActiveRecord::Base
     uniqueness: {:scope => [:company_id, :title], message: ": A project with the same code and title already exists for the company" }
   validates :title, presence: true
 
-
   scope :user_projects, ->(current_user) { joins(:projectusers).where('projectusers.user_id' => current_user.id).order("code")} 
 
   scope :user_projects_access, ->(current_user) { joins(:projectusers
