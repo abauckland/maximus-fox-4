@@ -4,8 +4,6 @@ class CreateAlterations < ActiveRecord::Migration
       t.integer :specline_id
       t.integer :project_id
       t.integer :clause_id
-      t.integer :txt1_id
-      t.integer :txt2_id
       t.integer :txt3_id
       t.integer :txt4_id
       t.integer :txt5_id
@@ -14,9 +12,9 @@ class CreateAlterations < ActiveRecord::Migration
       t.integer :perform_id
       t.integer :linetype_id
       t.string :event
-      t.integer :clause_add_delete
+      t.integer :clause_add_delete, default: 1, null: false
       t.integer :revision_id
-      t.integer :print_change
+      t.integer :print_change, default: 1, null: false
       t.integer :user_id
 
       t.timestamps

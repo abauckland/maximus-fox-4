@@ -5,7 +5,7 @@ class CreateCompanies < ActiveRecord::Migration
       t.string :tel
       t.string :www
       t.string :reg_address
-      t.integer :reg_number
+      t.string :reg_number
       t.string :reg_name
       t.string :reg_location
       t.integer :read_term

@@ -2,23 +2,23 @@ class CreatePrintsettings < ActiveRecord::Migration
   def change
     create_table :printsettings do |t|
       t.integer :project_id
-      t.integer :font_style
-      t.integer :font_size
-      t.integer :structure
-      t.integer :prelim
-      t.integer :page_number
-      t.integer :client_detail
-      t.integer :client_logo
-      t.integer :project_detail
-      t.integer :project_image
-      t.integer :company_detail
-      t.integer :header_project
-      t.integer :header_client
-      t.integer :header_document
-      t.integer :header_logo
-      t.integer :footer_detail
-      t.integer :footer_author
-      t.integer :footer_date
+      t.string :font_style
+      t.string :font_size
+      t.string :structure
+      t.string :prelim
+      t.string :page_number
+      t.string :client_detail
+      t.string :client_logo
+      t.string :project_detail
+      t.string :project_image
+      t.string :company_detail
+      t.string :header_project
+      t.string :header_client
+      t.string :header_document
+      t.string :header_logo
+      t.string :footer_detail
+      t.string :footer_author
+      t.string :footer_date
       t.string  :section_cover
       t.timestamps
     end
