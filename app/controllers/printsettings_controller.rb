@@ -63,7 +63,7 @@ class PrintsettingsController < ApplicationController
     end
 
     def set_printsetting
-      @printsetting = Printsetting.where(:project_id => params[:id]).last
+      @printsetting = Printsetting.where(:project_id => params[:id]).first
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
@@ -72,7 +72,7 @@ class PrintsettingsController < ApplicationController
     end
 
     def authorise_project_manager
-      project_user = Projectuser.where(:user_id => current_user.id, :project_id => params[:id], :role => "manage").first    
+      project_user = Projectuser.where(:user_id => current_user.id, :project_id => params[:id], :role => "manage").first
       if project_user.blank?
         redirect_to log_out_path
       end 
