@@ -9,6 +9,8 @@ class Company < ActiveRecord::Base
 #  attr_accessor :check_field
   enum category: [:client, :designer, :contractor, :supplier]
 
+before_create :set_default_values
+
 #  before_validation :custom_validation_check_field, on: :create
 
   validates :name,
@@ -28,6 +30,12 @@ class Company < ActiveRecord::Base
 #      errors.add(:check_field, "Cannot be blank")
 #    end
 #  end
+
+def set_default_values
+    self.no_licence = 2
+    self.category = 1
+end
+
 
 
   def details
