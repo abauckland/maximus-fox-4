@@ -37,7 +37,7 @@ $(document).ready(function(){
 	        text: function(event, api) {
                 
 	            $.ajax({
-	                url: 'https://specify.specright.co.uk/helps/'+$(this).attr('id'),
+	                url: 'http://specify.specright.co.uk/helps/'+$(this).attr('id'),
 	                type: 'GET', // POST or GET
 	                dataType: 'html',
 	            })
