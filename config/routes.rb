@@ -85,7 +85,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :printsettings, :only => [:edit, :update]  
+  resources :printsettings, :only => [:edit, :update]
 
   resources :prints, :only => [:show] do
     get :print_project, :on => :member
@@ -100,6 +100,11 @@ Rails.application.routes.draw do
   resources :helps
 
   resources :termcats, :only => [:index]
+
+  resources :guidepdfs, :only => [:new, :create, :index] do
+    get :download, :on => :member
+  end
+
 
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do

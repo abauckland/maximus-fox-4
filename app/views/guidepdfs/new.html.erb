@@ -1,0 +1,65 @@
+<div class="row title_band">
+    <div class="page_title">
+        <h1>Upload Guide</h1>
+    </div>
+    <div class="title_help" id="project_new"></div>
+</div>
+
+
+<div class="row">
+    <div class="col-1-1">
+        <div class="border">
+
+            <%= render :partial => "form_error", :locals => {:item => @guidepdf} %>
+
+            <%= form_for(@guidepdf, :html => { :multipart => true }) do |f| %>
+
+            <div class="row">
+                <div class="sub-1-3 column_1">
+                    <fieldset>
+
+                        <div class="row">
+                            <div class="column_title">
+                                <h4>Guide Details</h4>
+                            </div>
+                        </div>
+
+                        <!-- form input[text] -->
+                        <div class="form_tooltip" id="guide_title"></div>
+                        <label class="label_60">Title:*</label>
+                        <span>
+                            <%= f.text_field :title %>
+                        </span></br>
+
+                        <!-- form input[file] -->
+                        <div class="form_tooltip" id="guidepdf_guide"></div>
+                        <label class="label_60">Guide:</label>
+                        <span>
+                            <%= f.file_field :guide %>
+                        </span></br>
+
+
+                    </fieldset>
+                </div>
+                
+                <div class="sub-1-3 column_2">
+
+                </div>
+
+                <div class="sub-1-3 column_3">
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form_footer">
+                    <%= f.submit "save" %>
+                    <%= link_to "cancel", guidepdfs_path %>
+                </div>
+                <% end %>
+            </div>
+
+        </div>
+    </div>
+</div>
+  

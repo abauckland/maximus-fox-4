@@ -1,0 +1,41 @@
+<div class="row title_band">
+    <div class="page_title">
+        <h1>Guides</h1>
+    </div>
+    <div><%= link_to 'Add Guide', new_guidepdf_path, class: "title_button"%></div>
+</div>
+
+
+<div class="row">
+    <div class="col-1-1 column_1">
+        <div class="border">
+
+        <%= render :partial => "flash_notice" %>
+
+            <div class="row">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="guide_id">Id</th>
+                            <th class="guide_title">Title</th>
+                            <th class="row_button no_buttons_2"></th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <table>
+                    <tbody>
+                        <% @guidepfs.each do |guidepdf| %>
+                        <tr>
+                            <td class="guide_id"><%= guidepdf.id %></td>
+                            <td class="guide_title"><%= guidepdf.title %></td>
+                            <td class="row_button no_buttons_2"></td>
+                        </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
