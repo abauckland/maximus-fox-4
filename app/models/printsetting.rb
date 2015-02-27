@@ -6,7 +6,7 @@ class Printsetting < ActiveRecord::Base
 before_create :set_default_values
 
 def set_default_values
-    self.font_style = "helvetica"
+    self.font_style = "Helvetica"
     self.font_size = "medium"
 
     self.structure = "revision by section"
