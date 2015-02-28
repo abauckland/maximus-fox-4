@@ -12,7 +12,7 @@ class GuidepdfsController < ApplicationController
 
     # POST /pages
     def create
-      @guidepdf = Guidepdf.new(help_params)
+      @guidepdf = Guidepdf.new(guidepdf_params)
 
       if @guidepdf.save
       else
@@ -43,5 +43,12 @@ class GuidepdfsController < ApplicationController
       end
       return
     end
-    
+
+    private
+
+      # Only allow a trusted parameter "white list" through.
+      def guidepdf_params
+        params.require(:guidepdf).permit(:title, :guide)
+      end
+
 end
