@@ -28,7 +28,7 @@ class GuidepdfsController < ApplicationController
   
       if @guidepdf
   
-        send_file(@guidepdf.guide.path, :type => 'application/pdf', :filename => @guidepdf.pdf_file_name)
+        send_file(@guidepdf.guide.path, :type => 'application/pdf', :filename => @guidepdf.guide)
   
       #send_file("#{Rails.root}/public#{@guidepdf.pdf.url.sub!(/\?.+\Z/, '') }", :type => 'application/pdf', :filename => @guidepdf.pdf_file_name)
       #record download
