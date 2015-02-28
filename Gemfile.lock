@@ -31,6 +31,9 @@ GEM
     arel (5.0.1.20140414130214)
     bcrypt (3.1.7)
     bcrypt (3.1.7-x86-mingw32)
+    bugsnag (2.5.1)
+      httparty (>= 0.6, < 1.0)
+      multi_json (~> 1.0)
     builder (3.2.2)
     capistrano (3.3.5)
       capistrano-stats (~> 1.1.0)
@@ -185,6 +188,7 @@ PLATFORMS
 
 DEPENDENCIES
   aasm
+  bugsnag
   capistrano (~> 3.1)
   capistrano-bundler (~> 1.1.2)
   capistrano-rails (~> 1.1)
