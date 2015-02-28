@@ -10,8 +10,8 @@ set :default_stage, "staging"
 
 set :rvm_type, :user
 
-#require "bugsnag/capistrano"
-#set :bugsnag_api_key, "4749e41c02e44cf6285fe8ea70c1cf46"
+require "bugsnag/capistrano"
+set :bugsnag_api_key, "7964370ce03759cccb398587aaccf03b"
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
