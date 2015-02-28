@@ -15,8 +15,9 @@ class GuidepdfsController < ApplicationController
       @guidepdf = Guidepdf.new(guidepdf_params)
 
       if @guidepdf.save
+        redirect_to guidepdfs_path, notice: 'Guide was successfully uploaded.'
       else
-        render guidepdfs_path
+        render :new
       end
     end
 
