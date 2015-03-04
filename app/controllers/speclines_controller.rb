@@ -1,7 +1,11 @@
 class SpeclinesController < ApplicationController
+
+  skip_before_filter :authenticate_user!, :only => [:xref_data]
+
   before_action :set_specline
   before_action :set_project, only: [:delete_clause]
   before_action :set_revision, only: [:delete_clause, :move_specline]
+
 
   # GET
   def new_specline     
