@@ -99,10 +99,13 @@ Rails.application.configure do
   # Always generate canonical URLs with HTTPS
   routes.default_url_options = {
     protocol:  "http",
-    host:      "www.specright.co.uk"
+    host:      "specify.specright.co.uk"
   }
 
-  config.action_mailer.default_url_options = routes.default_url_options.dup  
+  config.action_mailer.default_url_options = {
+    protocol:  "http",
+    host:      "www.specright.co.uk"
+  }
   config.action_mailer.default_options = { from: "no-reply@specright.co.uk" } 
   
   
