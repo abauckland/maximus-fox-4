@@ -65,6 +65,7 @@ def print_caws_document(project, revision, issue, pdf)
           pdf.move_down(8.mm) 
           pdf.spec_box "Document Revisions", section_cover_style.merge(:at =>[0.mm, pdf.y])
           pdf.move_down(pdf.box_height)
+          pdf.move_down(8.mm)
         end
 
         #state if product status has changed
@@ -92,6 +93,7 @@ def print_caws_document(project, revision, issue, pdf)
           pdf.move_down(8.mm) 
           pdf.spec_box "Document Revisions", section_cover_style.merge(:at =>[0.mm, pdf.y])
           pdf.move_down(pdf.box_height)
+          pdf.move_down(8.mm)
         end
 
         #state if product status has changed
