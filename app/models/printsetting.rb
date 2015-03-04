@@ -9,7 +9,7 @@ def set_default_values
     self.font_style = "Helvetica"
     self.font_size = "medium"
 
-    self.structure = "revision by section"
+    self.structure = "group revisions"
     self.prelim = "separate sections"
     self.page_number = "by document"
 
