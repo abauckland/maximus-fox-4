@@ -68,7 +68,7 @@ def part_ref_title
 end
 
 def clause_code_title_in_brackets
-  return '('+ clausetitle.title = ')'
+  return '('+ clausetitle.text = ')'
 end
 
 
