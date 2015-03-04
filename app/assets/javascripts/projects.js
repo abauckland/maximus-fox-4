@@ -158,7 +158,7 @@ var spec_id = $(this).attr('id');
 
 $('.editable_xref').mouseover(function(){
 var spec_id = $(this).attr('id');
-	$(this).editable('/speclines/'+spec_id+'/update_specline_5', {
+	$(this).editable('http://specify.specright.co.uk/speclines/'+spec_id+'/update_specline_5', {
 		id: spec_id, width: ($(this).width() +10)+'px',
 		loadurl : 'http://specify.specright.co.uk/speclines/'+spec_id+'/xref_data',
 		type: 'select',
