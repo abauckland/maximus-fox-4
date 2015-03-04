@@ -161,6 +161,7 @@ var spec_id = $(this).attr('id');
 	$(this).editable('/speclines/'+spec_id+'/update_specline_5', {
 		id: spec_id, width: ($(this).width() +10)+'px',
 		loadurl : 'http://specify.specright.co.uk/speclines/'+spec_id+'/xref_data',
+		loadtype : 'GET',
 		type: 'select',
 		onblur: 'submit',
 		method: 'PUT',
