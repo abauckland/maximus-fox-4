@@ -57,11 +57,17 @@ def print_caws_document(project, revision, issue, pdf)
     
         #cover page
         if settings.section_cover == "section cover"
-          revision_cover(pdf)       
+          revision_cover(pdf) 
           pdf.start_new_page
           pdf.y = 268.mm
+        else
+          section_cover_style = {:size => 14, :style => :bold}
+          pdf.move_down(8.mm) 
+          pdf.spec_box "Document Revisions", section_cover_style.merge(:at =>[0.mm, pdf.y])
+          pdf.move_down(pdf.box_height)
         end
-        #state if product status has changed        
+
+        #state if product status has changed
         project_status_change(@previous_status, @current_status, pdf) if @status_change
 
         changed_sections.each do |subsection|
@@ -73,14 +79,19 @@ def print_caws_document(project, revision, issue, pdf)
     else
       if @status_change
 
-        ##page nummber record      
+        ##page nummber record
         document_content << ["Document Revisions", (pdf.page_number - document_page_start + 1)]
 
         #cover page
         if settings.section_cover == "section cover"
-          revision_cover(pdf)       
+          revision_cover(pdf)
           pdf.start_new_page
-          pdf.y = 268.mm   
+          pdf.y = 268.mm
+        else
+          section_cover_style = {:size => 14, :style => :bold}
+          pdf.move_down(8.mm) 
+          pdf.spec_box "Document Revisions", section_cover_style.merge(:at =>[0.mm, pdf.y])
+          pdf.move_down(pdf.box_height)
         end
 
         #state if product status has changed
@@ -93,7 +104,7 @@ def print_caws_document(project, revision, issue, pdf)
 ## SUBSECTIONS
   subsections = Cawssubsection.all_subsections(project)
   unless subsections.blank?
-    subsections.each do |subsection|     
+    subsections.each do |subsection|
   ##page nummber record
       document_content << [subsection.full_code_and_title, (pdf.page_number - document_page_start + 1)]
 
@@ -112,7 +123,7 @@ def print_caws_document(project, revision, issue, pdf)
               revisions_text(project, subsection, revision, pdf)
 
               pdf.start_new_page
-          end  
+          end
         end
 
         #set title based on whether cover is provided to section   
@@ -122,7 +133,7 @@ def print_caws_document(project, revision, issue, pdf)
         specification(project, subsection, revision, pdf)
 
         pdf.start_new_page
-    end    
+    end
   end
   #always one last blank page based on starting new page at end of each loop
   pdf.move_down(10)
@@ -157,9 +168,9 @@ end
 
   def combined_revision_info(project, subsection, revision, pdf)
    # subsections.each do |subsection|
-  #    combined_revision_title(subsection, pdf)   
+  #    combined_revision_title(subsection, pdf)
       combined_revisions_text(project, subsection, revision, pdf)
-  #  end 
+  #  end
   end
 
 
@@ -167,9 +178,9 @@ end
 
   def revision_info(project, subsection, revision, pdf)
    # subsections.each do |subsection|
-    #  revision_title(subsection, pdf)   
+    #  revision_title(subsection, pdf)
       revisions_text(project, subsection, revision, pdf)
-  #  end 
+  #  end
   end
 
 
