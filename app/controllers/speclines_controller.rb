@@ -311,7 +311,8 @@ class SpeclinesController < ApplicationController
 #else
 #end
       code_title = c.clause_code_title_in_brackets
-      @reference_options[code] = c.caws_code + c.clausetitle.text
+      code_title = c.caws_code + ' ' + c.clausetitle.text
+      @reference_options[code] = code_title
     end
     #identify which is currently selected option - txt5 value
     @reference_options['selected'] = current_text.text
