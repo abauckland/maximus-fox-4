@@ -158,20 +158,17 @@ var spec_id = $(this).attr('id');
 
 $('.editable_xref').mouseover(function(){
 var spec_id = $(this).attr('id');
-$(this).editable('/speclines/'+spec_id+'/update_specline_5', {id: spec_id, width: ($(this).width() +10)+'px', type: 'autogrow', onblur: 'submit', method: 'PUT', indicator: 'Saving..', autogrow : {lineHeight : 16, maxHeight  : 512}, submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}});    
-});    
-//var spec_id = $(this).attr('id');
-//	$(this).editable('/speclines/'+spec_id+'/update_specline_5', {
-//		id: spec_id, width: ($(this).width() +10)+'px',
-//		loadurl : 'http://specify.specright.co.uk/speclines/'+spec_id+'/xref_data',
-//		loadtype : 'GET',
-//		type: 'select',
-//		onblur: 'submit',
-//		method: 'PUT',
-//		indicator: 'Saving..',
-//		submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}
-//	});    
-//});
+	$(this).editable('/speclines/'+spec_id+'/update_specline_5', {
+		id: spec_id, width: ($(this).width() +10)+'px',
+		loadurl : 'http://specify.specright.co.uk/speclines/'+spec_id+'/xref_data',
+		loadtype : 'GET',
+		type: 'select',
+		onblur: 'submit',
+		method: 'PUT',
+		indicator: 'Saving..',
+		submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}
+	});    
+});
 
 $('.editable_product_key').mouseover(function(){
 var spec_id = $(this).attr('id');
