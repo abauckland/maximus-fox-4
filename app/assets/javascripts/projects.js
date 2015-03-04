@@ -160,7 +160,7 @@ $('.editable_xref').mouseover(function(){
 var spec_id = $(this).attr('id');
 	$(this).editable('/speclines/'+spec_id+'/update_specline_5', {
 		id: spec_id, width: ($(this).width() +10)+'px',
-		loadurl : 'specify.specright.co.uk/speclines/'+spec_id+'/xref_data',
+		loadurl : 'http://specify.specright.co.uk/speclines/'+spec_id+'/xref_data',
 		type: 'select',
 		onblur: 'submit',
 		method: 'PUT',
@@ -173,7 +173,7 @@ $('.editable_product_key').mouseover(function(){
 var spec_id = $(this).attr('id');
 	$(this).editable_2('/speclines/'+spec_id+'/update_product_key', {
 		id: spec_id, width: ($(this).width() +10)+'px',
-		loadurl : 'specify.specright.co.uk/products/'+spec_id+'/product_keys',
+		loadurl : 'http://specify.specright.co.uk/products/'+spec_id+'/product_keys',
 		type: 'select',
 		onblur: 'submit',
 		method: 'PUT',
@@ -186,7 +186,7 @@ $('.editable_product_value').mouseover(function(){
 var spec_id = $(this).attr('id');
 	$(this).editable_2('/speclines/'+spec_id+'/update_product_value', {
 		id: spec_id, width: ($(this).width() +10)+'px',
-		loadurl : 'specify.specright.co.uk/products/'+spec_id+'/product_values',
+		loadurl : 'http://specify.specright.co.uk/products/'+spec_id+'/product_values',
 		type: 'select',
 		onblur: 'submit',
 		method: 'PUT',
