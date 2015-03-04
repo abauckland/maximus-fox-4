@@ -67,6 +67,11 @@ def part_ref_title
   return clauseref.clausetype.text.to_s + ' ' + clauseref.clausetype_id.to_s + sprintf("%02d", clauseref.clause_no).to_s + clauseref.subclause.to_s + ': ' + clausetitle.text.to_s
 end
 
+def clause_code_title_in_brackets
+  return '('+ clausetitle.title = ')'
+end
+
+
 def custom_validation_1
     if @title_text.blank?
       errors.add(:title_text, ": Clause title cannot be blank")

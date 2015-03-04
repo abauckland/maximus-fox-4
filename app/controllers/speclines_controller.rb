@@ -306,7 +306,10 @@ class SpeclinesController < ApplicationController
     @reference_options['Not specified'] = 'Not specified'
     
     reference_clauses.each do |c|
-      code = c.clause_code
+#if project.CAWS?
+      code = c.caws_code
+#else
+#end
       code_title = c.clause_code_title_in_brackets
       @reference_options[code] = code_title
     end
