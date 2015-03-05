@@ -299,20 +299,23 @@ class SpeclinesController < ApplicationController
     reference_clause_ids = Clause.joins(:speclines, :clauseref
                                 ).where('speclines.project_id' => @specline.project_id, 'clauserefs.subsection_id' => @specline.clause.clauseref.subsection_id, 'clauserefs.clausetype_id' => permissible_clausetypes
                                 ).pluck(:id).uniq.sort 
-    reference_clauses = Clause.includes(:clausetitle, :clauseref => [:subsection => [:cawssubsection => :cawssection]]).where(:id => reference_clause_ids)
-   
+       
     #create hash of options
     @reference_options = {}
     @reference_options['Not specified'] = 'Not specified'
     
-    reference_clauses.each do |c|
+    reference_clause_ids.each do |c|
+
+      reference_clause = Clause.where(:id => c).first
+
+
 #if project.CAWS?
-      code = c.caws_code
+      code = reference_clause.caws_code
 #else
 #end
       code_title = c.clause_code_title_in_brackets
       code_title = c.caws_code + ' ' + c.clausetitle.text
-      @reference_options[code] = c.clausetitle.text.to_s
+      @reference_options[code] = reference_clause.clausetitle.text.to_s
     end
     #identify which is currently selected option - txt5 value
     @reference_options['selected'] = current_text.text
