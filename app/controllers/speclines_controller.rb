@@ -313,8 +313,8 @@ class SpeclinesController < ApplicationController
       code = reference_clause.caws_code
 #else
 #end
-      code_title = c.clause_code_title_in_brackets
-      code_title = c.caws_code + ' ' + c.clausetitle.text
+#      code_title = c.clause_code_title_in_brackets
+#      code_title = c.caws_code + ' ' + c.clausetitle.text
       @reference_options[code] = reference_clause.clausetitle.text.to_s
     end
     #identify which is currently selected option - txt5 value
