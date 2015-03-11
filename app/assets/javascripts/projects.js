@@ -79,7 +79,7 @@ $('ul.tabs, ul.tabs_2').each(function(){
   	
 //show/hide specline mob menu
 	$('.suffixed_line_menu_mob').click(function (){
-		$(this).closest('table').find('.specline_mob_menu_popup').toggle();
+		$(this).closest('tr').find('.specline_mob_menu_popup').toggle();
 	});
  
 	$('tr.specline_mob_menu_popup').mouseleave(function (){
