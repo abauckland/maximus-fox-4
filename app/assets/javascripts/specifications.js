@@ -1,5 +1,5 @@
 //function for setting height of edit box depending on height of window	
-function tab_format(){
+function doc_format(){
 	var window_height = $(window).height();
 	var edit_box_height = (window_height - 190);
 	$('.document').height(edit_box_height);
@@ -8,9 +8,9 @@ function tab_format(){
 
 $(document).ready(function(){
 
-	tab_format();
+	doc_format();
 	$(window).resize(function(){
-		tab_format();
+		doc_format();
 	});
 
 });
