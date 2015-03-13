@@ -24,13 +24,27 @@ function reset_menu() {
 };
 
 
+function position_right_menu() {
+
+	var grid_width = $('.grid-container').width()
+	var window_width = $(window).width();
+
+	if(window_width > 1200) {
+		var right_margin = ((window_width - 1200)/2) + 28
+		$('ul.right_menu').css('right', right_margin+'px');
+	}
+};
+
+
 $(document).ready(function(){
 
 	main_menu();
+	position_right_menu();
 //	reset_menu();
 	$(window).resize(function(){
 		main_menu();
 		reset_menu();
+		position_right_menu();
 	});
 
 
@@ -62,6 +76,7 @@ $(document).ready(function(){
 		$('ul.right_menu').toggle();
 //		$('ul.left_menu').hide();
 	});
+
 
 
 
