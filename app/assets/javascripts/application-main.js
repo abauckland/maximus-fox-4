@@ -14,6 +14,7 @@
 //= require layouts/grid.js
 //= require layouts/columns.js
 //= require projects
+//= require specifications
 //= require plugins/jquery.jeditable.js
 //= require plugins/jeditable_extensions.js
 //= require plugins/jquery.selection.js
