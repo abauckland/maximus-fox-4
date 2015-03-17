@@ -91,7 +91,7 @@ Rails.application.configure do
     :port => 465,
     :domain => "specright.co.uk",
     :user_name => "no-reply@specright.co.uk",
-    :password => "karaka1707",
+    :password => "#grange#1707",
     :authentication => :login
   }
 
