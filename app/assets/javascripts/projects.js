@@ -41,7 +41,7 @@ $('ul.tabs, ul.tabs_2').each(function(){
 
 
 //sortable specline
-	$('.1, .2, .3, .4, .5, .6, 7, .8, .prelim_show').sortable({
+	$('.1, .2, .3, .4, .5, .6, .7, .8, .prelim_show').sortable({
 		axis: 'y',
 		cancel: '.clause_title, span',
 		cursor: 'pointer',
@@ -49,15 +49,15 @@ $('ul.tabs, ul.tabs_2').each(function(){
 		stop: function(event, ui){
 			var sortorder=$(this).sortable('toArray');
 			var moved = $(ui.item).attr('id');	
-   
+
 			$.ajax({
 				type: 'put',
 				url: '/speclines/'+moved+'/move_specline',
 				dataType: 'script',
 				data: 'table_id_array='+sortorder +'',
 				complete: function(){}
-			});   
-		}	 		
+			});
+		}
 	});
 
  $('table.specline_table').on({
@@ -119,7 +119,7 @@ $.editable.addInputType('autogrow', {
                         textarea.height(settings.height + 8);
                     }
 
-                   	textarea.width(settings.width);	                       	                       	
+                   	textarea.width(settings.width);
 
                     textarea.css("font", "normal 12px arial").css("padding-top", "0px");
                     $(this).append(textarea);
@@ -134,16 +134,16 @@ $.editable.addInputType('autogrow', {
 $('.editable_text3').mouseover(function(){
 var spec_id = $(this).attr('id');
 $(this).editable('/speclines/'+spec_id+'/update_specline_3', {id: spec_id, width: ($(this).width() +10)+'px', type: 'text', onblur: 'submit', method: 'PUT', indicator: 'Saving..', submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}});    
-}); 
+});
 $('.editable_text4').mouseover(function(){
 var spec_id = $(this).attr('id');
 var text_width = $(this).width();
 $(this).editable('/speclines/'+spec_id+'/update_specline_4', {id: spec_id, width: ($(this).width() +10)+'px', type: 'autogrow', onblur: 'submit', method: 'PUT', indicator: 'Saving..', autogrow : {lineHeight : 16, maxHeight  : 512}, submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}});    
-}); 
+});
 $('.editable_text5').mouseover(function(){
 var spec_id = $(this).attr('id');
 $(this).editable('/speclines/'+spec_id+'/update_specline_5', {id: spec_id, width: ($(this).width() +10)+'px', type: 'autogrow', onblur: 'submit', method: 'PUT', indicator: 'Saving..', autogrow : {lineHeight : 16, maxHeight  : 512}, submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}});    
-});    
+});
 $('.editable_text6').mouseover(function(){
 var spec_id = $(this).attr('id');
 	$(this).editable('/speclines/'+spec_id+'/update_specline_6', {
@@ -153,8 +153,8 @@ var spec_id = $(this).attr('id');
 		method: 'PUT',
 		indicator: 'Saving..',
 		submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}
-	});    
-});    
+	});
+});
 
 $('.editable_xref').mouseover(function(){
 var spec_id = $(this).attr('id');
@@ -167,7 +167,7 @@ var spec_id = $(this).attr('id');
 		method: 'PUT',
 		indicator: 'Saving..',
 		submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}
-	});    
+	});
 });
 
 $('.editable_product_key').mouseover(function(){
@@ -180,7 +180,7 @@ var spec_id = $(this).attr('id');
 		method: 'PUT',
 		indicator: 'Saving..',
 		submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}
-	});    
+	});
 });
 
 $('.editable_product_value').mouseover(function(){
@@ -193,7 +193,7 @@ var spec_id = $(this).attr('id');
 		method: 'PUT',
 		indicator: 'Saving..',
 		submitdata: {_method: 'put', 'id': '<%= @line.id%>', authenticity_token: AUTH_TOKEN}
-	});    
+	});
 });
 
 
@@ -257,7 +257,7 @@ var $enter_clause_ref = $('#enter_clause_ref');
         });
 
 $('#enter_clause_ref').focusout(function() {
-    if ($(this).val().length === 0) { //if password field is empty            
+    if ($(this).val().length === 0) { //if password field is empty
         $(this).hide();
         $('#enter_clause_ref_default').show();
         $('#enter_clause_ref_default').default_value('????'); //will clear on click
