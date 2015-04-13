@@ -1,6 +1,6 @@
 <div class="row title_band">
     <div class="page_title">
-        <h1>Forgot your password?</h1>            
+        <h1>Forgot your password?</h1>
     </div>      
     <div><%= link_to "Sign in", new_session_path(resource_name), class: "title_button"%></div>
 </div>
@@ -16,7 +16,6 @@
                     <fieldset>
 
                         <!-- form input[text] --> 
-                        <div class="form_tooltip" id="password_email"></div>
                         <label class="label_120">Email:*</label>
                         <span>
                             <%= f.email_field :email, autofocus: true %>
