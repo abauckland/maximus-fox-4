@@ -65,13 +65,13 @@ class User < ActiveRecord::Base
 #            on: :create,
 #            :format => {:with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, },    
 #            :uniqueness => {:message => "A user with this email address already exists"}
-             
+
 
   def default_settings
     #only create initial project if first user for the company
-    users = Company.where(:id => self.company_id)
+    user_count = User.where(:company_id => self.company_id).count(:id)
 
-    if users.length == 1
+    if user_count == 1
 
       initial_project = Project.create(:company_id => self.company_id, :code => 'D1', :title => 'Demo Project', :parent_id => 1, :project_status => 'Draft', :ref_system => 'CAWS')
       project_template = Project.where(:id => [1..10], :ref_system => initial_project.ref_system).first
@@ -83,7 +83,7 @@ class User < ActiveRecord::Base
 
     else
 
-      projects =  Project.where(:company_id => current_user.company_id)
+      projects =  Project.where(:company_id => self.company_id)
       projects.each do |project|
         Projectuser.create(:project_id => project.id, :user_id => self.id, :role => "manage")
       end

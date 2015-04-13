@@ -1,16 +1,16 @@
 <div class="row title_band">
     <div class="page_title">
-        <h1>Listing Help Annotation</h1>            
-    </div>      
+        <h1>Listing Help Annotation</h1>
+    </div>
     <div><%= link_to 'New Help Note', new_help_path, class: "title_button"%></div>
 </div>
 
 <div class="row">
     <div class="col-1-1 column_1">
         <div class="border">
-                                        
-        <%= render :partial => "flash_notice" %>                 
-                        
+
+        <%= render :partial => "flash_notice" %>
+
             <div class="row">
                 <table>
                     <thead>
@@ -21,13 +21,13 @@
                         </tr>
                     </thead>
                 </table>
-                
+
                 <table>
                     <tbody>
                         <% @helps.each do |help| %>
                         <tr>
                             <td class="mob_cell"><%= help.item %></td>
-                            <td class="mob_cell"><%= help.text.html_safe %></td>
+                            <td class="mob_cell"><%= help.text.html_safe if help.text? %></td>
                             <td class="row_button no_buttons_1">
                                 <%= link_to "", edit_help_path(help), class: 'line_edit_icon', title: "edit help text" %>
                             </td>
@@ -35,7 +35,7 @@
                         <% end %>
                     </tbody>
                 </table>
-               
+
             </div>
         </div>
     </div>
