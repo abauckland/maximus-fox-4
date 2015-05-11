@@ -7,7 +7,7 @@ module Printtemplate
   include Printrevision
   include Printspecline
   include Printwatermark
-  include Printsubtitle  
+  include Printsubtitle
   include Printoutline
   include Printnumbers
 
@@ -19,17 +19,17 @@ def print_caws_document(project, revision, issue, pdf)
 
   #check if status of project has changed
   status_change(project)
-  
-#set common document settings  
+
+#set common document settings
   pdf.font settings.font_style
 
 ##COVER
   cover(project, revision, settings, pdf)
   pdf.start_new_page
-  
-##BLANK PAGE  
+
+##BLANK PAGE
   #leave page blank so that contents page starts of page 2 - allows replacement of cover when printing double sided 
-  pdf.text "[blank page]", :size =>10    
+  pdf.text "[blank page]", :size => 10
   pdf.start_new_page
 
 
@@ -37,7 +37,7 @@ def print_caws_document(project, revision, issue, pdf)
   header_page_start = pdf.page_number
 
 ##CONTENTS - contents page printed last
-#!!!!!!!!!!need to do dummy run to see if all the contents will fit on one page  
+#!!!!!!!!!!need to do dummy run to see if all the contents will fit on one page
   draft_content_page_count(project, revision, settings, pdf)
 
 ##DOCUMENT LEVEL PAGE NUMBERING START
@@ -51,10 +51,10 @@ def print_caws_document(project, revision, issue, pdf)
     #changed_sections = Alteration.changed_caws_all_sections(project, revision)
     changed_sections = Cawssubsection.all_subsection_revisions(project, revision)
     if !changed_sections.blank?
-  
+
         ##page nummber record
         document_content << ["Document Revisions", (pdf.page_number - document_page_start + 1)]
-    
+
         #cover page
         if settings.section_cover == "section cover"
           revision_cover(pdf) 
@@ -100,7 +100,7 @@ def print_caws_document(project, revision, issue, pdf)
         project_status_change(@previous_status, @current_status, pdf)
 
         pdf.start_new_page
-    end    
+    end
   end
 
 ## SUBSECTIONS
@@ -128,7 +128,7 @@ def print_caws_document(project, revision, issue, pdf)
           end
         end
 
-        #set title based on whether cover is provided to section   
+        #set title based on whether cover is provided to section
         caws_title_type(settings, subsection, "specification", pdf)
         #specline info
         #caws_title(subsection, "specline", pdf)
@@ -140,7 +140,7 @@ def print_caws_document(project, revision, issue, pdf)
   #always one last blank page based on starting new page at end of each loop
   pdf.move_down(10)
   pdf.text "[blank page]", :size =>10
-  
+
   header_page_end = pdf.page_number
   document_page_end = pdf.page_number
 
@@ -148,7 +148,7 @@ def print_caws_document(project, revision, issue, pdf)
   header(project, settings, header_page_start, header_page_end, pdf) 
 
 ##FOOTERS
-  footer(project, revision, settings, header_page_start, header_page_end, pdf)  
+  footer(project, revision, settings, header_page_start, header_page_end, pdf)
 
 #WATERMARKS
   watermark_helper(project, revision, issue, pdf)
@@ -187,24 +187,14 @@ end
 
 
   def status_change(project)
-    
+
     current_revision = Revision.where(:project_id => project.id).last
     previous_states = Revision.where(:project_id => project.id).pluck(:project_status)
     @previous_status = previous_states[previous_states.length - 2]
     @current_status = current_revision.project_status
-    
-    @status_changed = true if @current_status != @previous_status    
+
+    @status_changed = true if @current_status != @previous_status
   end
 
 #end of module
 end
-
-
-
-
-
-
-
-
-
-

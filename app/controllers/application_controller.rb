@@ -56,20 +56,21 @@ class ApplicationController < ActionController::Base
         end
       end
     else
-      @current_revision_rev = revisions.last.rev.capitalize       
-    end   
+      @current_revision_rev = revisions.last.rev.capitalize
+    end
   end
 
 
   def check_project_status_change(project, revision)
     previous_statuses = Revision.where(:project_id => project.id).pluck(:project_status)
-    
+
     if previous_statuses.length >= 3 
-      @previous_revision_project_status = previous_statuses[previous_statuses.length - 2]                        
+      @previous_revision_project_status = previous_statuses[previous_statuses.length - 2]
       if revision.project_status != @previous_revision_project_status
         @project_status_changed = true
       end
     end
+
   end
 
 #speclines controller - new_specline action
@@ -83,7 +84,7 @@ class ApplicationController < ActionController::Base
         line.update(:clause_line => specline.clause_line + i)
       end
     end
-       
+
   end
 
 
@@ -99,18 +100,18 @@ class ApplicationController < ActionController::Base
     if previous_changes
       previous_changes.each do |previous_change|
         previous_change.update(:clause_add_delete => event_type)
-      end    
+      end
     end
-  
+
   end
 
 
   def record_delete(specline, event_type)
-    #get current revision for project 
+    #get current revision for project
     revision = Revision.where(:project_id => specline.project_id).where.not(:rev => nil).order('created_at').last
     #check revision record exists - so next line does not throw error
     if revision
-      #do not record change if project has not been prevsioulsy issued (not in draft) 
+      #do not record change if project has not been prevsioulsy issued (not in draft)
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
         #check if any changes already made for selected specline in current revision
         #check by specline_id and rev_id only as delete action does not create/change a line whereby it may match an existing line or previous change
@@ -119,14 +120,14 @@ class ApplicationController < ActionController::Base
           #define if change action applied to line, clause or section
           #information used when reporting changes and upon reinstatement
           set_event_type(event_type)
-          #set update hash of specline data for creating new change records           
-          #if no previous changes for specline create delete record for l ine                     
+          #set update hash of specline data for creating new change records
+          #if no previous changes for specline create delete record for line
 #tested - correct 1
           create_alteration_record(specline, specline.id, 'deleted', @event_group, revision)
         else
           #where previous 'new' and 'change' events have been reorded
           #'delete' events not checked as none will exist for selected line (you cannot select a line that has already been deleted)
-          #if a change has been previously made to selected specline then...  
+          #if a change has been previously made to selected specline then...
           #if previous change event was creation of new specline then destory change record
 #tested - correct 1
           existing_record.destroy if existing_record.event == 'new'          
@@ -135,7 +136,7 @@ class ApplicationController < ActionController::Base
           existing_record.update(:event => 'deleted', :user_id => current_user.id) if existing_record.event == 'changed'
         end
       end
-    end   
+    end
   end
 
 
@@ -147,7 +148,7 @@ class ApplicationController < ActionController::Base
       #do not record change if project has not been prevsioulsy issued (not in draft)
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
         #define if change action applied to line, clause or section
-        #information used when reporting changes and upon reinstatement     
+        #information used when reporting changes and upon reinstatement
         set_event_type(event_type)
         #check if any changes already made for selected specline in current revision
         #check by rev_id, txts and linetype as 'new' line may match an existing line or previous change record
@@ -163,7 +164,7 @@ class ApplicationController < ActionController::Base
             update_specline_id_prior_changes(@previous.specline_id, specline.id)
             #if previous action was 'delete'do not create 'new' change record
             #delete change record, as this line has no longer been deleted, but re-created
-            
+
             #if previous action was 'change'
             #create 'new' change record for current specline with id of old change
             create_alteration_record(specline, @previous.specline_id, 'new', @event_group, revision) if @previous.event == 'changed'
@@ -178,10 +179,10 @@ class ApplicationController < ActionController::Base
   def record_change(old_specline, new_specline)
 
     #changes can only be applied to line
-    #information used when reporting alterations and upon reinstatement 
+    #information used when reporting alterations and upon reinstatement
     @event_group = 1
-    
-    #get current revision for project     
+
+    #get current revision for project
     revision = Revision.where(:project_id => old_specline.project_id).where.not(:rev => nil).order('created_at').last
     #check revision record exists - so next line does not throw error
     if revision

@@ -7,7 +7,7 @@ class PrintsController < ApplicationController
   layout "projects", :except => [:print_project]
 
   require "prawn"
-  require "prawn/measurement_extensions"  
+  require "prawn/measurement_extensions"
   require "prawn/table"
 
   include Printtemplate
@@ -37,15 +37,15 @@ class PrintsController < ApplicationController
         if project_rev_array.include?(@revision.rev)
           selected_revision = project_rev_array.index(@revision.rev)
           number_revisions_old = total_revisions - selected_revision - 1
-  
+
           if number_revisions_old > 1
             @print_status_show = 'superseded'
           end
-  
+
           if number_revisions_old == 1
             @print_status_show = 'issue'
           end
-  
+
           if number_revisions_old == 0
             @print_status_show = 'not for issue'
           end
@@ -57,49 +57,49 @@ class PrintsController < ApplicationController
       end
     end
   end
-  
+
 
 
 
   def print_project
 
-    selected_revision = Revision.find(params[:revision_id]) if !params[:revision_id].blank?
+#    selected_revision = Revision.find(params[:revision_id]) if !params[:revision_id].blank?
     last_revision = Revision.where(:project_id => @project.id).order('created_at').last
 
     check_alterations = Alteration.changed_caws_all_sections(@project, last_revision)
     if check_alterations.blank?
-      
-      revision_count = Revision.where(:project_id => params[:id]).count      
+
+      revision_count = Revision.where(:project_id => params[:id]).count
       if revision_count == 1
-        current_revision = Revision.where(:project_id => params[:id]).first 
+        current_revision = Revision.where(:project_id => params[:id]).first
       else
         current_revision = Revision.where(:project_id => params[:id]).where.not(:id => last_revision.id).last        
-      end  
-      
+      end
+
     else
       current_revision = last_revision
     end
 
 
-    if current_revision == last_revision && @project.project_status != 'Draft'      
+    if current_revision == last_revision && @project.project_status != 'Draft'
     #update revision status of project if document is not if draft status
       update_revision(@project, current_revision) if params[:issue] == "final"
     else
       check_project_status_change(@project, current_revision)
-      if @project_status_changed == true  
+      if @project_status_changed == true
         update_revision(@project, current_revision) if params[:issue] == "final"
       end
     end
 
 
-    if selected_revision.blank? || selected_revision == current_revision
+#    if selected_revision.blank? || selected_revision == current_revision
       print_download(current_revision, params[:issue])
-    else
-      @print = Print.where(:project_id => @project.id, :revision_id => @revision.id).first
+#    else
+#      @print = Print.where(:project_id => @project.id, :revision_id => @revision.id).first
 
-      #send copy of the saved document
-      send_file @print.document.path
-    end
+#      #send copy of the saved document
+#      send_file @print.document.path
+#    end
 
   end
 
@@ -134,7 +134,7 @@ class PrintsController < ApplicationController
     def set_project
       @project = Project.find(params[:id])
     end
-  
+
     def set_revision
       if params[:revision_id].blank?
         @revision = Revision.where(:project_id => params[:id]).order('created_at').last
@@ -142,27 +142,27 @@ class PrintsController < ApplicationController
         @revision = Revision.find(params[:revision_id])
       end
     end
-  
-  
+
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def print_params
       params.require(:print).permit(:project_id, :revision_id, :user_id, :print, :issue, :created_at, :updated_at)
     end
-  
-    
+
+
     def update_revision(project, revision)
-      
+
       #if no changes but project has not been issued before then change revision ref to 'a'
       if revision.rev == '-'
         next_revision_ref = 'a'
       else
-        next_revision_ref = revision.rev.next    
+        next_revision_ref = revision.rev.next
       end
-      
+
       new_revision = revision.dup
       new_revision.save
-      new_revision.update(:rev => next_revision_ref)         
-  
+      new_revision.update(:rev => next_revision_ref)
+
     end
 
 end
