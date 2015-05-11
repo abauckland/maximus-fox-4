@@ -10,6 +10,7 @@ module Printtemplate
   include Printsubtitle
   include Printoutline
   include Printnumbers
+#  include Printuserlist
 
 def print_caws_document(project, revision, issue, pdf)
 
@@ -31,6 +32,19 @@ def print_caws_document(project, revision, issue, pdf)
   #leave page blank so that contents page starts of page 2 - allows replacement of cover when printing double sided 
   pdf.text "[blank page]", :size => 10
   pdf.start_new_page
+
+##USER LIST PAGE
+#if print_audit == true
+##where is list of project_users created?
+#  specline_users = User.joins(:speclines).where('speclines.project_id' => params[:project_id]).ids.uniq
+#  alteration_users = User.joins(:alterations).where('alterations.project_id' => params[:project_id]).ids.uniq
+#  user_array = specline_users + alteration_users
+#  user_array.uniq!
+#  project_users = User.include(:company).where(:id => user_array).order(:id)
+#  page_userlist(project_users, pdf)
+#  pdf.start_new_page
+#  pdf.text "[blank page]", :size => 10
+#  pdf.start_new_page
 
 
 ##HEADER START POINT
