@@ -36,12 +36,13 @@ def print_caws_document(project, revision, issue, pdf)
 ##USER LIST PAGE
 #if print_audit == true
 ##where is list of project_users created?
-#  specline_users = User.joins(:speclines).where('speclines.project_id' => params[:project_id]).ids.uniq
-#  alteration_users = User.joins(:alterations).where('alterations.project_id' => params[:project_id]).ids.uniq
+#  specline_users = User.joins(:speclines).where('speclines.project_id' => params[:project_id]).order(:email).ids.uniq
+#  alteration_users = User.joins(:alterations).where('alterations.project_id' => params[:project_id]).order(:email).ids.uniq
 #  user_array = specline_users + alteration_users
 #  user_array.uniq!
-#  project_users = User.include(:company).where(:id => user_array).order(:id)
-#  page_userlist(project_users, pdf)
+
+#print list of authors
+#  page_userlist(user_array, pdf)
 #  pdf.start_new_page
 #  pdf.text "[blank page]", :size => 10
 #  pdf.start_new_page
@@ -147,6 +148,7 @@ def print_caws_document(project, revision, issue, pdf)
         #specline info
         #caws_title(subsection, "specline", pdf)
         specification(project, subsection, revision, pdf)
+#        specification(project, subsection, revision, user_array, print_audit, pdf)
 
         pdf.start_new_page
     end

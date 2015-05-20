@@ -37,13 +37,13 @@ module Printuserlist
   end
 
   def userlist_data(data, rows)
-        data.each_with_index do |set, i|
-
+        data.each_with_index do |id, i|
+          user = User.include(:company).find(id)
           rows[i+1] = [
                        i.to_s,
-                       set.email,
-                       set.name,
-                       set.company.name,
+                       user.email,
+                       user.name,
+                       user.company.name,
                        ]
       end
   end
