@@ -1,0 +1,52 @@
+<div class="page_title"><%=h @projectuser.project.code %>: <%=h @projectuser.user.name %></div>
+
+<div class="content">
+
+    <div class="column_1">
+        <div class="column_content">
+            <div class="column_title">Edit user's permissions</div>
+                <div class="column_sub_content">
+
+            		<%= render :partial => "form_error", :locals => {:item => @projectuser} %>
+
+                    <div class="column_guide">
+                        <p>Change the level of user access and editing rights.</p>
+                            <ul>
+                                <li>edit: user can edit the whole document and publish it.</li>
+                                <li>write: user can edit speclines and clauses, not add/delete subsections or publish the document.</li>
+                                <li>read: user can only read the last published version of the document.</li>
+                            </ul>
+                    </div>
+
+                    <div class="column_form">
+                        <%= form_for @projectuser do |f| %>
+                        <table>
+                        <tr><td>
+                            <div class="user_form_label form_input_label"><%= label_error_check(@projectuser, 'role', 'role')%></div>
+                            <div class="new_user_form form_input"><%= f.select :role, ["edit", "write", "read"], {:default => "edit"} %></div>                
+                        </td></tr>
+                        <tr><td>
+                            <div class="user_form_label form_input_label"><%= label_error_check(@projectuser, 'subsections', 'subsections')%></div>
+                            <div class="new_user_form form_input"><%= f.collection_select :subsection_ids, @subsections, :id, :full_code, {:prompt => 'All', :default => nil}, { :multiple => true, :size => 5 }%></div>                
+                        </td></tr> 
+                        </table>
+                    </div>
+                </div>
+                <div class="column_footer">
+                    <div>
+                        <div class="column_submit"><%= f.submit "save changes"%></div>
+                        <% end %>  
+                        <div class="column_cancel"><%= link_to "Cancel", {:controller => "projectusers", :action => "index", :id => @projectuser.project_id} %></div>                
+                    </div>
+
+                </div>
+
+            </div>
+        </div> 
+
+
+    <div class="column_2 column_blank"></div>
+
+    <div class="column_3 column_blank"></div>
+
+</div>
