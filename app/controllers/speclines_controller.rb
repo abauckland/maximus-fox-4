@@ -30,7 +30,7 @@ class SpeclinesController < ApplicationController
     end
 
     #call to private method that records addition of line in Changes table
-    record_new(@new_specline, @clause_change_record)
+    record_new(@new_specline, event_type)
     #change prefixs to clauselines in clause
     txt1_insert_line(@new_specline, @specline, subsequent_speclines)
     if !@subsequent_prefixes.blank?
@@ -538,7 +538,7 @@ end
         #call to private method that record deletion of line in Changes table
         clause_event_type = 2
 
-        record_delete(@specline, clause_event_type)
+        record_delete(@specline, event_type)
         clause_line.destroy   
       end
 

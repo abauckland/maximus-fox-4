@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
       else
         revision_rev_array = revisions.collect{|i| i.rev}.sort
         last_revs = revision_rev_array.pop(2)
-        if last_rev_check.blank?              
+        if last_rev_check.blank?
           @current_revision_rev = last_revs.first.capitalize
         else
           @current_revision_rev = last_revs.last.capitalize
@@ -130,7 +130,7 @@ class ApplicationController < ActionController::Base
           #if a change has been previously made to selected specline then...
           #if previous change event was creation of new specline then destory change record
 #tested - correct 1
-          existing_record.destroy if existing_record.event == 'new'          
+          existing_record.destroy if existing_record.event == 'new'
           #if previous change was for change to specline then amend action to 'delete' from 'change'
 #tested - correct 1
           existing_record.update(:event => 'deleted', :user_id => current_user.id) if existing_record.event == 'changed'
@@ -159,8 +159,11 @@ class ApplicationController < ActionController::Base
             #if no previous changes for specline create new record for line
             create_alteration_record(specline, specline.id, 'new', @event_group, revision)
         else
-#diffcult to test - new line is copy of existing, for situation to occur - must have been duplicat in original template?????
-            #update specline_id of all precious changes for existing change record specline with specline of new line
+
+          if @previous.event == 'new'
+            create_alteration_record(specline, specline.id, 'new', @event_group, revision)
+          else
+            #update specline_id of all previous changes for existing change record specline with specline of new line
             update_specline_id_prior_changes(@previous.specline_id, specline.id)
             #if previous action was 'delete'do not create 'new' change record
             #delete change record, as this line has no longer been deleted, but re-created
@@ -169,8 +172,9 @@ class ApplicationController < ActionController::Base
             #create 'new' change record for current specline with id of old change
             create_alteration_record(specline, @previous.specline_id, 'new', @event_group, revision) if @previous.event == 'changed'
             @previous.destroy
-        end
+          end
         #'delete' event not relevant because a line that has been previously deleted cannot be subsequently altered or re-created
+        end
       end
     end
   end
@@ -266,6 +270,8 @@ class ApplicationController < ActionController::Base
               #if new_specline content equals content of existing 'changed' record - not for same specline
               elsif @previous.event == 'changed'
 #tested - correct 1
+                #update ids of existing 'delete record' to match new_specline
+                update_specline_id_prior_changes(@previous.specline_id, new_specline.id)
                 #create 'changed' record using existing 'change record info with id of old_specline
                 create_alteration_record(old_specline, @previous.specline_id, 'changed', @event_group, revision)
                 #delete existing 'change record'
@@ -273,7 +279,7 @@ class ApplicationController < ActionController::Base
             
               #if new_specline content equals content of existing 'new' record - make change based on same specline only (ignor existing new record)              
               else
-#diffcult to test - new line is copy of existing, for situation to occur - must have been duplicat in original template?????
+#tested - correct 1
                 #create 'changed' alteration record using old_specline info
                 create_alteration_record(old_specline, new_specline.id, 'changed', @event_group, revision)
               end
@@ -290,7 +296,7 @@ class ApplicationController < ActionController::Base
 
             match_previous(new_specline, revision)
             if !@previous.blank?
-            
+
               #if new_specline content equals content of existing 'delete' record
               if @previous.event == 'deleted'
 #tested - correct 1
@@ -305,16 +311,26 @@ class ApplicationController < ActionController::Base
               elsif @previous.event == 'changed'
                 #update info in existing 'new' record with using existing 'change' record info for other line                
                 #get line info for new text of previous change
-                previous_new = Specline.where(:id => @previous.specline_id).first                
-                update_alteration_record(previous_new, alterations_for_specline.id)
-                #delete existing 'change record'
+#                previous_new = Specline.where(:id => @previous.specline_id).first
+#                update_alteration_record(previous_new, alterations_for_specline.id)
+#                #delete existing 'change record'
+#                @previous.destroy
+
+                #update ids of existing 'delete record' to match new_specline
+                update_specline_id_prior_changes(@previous.specline_id, new_specline.id)
+                #create 'new' alteration record using matching line info
+                previous_new = Specline.where(:id => @previous.specline_id).first
+                create_alteration_record(previous_new, @previous.specline_id, 'new', @event_group, revision)
+                #delete current new for old_specline
+                alterations_for_specline.destroy
+                #delete existing 'delete record'
                 @previous.destroy
-  
+
               #if new_specline content equals content of existing 'new' record - make change based on same specline only (ignor existing new record)
               else
 #diffcult to test - new line is copy of existing, for situation to occur - must have been duplicat in original template?????                
                 #update info in existing 'new' record with new_specline
-                update_alteration_record(new_specline, @previous.specline_id)
+                update_alteration_record(new_specline, alterations_for_specline.id)
               end
             #or if no existing record matches
             else
@@ -345,6 +361,10 @@ class ApplicationController < ActionController::Base
               elsif @previous.event == 'changed'
                 #update ids of existing change record so that specline id points to text of previous change specline, update all ids
                 update_specline_id_prior_changes(alterations_for_specline.id, @previous.specline_id)
+                #update ids of existing 'delete record' to match new_specline
+                update_specline_id_prior_changes(@previous.specline_id, new_specline.id)
+
+                alterations_for_specline.update(:specline_id => @previous.specline_id)
                 #delete existing 'change record'
                 @previous.destroy
 
