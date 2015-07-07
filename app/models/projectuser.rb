@@ -8,8 +8,8 @@ class Projectuser < ActiveRecord::Base
 
   enum role: [:manage, :edit, :write, :read]
 
-  validates :date_from, presence: true
-  validates :date_to, presence: true
+#  validates :date_from, presence: true
+#  validates :date_to, presence: true
 
 #before_save :assign_user
 
