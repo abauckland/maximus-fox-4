@@ -170,7 +170,11 @@ class ApplicationController < ActionController::Base
 
             #if previous action was 'change'
             #create 'new' change record for current specline with id of old change
-            create_alteration_record(specline, @previous.specline_id, 'new', @event_group, revision) if @previous.event == 'changed'
+            if @previous.event == 'changed'
+                previous_new = Specline.where(:id => @previous.specline_id).first
+                create_alteration_record(previous_new, @previous.specline_id, 'new', @event_group, revision)
+            end
+
             @previous.destroy
           end
         #'delete' event not relevant because a line that has been previously deleted cannot be subsequently altered or re-created
@@ -353,7 +357,7 @@ class ApplicationController < ActionController::Base
                 #update ids of existing 'delete record' to match new_specline
                 update_specline_id_prior_changes(@previous.specline_id, new_specline.id)
 
-                alterations_for_specline.update(:event => 'deleted')
+                alterations_for_specline.update(:event => 'deleted', :specline_id => @previous.specline_id)
                 #delete existing 'delete record'
                 @previous.destroy
 #tested - correct 1 
