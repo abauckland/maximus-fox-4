@@ -1,8 +1,8 @@
 class Projectuser < ActiveRecord::Base
   belongs_to :user
   belongs_to :project
-#  has_many :subsectionusers
-#  has_many :subsections, :through => :subsectionusers
+  has_many :subsectionusers
+  has_many :subsections, :through => :subsectionusers
 
   attr_accessor :email
 
