@@ -123,7 +123,14 @@ class ApplicationController < ActionController::Base
           #set update hash of specline data for creating new change records
           #if no previous changes for specline create delete record for line
 #tested - correct 1
-          create_alteration_record(specline, specline.id, 'deleted', @event_group, revision)
+
+          #check if matches existing change record
+          match_previous(specline, revision)
+          if !@previous.blank?
+            create_alteration_record(specline, specline.id, 'deleted', @event_group, revision)
+          else
+            @previous.destroy if @previous.event == 'new'
+          end
         else
           #where previous 'new' and 'change' events have been reorded
           #'delete' events not checked as none will exist for selected line (you cannot select a line that has already been deleted)
@@ -385,8 +392,8 @@ class ApplicationController < ActionController::Base
 
           end
         end
-      end   
-    end  
+      end
+    end
   end
 
 
@@ -404,7 +411,7 @@ def txt1_insert_line(specline, previous_specline, subsequent_specline_lines)
   end
 end
 
-                                                                                                                                           
+
 def txt1_delete_line(specline) 
   check_linetype = Linetype.find(specline.linetype_id)
 
@@ -441,7 +448,7 @@ def txt1_change_linetype(specline, old_linetype, new_linetype)
       else
         specline.txt1_id = 1
         set_txt1_id = 1
-      end                                        
+      end
       specline.save  
     end
   end
@@ -504,12 +511,12 @@ end
       #end    
 #      redirect_to log_out_path unless current_user
 #    end
-  
+
 #    def authenticate_owner
 #      redirect_to log_out_path unless current_user.role == "owner"
 #    end
 
-   
+
     def match_previous(specline, revision)
         @previous = Alteration.where(
                               :txt3_id => specline.txt3_id,
@@ -522,22 +529,23 @@ end
                               :project_id => specline.project_id,
                               :clause_id => specline.clause_id,
                               :linetype_id => specline.linetype_id
-                              ).first                              
+                              ).first
     end
-  
+
+
     #update specline_id of all previous changes to the same line
-    def update_specline_id_prior_changes(previous_id, new_id)        
+    def update_specline_id_prior_changes(previous_id, new_id)
       prior_changes = Alteration.where(:specline_id => previous_id)
       prior_changes.each do |change|
         change.update(:specline_id => new_id)
-      end  
+      end
     end
 
-    def create_alteration_record(content, line_id, event, event_group, revision)       
+    def create_alteration_record(content, line_id, event, event_group, revision)
        new_alteration_record = Alteration.create({:specline_id => line_id,
                                                   :project_id => content.project_id,
-                                                  :clause_id => content.clause_id,                        
-                                                  :txt3_id => content.txt3_id,               
+                                                  :clause_id => content.clause_id,
+                                                  :txt3_id => content.txt3_id,
                                                   :txt4_id => content.txt4_id,
                                                   :txt5_id => content.txt5_id,
                                                   :txt6_id => content.txt6_id,
@@ -548,20 +556,20 @@ end
                                                   :user_id => current_user.id,
                                                   :clause_add_delete => event_group,
                                                   :event => event,
-                                                  :print_change => 1})  
+                                                  :print_change => 1})
      end
 
      def update_alteration_record(content, line_id)
-       
+
        alteration = Alteration.where(:id => line_id).first
-       
-       updated_alteration_record = alteration.update({:txt3_id => content.txt3_id,               
+
+       updated_alteration_record = alteration.update({:txt3_id => content.txt3_id,
                                                       :txt4_id => content.txt4_id,
                                                       :txt5_id => content.txt5_id,
                                                       :txt6_id => content.txt6_id,
                                                       :identity_id => content.identity_id,
                                                       :perform_id => content.perform_id,
-                                                      :user_id => current_user.id,})  
+                                                      :user_id => current_user.id,})
      end
 
       def set_event_type(event_type) 
@@ -580,7 +588,7 @@ end
 #  def authorise_user_view(permissible_roles)
 #    if permissible_roles.include?(@current_user.role)
 #      return true
-#    end      
+#    end
 #  end
 
 
@@ -589,7 +597,7 @@ end
 #    permitted_user = Projectuser.joins(:subsectionusers
 #                               ).where(:user_id => @current_user.id, :project_id => project_id, :role => permissible_roles
 #                               ).where.not('subsectionusers.subsection_id' => subsection_id
-#                               ).first    
+#                               ).first
 #    if permitted_user.blank?
 #       redirect_to log_out_path
 #    end      
@@ -637,5 +645,5 @@ end
     end
   end
 
-  
+
 end
