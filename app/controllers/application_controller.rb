@@ -115,7 +115,7 @@ class ApplicationController < ActionController::Base
         existing_record = Alteration.where(:specline_id => deleted_line.id, :revision_id => revision.id).first
         if existing_record.blank?
   
-          old_matched_line = Alteration.match_line(current_line, revision).first
+          old_matched_line = Alteration.match_line(deleted_line, revision).first
           if old_matched_line.blank?
   
             new_matched_line_action(deleted_line, revision, 'changed')
