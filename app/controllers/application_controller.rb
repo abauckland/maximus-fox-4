@@ -136,7 +136,7 @@ class ApplicationController < ActionController::Base
 
               old_changed_line.destroy
   
-              record_deleted(new_delete_hash, event_type)
+              record_delete(new_delete_hash, event_type)
   
             end
   
@@ -161,7 +161,7 @@ class ApplicationController < ActionController::Base
             new_delete_hash[:id] = new_delete_hash.specline_id
 
             existing_record.destroy
-            record_deleted(new_delete_hash, event_type)
+            record_delete(new_delete_hash, event_type)
           end
         end
 
@@ -245,7 +245,7 @@ class ApplicationController < ActionController::Base
   
                 create_alteration_record(old_line, new_line.id, 'changed', event_type, revision)
               else
-  
+#cannot update ids if @new match_line is blank
                 update_id_prior_changes(new_line.id, revision, @new_matched_line.id)
                 update_id_prior_changes(@new_matched_line.id, revision, new_line.id)
   
