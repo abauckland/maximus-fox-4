@@ -117,8 +117,11 @@ class ApplicationController < ActionController::Base
   
           old_matched_line = Alteration.match_line(deleted_line, revision).first
           if old_matched_line.blank?
-  
-            new_matched_line_action(deleted_line, revision, 'changed')
+
+# if new_line matches and has chnage alteration associated with it
+
+
+            new_matched_change_action(deleted_line, revision, 'changed')
             if @new_matched_line.blank?
               create_alteration_record(deleted_line, deleted_line.id, 'deleted', event_type, revision)
             else
@@ -405,6 +408,22 @@ end
 #    def authenticate_owner
 #      redirect_to log_out_path unless current_user.role == "owner"
 #    end
+
+    def new_matched_change_action(current_line, revision, action)
+      @new_matched_line = Specline.joins(:alterations).where(
+                              :txt3_id => current_line.txt3_id,
+                              :txt4_id => current_line.txt4_id,
+                              :txt5_id => current_line.txt5_id,
+                              :txt6_id => current_line.txt6_id,
+                              :identity_id => current_line.identity_id,
+                              :perform_id => current_line.perform_id,
+                              :project_id => current_line.project_id,
+                              :clause_id => current_line.clause_id,
+                              :linetype_id => current_line.linetype_id,
+                              'alterations.revision_id' => revision.id,
+                              'alterations.event' => 'change'
+                              ).first
+    end
 
 
     def new_matched_line_action(current_line, revision, action)
