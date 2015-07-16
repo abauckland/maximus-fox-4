@@ -106,9 +106,9 @@ class ApplicationController < ActionController::Base
   end
 
 
-  def record_delete(specline, event_type)
+  def record_delete(deleted_line, event_type)
     #get current revision for project
-    revision = Revision.where(:project_id => specline.project_id).where.not(:rev => nil).order('created_at').last
+    revision = Revision.where(:project_id => deleted_line.project_id).where.not(:rev => nil).order('created_at').last
     if revision
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
 
@@ -167,13 +167,13 @@ class ApplicationController < ActionController::Base
   end
 
 
-  def record_new(specline, event_type)
+  def record_new(new_line, event_type)
     #get current revision for project
-    revision = Revision.where(:project_id => specline.project_id).where.not(:rev => nil).order('created_at').last
+    revision = Revision.where(:project_id => new_line.project_id).where.not(:rev => nil).order('created_at').last
     if revision
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
 
-        old_matched_line = Alteration.match_line(current_line, revision).where.not(:event => 'new').first
+        old_matched_line = Alteration.match_line(new_line, revision).where.not(:event => 'new').first
         if old_matched_line.blank?
           create_alteration_record(new_line, new_line.id, 'new', event_type, @revision)
         else
@@ -190,9 +190,9 @@ class ApplicationController < ActionController::Base
   end
 
 
-  def record_change(old_specline, new_specline)
+  def record_change(old_line, new_line)
 
-    revision = Revision.where(:project_id => old_specline.project_id).where.not(:rev => nil).order('created_at').last
+    revision = Revision.where(:project_id => old_line.project_id).where.not(:rev => nil).order('created_at').last
     if revision
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
         event_type = 1
