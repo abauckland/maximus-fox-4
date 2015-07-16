@@ -20,6 +20,18 @@ belongs_to :user
 #need to allow hash of specline to be saved into Alteration model - should really delete out of hasd before creating
 attr_accessor :clause_line
 
+  scope :match_line, ->(line, revision) { where(:txt3_id => current_line.txt3_id,
+                                                :txt4_id => current_line.txt4_id,
+                                                :txt5_id => current_line.txt5_id,
+                                                :txt6_id => current_line.txt6_id,
+                                                :identity_id => current_line.identity_id,
+                                                :perform_id => current_line.perform_id,
+                                                :revision_id => revision.id,
+                                                :project_id => current_line.project_id,
+                                                :clause_id => current_line.clause_id,
+                                                :linetype_id => current_line.linetype_id
+                                                )}
+
   scope :changed_caws_all_sections, ->(project, revision) { where(:project_id => project.id, :revision_id => revision.id
                                     ).group(:id
                                     ) }
