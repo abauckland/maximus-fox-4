@@ -208,7 +208,7 @@ class ApplicationController < ActionController::Base
         existing_record = Alteration.where(:specline_id => new_line.id, :revision_id => revision.id).first
         if existing_record.blank?
   #new
-          old_matched_line = Alteration.match_line(old_line, revision).where.not(:event => 'change').first
+          old_matched_line = Alteration.match_line(old_line, revision).where.not(:event => 'changed').first
           if !old_matched_line.blank?
   
             if old_matched_line.event = 'new'
@@ -216,12 +216,12 @@ class ApplicationController < ActionController::Base
               old_matched_line.destroy
               record_new(new_line)
             else #old_matched_line.event = 'deleted'
-              create_alteration_record(old_line, new_line.id, 'change', event_type, revision)
+              create_alteration_record(old_line, new_line.id, 'changed', event_type, revision)
             end
   
           else
   
-            new_matched_line = Alteration.match_line(new_line, revision).where.not(:event => 'change').first
+            new_matched_line = Alteration.match_line(new_line, revision).where.not(:event => 'changed').first
             if !new_matched_line.blank?
   
               if new_matched_line.event = 'deleted'
@@ -231,17 +231,19 @@ class ApplicationController < ActionController::Base
                 new_matched_line.destroy 
                 record_delete(old_line)
               else #new_matched_line.event = 'new'
-                create_alteration_record(old_line, new_line.id, 'change', event_type, revision)
+                create_alteration_record(old_line, new_line.id, 'changed', event_type, revision)
               end
   
             else
     #change
-              new_matched_line_action(old_line, revision, 'change')
-              old_matched_line = Alteration.match_line(new_line, revision).where(:event => 'change').first
+    
+#    
+              new_matched_change_action(old_line, revision, 'changed')
+              old_matched_line = Alteration.match_line(new_line, revision).where(:event => 'changed').first
   
               if old_matched_line.blank? && @new_matched_line.blank?
   
-                create_alteration_record(old_line, new_line.id, 'change', event_type, revision)
+                create_alteration_record(old_line, new_line.id, 'changed', event_type, revision)
               else
   
                 update_id_prior_changes(new_line.id, revision, new_matched_line.specline_id)
@@ -263,7 +265,7 @@ class ApplicationController < ActionController::Base
   
                   if @new_matched_line.blank?
   # b => c
-                    new_match_line_change = Alteration.where(:specline_id => @new_matched_line.id, :revision_id => revision.id, :event => 'change').first
+                    new_match_line_change = Alteration.where(:specline_id => @new_matched_line.id, :revision_id => revision.id, :event => 'changed').first
                     new_match_line_change.destroy
   
                     record_change(old_line, @new_matched_line)
@@ -280,7 +282,7 @@ class ApplicationController < ActionController::Base
             record_new(new_line)
           end
   
-          if existing_record.event == 'change'
+          if existing_record.event == 'changed'
   
             original_line_hash = existing_record.dup
             original_line_hash[:id] = original_line_hash.specline_id
@@ -431,19 +433,19 @@ end
     end
 
 
-    def new_matched_line_action(current_line, revision, action)
-      @new_matched_line = Specline.where(
-                              :txt3_id => current_line.txt3_id,
-                              :txt4_id => current_line.txt4_id,
-                              :txt5_id => current_line.txt5_id,
-                              :txt6_id => current_line.txt6_id,
-                              :identity_id => current_line.identity_id,
-                              :perform_id => current_line.perform_id,
-                              :project_id => current_line.project_id,
-                              :clause_id => current_line.clause_id,
-                              :linetype_id => current_line.linetype_id
-                              ).first
-    end
+#    def new_matched_line_action(current_line, revision, action)
+#      @new_matched_line = Specline.where(
+#                              :txt3_id => current_line.txt3_id,
+#                              :txt4_id => current_line.txt4_id,
+#                              :txt5_id => current_line.txt5_id,
+#                              :txt6_id => current_line.txt6_id,
+#                              :identity_id => current_line.identity_id,
+#                              :perform_id => current_line.perform_id,
+#                              :project_id => current_line.project_id,
+#                              :clause_id => current_line.clause_id,
+#                              :linetype_id => current_line.linetype_id
+#                              ).first
+#    end
 
 
     def update_id_prior_changes(line_id, revision, new_id)
