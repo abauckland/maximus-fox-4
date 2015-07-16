@@ -180,12 +180,17 @@ class ApplicationController < ActionController::Base
         if old_matched_line.blank?
           create_alteration_record(new_line, new_line.id, 'new', event_type, revision)
         else
-          new_matched_line = Specline.find(old_matched_line.specline_id)
+          if old_matched_line.event == 'changed'
+            new_matched_line = Specline.find(old_matched_line.specline_id)
   
-          update_id_prior_changes(old_matched_line.id, revision, new_line.id)
-          old_matched_line.destroy
+            update_id_prior_changes(old_matched_line.id, revision, new_line.id)
+            old_matched_line.destroy
   
-          record_new(new_matched_line, event_type) if old_matched_line.event == 'changed'
+            record_new(new_matched_line, event_type)
+          else
+            update_id_prior_changes(old_matched_line.id, revision, new_line.id)
+            old_matched_line.destroy
+          end
         end
 
       end
