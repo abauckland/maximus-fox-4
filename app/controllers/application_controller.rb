@@ -246,8 +246,8 @@ class ApplicationController < ActionController::Base
                 create_alteration_record(old_line, new_line.id, 'changed', event_type, revision)
               else
   
-                update_id_prior_changes(new_line.id, revision, new_matched_line.specline_id)
-                update_id_prior_changes(new_matched_line.specline_id, revision, new_line.id)
+                update_id_prior_changes(new_line.id, revision, @new_matched_line.specline_id)
+                update_id_prior_changes(@new_matched_line.specline_id, revision, new_line.id)
   
                 if !old_matched_line.blank? && !@new_matched_line.blank?
                   old_matched_line.destroy
