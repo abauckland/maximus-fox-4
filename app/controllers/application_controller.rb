@@ -468,14 +468,14 @@ end
                                                  )
      end
 
-      def set_event_type(event_type) 
-          if event_type.blank?
-             @event_group = 1
-          else
-             @event_group = event_type
-          end
-          return @event_group
-      end
+#      def set_event_type(event_type) 
+#          if event_type.blank?
+#             @event_group = 1
+#          else
+#             @event_group = event_type
+#          end
+#          return @event_group
+#      end
 
 
 #user_role(["admin", "owner", "employee"])

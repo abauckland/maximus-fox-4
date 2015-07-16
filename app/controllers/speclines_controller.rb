@@ -23,7 +23,7 @@ class SpeclinesController < ApplicationController
     end 
 
     #if specline is a product or reference line (linetype 10, 11 or 12)
-    if [10,11].include?(@specline.linetype_id)      
+    if [10,11].include?(@specline.linetype_id)
       @new_specline = Specline.create(:id => nil, :project_id => @specline.project_id, :clause_id => @specline.clause_id, :clause_line => @specline.clause_line + 1, :linetype_id => linetype_id)
     else
       @new_specline = Specline.create(@specline.attributes.merge(:id => nil, :clause_line => @specline.clause_line + 1, :linetype_id => linetype_id))
@@ -572,7 +572,7 @@ end
           @subsequent_prefixes.compact
         end
         #call to private method that record deletion of line in Alterations table
-        record_delete(@specline, @clause_change_record)
+        record_delete(@specline, event_type)
         @specline.destroy
 
         #call to protected method in application controller that changes the clause_line ref in any subsequent speclines
