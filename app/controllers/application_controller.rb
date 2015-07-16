@@ -130,7 +130,7 @@ class ApplicationController < ActionController::Base
   
               new_delete_hash = old_changed_line.dup
               new_delete_hash[:id] = new_delete_hash.specline_id
-  
+
               old_changed_line.destroy
   
               record_deleted(new_delete_hash)
@@ -156,7 +156,7 @@ class ApplicationController < ActionController::Base
   
             new_delete_hash = existing_record.dup
             new_delete_hash[:id] = new_delete_hash.specline_id
-  
+
             existing_record.destroy
             record_deleted(new_delete_hash)
           end
@@ -247,7 +247,7 @@ class ApplicationController < ActionController::Base
   # c => b
                     original_line_hash = old_matched_line.dup
                     original_line_hash[:id] = original_line_hash.specline_id
-  
+
                     old_matched_line.destroy
   
                     record_change(original_line_hash, new_line)
@@ -276,7 +276,7 @@ class ApplicationController < ActionController::Base
   
             original_line_hash = existing_record.dup
             original_line_hash[:id] = original_line_hash.specline_id
-  
+
             existing_record.destroy
             record_change(original_line_hash, new_line)
           end
@@ -415,11 +415,9 @@ end
                               :txt6_id => current_line.txt6_id,
                               :identity_id => current_line.identity_id,
                               :perform_id => current_line.perform_id,
-                              :revision_id => revision.id,
                               :project_id => current_line.project_id,
                               :clause_id => current_line.clause_id,
-                              :linetype_id => current_line.linetype_id,
-                              :event => action
+                              :linetype_id => current_line.linetype_id
                               ).first
     end
 
