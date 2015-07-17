@@ -207,7 +207,7 @@ class ApplicationController < ActionController::Base
   
         existing_record = Alteration.where(:specline_id => new_line.id, :revision_id => revision.id).first
         if existing_record.blank?
-#A
+
           old_matched_line = Alteration.match_line(old_line, revision).where.not(:event => 'changed').first
           if !old_matched_line.blank?
 
@@ -230,50 +230,46 @@ class ApplicationController < ActionController::Base
 
                 new_matched_line.destroy 
                 record_delete(old_line, event_type)
-              end
-              
-              if new_matched_line.event == 'new' #new_matched_line.event = 'new'
+              else #new_matched_line.event = 'new'
                 create_alteration_record(old_line, new_line.id, 'changed', event_type, revision)
               end
-#if new_matched_line.event == 'changed'
+
             else
-    #change
 
-              new_matched_change_action(old_line, revision, 'changed')
               old_matched_line = Alteration.match_line(new_line, revision).where(:event => 'changed').first
-  
-              if old_matched_line.blank? && @new_matched_line.blank?
-  
-                create_alteration_record(old_line, new_line.id, 'changed', event_type, revision)
-              else
-#cannot update ids if @new match_line is blank
-                update_id_prior_changes(new_line.id, revision, @new_matched_line.id)
-                update_id_prior_changes(@new_matched_line.id, revision, new_line.id)
+              new_matched_change_action(old_line, revision, 'changed')
 
-                if !old_matched_line.blank? && !@new_matched_line.blank?
+              if !old_matched_line.blank?
+                if !@new_matched_line.blank?
+                  update_id_prior_changes(new_line.id, revision, @new_matched_line.id)
+                  update_id_prior_changes(@new_matched_line.id, revision, new_line.id)
+
                   old_matched_line.destroy
                 else
+                  update_id_prior_changes(new_line.id, revision, @new_matched_line.id)
+                  update_id_prior_changes(@new_matched_line.id, revision, new_line.id)
 
-                  if old_matched_line.blank?
-  # c => b
-                    original_line_hash = old_matched_line.dup
-                    original_line_hash[:id] = original_line_hash.specline_id
+                  new_match_line_change = Alteration.where(:specline_id => @new_matched_line.id, :revision_id => revision.id, :event => 'changed').first
+                  new_match_line_change.destroy
 
-                    old_matched_line.destroy
+                  record_change(old_line, @new_matched_line)
+                end
+              else
+                if !@new_matched_line.blank?
+                  update_id_prior_changes(new_line.id, revision, @new_matched_line.id)
+                  update_id_prior_changes(@new_matched_line.id, revision, new_line.id)
 
-                    record_change(original_line_hash, new_line)
-                  end
+                  original_line_hash = old_matched_line.dup
+                  original_line_hash[:id] = original_line_hash.specline_id
 
-                  if @new_matched_line.blank?
-  # b => c
-                    new_match_line_change = Alteration.where(:specline_id => @new_matched_line.id, :revision_id => revision.id, :event => 'changed').first
-                    new_match_line_change.destroy
+                  old_matched_line.destroy
 
-                    record_change(old_line, @new_matched_line)
-                  end
-
+                  record_change(original_line_hash, new_line)
+                else
+                  create_alteration_record(old_line, new_line.id, 'changed', event_type, revision)
                 end
               end
+
             end
           end
 
