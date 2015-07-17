@@ -553,12 +553,24 @@ end
     def original_not_same_as_new(existing_hash, line_hash)
 
       #remove non common key value pairs from existing_hash
-      keys_to_delete_from_existing = [:specline_id, :revision_id, :user_id, :clause_add_delete, :event, :print_change, :created_at, :updated_at, ]
-      existing_hash.delete_if{ |k,| keys_to_delete_from_existing.include? k }
+      keys_to_delete_from_existing = [:specline_id, :revision_id, :user_id, :clause_add_delete, :event, :print_change, :created_at, :updated_at]
+#      existing_hash.delete_if{ |k, v| keys_to_delete_from_existing.include? k }
+existing_hash.delete(:specline_id)
+existing_hash.delete(:revision_id)
+existing_hash.delete(:user_id)
+existing_hash.delete(:clause_add_delete)
+existing_hash.delete(:event)
+existing_hash.delete(:print_change)
+existing_hash.delete(:created_at)
+existing_hash.delete(:updated_at)
 
       #remove non commone key value pairs from line_hash
       keys_to_delete_from_line = [:clause_line, :created_at, :updated_at]
-      line_hash.delete_if{ |k,| keys_to_delete_from_line.include? k }
+#      line_hash.delete_if{ |k, v| keys_to_delete_from_line.include? k }
+
+line_hash.delete(:clause_line)
+line_hash.delete(:created_at)
+line_hash.delete(:updated_at)
 
       if existing_hash == line_hash
         false
