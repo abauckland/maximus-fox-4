@@ -170,6 +170,78 @@ class ApplicationController < ActionController::Base
   end
 
 
+  #deleting section
+  #delete each existing line
+  #find lines that have been deleted (event_type 1 & 2)
+  #update to event_type 3
+
+
+  #adding new section
+  #check if section has been deleted before - event_type 3
+  #if not create each line - event_type 3
+  #else
+  #for each line
+  #where previously deleted destory 'delete' records - event_type 3
+    #check if previous records for clause - event type 2
+      #if not create each line - event_type 2
+      #else
+      #for each line
+      #end
+    #else record_new(line, 1)
+    #end
+  #end
+
+  #adding new clause
+  #add each clause one at a time
+  def check_clause_alterations(speclines, project, clause, revision)
+    clause_alterations = Alteration.where(:event_type => 2, :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
+    if clause_alterations.blank?
+      speclines do |line|
+        record_new(line, 2)
+        #create specline
+      end
+    else
+      #for each line
+      speclines do |line|
+        previous_record = Alteration.match_record(line, revision)
+        if !previous_record.blank?
+
+          if previous_delete_record == 'deleted'
+            previous_delete_record.destroy
+          else
+            record_new(line, 1)
+
+          end
+        end
+        #create specline
+      end
+      # find lines previous deleted but not in new clause
+      #same as left over lines when added lines have been processed
+      previous_deleted = Alteration.where(:event => 'deleted',:event_type => 2, :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
+      if !previous_deleted.blank?
+        previous_deleted.update(:event_type => 1)
+      end
+    end
+  end
+
+  #deleting clause
+  #delete one clause at a time
+  def update_delete_events(project, clause)
+    #record deletion of each line in clause
+    record_deleted(line, 2)
+
+    #find previous 'deleted' changes for clause when deleting clause and update records
+    previous_alterations = Alteration.where(:event => 'deleted', :event_type => 1, :project_id => _project_id, :clause_id => clause.id, :revision_id => revision.id)
+    previous_alterations.each do |alteration|
+      alteration.update(:event_type => 2)
+    end
+
+  end
+
+  #if new line added to new clause/section
+  #if line deleted from new clause/section
+  #if change to line of new clause/section
+
   def record_new(new_line, event_type)
     #get current revision for project
     revision = Revision.where(:project_id => new_line.project_id).where.not(:rev => nil).order('created_at').last
