@@ -304,7 +304,7 @@ class ApplicationController < ActionController::Base
 #                new_delete_hash[:id] = new_delete_hash.specline_id
 
                 new_matched_line.destroy 
-                record_delete(old_line, event_type)
+                record_delete(new_line, event_type)
 
               else #new_matched_line.event = 'new'
                 create_alteration_record(old_line, new_line.id, 'changed', event_type, revision)
