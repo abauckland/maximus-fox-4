@@ -300,10 +300,9 @@ class ApplicationController < ActionController::Base
                 update_id_prior_changes(new_line.id, revision, new_matched_line.specline_id)
                 update_id_prior_changes(new_matched_line.specline_id, revision, new_line.id)
 
+                new_matched_line.destroy
 
                 old_line[:id] = new_line.id
-
-                new_matched_line.destroy 
                 record_delete(old_line, event_type)
 
               else #new_matched_line.event = 'new'
@@ -328,6 +327,7 @@ class ApplicationController < ActionController::Base
                   new_match_line_change = Alteration.where(:specline_id => @new_matched_line.id, :revision_id => revision.id, :event => 'changed').first
                   new_match_line_change.destroy
 
+                  old_line[:id] = @new_matched_line.id
                   record_change(old_line, @new_matched_line)
                 end
               else
@@ -505,21 +505,6 @@ end
                               'alterations.event' => action
                               ).first
     end
-
-
-#    def new_matched_line_action(current_line, revision, action)
-#      @new_matched_line = Specline.where(
-#                              :txt3_id => current_line.txt3_id,
-#                              :txt4_id => current_line.txt4_id,
-#                              :txt5_id => current_line.txt5_id,
-#                              :txt6_id => current_line.txt6_id,
-#                              :identity_id => current_line.identity_id,
-#                              :perform_id => current_line.perform_id,
-#                              :project_id => current_line.project_id,
-#                              :clause_id => current_line.clause_id,
-#                              :linetype_id => current_line.linetype_id
-#                              ).first
-#    end
 
 
     def update_id_prior_changes(line_id, revision, new_id)
