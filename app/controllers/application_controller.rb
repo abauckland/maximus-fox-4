@@ -300,11 +300,11 @@ class ApplicationController < ActionController::Base
                 update_id_prior_changes(new_line.id, revision, new_matched_line.specline_id)
                 update_id_prior_changes(new_matched_line.specline_id, revision, new_line.id)
 
-                new_delete_hash = new_matched_line.dup
-                new_delete_hash[:id] = new_delete_hash.specline_id
+#                new_delete_hash = new_matched_line.dup
+#                new_delete_hash[:id] = new_delete_hash.specline_id
 
                 new_matched_line.destroy 
-                record_delete(new_delete_hash, event_type)
+                record_delete(old_line, event_type)
 
               else #new_matched_line.event = 'new'
                 create_alteration_record(old_line, new_line.id, 'changed', event_type, revision)
