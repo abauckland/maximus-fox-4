@@ -230,14 +230,15 @@ class ApplicationController < ActionController::Base
 
                 new_matched_line.destroy 
                 record_delete(old_line, event_type)
-              else #new_matched_line.event = 'new'
+              end
+              
+              if new_matched_line.event == 'new' #new_matched_line.event = 'new'
                 create_alteration_record(old_line, new_line.id, 'changed', event_type, revision)
               end
-  
+#if new_matched_line.event == 'changed'
             else
     #change
-    
-#    
+
               new_matched_change_action(old_line, revision, 'changed')
               old_matched_line = Alteration.match_line(new_line, revision).where(:event => 'changed').first
   
@@ -248,34 +249,34 @@ class ApplicationController < ActionController::Base
 #cannot update ids if @new match_line is blank
                 update_id_prior_changes(new_line.id, revision, @new_matched_line.id)
                 update_id_prior_changes(@new_matched_line.id, revision, new_line.id)
-  
+
                 if !old_matched_line.blank? && !@new_matched_line.blank?
                   old_matched_line.destroy
                 else
-  
+
                   if old_matched_line.blank?
   # c => b
                     original_line_hash = old_matched_line.dup
                     original_line_hash[:id] = original_line_hash.specline_id
 
                     old_matched_line.destroy
-  
+
                     record_change(original_line_hash, new_line)
                   end
-  
+
                   if @new_matched_line.blank?
   # b => c
                     new_match_line_change = Alteration.where(:specline_id => @new_matched_line.id, :revision_id => revision.id, :event => 'changed').first
                     new_match_line_change.destroy
-  
+
                     record_change(old_line, @new_matched_line)
                   end
-  
+
                 end
               end
             end
           end
-  
+
         else
           if existing_record.event == 'new'
             existing_record.destroy
@@ -287,8 +288,9 @@ class ApplicationController < ActionController::Base
             original_line_hash = existing_record.dup
             original_line_hash[:id] = original_line_hash.specline_id
 
-            existing_record.destroy
-            record_change(original_line_hash, new_line)
+            existing_record.destroy        
+            record_change(original_line_hash, new_line) if original_not_same_as_new(original_line_hash, new_line)
+
           end
         end
 
@@ -307,7 +309,7 @@ def txt1_insert_line(specline, previous_specline, subsequent_specline_lines)
      update_subsequent_lines_last(subsequent_specline_lines, specline.txt1_id)    
    else
     update_subsequent_lines(subsequent_specline_lines, specline.txt1_id)
-  end
+   end
   end
 end
 
@@ -474,6 +476,26 @@ end
                                                  :print_change => 1
                                                  )
      end
+
+
+    def original_not_same_as_new(existing_hash, line_hash)
+
+      #remove non common key value pairs from existing_hash
+      keys_to_delete_from_existing = [:specline_id, :revision_id, :user_id, :clause_add_delete, :event, :print_change, :created_at, :updated_at, ]
+      existing_hash.delete_if{ |k,| keys_to_delete_from_existing.include? k }
+
+      #remove non commone key value pairs from line_hash
+      keys_to_delete_from_line = [:clause_line, :created_at, :updated_at]
+      line_hash.delete_if{ |k,| keys_to_delete_from_line.include? k }
+
+      if existing_hash == line_hash
+        false
+      else
+        true
+      end
+
+    end
+
 
 #      def set_event_type(event_type) 
 #          if event_type.blank?
