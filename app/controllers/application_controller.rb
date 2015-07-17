@@ -125,21 +125,21 @@ class ApplicationController < ActionController::Base
             if @new_matched_line.blank?
               create_alteration_record(deleted_line, deleted_line.id, 'deleted', event_type, revision)
             else
-  
+
               old_changed_line = Alteration.where(:specline_id => @new_matched_line.id, :revision_id => revision.id).first
-  
+
               update_id_prior_changes(deleted_line.id, revision, old_changed_line.specline_id)
               update_id_prior_changes(old_changed_line.specline_id, revision, deleted_line.id)
-  
+
               new_delete_hash = old_changed_line.dup
               new_delete_hash[:id] = new_delete_hash.specline_id
 
               old_changed_line.destroy
-  
+
               record_delete(new_delete_hash, event_type)
-  
+
             end
-  
+
           else
             if old_matched_line.event == 'new'
               update_id_prior_changes(deleted_line.id, revision, old_matched_line.specline_id)
@@ -148,15 +148,15 @@ class ApplicationController < ActionController::Base
               create_alteration_record(deleted_line, deleted_line.id, 'deleted', event_type, revision)
             end
           end
-  
-  
+
+
         else
           if existing_record.event == 'new'
             existing_record.destroy
           end
-          
+
           if existing_record.event == 'changed'
-  
+
             new_delete_hash = existing_record.dup
             new_delete_hash[:id] = new_delete_hash.specline_id
 
@@ -182,10 +182,10 @@ class ApplicationController < ActionController::Base
         else
           if old_matched_line.event == 'changed'
             new_matched_line = Specline.find(old_matched_line.specline_id)
-  
+
             update_id_prior_changes(old_matched_line.id, revision, new_line.id)
             old_matched_line.destroy
-  
+
             record_new(new_matched_line, event_type)
           else
             update_id_prior_changes(old_matched_line.id, revision, new_line.id)
@@ -430,7 +430,7 @@ end
                               :clause_id => current_line.clause_id,
                               :linetype_id => current_line.linetype_id,
                               'alterations.revision_id' => revision.id,
-                              'alterations.event' => 'change'
+                              'alterations.event' => action
                               ).first
     end
 
