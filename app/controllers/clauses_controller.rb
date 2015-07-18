@@ -68,6 +68,7 @@ class ClausesController < ApplicationController
               end
               # find lines previous deleted but not in new clause
               #same as left over lines when added lines have been processed
+              clause = Clause.find(@new_specline.clause_id)
               update_clause_alterations(clause, @project, revision, 1)  
             else
               record_new(@new_specline, 2)
@@ -97,9 +98,6 @@ class ClausesController < ApplicationController
               else
                 record_new(@new_specline, 1)
               end
-              # find lines previous deleted but not in new clause
-              #same as left over lines when added lines have been processed
-              update_clause_alterations(clause, @project, revision, 1)  
             else
               record_new(@new_specline, 2)
             end      
@@ -126,6 +124,7 @@ class ClausesController < ApplicationController
               end
               # find lines previous deleted but not in new clause
               #same as left over lines when added lines have been processed
+              clause = Clause.find(@new_specline.clause_id)
               update_clause_alterations(clause, @project, revision, 1)  
             else
               speclines_to_add.each do |line|
