@@ -82,8 +82,8 @@ class SpecclausesController < ApplicationController
       revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last    
       if revision
         #record revisions
-        clause_alterations = Alteration.where(:clause_add_delete => 2, :project_id => @project.id, :clause_id => clause.id, :revision_id => revision.id)
-        if clause_alterations.blank?
+        clause_alteration = Alteration.where(:clause_add_delete => 2, :project_id => @project.id, :clause_id => clause.id, :revision_id => revision.id).first
+        if clause_alteration.blank?
           speclines_to_add.each do |line|
             @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
             record_new(@new_specline, 2)
