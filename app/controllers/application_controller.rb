@@ -347,8 +347,9 @@ class ApplicationController < ActionController::Base
                   update_id_prior_changes(new_line.id, revision, old_matched_line.id)
                   update_id_prior_changes(old_matched_line.id, revision, new_line.id)
 
-                  new_match_line_change = Alteration.where(:specline_id => @new_matched_line.id, :revision_id => revision.id, :event => 'changed').first
-                  new_match_line_change.destroy
+#                  new_match_line_change = Alteration.where(:specline_id => @new_matched_line.id, :revision_id => revision.id, :event => 'changed').first
+#                  new_match_line_change.destroy
+old_matched_line.destroy
 
                   old_line[:id] = @new_matched_line.id
                   record_change(old_line, @new_matched_line)
@@ -359,9 +360,11 @@ class ApplicationController < ActionController::Base
                   update_id_prior_changes(@new_matched_line.id, revision, new_line.id)
 
                   original_line_hash = @new_matched_line.dup
-                  original_line_hash[:id] = original_line_hash.specline_id
+                  original_line_hash[:id] = @new_matched_line.id
 
-                  old_matched_line.destroy
+#                  old_matched_line.destroy
+new_match_line_change = Alteration.where(:specline_id => @new_matched_line.id, :revision_id => revision.id, :event => 'changed').first
+new_match_line_change.destroy
 
                   record_change(original_line_hash, new_line)
                 else
