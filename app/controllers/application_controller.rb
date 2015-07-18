@@ -196,7 +196,7 @@ set_event_type(deleted_line, revision)
   #adding new clause
   #add each clause one at a time
   def check_clause_alterations(speclines, project, clause, revision)
-    clause_alterations = Alteration.where(:event_type => 2, :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
+    clause_alterations = Alteration.where(:clause_add_delete => 2, :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
     if clause_alterations.blank?
       speclines do |line|
         record_new(line, 2)
@@ -240,7 +240,7 @@ set_event_type(deleted_line, revision)
   end
 
   def update_clause_alterations(clause, project, revision, event_type)
-    previous_alterations = Alteration.where(:event => 'deleted', :event_type => 1, :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
+    previous_alterations = Alteration.where(:event => 'deleted', :clause_add_delete => 1, :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
     previous_alterations.each do |alteration|
       alteration.update(:event_type => event_type)
     end    
@@ -605,16 +605,6 @@ end
           event_type = 1
         end
       end
-
-#      def set_event_type(event_type) 
-#          if event_type.blank?
-#             @event_group = 1
-#          else
-#             @event_group = event_type
-#          end
-#          return @event_group
-#      end
-
 
 #user_role(["admin", "owner", "employee"])
 #project_role(@project, ["manage", "publish", "write", "read"])
