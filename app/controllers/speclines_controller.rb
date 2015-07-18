@@ -522,6 +522,7 @@ end
           record_delete(specline, 2)
           specline.destroy          
         end
+        clause = Clause.find(@specline.clause_id)
         update_clause_alterations(clause, @project, revision, 2)
       else
         speclines_to_delete.each do |specline|
