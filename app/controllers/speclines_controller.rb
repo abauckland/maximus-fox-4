@@ -517,7 +517,7 @@ end
       speclines_to_delete = Specline.where(:project_id => @specline.project_id, :clause_id => @specline.clause_id).order('clause_line')  
       revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last    
       if revision
-        speclines_to_delete.each do |specline|
+        speclines_to_delete.each_with_index do |specline, i|
           @array_of_lines_deleted[i] = specline.id 
           record_delete(specline, 2)
           specline.destroy          
