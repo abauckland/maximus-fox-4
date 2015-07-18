@@ -78,13 +78,13 @@ class SpecsubsectionsController < ApplicationController
       if !section_alteration.blank?
 
     #get speclines
-        clauses.each do |clause|
+        clause_ids.each do |clause_id|
           #assign speclines
-          speclines_to_add = Specline.where(:project_id => params[:template_id], :clause_id => clause.id)
+          speclines_to_add = Specline.where(:project_id => params[:template_id], :clause_id => clause_id)
 
 
             #record revisions
-            clause_alteration = Alteration.where(:clause_add_delete => 3, :project_id => @project.id, :clause_id => clause.id, :revision_id => revision.id).first
+            clause_alteration = Alteration.where(:clause_add_delete => 3, :project_id => @project.id, :clause_id => clause_id, :revision_id => revision.id).first
             if !clause_alteration.blank?
               #for each line
               speclines_to_add.each do |line|
@@ -98,6 +98,7 @@ class SpecsubsectionsController < ApplicationController
               end
               # find lines previous deleted but not in new clause
               #same as left over lines when added lines have been processed
+              clause = Clause.find(clause_id)
               update_clause_alterations(clause, @project, revision, 1)
             else
               speclines_to_add.each do |line|
@@ -107,8 +108,8 @@ class SpecsubsectionsController < ApplicationController
             end
         end
       else
-        clauses.each do |clause|
-          speclines_to_add = Specline.where(:project_id => params[:template_id], :clause_id => clause.id)
+        clause_ids.each do |clause_id|
+          speclines_to_add = Specline.where(:project_id => params[:template_id], :clause_id => clause_id)
           speclines_to_add.each do |line|
             @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
             record_new(@new_specline, 3)
@@ -118,8 +119,8 @@ class SpecsubsectionsController < ApplicationController
 
     else
       #do not record revisions
-      clauses.each do |clause|
-        speclines_to_add = Specline.where(:project_id => params[:template_id], :clause_id => clause.id)
+      clause_ids.each do |clause_id|
+        speclines_to_add = Specline.where(:project_id => params[:template_id], :clause_id => clause_id)
         speclines_to_add.each do |line|
           @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
         end
