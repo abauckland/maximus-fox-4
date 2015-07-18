@@ -112,6 +112,8 @@ class ApplicationController < ActionController::Base
     if revision
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
 
+#set_event_type(line, revision)
+
         existing_record = Alteration.where(:specline_id => deleted_line.id, :revision_id => revision.id).first
         if existing_record.blank?
   
@@ -217,28 +219,45 @@ class ApplicationController < ActionController::Base
       end
       # find lines previous deleted but not in new clause
       #same as left over lines when added lines have been processed
-      previous_deleted = Alteration.where(:event => 'deleted',:event_type => 2, :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
-      if !previous_deleted.blank?
-        previous_deleted.update(:event_type => 1)
-      end
+      update_clause_alterations(clause, project, revision, event_type)
+      
     end
   end
 
   #deleting clause
   #delete one clause at a time
-  def update_delete_events(project, clause)
+  def update_delete_events(speclines, project, clause, revision)
+    #set event type
+    event_type = 2
     #record deletion of each line in clause
-    record_deleted(line, 2)
+    speclines do |line|
+      record_deleted(line, event_type)
+    end
 
     #find previous 'deleted' changes for clause when deleting clause and update records
-    previous_alterations = Alteration.where(:event => 'deleted', :event_type => 1, :project_id => _project_id, :clause_id => clause.id, :revision_id => revision.id)
-    previous_alterations.each do |alteration|
-      alteration.update(:event_type => 2)
-    end
+    update_clause_alterations(clause, project, revision, event_type)
 
   end
 
+  def update_clause_alterations(clause, project, revision, event_type)
+    previous_alterations = Alteration.where(:event => 'deleted', :event_type => 1, :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
+    previous_alterations.each do |alteration|
+      alteration.update(:event_type => event_type)
+    end    
+  end
+
+# def set_event_type(line, revision)
   #if new line added to new clause/section
+    #check event type for line
+    #do changes exist for same clause
+    #previous_line_alteration = Alteration.where(:project_id => line.project_id, :clause_id => line.clause_id, :revision_id => revision.id).first
+    #if !previous_line_alterations.blank?
+      #event_type = previous_line_alteration.event_type
+    #else
+      #event_type = 1
+    #end
+  #end
+
   #if line deleted from new clause/section
   #if change to line of new clause/section
 
@@ -247,6 +266,8 @@ class ApplicationController < ActionController::Base
     revision = Revision.where(:project_id => new_line.project_id).where.not(:rev => nil).order('created_at').last
     if revision
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
+
+#set_event_type(line, revision)
 
         old_matched_line = Alteration.match_line(new_line, revision).where.not(:event => 'new').first
         if old_matched_line.blank?
@@ -276,6 +297,8 @@ class ApplicationController < ActionController::Base
     if revision
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
         event_type = 1
+
+#set_event_type(new_line, revision)
   
         existing_record = Alteration.where(:specline_id => new_line.id, :revision_id => revision.id).first
         if existing_record.blank?
@@ -297,12 +320,12 @@ class ApplicationController < ActionController::Base
             if !new_matched_line.blank?
 
               if new_matched_line.event == 'deleted'
-                update_id_prior_changes(new_line.id, revision, new_matched_line.specline_id)
-                update_id_prior_changes(new_matched_line.specline_id, revision, new_line.id)
+                update_id_prior_changes(new_line.id, revision, new_matched_line.specline_id) #check ids
+                update_id_prior_changes(new_matched_line.specline_id, revision, new_line.id) #check ids
 
                 new_matched_line.destroy
 
-                old_line[:id] = new_line.id
+                old_line[:id] = new_matched_line.specline_id #wrong id - needs to equal - new_matched_line.specline_id
                 record_delete(old_line, event_type)
 
               else #new_matched_line.event = 'new'
@@ -321,7 +344,7 @@ class ApplicationController < ActionController::Base
 
                   old_matched_line.destroy
                 else
-                  update_id_prior_changes(new_line.id, revision, @new_matched_line.id)
+                  update_id_prior_changes(new_line.id, revision, @new_matched_line.id) #@new_matched_line == nil
                   update_id_prior_changes(@new_matched_line.id, revision, new_line.id)
 
                   new_match_line_change = Alteration.where(:specline_id => @new_matched_line.id, :revision_id => revision.id, :event => 'changed').first
@@ -335,7 +358,7 @@ class ApplicationController < ActionController::Base
                   update_id_prior_changes(new_line.id, revision, @new_matched_line.id)
                   update_id_prior_changes(@new_matched_line.id, revision, new_line.id)
 
-                  original_line_hash = old_matched_line.dup
+                  original_line_hash = old_matched_line.dup #nil class being called here - get correct info
                   original_line_hash[:id] = original_line_hash.specline_id
 
                   old_matched_line.destroy
