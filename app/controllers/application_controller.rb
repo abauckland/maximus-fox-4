@@ -125,7 +125,7 @@ set_event_type(deleted_line, revision)
 
             new_matched_change_action(deleted_line, revision, 'changed')
             if @new_matched_line.blank?
-              create_alteration_record(deleted_line, deleted_line.id, 'deleted', event_type, revision)
+              create_alteration_record(deleted_line, deleted_line.id, 'deleted', @event_type, revision)
             else
 
               old_changed_line = Alteration.where(:specline_id => @new_matched_line.id, :revision_id => revision.id).first
@@ -138,7 +138,7 @@ set_event_type(deleted_line, revision)
 
               old_changed_line.destroy
 
-              record_delete(new_delete_hash, event_type)
+              record_delete(new_delete_hash, @event_type)
 
             end
 
@@ -147,7 +147,7 @@ set_event_type(deleted_line, revision)
               update_id_prior_changes(deleted_line.id, revision, old_matched_line.specline_id)
               old_matched_line.destroy 
             else
-              create_alteration_record(deleted_line, deleted_line.id, 'deleted', event_type, revision)
+              create_alteration_record(deleted_line, deleted_line.id, 'deleted', @event_type, revision)
             end
           end
 
@@ -163,7 +163,7 @@ set_event_type(deleted_line, revision)
             new_delete_hash[:id] = new_delete_hash.specline_id
 
             existing_record.destroy
-            record_delete(new_delete_hash, event_type)
+            record_delete(new_delete_hash, @event_type)
           end
         end
 
@@ -271,7 +271,7 @@ set_event_type(new_line, revision)
 
         old_matched_line = Alteration.match_line(new_line, revision).where.not(:event => 'new').first
         if old_matched_line.blank?
-          create_alteration_record(new_line, new_line.id, 'new', event_type, revision)
+          create_alteration_record(new_line, new_line.id, 'new', @event_type, revision)
         else
           if old_matched_line.event == 'changed'
             new_matched_line = Specline.find(old_matched_line.specline_id)
@@ -310,7 +310,7 @@ set_event_type(new_line, revision)
               old_matched_line.destroy
               record_new(new_line, event_type)
             else #old_matched_line.event = 'deleted'
-              create_alteration_record(old_line, new_line.id, 'changed', event_type, revision)
+              create_alteration_record(old_line, new_line.id, 'changed', @event_type, revision)
             end
 
           else
@@ -328,7 +328,7 @@ set_event_type(new_line, revision)
                 record_delete(old_line, event_type)
 
               else #new_matched_line.event = 'new'
-                create_alteration_record(old_line, new_line.id, 'changed', event_type, revision)
+                create_alteration_record(old_line, new_line.id, 'changed', @event_type, revision)
               end
 
             else
@@ -370,7 +370,7 @@ old_match_line_change.destroy
 
                   record_change(original_line_hash, new_line)
                 else
-                  create_alteration_record(old_line, new_line.id, 'changed', event_type, revision)
+                  create_alteration_record(old_line, new_line.id, 'changed', @event_type, revision)
                 end
               end
 
@@ -380,7 +380,7 @@ old_match_line_change.destroy
         else
           if existing_record.event == 'new'
             existing_record.destroy
-            record_new(new_line, event_type)
+            record_new(new_line, @event_type)
           end
   
           if existing_record.event == 'changed'
@@ -600,9 +600,9 @@ end
         #do changes exist for same clause
         previous_line_alteration = Alteration.where(:project_id => line.project_id, :clause_id => line.clause_id, :revision_id => revision.id).first
         if !previous_line_alteration.blank?
-          event_type = previous_line_alteration.clause_add_delete
+          @event_type = previous_line_alteration.clause_add_delete
         else
-          event_type = 1
+          @event_type = 1
         end
       end
 
