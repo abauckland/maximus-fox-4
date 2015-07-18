@@ -347,7 +347,7 @@ class ApplicationController < ActionController::Base
                   update_id_prior_changes(new_line.id, revision, old_matched_line.id)
                   update_id_prior_changes(old_matched_line.id, revision, new_line.id)
 
-                  new_match_line_change = Specline.find(:specline_id => old_matched_line.specline_id)
+                  new_match_line_change = Specline.find(old_matched_line.specline_id)
 
                   old_matched_line.destroy
 
