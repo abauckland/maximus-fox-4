@@ -108,6 +108,7 @@ class SpecsubsectionsController < ApplicationController
         end
       else
         clauses.each do |clause|
+          speclines_to_add = Specline.where(:project_id => params[:template_id], :clause_id => clause.id)
           speclines_to_add.each do |line|
             @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
             record_new(@new_specline, 3)
@@ -117,8 +118,11 @@ class SpecsubsectionsController < ApplicationController
 
     else
       #do not record revisions
-      speclines_to_add.each do |line|
-        @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
+      clauses.each do |clause|
+        speclines_to_add = Specline.where(:project_id => params[:template_id], :clause_id => clause.id)
+        speclines_to_add.each do |line|
+          @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
+        end
       end
     end
 
