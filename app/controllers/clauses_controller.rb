@@ -50,10 +50,29 @@ class ClausesController < ApplicationController
     else
 
       if @clause.save
+
         #create title line
         @new_specline = Specline.create(:project_id => @project.id, :clause_id => @clause.id, :clause_line => 0, :linetype_id => 1)
         #create change record for new clause title line
-        record_new(@new_specline, event_type) 
+          revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last    
+          if revision
+            #record revisions
+            clause_alteration = Alteration.where(:clause_add_delete => 2, :project_id => @project.id, :clause_id => @clause.id, :revision_id => revision.id).first
+            if !clause_alteration.blank?
+              #for each line
+              previous_delete_record = Alteration.match_line(@new_specline, revision).where(:event => 'deleted')
+              if !previous_delete_record.blank?
+                  previous_delete_record.destroy
+              else
+                record_new(@new_specline, 1)
+              end
+              # find lines previous deleted but not in new clause
+              #same as left over lines when added lines have been processed
+              update_clause_alterations(clause, @project, revision, 1)  
+            else
+              record_new(@new_specline, 2)
+            end      
+          end
 
         #get information on content to be created
         clausetype_id = params[:clause][:clauseref_attributes][:full_clause_ref][0,1]
@@ -63,16 +82,64 @@ class ClausesController < ApplicationController
         end
 
         if params[:clause_content] == 'blank_content'
+
           @new_specline = Specline.create(:project_id => @project.id, :clause_id => @clause.id, :clause_line => 1, :linetype_id => @linetype_id)
-          #create change record for line
-          record_new(@new_specline, event_type)
-        else   
-          clone_speclines = Specline.where(:clause_id => params[:clone_clause_id], :project_id => params[:clone_template_id]).where.not(:clause_line => 0)         
-          clone_speclines.each do |clone_line|
-            @new_specline = Specline.create(clone_line.attributes.merge(:id => nil, :project_id => @project.id, :clause_id => @clause.id))      
-            #create change record for each new line
-            record_new(@new_specline, event_type)
+      
+          revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last    
+          if revision
+            #record revisions
+            clause_alteration = Alteration.where(:clause_add_delete => 2, :project_id => @project.id, :clause_id => @clause.id, :revision_id => revision.id).first
+            if !clause_alteration.blank?
+              #for each line
+              previous_delete_record = Alteration.match_line(@new_specline, revision).where(:event => 'deleted')
+              if !previous_delete_record.blank?
+                  previous_delete_record.destroy
+              else
+                record_new(@new_specline, 1)
+              end
+              # find lines previous deleted but not in new clause
+              #same as left over lines when added lines have been processed
+              update_clause_alterations(clause, @project, revision, 1)  
+            else
+              record_new(@new_specline, 2)
+            end      
           end
+
+        else
+
+          speclines_to_add = Specline.where(:clause_id => params[:clone_clause_id], :project_id => params[:clone_template_id]).where.not(:clause_line => 0) 
+      
+          revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last    
+          if revision
+            #record revisions
+            clause_alteration = Alteration.where(:clause_add_delete => 2, :project_id => @project.id, :clause_id => clause.id, :revision_id => revision.id).first
+            if !clause_alteration.blank?
+              #for each line
+              speclines_to_add.each do |line|
+                previous_delete_record = Alteration.match_line(line, revision).where(:event => 'deleted')
+                if !previous_delete_record.blank?
+                    previous_delete_record.destroy
+                else
+                  @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id, :clause_id => @clause.id))
+                  record_new(@new_specline, 1)
+                end
+              end
+              # find lines previous deleted but not in new clause
+              #same as left over lines when added lines have been processed
+              update_clause_alterations(clause, @project, revision, 1)  
+            else
+              speclines_to_add.each do |line|
+                @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id, :clause_id => @clause.id))
+                record_new(@new_specline, 2)
+              end
+            end
+          else
+            #do not record revisions
+            speclines_to_add.each do |line|
+              @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id, :clause_id => @clause.id))
+            end      
+          end
+
         end
 
         redirect_to manage_specclause_path(:id => @project.id, :subsection_id => params[:clause][:clauseref_attributes][:subsection_id])
