@@ -509,18 +509,38 @@ end
 
   def delete_clause
 
-    @array_of_lines_deleted = []
+      @array_of_lines_deleted = []
+      #required for js response
+      @clause_title_to_delete = @specline.id
 
-    #required for js response
-    @clause_title_to_delete = @specline.id
+
+      speclines_to_delete = Specline.where(:project_id => @specline.project_id, :clause_id => @specline.clause_id).order('clause_line')  
+      revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last    
+      if revision
+        speclines_to_delete.each do |specline|
+          @array_of_lines_deleted[i] = specline.id 
+          record_delete(specline, 2)
+          specline.destroy          
+        end
+        update_clause_alterations(clause, @project, revision, 2)
+      else
+        speclines_to_delete.each do |specline|
+          @array_of_lines_deleted[i] = specline.id 
+          specline.destroy          
+        end        
+      end
+
+      @array_of_lines_deleted.compact
+
+
     #selected_clause_title.destroy
 
     #clause = Clause.find(@specline.clause_id)
     #adds in parent clause title line where clause has parent clause
     #add_parent_clause(clause, @current_project)
 
-    clause_lines = Specline.where(:project_id => @specline.project_id, :clause_id => @specline.clause_id).order('clause_line')    
-      clause_lines.each_with_index do |clause_line, i|
+#    clause_lines = Specline.where(:project_id => @specline.project_id, :clause_id => @specline.clause_id).order('clause_line')    
+#      clause_lines.each_with_index do |clause_line, i|
 
 #TO DO: ENHANCEMENT
 #get clause reference for clause to be delete
@@ -533,24 +553,24 @@ end
 #end
 #END OF TO DO
 
-        @array_of_lines_deleted[i] = clause_line.id 
-        @specline = clause_line
+#        @array_of_lines_deleted[i] = clause_line.id 
+ #       @specline = clause_line
         #call to private method that record deletion of line in Changes table
-        clause_event_type = 2
+#        clause_event_type = 2
 
-        record_delete(@specline, event_type)
-        clause_line.destroy   
-      end
+ #       record_delete(@specline, event_type)
+ #       clause_line.destroy   
+#      end
 
-      @array_of_lines_deleted.compact
+ #     @array_of_lines_deleted.compact
 
-    previous_changes = Alteration.where(:project_id => @project.id, :clause_id => @specline.clause_id, :revision_id => @revision.id)
-    if !previous_changes.blank?
-      previous_changes.each do |previous_change|
-        previous_change.clause_add_delete = 2
-        previous_change.save
-      end
-    end
+#    previous_changes = Alteration.where(:project_id => @project.id, :clause_id => @specline.clause_id, :revision_id => @revision.id)
+#    if !previous_changes.blank?
+#      previous_changes.each do |previous_change|
+#        previous_change.clause_add_delete = 2
+#        previous_change.save
+#      end
+#    end
 
     respond_to do |format|
       format.js  { render :delete_clause, :layout => false }
