@@ -112,7 +112,7 @@ class ApplicationController < ActionController::Base
     if revision
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
 
-set_event_type(deleted_line, revision)
+set_event_type(deleted_line, revision, event_type)
 
         existing_record = Alteration.where(:specline_id => deleted_line.id, :revision_id => revision.id).first
         if existing_record.blank?
@@ -267,7 +267,7 @@ set_event_type(deleted_line, revision)
     if revision
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
 
-set_event_type(new_line, revision)
+set_event_type(new_line, revision, event_type)
 
         old_matched_line = Alteration.match_line(new_line, revision).where.not(:event => 'new').first
         if old_matched_line.blank?
@@ -297,7 +297,7 @@ set_event_type(new_line, revision)
     if revision
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
 
-set_event_type(new_line, revision)
+set_event_type(new_line, revision, event_type)
   
         existing_record = Alteration.where(:specline_id => new_line.id, :revision_id => revision.id).first
         if existing_record.blank?
@@ -594,7 +594,7 @@ end
       end
 
 
-      def set_event_type(line, revision)
+      def set_event_type(line, revision, event_type)
         #if new line added to new clause/section
         #check event type for line
         #do changes exist for same clause
@@ -602,7 +602,7 @@ end
         if !previous_line_alteration.blank?
           @event_type = previous_line_alteration.clause_add_delete
         else
-          @event_type = 1
+          @event_type = event_type
         end
       end
 

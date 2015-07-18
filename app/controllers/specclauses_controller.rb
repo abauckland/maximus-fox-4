@@ -86,7 +86,7 @@ class SpecclausesController < ApplicationController
         if !clause_alteration.blank?
           #for each line
           speclines_to_add.each do |line|
-            previous_record = Alteration.match_line(line, revision).where(:event => 'deleted')
+            previous_delete_record = Alteration.match_line(line, revision).where(:event => 'deleted')
             if !previous_delete_record.blank?
                 previous_delete_record.destroy
             else
