@@ -91,15 +91,9 @@ class SpecclausesController < ApplicationController
         else
           #for each line
           speclines_to_add.each do |line|
-            previous_record = Alteration.match_line(line, revision)
-            if !previous_record.blank?
-    
-              if previous_delete_record == 'deleted'
+            previous_record = Alteration.match_line(line, revision).where(:event => 'deleted')
+            if !previous_delete_record.blank?
                 previous_delete_record.destroy
-              else
-                @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
-                record_new(@new_specline, 1)
-              end
             else
               @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
               record_new(@new_specline, 1)
