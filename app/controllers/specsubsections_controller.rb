@@ -68,14 +68,15 @@ class SpecsubsectionsController < ApplicationController
       #clauses = Clause.unisubsection_clauses(@project.id, params[:project_sections])
     end
 
+    clause_ids = clauses.collect{|i| i.id}.uniq.sort
 
     revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last
     if revision
 
-      section_alteration = Alteration.where(:clause_add_delete => 3, :project_id => @project.id, :clause_id => clause.ids, :revision_id => revision.id).first
-  
+      section_alteration = Alteration.where(:clause_add_delete => 3, :project_id => @project.id, :clause_id => clause_ids, :revision_id => revision.id).first
+
       if !section_alteration.blank?
-    
+
     #get speclines
         clauses.each do |clause|
           #assign speclines
