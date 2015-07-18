@@ -77,7 +77,7 @@ class SpecclausesController < ApplicationController
   #get speclines
     clauses.each do |clause|
       #assign speclines
-      speclines = Specline.where(:project_id => params[:template_id], :clause_id => clause.id) 
+      speclines_to_add = Specline.where(:project_id => params[:template_id], :clause_id => clause.id) 
   
       revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last    
       if revision
@@ -149,18 +149,6 @@ class SpecclausesController < ApplicationController
         end        
       end
     end
-
-
-
-#    event_type = 2
-#    #record deletion of each line in clause
-#    speclines do |line|
-#      record_deleted(line, event_type)
-#    end
-#
-#    #find previous 'deleted' changes for clause when deleting clause and update records
-#    update_clause_alterations(clause, project, revision, event_type)
-
 
 ##for each clause
 #    #get speclines for all clauses that are in include list    
