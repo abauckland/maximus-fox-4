@@ -599,7 +599,7 @@ end
         #check event type for line
         #do changes exist for same clause
         previous_line_alteration = Alteration.where(:project_id => line.project_id, :clause_id => line.clause_id, :revision_id => revision.id).first
-        if !previous_line_alterations.blank?
+        if !previous_line_alteration.blank?
           event_type = previous_line_alteration.event_type
         else
           event_type = 1
