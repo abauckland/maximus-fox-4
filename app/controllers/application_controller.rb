@@ -242,7 +242,7 @@ set_event_type(deleted_line, revision)
   def update_clause_alterations(clause, project, revision, event_type)
     previous_alterations = Alteration.where(:event => 'deleted', :clause_add_delete => 1, :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
     previous_alterations.each do |alteration|
-      alteration.update(:event_type => event_type)
+      alteration.update(:clause_add_delete => event_type)
     end    
   end
 
