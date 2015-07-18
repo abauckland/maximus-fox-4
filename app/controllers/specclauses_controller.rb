@@ -83,12 +83,7 @@ class SpecclausesController < ApplicationController
       if revision
         #record revisions
         clause_alteration = Alteration.where(:clause_add_delete => 2, :project_id => @project.id, :clause_id => clause.id, :revision_id => revision.id).first
-        if clause_alteration.blank?
-          speclines_to_add.each do |line|
-            @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
-            record_new(@new_specline, 2)
-          end
-        else
+        if !clause_alteration.blank?
           #for each line
           speclines_to_add.each do |line|
             previous_record = Alteration.match_line(line, revision).where(:event => 'deleted')
@@ -102,6 +97,11 @@ class SpecclausesController < ApplicationController
           # find lines previous deleted but not in new clause
           #same as left over lines when added lines have been processed
           update_clause_alterations(clause, @project, revision, 1)  
+        else
+          speclines_to_add.each do |line|
+            @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
+            record_new(@new_specline, 2)
+          end
         end
       else
         #do not record revisions
