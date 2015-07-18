@@ -91,7 +91,7 @@ class SpecclausesController < ApplicationController
         else
           #for each line
           speclines_to_add.each do |line|
-            previous_record = Alteration.match_record(line, revision)
+            previous_record = Alteration.match_line(line, revision)
             if !previous_record.blank?
     
               if previous_delete_record == 'deleted'
