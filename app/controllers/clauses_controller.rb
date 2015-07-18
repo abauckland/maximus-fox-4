@@ -110,7 +110,7 @@ class ClausesController < ApplicationController
           revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last    
           if revision
             #record revisions
-            clause_alteration = Alteration.where(:clause_add_delete => 2, :project_id => @project.id, :clause_id => clause.id, :revision_id => revision.id).first
+            clause_alteration = Alteration.where(:clause_add_delete => 2, :project_id => @project.id, :clause_id => @clause.id, :revision_id => revision.id).first
             if !clause_alteration.blank?
               #for each line
               speclines_to_add.each do |line|
