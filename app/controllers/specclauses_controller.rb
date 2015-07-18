@@ -102,12 +102,12 @@ class SpecclausesController < ApplicationController
               end
             else
               @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
-              record_new(@new_specline, 2)
+              record_new(@new_specline, 1)
             end
           end
           # find lines previous deleted but not in new clause
           #same as left over lines when added lines have been processed
-          update_clause_alterations(clause, @project, revision, 2)  
+          update_clause_alterations(clause, @project, revision, 1)  
         end
       else
         #do not record revisions
