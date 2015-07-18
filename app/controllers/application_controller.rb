@@ -112,7 +112,7 @@ class ApplicationController < ActionController::Base
     if revision
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
 
-set_event_type(line, revision)
+set_event_type(deleted_line, revision)
 
         existing_record = Alteration.where(:specline_id => deleted_line.id, :revision_id => revision.id).first
         if existing_record.blank?
@@ -267,7 +267,7 @@ set_event_type(line, revision)
     if revision
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
 
-set_event_type(line, revision)
+set_event_type(new_line, revision)
 
         old_matched_line = Alteration.match_line(new_line, revision).where.not(:event => 'new').first
         if old_matched_line.blank?
