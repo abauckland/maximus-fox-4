@@ -43,6 +43,9 @@ before_save :assign_title
                               ).uniq
                               } 
 
+  scope :cawssubsection_clauses, ->(project_id, cawssubsection_ids) { joins(:speclines, :clauseref => [:subsection]
+                                     ).where('speclines.project_id' => project_id, 'subsections.cawssubsection_id' => cawssubsection_ids
+                                     )}
 
 def caws_code
 #this needs to be sorted, unclear what is going on
