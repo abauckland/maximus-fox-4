@@ -320,12 +320,12 @@ class ApplicationController < ActionController::Base
             if !new_matched_line.blank?
 
               if new_matched_line.event == 'deleted'
-                update_id_prior_changes(new_line.id, revision, new_matched_line.specline_id) #check ids
-                update_id_prior_changes(new_matched_line.specline_id, revision, new_line.id) #check ids
+                update_id_prior_changes(new_line.id, revision, new_matched_line.specline_id)
+                update_id_prior_changes(new_matched_line.specline_id, revision, new_line.id)
 
                 new_matched_line.destroy
 
-                old_line[:id] = new_matched_line.specline_id #wrong id - needs to equal - new_matched_line.specline_id
+                old_line[:id] = new_matched_line.specline_id
                 record_delete(old_line, event_type)
 
               else #new_matched_line.event = 'new'
@@ -344,8 +344,8 @@ class ApplicationController < ActionController::Base
 
                   old_matched_line.destroy
                 else
-                  update_id_prior_changes(new_line.id, revision, @new_matched_line.id) #@new_matched_line == nil
-                  update_id_prior_changes(@new_matched_line.id, revision, new_line.id)
+                  update_id_prior_changes(new_line.id, revision, old_matched_line.id)
+                  update_id_prior_changes(old_matched_line.id, revision, new_line.id)
 
                   new_match_line_change = Alteration.where(:specline_id => @new_matched_line.id, :revision_id => revision.id, :event => 'changed').first
                   new_match_line_change.destroy
@@ -358,7 +358,7 @@ class ApplicationController < ActionController::Base
                   update_id_prior_changes(new_line.id, revision, @new_matched_line.id)
                   update_id_prior_changes(@new_matched_line.id, revision, new_line.id)
 
-                  original_line_hash = old_matched_line.dup #nil class being called here - get correct info
+                  original_line_hash = @new_matched_line.dup
                   original_line_hash[:id] = original_line_hash.specline_id
 
                   old_matched_line.destroy
