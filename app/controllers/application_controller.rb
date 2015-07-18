@@ -112,7 +112,7 @@ class ApplicationController < ActionController::Base
     if revision
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
 
-#set_event_type(line, revision)
+set_event_type(line, revision)
 
         existing_record = Alteration.where(:specline_id => deleted_line.id, :revision_id => revision.id).first
         if existing_record.blank?
@@ -267,7 +267,7 @@ class ApplicationController < ActionController::Base
     if revision
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
 
-#set_event_type(line, revision)
+set_event_type(line, revision)
 
         old_matched_line = Alteration.match_line(new_line, revision).where.not(:event => 'new').first
         if old_matched_line.blank?
@@ -296,9 +296,8 @@ class ApplicationController < ActionController::Base
     revision = Revision.where(:project_id => old_line.project_id).where.not(:rev => nil).order('created_at').last
     if revision
       if revision.rev.to_s == '-' || revision.rev.to_s >= 'a'
-        event_type = 1
 
-#set_event_type(new_line, revision)
+set_event_type(new_line, revision)
   
         existing_record = Alteration.where(:specline_id => new_line.id, :revision_id => revision.id).first
         if existing_record.blank?
@@ -594,6 +593,18 @@ end
   
       end
 
+
+      def set_event_type(line, revision)
+        #if new line added to new clause/section
+        #check event type for line
+        #do changes exist for same clause
+        previous_line_alteration = Alteration.where(:project_id => line.project_id, :clause_id => line.clause_id, :revision_id => revision.id).first
+        if !previous_line_alterations.blank?
+          event_type = previous_line_alteration.event_type
+        else
+          event_type = 1
+        end
+      end
 
 #      def set_event_type(event_type) 
 #          if event_type.blank?
