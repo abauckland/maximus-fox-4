@@ -134,7 +134,7 @@ class SpecclausesController < ApplicationController
   #get speclines
     clauses.each do |clause|
       #assign speclines
-      speclines_to_delete = Specline.where(:project_id => params[:template_id], :clause_id => clause.id) 
+      speclines_to_delete = Specline.where(:project_id => @project.id, :clause_id => clause.id) 
   
       revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last    
       if revision
