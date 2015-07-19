@@ -88,22 +88,22 @@ class ApplicationController < ActionController::Base
   end
 
 
-  def update_clause_change_records(project, revision, clause_ids, event_type)
+#  def update_clause_change_records(project, revision, clause_ids, event_type)
 
-    #estabish current revision for project
-    revision = Revision.where('project_id = ?', @project.id).last
+#    #estabish current revision for project
+#    revision = Revision.where('project_id = ?', @project.id).last
 
     #check if there have been any changes to the clauses to be deleted within the current revision (since the project was last issued)
     #if there are previous changes update change event record
     #illustrate that all lines within the clause have been deleted as part of subsection deletion event (3)
-    previous_changes = Alteration.where(:project_id => project.id, :clause_id => params[:project_clauses], :revision_id => revision.id)
-    if previous_changes
-      previous_changes.each do |previous_change|
-        previous_change.update(:clause_add_delete => event_type)
-      end
-    end
+#    previous_changes = Alteration.where(:project_id => project.id, :clause_id => params[:project_clauses], :revision_id => revision.id)
+#    if previous_changes
+#      previous_changes.each do |previous_change|
+#        previous_change.update(:clause_add_delete => event_type)
+#      end
+#    end
 
-  end
+#  end
 
 
   def record_delete(deleted_line, event_type)
@@ -172,78 +172,11 @@ set_event_type(deleted_line, revision, event_type)
   end
 
 
-  #deleting section
-  #delete each existing line
-  #find lines that have been deleted (event_type 1 & 2)
-  #update to event_type 3
-
-
-  #adding new section
-  #check if section has been deleted before - event_type 3
-  #if not create each line - event_type 3
-  #else
-  #for each line
-  #where previously deleted destory 'delete' records - event_type 3
-    #check if previous records for clause - event type 2
-      #if not create each line - event_type 2
-      #else
-      #for each line
-      #end
-    #else record_new(line, 1)
-    #end
-  #end
-
-  #adding new clause
-  #add each clause one at a time
-  def check_clause_alterations(speclines, project, clause, revision)
-    clause_alterations = Alteration.where(:clause_add_delete => 2, :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
-    if clause_alterations.blank?
-      speclines do |line|
-        record_new(line, 2)
-        #create specline
-      end
-    else
-      #for each line
-      speclines do |line|
-        previous_record = Alteration.match_record(line, revision)
-        if !previous_record.blank?
-
-          if previous_delete_record == 'deleted'
-            previous_delete_record.destroy
-          else
-            record_new(line, 1)
-
-          end
-        end
-        #create specline
-      end
-      # find lines previous deleted but not in new clause
-      #same as left over lines when added lines have been processed
-      update_clause_alterations(clause, project, revision, event_type)
-      
-    end
-  end
-
-  #deleting clause
-  #delete one clause at a time
-  def update_delete_events(speclines, project, clause, revision)
-    #set event type
-    event_type = 2
-    #record deletion of each line in clause
-    speclines do |line|
-      record_deleted(line, event_type)
-    end
-
-    #find previous 'deleted' changes for clause when deleting clause and update records
-    update_clause_alterations(clause, project, revision, event_type)
-
-  end
-
   def update_clause_alterations(clause, project, revision, event_type)
     previous_alterations = Alteration.where(:event => 'deleted', :clause_add_delete => 1, :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
     previous_alterations.each do |alteration|
       alteration.update(:clause_add_delete => event_type)
-    end    
+    end
   end
 
 # def set_event_type(line, revision)

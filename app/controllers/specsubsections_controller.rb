@@ -105,6 +105,10 @@ class SpecsubsectionsController < ApplicationController
                 @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
                 record_new(@new_specline, 2)
               end
+              previous_alterations = Alteration.where(:event => 'deleted', :project_id => project.id, :clause_id => clause_id, :revision_id => revision.id)
+              previous_alterations.each do |alteration|
+                alteration.update(:clause_add_delete => 2)
+              end
             end
         end
       else
