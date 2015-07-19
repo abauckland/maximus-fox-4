@@ -202,7 +202,7 @@ set_event_type(deleted_line, revision, event_type)
 
 set_event_type(new_line, revision, event_type)
 
-        old_matched_line = Alteration.match_line(new_line, revision).where.not(:event => 'new').first
+        old_matched_line = Alteration.match_line(new_line, revision).where(:clause_add_delete => event_type).where.not(:event => 'new').first
         if old_matched_line.blank?
           create_alteration_record(new_line, new_line.id, 'new', @event_type, revision)
         else
