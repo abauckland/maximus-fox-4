@@ -520,15 +520,15 @@ end
         speclines_to_delete.each_with_index do |specline, i|
           @array_of_lines_deleted[i] = specline.id 
           record_delete(specline, 2)
-          specline.destroy          
+          specline.destroy
         end
         clause = Clause.find(@specline.clause_id)
         update_clause_alterations(clause, @project, revision, 2)
       else
-        speclines_to_delete.each do |specline|
+        speclines_to_delete.each_with_index do |specline, i|
           @array_of_lines_deleted[i] = specline.id 
-          specline.destroy          
-        end        
+          specline.destroy
+        end
       end
 
       @array_of_lines_deleted.compact
@@ -560,7 +560,7 @@ end
 #        clause_event_type = 2
 
  #       record_delete(@specline, event_type)
- #       clause_line.destroy   
+ #       clause_line.destroy
 #      end
 
  #     @array_of_lines_deleted.compact
