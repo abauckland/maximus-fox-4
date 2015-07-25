@@ -2,7 +2,7 @@
   class DatasController < ApplicationController
 
     before_action :set_project, only: [:show, :download]
-    before_action :set_revision, only: [:show, :print_project]
+    before_action :set_revision, only: [:show, :download]
 
     layout "projects", :except => [:download]
 
