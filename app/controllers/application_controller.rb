@@ -105,6 +105,28 @@ class ApplicationController < ActionController::Base
 
 #  end
 
+  def update_clause_alterations(clause, project, revision, event_type)
+    previous_alterations = Alteration.where(:event => 'deleted', :clause_add_delete => 1, :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
+    previous_alterations.each do |alteration|
+      alteration.update(:clause_add_delete => event_type)
+    end
+  end
+
+# def set_event_type(line, revision)
+  #if new line added to new clause/section
+    #check event type for line
+    #do changes exist for same clause
+    #previous_line_alteration = Alteration.where(:project_id => line.project_id, :clause_id => line.clause_id, :revision_id => revision.id).first
+    #if !previous_line_alterations.blank?
+      #event_type = previous_line_alteration.event_type
+    #else
+      #event_type = 1
+    #end
+  #end
+
+  #if line deleted from new clause/section
+  #if change to line of new clause/section
+
 
   def record_delete(deleted_line, event_type)
     #get current revision for project
@@ -171,28 +193,6 @@ set_event_type(deleted_line, revision, event_type)
     end
   end
 
-
-  def update_clause_alterations(clause, project, revision, event_type)
-    previous_alterations = Alteration.where(:event => 'deleted', :clause_add_delete => 1, :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
-    previous_alterations.each do |alteration|
-      alteration.update(:clause_add_delete => event_type)
-    end
-  end
-
-# def set_event_type(line, revision)
-  #if new line added to new clause/section
-    #check event type for line
-    #do changes exist for same clause
-    #previous_line_alteration = Alteration.where(:project_id => line.project_id, :clause_id => line.clause_id, :revision_id => revision.id).first
-    #if !previous_line_alterations.blank?
-      #event_type = previous_line_alteration.event_type
-    #else
-      #event_type = 1
-    #end
-  #end
-
-  #if line deleted from new clause/section
-  #if change to line of new clause/section
 
   def record_new(new_line, event_type)
     #get current revision for project

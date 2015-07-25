@@ -96,7 +96,7 @@ class SpecclausesController < ApplicationController
           end
           # find lines previous deleted but not in new clause
           #same as left over lines when added lines have been processed
-          update_clause_alterations(clause, @project, revision, 1)  
+          update_clause_alterations(clause, @project, revision, 1)
         else
           speclines_to_add.each do |line|
             @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
@@ -129,18 +129,18 @@ class SpecclausesController < ApplicationController
     clauses.each do |clause|
       #assign speclines
       speclines_to_delete = Specline.where(:project_id => @project.id, :clause_id => clause.id) 
-  
-      revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last    
+
+      revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last
       if revision
         speclines_to_delete.each do |specline|
           record_delete(specline, 2)
-          specline.destroy          
+          specline.destroy
         end
         update_clause_alterations(clause, @project, revision, 2)
       else
         speclines_to_delete.each do |specline|
-          specline.destroy          
-        end        
+          specline.destroy
+        end
       end
     end
 
@@ -179,6 +179,13 @@ class SpecclausesController < ApplicationController
 
     #if no clauses in subsection redirect to subsection manager
     if get_valid_spline_ref.blank?
+
+      #update all alteration records so event_type = 3
+      previous_alterations = Alteration.where(:event => 'deleted', :clause_add_delete => 2, :project_id => project.id, :revision_id => revision.id)
+      previous_alterations.each do |alteration|
+        alteration.update(:clause_add_delete => 3)
+      end
+
       redirect_to manage_specsubsection_path(:id => @project.id, :template_id => params[:template_id])
     else
       redirect_to manage_specclause_path(:id => @project.id, :template_id => params[:template_id], :subsection_id => params[:subsection_id])
