@@ -53,7 +53,7 @@
           end
           clause_info = [clause_ref, clause.clausetitle]
 
-          sorted_header_array.each_with_index do |header, i|
+          @sorted_header_array.each_with_index do |header, i|
 
             product_info = []
             attribute_value = Txt4.joins(:specline => [:txt3s, :clause => [:clauseref]]
