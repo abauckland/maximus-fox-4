@@ -66,10 +66,13 @@
             end
 
           end
-          clause_info << product_info
+            if product_info
+              clause_info << product_info
+            end
         end
-
-        csv << clause_info
+          if clause_info
+            csv << clause_info
+          end
       end
     end
 
