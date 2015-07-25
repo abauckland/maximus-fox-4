@@ -69,7 +69,7 @@
     def csv_product_header_array(project)
       fixed_headers = ["clause reference","clause title"]
       attibrute_headers(project)
-      header_row = fixed_headers << sorted_header_array
+      header_row = fixed_headers << @sorted_header_array
     end
 
     def attibrute_headers(project)
@@ -79,7 +79,7 @@
                        ).group(:text).count
 
       headers_ordered = header_hash.sort_by{|key, value| value}
-      sorted_header_array = headers_ordered .collect(&:first)
+      @sorted_header_array = headers_ordered .collect(&:first)
     end
 
   end
