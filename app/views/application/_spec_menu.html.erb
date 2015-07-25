@@ -26,6 +26,9 @@
                     <li><%= link_to "Create/Download PDF", print_path(@project.id) %> </li>
                     <li><%= link_to "Document Settings", edit_printsetting_path(@project.id) %> </li>
                     <li><%= link_to "Download Keynote Files", keynote_path(@project.id) %> </li>
+                    <% if current_user.id == 34 %>
+                        <li><%= link_to "Download Product Schedule", data_path(@project.id) %> </li>
+                    <% end %>
                 </ul>
             </li>
         <% end %>
@@ -72,6 +75,9 @@
                     <li><%= link_to "Create/Download PDF", print_path(@project.id) %> </li>
                     <li><%= link_to "Document Settings", edit_printsetting_path(@project.id) %> </li>
                     <li><%= link_to "Download Keynote Files", keynote_path(@project.id) %> </li>
+                    <% if current_user.id == 34 %>
+                        <li><%= link_to "Download Product Schedule", data_path(@project.id) %> </li>
+                    <% end %>
                 </ul>
             </li>
         <% end %>

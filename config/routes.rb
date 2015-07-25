@@ -21,17 +21,19 @@ Rails.application.routes.draw do
 #    get :deactivated, :on => :member
 #  end
 
+  resources :datas
+
   resources :companies, :only => [:edit, :update]
 
   resources :projects
 
   resources :projectusers
-  
+
   resources :specifications, :only => [:index, :show] do
     get :empty_project, :on => :member  
     get :show_tab_content, :on => :member  
   end
-  
+
   resources :specrevisions, :only => [:index, :show] do
     get :show_prelim_tab_content, :on => :member
     get :show_rev_tab_content, :on => :member
@@ -48,11 +50,11 @@ Rails.application.routes.draw do
     post :add_clauses, :on => :member
     post :delete_clauses, :on => :member
   end
-  
+
   resources :clauses, :only => [:new, :create] do
     get :new_clone_project_list, :on => :member
     get :new_clone_subsection_list, :on => :member
-    get :new_clone_clause_list, :on => :member    
+    get :new_clone_clause_list, :on => :member
   end
 
   resources :speclines, :only => [:edit, :update] do
@@ -60,7 +62,7 @@ Rails.application.routes.draw do
     get :new_specline, :on => :member
     delete :delete_specline, :on => :member
     get :guidance, :on => :member
-    get :xref_data, :on => :member            
+    get :xref_data, :on => :member
     member do
       put :move_specline
       put :update_specline_3
@@ -68,8 +70,8 @@ Rails.application.routes.draw do
       put :update_specline_5
       put :update_specline_6
       put :update_product_key
-      put :update_product_value       
-    end    
+      put :update_product_value
+    end
   end
 
   resources :reinstates do
@@ -92,14 +94,19 @@ Rails.application.routes.draw do
     get :rint_download, :on => :member
   end
 
-  
+
   resources :keynotes, :only => [:show] do
     get :keynote_export, :on => :member
-  end 
-  
+  end
+
   resources :helps
 
   resources :termcats, :only => [:index]
+
+  resources :guidenotes do
+    get :allocate, :on => :member
+  end
+
 
   resources :guidepdfs, :only => [:new, :create, :index] do
     get :download, :on => :member

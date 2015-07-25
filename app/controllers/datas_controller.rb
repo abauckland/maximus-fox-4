@@ -23,7 +23,7 @@
     end
 
     def set_revision
-      @revision = Revision.find(params[:revision_id])
+      @revision = Revision.where(:project_id => params[:id]).last
 
     end
 
