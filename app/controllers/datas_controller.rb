@@ -36,8 +36,8 @@
 
     def product_data_csv(project)
 
-      clauses = Clause.joins(:clauserefs, :speclines
-                     ).where( 'speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5]).where.not('speclines.txt4_id' => 1
+      clauses = Clause.joins(:clauseref, :speclines
+                     ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5]).where.not('speclines.txt4_id' => 1
                      ).uniq
 
       product_date = CSV.generate do |csv|
