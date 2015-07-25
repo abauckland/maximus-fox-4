@@ -11,7 +11,14 @@
 
     def download
       if params[:product_data] == 'products_accessories'
-        filename = "Product_data_#{@project.code}_rev_#{@revision.rev.upcase}.csv"
+
+        case @revision.rev
+        when nil ; filename = "Product_data_#{@project.code}_rev_na.pdf"
+        when '-'; filename = "Product_data_#{@project.code}_rev_-.pdf"
+        else
+          filename = "Product_data_#{@project.code}_rev_#{@revision.rev.upcase}.csv"
+        end
+
         send_data product_data_csv(@project), filename: filename, :type => "text/csv"
       end
     end
