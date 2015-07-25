@@ -56,7 +56,7 @@
           @sorted_header_array.each_with_index do |header, i|
 
             product_info = []
-            attribute_value = Txt4.joins(:specline => [:txt3s, :clause => [:clauseref]]
+            attribute_value = Txt4.joins(:speclines => [:txt3s, :clause => [:clauseref]]
                                  ).where('speclines.project_id' => params[:project_id], 'txt3s.text' => header, 'clauserefs.clausetype_id' => [4,5]
                                  ).where.not(:id => 1
                                  ).first
