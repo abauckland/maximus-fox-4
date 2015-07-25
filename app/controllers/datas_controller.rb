@@ -46,7 +46,12 @@
 
         clauses.each do |clause|
 
-          clause_info = [clause.ref, clause.clausetitle]
+          if @project.CAWS?
+            clause_ref = clause.caws_code
+          else
+            ##inu class code
+          end
+          clause_info = [clause_ref, clause.clausetitle]
 
           sorted_header_array.each_with_index do |header, i|
 
