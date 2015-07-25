@@ -61,7 +61,9 @@
                                  ).where.not(:id => 1
                                  ).first
 
-            product_info[i] = attribute_value.text csv << clause_info
+            if attribute_value != nil
+              product_info[i] = attribute_value.text csv << clause_info
+            end
 
           end
           clause_info << product_info
