@@ -73,7 +73,7 @@
     end
 
     def attibrute_headers(project)
-      header_hash = Txt3.joins(:specline => [:clause => :clauseref]
+      header_hash = Txt3.joins(:speclines => [:clause => :clauseref]
                        ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5]
                        ).where.not('speclines.txt4_id' => 1
                        ).group(:text).count
