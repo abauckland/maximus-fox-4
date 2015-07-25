@@ -21,7 +21,9 @@ Rails.application.routes.draw do
 #    get :deactivated, :on => :member
 #  end
 
-  resources :datas
+  resources :datas, :only => [:show] do
+    get :download, :on => :member
+  end
 
   resources :companies, :only => [:edit, :update]
 
@@ -30,8 +32,8 @@ Rails.application.routes.draw do
   resources :projectusers
 
   resources :specifications, :only => [:index, :show] do
-    get :empty_project, :on => :member  
-    get :show_tab_content, :on => :member  
+    get :empty_project, :on => :member
+    get :show_tab_content, :on => :member
   end
 
   resources :specrevisions, :only => [:index, :show] do
