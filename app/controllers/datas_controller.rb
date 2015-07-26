@@ -51,7 +51,7 @@
           else
             ##uniclass code
           end
-          @clause_info = [clause_ref, clause.clausetitle]
+          @clause_info = [clause_ref, clause.clausetitle.text]
 
           @sorted_header_array.each_with_index do |header, i|
 
@@ -67,7 +67,7 @@
 
           end
             if @product_info.length > 0
-              @clause_info << @product_info
+              @clause_info + @product_info
             end
         end
           csv << @clause_info
@@ -77,7 +77,7 @@
     def csv_product_header_array(project)
       fixed_headers = ["clause reference","clause title"]
       attibrute_headers(project)
-      header_row = fixed_headers << @sorted_header_array
+      header_row = fixed_headers + @sorted_header_array
     end
 
     def attibrute_headers(project)
