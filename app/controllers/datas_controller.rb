@@ -51,7 +51,7 @@
           else
             ##uniclass code
           end
-          clause_info = [clause_ref, clause.clausetitle]
+          @clause_info = [clause_ref, clause.clausetitle]
 
           @sorted_header_array.each_with_index do |header, i|
 
@@ -67,10 +67,10 @@
 
           end
             if @product_info.length > 0
-              clause_info << @product_info
+              @clause_info << @product_info
             end
         end
-          csv << clause_info
+          csv << @clause_info
       end
     end
 
