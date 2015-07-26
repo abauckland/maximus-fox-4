@@ -13,8 +13,8 @@
       if params[:product_data] == 'products_accessories'
 
         case @revision.rev
-        when nil ; filename = "Product_data_#{@project.code}_rev_na.pdf"
-        when '-'; filename = "Product_data_#{@project.code}_rev_-.pdf"
+        when nil ; filename = "Product_data_#{@project.code}_rev_na.csv"
+        when '-'; filename = "Product_data_#{@project.code}_rev_-.csv"
         else
           filename = "Product_data_#{@project.code}_rev_#{@revision.rev.upcase}.csv"
         end
