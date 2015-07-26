@@ -38,8 +38,8 @@
 
 #list of clauses with product data
       clauses = Clause.joins(:clauseref, :speclines
-                     ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => [3,5,8]
-                     ).where.not('speclines.txt3_id' => 1, 'speclines.txt4_id' => 1
+                     ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => 8
+                     ).where.not('speclines.txt4id' => 1, 'speclines.txt5_id' => 1
                      ).uniq
 
       product_date = CSV.generate do |csv|
@@ -58,8 +58,8 @@
           @sorted_header_array.each_with_index do |header, i|
 
             @product_info = []
-            attribute_value = Txt4.joins(:speclines => [:txt3, :clause => [:clauseref]]
-                                 ).where('speclines.project_id' => params[:project_id], 'txt3s.text' => header, 'clauserefs.clausetype_id' => [4,5]
+            attribute_value = Txt5.joins(:speclines => [:txt4, :clause => [:clauseref]]
+                                 ).where('speclines.project_id' => params[:project_id], 'txt4s.text' => header, 'clauserefs.clausetype_id' => [4,5]
                                  ).where.not(:id => 1
                                  ).first
 
@@ -83,13 +83,14 @@
     end
 
     def attibrute_headers(project)
-      header_hash = Txt3.joins(:speclines => [:clause => :clauseref]
-                       ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => [3,5,8]
-                       ).where.not(:id => 1, 'speclines.txt4_id' => 1
+      header_hash = Txt4.joins(:speclines => [:clause => :clauseref]
+                       ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => 8
+                       ).where.not(:id => 1, 'speclines.txt5_id' => 1
                        ).group(:text).count
-
+ 
       headers_ordered = header_hash.sort_by{|key, value| value}
-      @sorted_header_array = headers_ordered .collect(&:first)
+      @sorted_header_array = headers_ordered.collect(&:first)
+      @sorted_header_array.reverse!
     end
 
   end
