@@ -36,8 +36,10 @@
 
     def product_data_csv(project)
 
+#list of clauses with product data
       clauses = Clause.joins(:clauseref, :speclines
-                     ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5]).where.not('speclines.txt4_id' => 1
+                     ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => [3,5,8]
+                     ).where.not('speclines.txt3_id' => 1, 'speclines.txt4_id' => 1
                      ).uniq
 
       product_date = CSV.generate do |csv|
@@ -82,8 +84,8 @@
 
     def attibrute_headers(project)
       header_hash = Txt3.joins(:speclines => [:clause => :clauseref]
-                       ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5]
-                       ).where.not('speclines.txt4_id' => 1
+                       ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => [3,5,8]
+                       ).where.not(:id => 1, 'speclines.txt4_id' => 1
                        ).group(:text).count
 
       headers_ordered = header_hash.sort_by{|key, value| value}
