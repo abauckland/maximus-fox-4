@@ -55,19 +55,19 @@
 
           @sorted_header_array.each_with_index do |header, i|
 
-            product_info = []
+            @product_info = []
             attribute_value = Txt4.joins(:speclines => [:txt3, :clause => [:clauseref]]
                                  ).where('speclines.project_id' => params[:project_id], 'txt3s.text' => header, 'clauserefs.clausetype_id' => [4,5]
                                  ).where.not(:id => 1
                                  ).first
 
             if attribute_value != nil
-              product_info[i] = attribute_value.text
+              @product_info[i] = attribute_value.text
             end
 
           end
-            if product_info.length > 0
-              clause_info << product_info
+            if @product_info.length > 0
+              clause_info << @product_info
             end
         end
           csv << clause_info
