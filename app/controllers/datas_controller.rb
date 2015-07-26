@@ -49,7 +49,7 @@
           if @project.CAWS?
             clause_ref = clause.caws_code
           else
-            ##inu class code
+            ##uniclass code
           end
           clause_info = [clause_ref, clause.clausetitle]
 
@@ -62,17 +62,15 @@
                                  ).first
 
             if attribute_value != nil
-              product_info[i] = attribute_value.text csv << clause_info
+              product_info[i] = attribute_value.text
             end
 
           end
-            if product_info
+            if product_info.length > 0
               clause_info << product_info
             end
         end
-          if clause_info
-            csv << clause_info
-          end
+          csv << clause_info
       end
     end
 
