@@ -10,17 +10,39 @@
     end
 
     def download
-      if params[:product_data] == 'products_accessories'
 
-        case @revision.rev
-        when nil ; filename = "Product_data_#{@project.code}_rev_na.csv"
-        when '-'; filename = "Product_data_#{@project.code}_rev_-.csv"
-        else
-          filename = "Product_data_#{@project.code}_rev_#{@revision.rev.upcase}.csv"
-        end
-
-        send_data product_data_csv(@project), filename: filename, :type => "text/csv"
+      case @revision.rev
+      when nil ; project_details = "#{@project.code}_rev_na.csv"
+      when '-'; project_details = "#{@project.code}_rev_-.csv"
+      else
+        project_details = "#{@project.code}_rev_#{@revision.rev.upcase}.csv"
       end
+
+      if params[:product_data] == 'clauses'
+        filename = "Clause_data_#{project_details}"
+
+        @clauses = Clause.joins(:clauseref, :speclines
+                       ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => 8
+                       ).uniq
+      end
+
+      if params[:product_data] == 'products'
+        filename = "Product_data_#{project_details}"
+
+        @clauses = Clause.joins(:clauseref, :speclines
+                       ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => 8
+                       ).uniq
+      end
+
+      if params[:product_data] == 'products_accessories'
+        filename = "Product_&_Accessory_data_#{project_details}"
+
+        @clauses = Clause.joins(:clauseref, :speclines
+                       ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => 8
+                       ).uniq
+      end
+
+      send_data product_data_csv(@project, @clauses), filename: filename, :type => "text/csv"
     end
 
 
@@ -31,16 +53,9 @@
 
     def set_revision
       @revision = Revision.where(:project_id => params[:id]).last
-
     end
 
-    def product_data_csv(project)
-
-#list of clauses with product data
-      clauses = Clause.joins(:clauseref, :speclines
-                     ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => 8
-                     ).where.not('speclines.txt4id' => 1, 'speclines.txt5_id' => 1
-                     ).uniq
+    def product_data_csv(project, clauses)
 
       product_date = CSV.generate do |csv|
 
@@ -48,12 +63,7 @@
 
         clauses.each do |clause|
 
-          if @project.CAWS?
-            clause_ref = clause.caws_code
-          else
-            ##uniclass code
-          end
-          @clause_info = [clause_ref, clause.clausetitle.text]
+          csv_product_clause_array(@project, clause)
 
           @sorted_header_array.each_with_index do |header, i|
 
@@ -63,18 +73,15 @@
                                  ).where.not(:id => 1
                                  ).first
 
-            if attribute_value != nil
-              @product_info[i] = attribute_value.text
-            end
+            @product_info[i] = attribute_value.text if attribute_value != nil
 
           end
-            if @product_info.length > 0
-              @clause_info + @product_info
-            end
+          @clause_info + @product_info if @product_info.length > 0
         end
-          csv << @clause_info
+        csv << @clause_info
       end
     end
+
 
     def csv_product_header_array(project)
       fixed_headers = ["clause reference","clause title"]
@@ -93,5 +100,14 @@
       @sorted_header_array.reverse!
     end
 
-  end
+    def csv_product_clause_array(project, clause)
+          if project.CAWS?
+            clause_ref = clause.caws_code
+          else
+            ##uniclass code
+          end
+          @clause_info = [clause_ref, clause.clausetitle.text]
+    end
 
+
+  end
