@@ -10,10 +10,13 @@
             <ul class="sub_menu">
                 <li><%= link_to "Select Project", projects_path %> </li>
                 <li><%= link_to "Create Project", new_project_path %> </li>
-        <% if @project %>
-                <% unless @project.id == nil %> 
+                <% if @project %>
+                  <% unless @project.id == nil %> 
                     <li><%= link_to "Edit Project Details", edit_project_path(@project.id) %> </li>
-                <% end %>
+                  <% end %>
+                  <% if current_user.id == 34 %>
+                    <li><%= link_to "Manage Project Users", projectuser_path(@project.id) %> </li>
+                  <% end %>
                 <% end %>
             </ul>
         </li>
@@ -51,10 +54,13 @@
             <ul class="sub_menu_mob">
                 <li><%= link_to "Select Project", projects_path %> </li>
                 <li><%= link_to "Create Project", new_project_path %> </li>
-        <% if @project %>
-                <% unless @project.id == nil %> 
+                <% if @project %>
+                  <% unless @project.id == nil %> 
                     <li><%= link_to "Edit Project Details", edit_project_path(@project.id) %> </li>
-                <% end %>
+                  <% end %>
+                  <% if current_user.id == 34 %>
+                    <li><%= link_to "Manage Project Users", projectuser_path(@project.id) %> </li>
+                  <% end %>
                 <% end %>
             </ul>
         </li>
