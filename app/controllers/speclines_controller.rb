@@ -544,7 +544,7 @@ end
       #if no clauses in subsection redirect to subsection manager
       if get_valid_spline_ref.blank?
         #update all alteration records so event_type = 3
-        previous_alterations = Alteration.where(:event => 'deleted', :clause_add_delete => 2, :project_id => project.id, :revision_id => revision.id)
+        previous_alterations = Alteration.where(:event => 'deleted', :clause_add_delete => 2, :project_id => @project.id, :revision_id => revision.id)
         previous_alterations.each do |alteration|
           alteration.update(:clause_add_delete => 3)
         end
