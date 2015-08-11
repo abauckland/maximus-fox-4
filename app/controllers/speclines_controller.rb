@@ -515,7 +515,7 @@ end
 
 
       speclines_to_delete = Specline.where(:project_id => @specline.project_id, :clause_id => @specline.clause_id).order('clause_line')  
-      revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last    
+      revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last
       if revision
         speclines_to_delete.each_with_index do |specline, i|
           @array_of_lines_deleted[i] = specline.id 
@@ -544,7 +544,7 @@ end
       #if no clauses in subsection redirect to subsection manager
       if get_valid_spline_ref.blank?
         #update all alteration records so event_type = 3
-        previous_alterations = Alteration.where(:event => 'deleted', :clause_add_delete => 2, :project_id => project.id, :revision_id => revision.id)
+        previous_alterations = Alteration.where(:event => 'deleted', :clause_add_delete => 2, :project_id => @project.id, :revision_id => @revision.id)
         previous_alterations.each do |alteration|
           alteration.update(:clause_add_delete => 3)
         end
