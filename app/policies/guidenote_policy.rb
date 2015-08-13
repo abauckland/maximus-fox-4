@@ -1,4 +1,4 @@
-class HelpPolicy < Struct.new(:user, :help)
+class GuidenotePolicy < Struct.new(:user, :guidenote)
 
     def index?
       user.admin?

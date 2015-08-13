@@ -1,51 +1,38 @@
-
 class ProjectuserPolicy < Struct.new(:user, :projectuser)
 
-#list of projects accessible to user
-#list of users for project
 
-
-    class Scope < Struct.new(:user, :scope)
-      def resolve
-          #projectuser records where current user is a user
-          scope.where(:user_id => user.id)
-      end
+  class Scope < Struct.new(:user, :scope)
+    def resolve
+      scope.where(:project_id => projectuser.project_id)
     end
+  end
 
+  def current_user
+    User.find(user.id)
+  end
 
-#    def owned
-#      if user.admin? || user.owner?
-#        projectuser.manager_id == user.id
-#      end
-#    end
+  def show?
+    current_user.admin?
+  end
 
+  def new?
+    true
+  end
 
-    def index?
-#only if a project user of the project
-      true
-#record.company_id == user.company_id
-    end
+  def create?
+    user.manage?
+  end
 
-    def new?
-#only if a project user and manager of the project
-      true
-#      user.projetuser.manage?
-    end
+  def edit?
+    user.manage?
+  end
 
-    def create?
-#only if a project user and manager of the project
-      true
-#      user.projetuser.manage?
-    end
+  def update?
+    user.manage?
+  end
 
-    def edit?
-      #only if manager of the project user
-      projectuser.manager_id == user.id
-    end
-
-    def update?
-      #only if manager of the project user
-      projectuser.manager_id == user.id
-    end
+  def destroy?
+    user.manage?
+  end
 
 end
