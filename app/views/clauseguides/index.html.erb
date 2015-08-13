@@ -1,0 +1,72 @@
+<div class="row title_band">
+    <div class="page_title">
+        <h1>Listing Clause Guides</h1>
+    </div>
+    <div><%= link_to 'Allocate Guides by Clause', nil, class: "title_button"%></div>
+</div>
+
+
+<!-- revision option bar -->
+<div class="row option_band">
+    <div>
+        <div>
+            <label class="select_2">Subsection:</label>
+            <span><%= select_tag "section", options_from_collection_for_select(@subsections, :id, :full_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/clauseguides/?subsection='+this.value;"} %></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-1-1 column_1">
+        <div class="border">
+
+        <%= render :partial => "flash_notice" %>
+
+            <div class="row">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Clause Ref</th>
+                            <th>Clause Title</th>
+                            <th class="row_button no_buttons_3">Plan 1</th>
+                            <th class="row_button no_buttons_3">Plan 2</th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <table>
+                    <tbody>
+                        <% @clauses.each do |clause| %>
+                        <tr>
+                            <td class="mob_cell"><%= clause.caws_code %></td>
+                            <td class="mob_cell"><%= clause.clausetitle.text %></td>
+                            <td class="row_button no_buttons_3">
+                              <% if has_guide(clause.id, 1) %>
+                                <%= link_to '', edit_clauseguide_path(@clauseguide), class: 'line_edit_icon', title: "edit guidance note" %>
+                                <%= link_to '', clauseguide_path(@clauseguide), method: :delete, class: 'line_delete_icon', title: "remove guidance note" %>
+                                <%= link_to '', assign_clauseguide_path(@clauseguide.id), class: 'line_new_icon', title: "assign guidance note to other clauses" %>
+                              <% else %>
+                                <%= link_to '', new_clauseguide_path(:clause_id => clause.id, :plan_id => 1), class: 'line_new_icon', title: "add guidance note" %>
+                                <%= link_to '', clone_clauseguide_path(:id => clause.id, :plan_id => 1), class: 'line_new_icon', title: "add guidance note" %>
+                              <% end %>
+                            </td>
+                            <td class="row_button no_buttons_3">
+                              <% if has_guide(clause.id, 2) %>
+                                <%= link_to '', edit_clauseguide_path(@clauseguide), class: 'line_edit_icon', title: "edit guidance note" %>
+                                <%= link_to '', clauseguide_path(@clauseguide), method: :delete, class: 'line_delete_icon', title: "remove guidance note" %>
+                                <%= link_to '', assign_clauseguide_path(@clauseguide.id), class: 'line_new_icon', title: "assign guidance note to other clauses" %>
+                              <% else %>
+                                <%= link_to '', new_clauseguide_path(:clause_id => clause.id, :plan_id => 2), class: 'line_new_icon', title: "add guidance note" %>
+                                <%= link_to '', clone_clauseguide_path(:id => clause.id, :plan_id => 2), class: 'line_new_icon', title: "add guidance note" %>
+                              <% end %>
+                            </td>
+                        </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="row title_band">
+    <div class="page_title">
+        <h1>Listing Guidenotes</h1>
+    </div>
+    <div><%= link_to 'Allocate Guides by Clause', nil, class: "title_button"%></div>
+</div>
+
+<div class="row">
+    <div class="col-1-1 column_1">
+        <div class="border">
+
+        <%= render :partial => "flash_notice" %>
+
+            <div class="row">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th class="row_button no_buttons_3"></th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <table>
+                    <tbody>
+                        <% @guidenotes.each do |guidenote| %>
+                        <tr>
+                            <td class="mob_cell"><%= guidenote.text %></td>
+                            <td class="row_button no_buttons_3">
+                                <%= link_to "", edit_guidenote_path(guidenote), class: 'line_edit_icon', title: "edit guidenote text" %>
+
+                            </td>
+                        </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
