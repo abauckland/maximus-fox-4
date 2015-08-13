@@ -12,6 +12,8 @@ belongs_to :clauseref
 belongs_to :clausetitle
 belongs_to :guidenote
 
+has_many :clauseguides
+
 #has_many :associations
 #has_many :associates, :through => :associations
 
@@ -22,6 +24,16 @@ attr_accessor :title_text
 
 before_validation :custom_validation_1
 before_save :assign_title
+
+#used
+  scope :project_subsection, ->(project, subsection_id, subsection_name) { joins(:clauseref => [:subsection], :speclines => [:project => :projectusers]
+                                  ).where('projectusers.user_id' => current_user.id
+                                  ).where('speclines.project_id' => project.id
+                                  ).where('subsections.'+subsection_name+'_id' => subsection_id
+                                  ).group(:id
+                                  ).order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
+                                  )}
+ 
 
 
 
@@ -46,6 +58,13 @@ before_save :assign_title
   scope :cawssubsection_clauses, ->(project_id, cawssubsection_ids) { joins(:speclines, :clauseref => [:subsection]
                                      ).where('speclines.project_id' => project_id, 'subsections.cawssubsection_id' => cawssubsection_ids
                                      )}
+
+
+  scope :ref_subsection_clauses, ->(project_id, subsection_ids, subsection_name) { joins(:speclines, :clauseref => [:subsection]
+                                     ).where('speclines.project_id' => project_id, 'subsections.'+subsection_name+'_id' => subsection_ids
+                                     )}
+
+
 
 def caws_code
 #this needs to be sorted, unclear what is going on
