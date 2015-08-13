@@ -533,23 +533,30 @@ end
 
       @array_of_lines_deleted.compact
 
-
+#TODO seporate into separate method
       if @project.CAWS?
         #find if any clauses are in current subsection after changes
         get_valid_spline_ref = Specline.cawssubsection_speclines(@project.id, params[:subsection_id]).last
+
+
+        #if no clauses in subsection redirect to subsection manager
+        if get_valid_spline_ref.blank?
+          #update all alteration records so event_type = 3
+          @subsection = Subsection.where('subsections.cawssubsection_id'=> params[:subsection_id]).first
+  
+          #update all alteration records for section so event_type = 3
+          previous_alterations = Alteration.joins(:clause => [:clauseref => :subsection]
+                                          ).where(:event => 'deleted', :clause_add_delete => 2, :project_id => project.id, :revision_id => @revision.id
+                                          ).where(:subsection => @susbection.id
+                                          )
+#TODO this needs to update all reocrds as per delete section - check this is correct
+          previous_alterations.each do |alteration|
+            alteration.update(:clause_add_delete => 3)
+          end
+        end
       else
   ###uniclass code to go here - same as above 
       end
-
-      #if no clauses in subsection redirect to subsection manager
-      if get_valid_spline_ref.blank?
-        #update all alteration records so event_type = 3
-        previous_alterations = Alteration.where(:event => 'deleted', :clause_add_delete => 2, :project_id => @project.id, :revision_id => @revision.id)
-        previous_alterations.each do |alteration|
-          alteration.update(:clause_add_delete => 3)
-        end
-      end
-
 
     #selected_clause_title.destroy
 
