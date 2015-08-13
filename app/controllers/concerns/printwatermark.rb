@@ -18,33 +18,12 @@ module Printwatermark
 
   def set_watermark(issue)
 
-    if issue == "draft"
+    if issue == "draft" || issue == "audit"
       @watermark = 1 #show
     else
       @watermark = 2 #do not show
     end
 
-#    if project.project_status == 'Draft'
-#      @watermark = 1 #show
-#    else
-
-#      project_rev_array = Revision.where('project_id = ?', project.id).order('created_at').pluck(:rev)
-
-#      total_revisions = project_rev_array.length
-#      selected_revision = project_rev_array.index(revision.rev)
-#      number_revisions_old = total_revisions - selected_revision - 1
-
-#      if number_revisions_old == 0
-#        if params[:issue] == 'true'
-#          @watermark = 1 #show
-#        else
-#          @watermark = 2 #do not show
-#        end
-#      else
-#        @watermark = 2 #do not show
-#      end
-#    end
-#   end
   end
 
 end
