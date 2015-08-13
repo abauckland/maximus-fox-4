@@ -1,37 +1,36 @@
 class Printsetting < ActiveRecord::Base
 #associations
   belongs_to :project
-  
+#TODO has_one :project - need to amend database
+
 
 before_create :set_default_values
 
-def set_default_values
-    self.font_style = "Helvetica"
-    self.font_size = "medium"
+  def set_default_values
+      self.font_style = "Helvetica"
+      self.font_size = "medium"
 
-    self.structure = "group revisions"
-    self.prelim = "separate sections"
-    self.page_number = "by document"
+      self.structure = "group revisions"
+      self.prelim = "separate sections"
+      self.page_number = "by document"
 
-    self.section_cover = "no cover"
+      self.section_cover = "no cover"
 
-    self.client_detail = "right"
-    self.client_logo = "right" 
-    self.project_detail = "right" 
-    self.project_image = "right"
-    self.company_detail = "right" 
+      self.client_detail = "right"
+      self.client_logo = "right" 
+      self.project_detail = "right" 
+      self.project_image = "right"
+      self.company_detail = "right" 
 
-    self.header_project = "show"
-    self.header_client = "show"  
-    self.header_document = "show"
-    self.header_logo = "none"
+      self.header_project = "show"
+      self.header_client = "show"  
+      self.header_document = "show"
+      self.header_logo = "none"
 
-    self.footer_detail = "show"
-    self.footer_author = "show"
-    self.footer_date = "show"
+      self.footer_detail = "show"
+      self.footer_author = "show"
+      self.footer_date = "show"
 
-end
-
-
+  end
 
 end
