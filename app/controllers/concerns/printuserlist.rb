@@ -1,8 +1,8 @@
 module Printuserlist
 
-  def page_userlist(data, pdf)
+  def page_userlist(project, pdf)
     page_userlist_header(pdf)
-    index_userlist(data, pdf)
+    index_userlist(project, pdf)
   end
 
 
@@ -14,14 +14,14 @@ module Printuserlist
     pdf.move_down(20)
   end
 
-  def index_userlist(data, pdf)
+  def index_userlist(project, pdf)
 
     rows = []
     rows[0] = userlist_headers
-    userlist_data(data, rows)
+    userlist_data(project, rows)
 
     pdf.table(rows, :header => true,
-                    :column_widths => column_widths(index),
+                    :column_widths => userlist_column_widths(index),
                     :cell_style => {:padding => [2.mm, 2.mm, 2.mm, 2.mm], :border_width => [0,0,0,0], :size => 8}
                     )
   end
@@ -36,9 +36,10 @@ module Printuserlist
     [60.mm, 120.mm, 80.mm, 80.mm]
   end
 
-  def userlist_data(data, rows)
-        data.each_with_index do |id, i|
-          user = User.include(:company).find(id)
+  def userlist_data(project, rows)
+
+        users = User.joins(:projectusers).where('projectusers.project_id' => project.id).order(:email)
+        users.each_with_index do |id, i|
           rows[i+1] = [
                        i.to_s,
                        user.email,
