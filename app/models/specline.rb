@@ -16,8 +16,18 @@ class Specline < ActiveRecord::Base
   belongs_to :perform
 
   belongs_to :linetype
-  
-  
+
+#used
+  scope :subsection_speclines, ->(project_id, subsection_ids, subsection_name) { joins(:clause => [:clauseref => :subsection]
+                                     ).where(:project_id => project_id, 'subsections.'+subsection_name+'_id' => subsection_ids
+                                     ).order('clauserefs.clause_no, clauserefs.subclause, clause_line')}
+
+  scope :clausetype_speclines, ->(project_id, subsection_id, clausetype_id, subsection_name) { includes(:txt1, :txt3, :txt4, :txt5, :txt6, :identity => [:identkey, :identvalue], :perform => [:performvalue, :performkey], :clause => [:clausetitle, :guidenote, :clauseref => [:subsection]]
+                                     ).where(:project_id => project_id, 'subsections.'+subsection_name+'_id' => subsection_id, 'clauserefs.clausetype_id' => clausetype_id
+                                     ).order('clauserefs.clause_no, clauserefs.subclause, clause_line')}
+
+
+
   scope :cawssubsection_speclines, ->(project_id, cawssubsection_ids) { joins(:clause => [:clauseref => :subsection]
                                      ).where(:project_id => project_id, 'subsections.cawssubsection_id' => cawssubsection_ids
                                      )}
@@ -48,5 +58,5 @@ class Specline < ActiveRecord::Base
                                    ).where.not(:id => specline.id
                                    ).pluck('speclines.perform_id'
                                    )}
-  
+
 end
