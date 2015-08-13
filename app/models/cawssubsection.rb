@@ -2,6 +2,7 @@ class Cawssubsection < ActiveRecord::Base
   belongs_to :cawssection
   has_many :subsections
 
+#used
   scope :project_subsections, ->(project) { joins(:subsections => [:clauserefs => [:clauses => :speclines]]
                                            ).where('speclines.project_id' => project.id
                                            ).group('cawssubsections.id'
@@ -14,7 +15,7 @@ class Cawssubsection < ActiveRecord::Base
 #                                           ).order(:id
 #                                           )}                                             
 
-
+#used
   scope :template_subsections, ->(project, template) { joins(:subsections => [:clauserefs => [:clauses => :speclines]]
                                                       ).where('speclines.project_id' => template.id
                                                       ).group('cawssubsections.id'
