@@ -1,0 +1,54 @@
+<div class="row title_band">
+    <div class="page_title">
+        <h1>Project Users: <%=h @project.code_and_title %></h1>
+    </div>
+    <div class="title_help" id="projectuser_index"></div>
+    <div><%= link_to 'Add Project User', new_projectuser_path, class: "title_button"%></div>
+</div>
+
+<div class="row">
+    <div class="col-1-1 column_1">
+        <div class="border">
+
+        <%= render :partial => "flash_notice" %>
+
+            <div class="row">
+                <table>
+                    <thead>
+                        <tr>
+		                    <th class="projectuser_email">Email</th>
+		                    <th class="projectuser_name">Name</th>
+		                    <th class="projectuser_company">Company</th>
+		                    <th class="projectuser_role">Role</th>
+		                    <th class="projectuser_date">Access From</th>
+		                    <th class="projectuser_date">Access To</th>
+		                    <th class="row_button no_buttons_2"></th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <table>
+                    <tbody>
+		                <% @projectusers.each do |projectuser| %>
+		                <tr>
+		                    <td class="projectuser_email"><%=h projectuser.user.email %></td>
+		                    <td class="projectuser_name"><%=h projectuser.user.name %></td>
+		                    <td class="projectuser_company"><%=h projectuser.user.company.name %></td>
+		                    <td class="projectuser_role"><%=h projectuser.role %></td>
+
+		                    <td id="<%= projectuser.id %>_links" class="row_button no_buttons_2">
+			                    <% if projectuser.manage? %>
+									<%= link_to "", projectuser_path(projectuser), method: :delete, class: 'line_delete_icon', title: "cancel user access" %>
+			                        <%= link_to "", edit_projectuser_path(projectuser), class: 'line_edit_icon', title: "edit user access details" %>
+			                    <% end %>
+		                    </td>
+		                </tr>
+		                <%end%>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
