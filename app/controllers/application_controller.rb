@@ -1,6 +1,13 @@
 class ApplicationController < ActionController::Base
 
   helper :all # include all helpers, all the time
+
+  include Pundit
+  # Globally rescue Authorization Errors in controller.
+  # Returning 403 Forbidden if permission is denied  
+  rescue_from Pundit::NotAuthorizedError, with: :permission_denied
+
+
 #  helper_method :current_user 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -12,19 +19,14 @@ class ApplicationController < ActionController::Base
    
   layout :layout_by_resource
 
+
   #root to admin index page after successfull sign in
   def after_sign_in_path_for(resource)
     projects_path
   end
 
 
-
  protected
-
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :role, :company_id, :check_field, :company_attributes => [:name, :read_term]) }
-    devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :current_password, :role, :company_id, :company_attributes => [:name]) }
-  end
 
 
   def current_revision_render(project)
@@ -315,13 +317,13 @@ old_match_line_change.destroy
             existing_record.destroy
             record_new(new_line, @event_type)
           end
-  
+
           if existing_record.event == 'changed'
-  
+
             original_line_hash = existing_record.dup
             original_line_hash[:id] = original_line_hash.specline_id
 
-            existing_record.destroy        
+            existing_record.destroy
             record_change(original_line_hash, new_line) if original_not_same_as_new(original_line_hash, new_line)
 
           end
@@ -430,26 +432,10 @@ end
 
   private
  
-#    def permission_denied
-#      session[:user_id] = nil  
-#      redirect_to home_path 
-#    end
-  
-#    def current_user  
-#      @current_user ||= User.find(session[:user_id]) if session[:user_id]  
-#    end
-  
-#    def authenticate
-      #@current_user ||= User.find(session[:user_id]) if session[:user_id]
-      #if @current_user.role == 'user'
-      #   redirect_to log_out_path
-      #end    
-#      redirect_to log_out_path unless current_user
-#    end
+    def permission_denied
+      head 403
+    end
 
-#    def authenticate_owner
-#      redirect_to log_out_path unless current_user.role == "owner"
-#    end
 
     def new_matched_change_action(current_line, revision, action)
       @new_matched_line = Specline.joins(:alterations).where(
@@ -575,11 +561,9 @@ end
 #      @match_old_line_content = Alteration.joins(:txt3, :txt4, :txt5, :txt6, :identity, :perform).where(@specline_match_hash).where.not(:event => ['changed', 'deleted']).first
 #    end
 
-  protected
-
   def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :role, :check_field, :company_id, :company_attributes => [:name, :read_term]) }
-    devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :current_password, :role, :company_id, :company_attributes => [:name]) }
+    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :role, :company_id, :check_field, :state, :company_attributes => [:name, :read_term]) }
+    devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :current_password, :role, :state, :company_id, :company_attributes => [:name]) }
   end
 
   def layout_by_resource
