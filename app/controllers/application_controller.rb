@@ -90,23 +90,6 @@ class ApplicationController < ActionController::Base
   end
 
 
-#  def update_clause_change_records(project, revision, clause_ids, event_type)
-
-#    #estabish current revision for project
-#    revision = Revision.where('project_id = ?', @project.id).last
-
-    #check if there have been any changes to the clauses to be deleted within the current revision (since the project was last issued)
-    #if there are previous changes update change event record
-    #illustrate that all lines within the clause have been deleted as part of subsection deletion event (3)
-#    previous_changes = Alteration.where(:project_id => project.id, :clause_id => params[:project_clauses], :revision_id => revision.id)
-#    if previous_changes
-#      previous_changes.each do |previous_change|
-#        previous_change.update(:clause_add_delete => event_type)
-#      end
-#    end
-
-#  end
-
   def update_clause_alterations(clause, project, revision, event_type)
     previous_alterations = Alteration.where(:event => 'deleted', :clause_add_delete => 1, :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
     previous_alterations.each do |alteration|
@@ -524,36 +507,6 @@ end
           @event_type = event_type
         end
       end
-
-#user_role(["admin", "owner", "employee"])
-#project_role(@project, ["manage", "publish", "write", "read"])
-
-#  def authorise_user_view(permissible_roles)
-#    if permissible_roles.include?(@current_user.role)
-#      return true
-#    end
-#  end
-
-
-
-#  def subsection_action(project_id, subsection_id, permissible_roles)
-#    permitted_user = Projectuser.joins(:subsectionusers
-#                               ).where(:user_id => @current_user.id, :project_id => project_id, :role => permissible_roles
-#                               ).where.not('subsectionusers.subsection_id' => subsection_id
-#                               ).first
-#    if permitted_user.blank?
-#       redirect_to log_out_path
-#    end      
-#  end
-
-
-
-#  def authorise_specline_action(specline_id, permissible_roles)
-#    permitted_user = Subsectionuser.where(:user_id => @current_user.id, :project_id => project_id, :role => permissible_roles).first    
-#    if permitted_user.blank?
-#       redirect_to log_out_path
-#    end      
-#  end
 
 
 #    def old_match_previous_alterations(specline, revision)      
