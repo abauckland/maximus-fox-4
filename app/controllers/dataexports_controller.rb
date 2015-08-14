@@ -1,21 +1,25 @@
+class DataexportsController < ApplicationController
 
-  class DatasController < ApplicationController
+  before_action :set_project
+  before_action :set_revision
 
-    before_action :set_project, only: [:show, :download]
-    before_action :set_revision, only: [:show, :download]
+  include ProjectuserDetails
 
-    layout "projects", :except => [:download]
+
+  layout "projects", :except => [:download]
 
     def show
+      authorize :dataexport, :show?
     end
 
     def download
+      authorize :dataexport, :download?
 
       case @revision.rev
-      when nil ; project_details = "#{@project.code}_rev_na.csv"
-      when '-'; project_details = "#{@project.code}_rev_-.csv"
-      else
-        project_details = "#{@project.code}_rev_#{@revision.rev.upcase}.csv"
+        when nil ; project_details = "#{@project.code}_rev_na.csv"
+        when '-'; project_details = "#{@project.code}_rev_-.csv"
+        else
+          project_details = "#{@project.code}_rev_#{@revision.rev.upcase}.csv"
       end
 
       if params[:product_data] == 'clauses'
@@ -110,4 +114,4 @@
     end
 
 
-  end
+end
