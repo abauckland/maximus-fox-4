@@ -5,7 +5,5 @@ class Subsection < ActiveRecord::Base
   
   belongs_to :cawssubsection
   belongs_to :unisubsection 
-  
- 
 
 end
