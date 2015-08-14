@@ -8,11 +8,12 @@ class ProjectuserPolicy < Struct.new(:user, :projectuser)
   end
 
   def current_user
-    User.find(user.id)
+    User.find(user.user_id)
   end
 
   def show?
-    current_user.admin?
+    false
+    #true
   end
 
   def new?

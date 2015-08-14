@@ -5,11 +5,12 @@ class DataexportPolicy < Struct.new(:user, :help)
   end
 
   def current_user
-    User.find(user.id)
+    User.find(user.user_id)
   end
 
   def show?
-    current_user.admin?
+    false
+    #current_user.owner?
 #    if user.manage? || user.edit?
 #      project.plan.basic?
 #    end

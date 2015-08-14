@@ -13,6 +13,11 @@ class PrintPolicy < Struct.new(:user, :project)
   end
 
   #option for downloading final document which advances revision and removes watermark
+  def audit?
+    false
+  end
+
+
   def final?
     user.manage?
   end

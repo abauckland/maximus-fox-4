@@ -1,11 +1,11 @@
 class ProjectPolicy < Struct.new(:user, :project)
 
 
-  class Scope < Struct.new(:user, :scope)
-    def resolve
-        scope.joins(:projectusers).where('projectusers.user_id' => user.id).order("code")
-    end
-  end
+#  class Scope < Struct.new(:user, :scope)
+#    def resolve
+#        scope.joins(:projectusers).where('projectusers.user_id' => user.id).order("code")
+#    end
+#  end
 
 
   def index?
