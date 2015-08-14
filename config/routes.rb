@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 #    get :deactivated, :on => :member
 #  end
 
-  resources :datas, :only => [:show] do
+  resources :dataexports, :only => [:show] do
     get :download, :on => :member
   end
 
@@ -104,6 +104,16 @@ Rails.application.routes.draw do
   resources :helps
 
   resources :termcats, :only => [:index]
+
+
+  resources :clauseguides do
+    get :clone, :on => :member
+    get :clone_clause_list, :on => :member
+    get :create_clone, :on => :member
+
+    get :assign, :on => :member
+    get :assign_guides, :on => :member
+  end
 
   resources :guidenotes do
     get :allocate, :on => :member
