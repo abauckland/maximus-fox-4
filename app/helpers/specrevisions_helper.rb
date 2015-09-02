@@ -13,7 +13,7 @@ module SpecrevisionsHelper
 #      end
     end
   end
-
+ 
 #revision select menu
   def revision_select_input(revisions, revision, project)
     select_tag  "revision", options_from_collection_for_select(revisions, :id, :rev, revision.id), {:class => 'revision_selectBox', :onchange => "window.location='/specrevisions/#{project.id}?revision='+this.value;"}
@@ -21,7 +21,7 @@ module SpecrevisionsHelper
 
 
     def cawssubsection_change_data_helper(project, subsection, revision)
-      subsection_change = Alteration.changed_caws_subsections_show(project, revision, subsection) 
+      subsection_change = Alteration.changed_caws_subsections_show(project, revision, subsection)
       
       if subsection_change.clause_add_delete == 3
         if subsection_change.event == 'new'
@@ -32,11 +32,11 @@ module SpecrevisionsHelper
         end
       else
         #@changed_subsection = subsection
-      #check status of clause within changed subsection           
+      #check status of clause within changed subsection
         @added_clauses = Clause.changed_caws_clauses('new', project, revision, subsection)
         @deleted_clauses = Clause.changed_caws_clauses('deleted', project, revision, subsection)
         @changed_clauses = Clause.changed_caws_clause_content('changed', project, revision, subsection)
-      end  
+      end
     end
 
 #  def get_class_and_href_ref(subsection_id, current_subsection_id)
@@ -88,19 +88,19 @@ module SpecrevisionsHelper
   def new_clauses_text(subsection)  
       if !@added_clauses.empty?
            clauses_text_show(subsection, 'added')
-      end  
+      end
   end
   
   def deleted_clauses_text(subsection)  
       if !@deleted_clauses.empty?
            clauses_text_show(subsection, 'deleted')
-      end  
+      end
   end
   
   def changed_clauses_text(subsection)  
       if !@changed_clauses.empty?
            clauses_text_show(subsection, 'changed')
-      end  
+      end
   end
   
   def clauses_text_show(subsection, action)
@@ -109,26 +109,18 @@ module SpecrevisionsHelper
  
 #non prelim
 #text of clause titles deleted or added
- def altered_clause_text(clause, revision, project)   
+ def altered_clause_text(clause, revision, project)
  
     last_clause_change = Alteration.where('project_id = ? AND clause_id = ? AND clause_add_delete =?', project.id, clause.id, 2).last
     if revision.id == last_clause_change[:revision_id]
-      "<table width='100%' class='rev_table'><tr id='#{clause.id.to_s}'class='clause_title_2'><td class='rev_clause_code'> #{clause_ref(clause)} </td><td class ='rev_clause_title'> #{clause.clausetitle.text.to_s}</td><td class='rev_line_menu'>#{change_info_clause(clause, revision, project)}</td><td class='rev_line_menu_mob'> #{rev_mob_menu(clause)} </td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{change_info_clause(clause, revision, project)}</td></tr></table>".html_safe   
+      "<table width='100%' class='rev_table'><tr id='#{clause.id.to_s}'class='clause_title_2'><td class='rev_clause_code'> #{clause_ref(project,clause)} </td><td class ='rev_clause_title'> #{clause.clausetitle.text.to_s}</td><td class='rev_line_menu'>#{change_info_clause(clause, revision, project)}</td><td class='rev_line_menu_mob'> #{rev_mob_menu(clause)} </td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{change_info_clause(clause, revision, project)}</td></tr></table>".html_safe
     else
-      "<table width='100%' class='rev_table'><tr id='#{clause.id.to_s}'class='clause_title_2'><td class='rev_clause_code'> #{clause_ref(clause)} </td><td class ='rev_clause_title'> #{clause.clausetitle.text.to_s} </td><td class='rev_line_menu'> #{change_info_clause(clause)} </td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{change_info_clause(clause, revision, project)}</td><td class='rev_line_menu_mob'> #{rev_mob_menu(clause)} </td></tr></table>".html_safe    
+      "<table width='100%' class='rev_table'><tr id='#{clause.id.to_s}'class='clause_title_2'><td class='rev_clause_code'> #{clause_ref(project,clause)} </td><td class ='rev_clause_title'> #{clause.clausetitle.text.to_s} </td><td class='rev_line_menu'> #{change_info_clause(clause)} </td></tr><tr class='rev_mob_menu_popup'><td class='mob_rev_menu' colspan=3 >#{change_info_clause(clause, revision, project)}</td><td class='rev_line_menu_mob'> #{rev_mob_menu(clause)} </td></tr></table>".html_safe
     end
  end
 
-def clause_ref(clause)                                                        
-  if @project.CAWS?
-    clause.caws_code  
-  else
-    clause.uniclass_code  
-  end  
-end
-
-def changed_clause_titles(changed_clause, action)
-      "<table width='100%' class='rev_table'><tr id='#{changed_clause.id.to_s}'class='clause_title_2'><td class='rev_clause_code'> #{clause_ref(changed_clause)} </td><td class ='rev_clause_title'> #{changed_clause.clausetitle.text.to_s} </td></tr></table>".html_safe  
+def changed_clause_titles(project, changed_clause, action)
+      "<table width='100%' class='rev_table'><tr id='#{changed_clause.id.to_s}'class='clause_title_2'><td class='rev_clause_code'> #{clause_ref(project, changed_clause)} </td><td class ='rev_clause_title'> #{changed_clause.clausetitle.text.to_s} </td></tr></table>".html_safe  
 end
 
 #prelim and non prelim
@@ -275,5 +267,18 @@ end
         end
       end   
   end
-  
+
+
+  def set_subsection_name(project_id)
+#TODO change ref system establishment
+    project = Project.find(project_id)
+    case project.ref_system
+      when "CAWS" ; 'cawssubsection'
+    end
+  end
+
+  def clause_ref(project, clause)
+      return clause.clauseref.subsection.method(set_subsection_name(project.id)).call.full_code.to_s + '.' +clause.clauseref_code.to_s
+  end
+
 end
