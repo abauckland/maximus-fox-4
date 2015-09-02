@@ -27,7 +27,7 @@
         <%= changed_clauses_text(@subsection) %> 
         <% @changed_clauses.each do |changed_clause| %>
     
-          <%= changed_clause_titles(changed_clause, 'changed') %>
+          <%= changed_clause_titles(@project, changed_clause, 'changed') %>
     
           <%= clause_line_text_altered(@project, @revision, changed_clause, 'new') %>
             <% @altered_lines.each do |added_line| %>
