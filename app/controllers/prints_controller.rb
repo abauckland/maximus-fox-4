@@ -1,8 +1,10 @@
 class PrintsController < ApplicationController
 
-#  before_filter :authenticate
   before_action :set_project, only: [:show, :print_project]
   before_action :set_revision, only: [:show, :print_project]
+
+  include ProjectuserDetails
+
 
   layout "projects", :except => [:print_project]
 
@@ -15,8 +17,9 @@ class PrintsController < ApplicationController
   # GET /txt1s/1
   # GET /txt1s/1.xml
   def show
+    authorize :print, :show?
 
-    check_alterations = Alteration.changed_caws_all_sections(@project, @revision)
+    check_alterations = Alteration.all_changes(@project, @revision).first
     if check_alterations.blank?
       @revisions = Revision.where(:project_id => params[:id]).where.not(:id => @revision.id).order('created_at')
     else
@@ -25,7 +28,7 @@ class PrintsController < ApplicationController
 
 
     #show if print with superseded
-    #check if selected revision has been superseded, i.e. nest revision has been published
+    #check if selected revision has been superseded, i.e. next revision has been published
     if @project.project_status == 'Draft'
       @print_status_show = 'draft'
     else
@@ -38,17 +41,13 @@ class PrintsController < ApplicationController
           selected_revision = project_rev_array.index(@revision.rev)
           number_revisions_old = total_revisions - selected_revision - 1
 
-          if number_revisions_old > 1
-            @print_status_show = 'superseded'
+          @print_status_show = case number_revisions_old
+            when 0 ; 'not for issue'
+            when 1 ; 'issue'
+            else
+              'superseded'
           end
 
-          if number_revisions_old == 1
-            @print_status_show = 'issue'
-          end
-
-          if number_revisions_old == 0
-            @print_status_show = 'not for issue'
-          end
         else
           @print_status_show = 'issue'
         end
@@ -62,18 +61,19 @@ class PrintsController < ApplicationController
 
 
   def print_project
+    authorize :print, :print_project?
 
 #    selected_revision = Revision.find(params[:revision_id]) if !params[:revision_id].blank?
     last_revision = Revision.where(:project_id => @project.id).order('created_at').last
 
-    check_alterations = Alteration.changed_caws_all_sections(@project, last_revision)
+    check_alterations = Alteration.all_changes(@project, last_revision).first
     if check_alterations.blank?
 
       revision_count = Revision.where(:project_id => params[:id]).count
       if revision_count == 1
-        current_revision = Revision.where(:project_id => params[:id]).first
+        current_revision = last_revision
       else
-        current_revision = Revision.where(:project_id => params[:id]).where.not(:id => last_revision.id).last        
+        current_revision = Revision.where(:project_id => params[:id]).where.not(:id => last_revision.id).order('created_at').last
       end
 
     else
@@ -91,45 +91,32 @@ class PrintsController < ApplicationController
       end
     end
 
-
-#    if selected_revision.blank? || selected_revision == current_revision
-      print_download(current_revision, params[:issue])
-#    else
-#      @print = Print.where(:project_id => @project.id, :revision_id => @revision.id).first
-
-#      #send copy of the saved document
-#      send_file @print.document.path
-#    end
+    print_download(current_revision, params[:issue])
 
   end
 
-  
-  def print_download(revision, issue)
 
-   document = Prawn::Document.new(
-    :page_size => "A4",
-    :margin => [20.mm, 14.mm, 5.mm, 20.mm],
-    :info => {:title => @project.title}
-    ) do |pdf|
-        if @project.CAWS?
-            print_caws_document(@project, revision, issue, pdf)
-        else
-            print_uni_document(@project, revision, issue, pdf)
-        end
+private
+
+    def print_download(revision, issue)
+
+     document = Prawn::Document.new(
+      :page_size => "A4",
+      :margin => [20.mm, 14.mm, 5.mm, 20.mm],
+      :info => {:title => @project.title}
+      ) do |pdf|
+        print_document(@project, revision, issue, pdf)
+      end
+
+      case revision.rev
+      when nil ; filename = "#{@project.code}_rev_na.pdf"
+      when '-'; filename = "#{@project.code}_rev_-.pdf"
+      else
+        filename = "#{@project.code}_rev_#{revision.rev.upcase}.pdf"
+      end
+
+      send_data document.render, filename: filename, :type => "application/pdf"
     end
-
-    case revision.rev
-    when nil ; filename = "#{@project.code}_rev_na.pdf"
-    when '-'; filename = "#{@project.code}_rev_-.pdf"
-    else
-      filename = "#{@project.code}_rev_#{revision.rev.upcase}.pdf"
-    end
-
-    send_data document.render, filename: filename, :type => "application/pdf"
-  end
-
-
-  private
 
     def set_project
       @project = Project.find(params[:id])

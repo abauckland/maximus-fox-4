@@ -1,142 +1,102 @@
 class SpecclausesController < ApplicationController
 
+  before_action :set_project
+  before_action :set_template
+  before_action :set_revision
 
-#  before_filter :authenticate  
-  before_action :set_project, only: [:manage, :add_clauses, :delete_clauses]
+  include ProjectuserDetails
+  include RefsystemSettings
+  #order important so that model name is set
+  before_action :set_subsection, only: [:manage, :delete_clauses]
 
   layout "projects"
 
 
   def manage
+    authorize :specclause, :manage?
 
-    if @project.CAWS?
-      #all users except user assigned role 'read' can add and delete clauses from subsection   
-      #only those projects that the current user is a 'projectuser' has access to the current subsection are available as a template
-      @subsection = Cawssubsection.where(:id => params[:subsection_id]).first
-
-      #projects where projectuser
-      user_projects = Project.project_templates(@project, current_user).cawssubsections(@subsection).ids
-      
-      #projects where projectuser: but a subsectionuser, but not a subsectionuser of current subsection 
-      subsectionuser_ids = Subsectionuser.joins(:projectuser, :subsection
+      #list of projects where project user has subsections assigned to them other than current
+#TODO check that this returns correct projects
+      user_projects_no_access_ids = Project.joins(:projectusers => :subsectionusers
                                       ).where('projectusers.user_id' => current_user.id
-                                      ).where.not('subsections.cawssubsection_id' => @subsection.id
+                                      ).where(:ref_system => @project.ref_system
+                                      ).where.not('subsectionusers.subsection_id' => @subsection.id
                                       ).ids
 
-      projects_no_access_subsection = Project.joins(:projectusers => :subsectionusers).where('subsectionusers.id' => subsectionuser_ids).ids
+#TODO change ref system names
+      user_projects = Project.joins(:projectusers).where('projectusers.user_id' => current_user.id, :ref_system => @project.ref_system
+                                          ).where.not(:id => @project.id
+                                          ).where.not(:id => user_projects_no_access_ids
+                                          ).order("code")
+#TODO check ids of template projects
+#TODO change ref system names
+      standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system).order("code")
+      @templates = standard_templates + user_projects
 
-      #users also have access to standard (specright) templates 
-      standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system).ids
+      @current_project_clauses = Clause.project_subsection(@project, params[:subsection_id], @subsection_name, current_user)
+      @template_project_clauses = Clause.where.not(:id => @current_project_clauses.ids
+                                       ).project_subsection(@template, params[:subsection_id], @subsection_name, current_user)
 
-      template_ids = user_projects - projects_no_access_subsection + standard_templates
-
-      @templates = Project.where(:id => template_ids).order("code")
-
-      #uses default template set for project unless different template is selected from drop down list
-      #if user does not have access to subsection in default template select first available template that does
-      if params[:template_id].blank?
-        if template_ids.include?(@project.parent_id)
-          @template = Project.find(@project.parent_id)
-        else
-          @template = @templates.first 
-        end
-      else
-        @template = Project.find(params[:template_id])
-      end
-
-
-      @current_project_clauses = Clause.joins(:clauseref => [:subsection], :speclines => [:project => :projectusers]
-                                      ).where('projectusers.user_id' => current_user.id
-                                      ).where('speclines.project_id' => @project.id
-                                      ).where('subsections.cawssubsection_id' => @subsection.id
-                                      ).group(:id
-                                      ).order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
-                                      )
-
-      template_clauses = Clause.joins(:clauseref => [:subsection], :speclines => [:project => :projectusers]
-                                        ).where('speclines.project_id' => @template.id
-                                        ).where('subsections.cawssubsection_id' => @subsection.id
-                                        ).group(:id
-                                        ).order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
-                                        )
-
-       template_clause_ids = template_clauses.ids - @current_project_clauses.ids
-
-       @template_project_clauses = Clause.joins(:clauseref).where(:id => template_clause_ids).order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause')
-
-    else
-###uniclass code to go here - same as above 
-    end
   end
 
 
   def add_clauses
+    authorize :specclause, :add_clauses?
 
-  #for each clause
     clauses = Clause.where(:id => params[:template_clauses])
-  #get speclines
     clauses.each do |clause|
-      #assign speclines
-      speclines_to_add = Specline.where(:project_id => params[:template_id], :clause_id => clause.id) 
-  
-      revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last    
-      if revision
+
+      speclines_to_add = Specline.where(:project_id => @template.id, :clause_id => clause.id) 
+
+      if @revision
         #record revisions
-        clause_alteration = Alteration.where(:clause_add_delete => 2, :project_id => @project.id, :clause_id => clause.id, :revision_id => revision.id).first
+        clause_alteration = Alteration.match_clause(clause.id, @project, @revision).where(:clause_add_delete => 2).first #2 => clause added/deleted
         if !clause_alteration.blank?
           #for each line
           speclines_to_add.each do |line|
-            previous_delete_record = Alteration.match_line(line, revision).where(:event => 'deleted')
+            previous_delete_record = Alteration.match_line(line, @revision).where(:event => 'deleted')
             if !previous_delete_record.blank?
                 previous_delete_record.destroy
             else
               @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
-              record_new(@new_specline, 1)
+              record_new(@new_specline, 1) #1 => line added/deleted/changed
             end
           end
           # find lines previous deleted but not in new clause
           #same as left over lines when added lines have been processed
-          update_clause_alterations(clause, @project, revision, 1)
+          update_clause_alterations(clause, @project, @revision, 1) #1 => line added/deleted/changed
         else
           speclines_to_add.each do |line|
             @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
-            record_new(@new_specline, 2)
+            record_new(@new_specline, 2) #2 => clause added/deleted
           end
         end
       else
         #do not record revisions
         speclines_to_add.each do |line|
           @new_specline = Specline.create(line.attributes.merge(:id => nil, :project_id => @project.id))
-        end      
+        end
       end
     end
 
-#    speclines_to_add = Specline.where(:project_id => params[:template_id], :clause_id => params[:template_clauses]) 
-#    speclines_to_add.each do |line_to_add|
-#      @new_specline = Specline.create(line_to_add.attributes.merge(:id => nil, :project_id => @project.id))
-#      record_new(@new_specline, event_type)
-#    end
-
-    redirect_to manage_specclause_path(:id => @project.id, :template_id => params[:template_id], :subsection_id => params[:subsection_id])
+    redirect_to manage_specclause_path(:id => @project.id, :template_id => @template.id, :subsection_id => params[:subsection_id])
   end
 
 
   def delete_clauses
+    authorize :specclause, :delete_clauses? 
 
-  #for each clause
     clauses = Clause.where(:id => params[:project_clauses])
-  #get speclines
     clauses.each do |clause|
-      #assign speclines
-      speclines_to_delete = Specline.where(:project_id => @project.id, :clause_id => clause.id) 
 
-      revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last
-      if revision
+      speclines_to_delete = Specline.where(:project_id => @project.id, :clause_id => clause.id)
+
+      if @revision
         speclines_to_delete.each do |specline|
-          record_delete(specline, 2)
+          record_delete(specline, 2) #2 => clause added/deleted
           specline.destroy
         end
-        update_clause_alterations(clause, @project, revision, 2)
+        update_clause_alterations(clause, @project, @revision, 2) #2 => clause added/deleted
       else
         speclines_to_delete.each do |specline|
           specline.destroy
@@ -144,62 +104,48 @@ class SpecclausesController < ApplicationController
       end
     end
 
-##for each clause
-#    #get speclines for all clauses that are in include list    
-##    specline_lines_to_deleted = Specline.where(:project_id => @project.id, :clause_id => params[:project_clauses])
-#    specline_lines_to_deleted.each do |existing_specline_line|
-#      @specline = existing_specline_line
-#      record_delete(@specline, event_type)  
-#      existing_specline_line.destroy
-#    end
-#
-#    clause_ids = Clause.where(:id => params[:project_clauses]).ids
-#    #if there are previous changes update change event record
-#    update_clause_change_records(@project, @revision, clause_ids, event_type)
-
-#    #estabish current revision for project
-#    revision = Revision.where('project_id = ?', @project.id).last
-
-    #check if there have been any changes to the clauses to be deleted within the current revision (since the project was last issued)
-    #if there are previous changes update change event record
-    #illustrate that all lines within the clause have been deleted as part of subsection deletion event (3)
-#    previous_changes = Alteration.where(:project_id => project.id, :clause_id => params[:project_clauses], :revision_id => revision.id)
-#    if previous_changes
-#      previous_changes.each do |previous_change|
-#        previous_change.update(:clause_add_delete => event_type)
-#      end
-#    end
-
-    if @project.CAWS?
-      #find if any clauses are in current subsection after changes
-      get_valid_spline_ref = Specline.cawssubsection_speclines(@project.id, params[:subsection_id]).last
-    else
-###uniclass code to go here - same as above 
-    end
-
-    #if no clauses in subsection redirect to subsection manager
+#TODO seporate into separate method
+    #find if any clauses are in current subsection after changes
+    get_valid_spline_ref = Specline.subsection_speclines(@project.id, params[:subsection_id], @subsection_name).last
     if get_valid_spline_ref.blank?
-
-      #update all alteration records so event_type = 3
-      previous_alterations = Alteration.where(:event => 'deleted', :clause_add_delete => 2, :project_id => project.id, :revision_id => revision.id)
+      #update all alteration records for section so event_type = 3
+      previous_alterations = Alteration.joins(:clause => [:clauseref => :subsection]
+                                      ).where(:event => 'deleted', :clause_add_delete => 2, :project_id => project.id, :revision_id => @revision.id
+                                      ).where(:subsection => @susbection.id
+                                      )
+#TODO this needs to update all reocrds as per delete section - check this is correct
       previous_alterations.each do |alteration|
         alteration.update(:clause_add_delete => 3)
       end
 
-      redirect_to manage_specsubsection_path(:id => @project.id, :template_id => params[:template_id])
+      redirect_to manage_specsubsection_path(:id => @project.id, :template_id => @template.id)
     else
-      redirect_to manage_specclause_path(:id => @project.id, :template_id => params[:template_id], :subsection_id => params[:subsection_id])
+      redirect_to manage_specclause_path(:id => @project.id, :template_id => @template.id, :subsection_id => params[:subsection_id])
     end 
   #end
   end
 
 
-
-
   private
-    # Use callbacks to share common setup or constraints between actions.    
+    # Use callbacks to share common setup or constraints between actions.
     def set_project
       @project = Project.find(params[:id])
+    end
+
+    def set_template
+      if params[:template_id].blank?
+        @template = Project.find(@project.parent_id)
+      else
+        @template = Project.find(params[:template_id])
+      end
+    end
+
+    def set_subsection
+      @subsection = @subsection_model.find(params[:subsection_id])
+    end
+
+    def set_revision
+      @revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last
     end
 
     def event_type

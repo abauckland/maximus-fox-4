@@ -1,62 +1,61 @@
 class KeynotesController < ApplicationController
 
-
-#  before_filter :authenticate
   before_action :set_project, only: [:show, :keynote_export]
   before_action :set_revision, only: [:show]
 
+  include ProjectuserDetails
+  include RefsystemSettings
+
   layout "projects"
 
+
   def show
+    authorize :keynote, :show?
     #call to protected method that restablishes text to be shown for project revision status
     current_revision_render(@project)
-    
-  end
-
-
-  def keynote_export    
-      if params[:cad_product] == 'csv'
-        csv_keynote(@project)
-      end 
-
-      if params[:cad_product] == 'revit'
-        revit_keynote(@project)
-      end 
-
-      if params[:cad_product] == 'bentley'
-        bentley_keynote(@project)
-      end 
-
-      if params[:cad_product] == 'cadimage'
-        cadimage_csv(@project)
-      end
-
-      if params[:cad_product] == 'cadimage_keynote'
-        cadimage_keynote(@project)
-      end
 
   end
 
-  
+
+  def keynote_export
+    authorize :keynote, :keynote_export?
+
+    case params[:cad_product]
+      when 'csv' ;              csv_keynote(@project)
+      when 'revit' ;            revit_keynote(@project)
+      when 'bentley' ;          bentley_keynote(@project)
+      when 'cadimage' ;         cadimage_csv(@project)
+      when 'cadimage_keynote' ; cadimage_keynote(@project)
+    end
+
+  end
+
+
+private
+
   def csv_keynote(project)
-  
-    #set up for columns, unique identifier column to be set to 'Create Unique IDS'    
+
+    #set up for columns, unique identifier column to be set to 'Create Unique IDS'
     headers = ['ref', 'title', 'ref & title']
 
     @csv_keynote = CSV.generate do |csv|
 
       csv << headers
-      
+
       set_subsections(project)
       @subsections.each_with_index do |subsection, n|
         #project subsection
-        csv << [subsection.full_code, subsection.text]
+        subsection_code = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.full_code.to_s
+        subsection_title = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.text.to_s
+        csv << [subsection_code, subsection_title]
 
         #for each clause
         set_clauses(project, subsection)
         @clauses.each_with_index do |clause, m|
-          #project clauses
-          csv << [clause.caws_code, clause.clausetitle.text, clause.caws_full_title]
+
+          clause_code = subsection_code + '.' +clause.clauseref_code.to_s
+          clause_full_title = subsection_code + '.' +clause.clauseref_code.to_s + ' ' +clause.clausetitle.text.to_s
+          csv << [clause_code, clause.clausetitle.text, clause_full_title]
         end
       end
     end
@@ -84,12 +83,17 @@ class KeynotesController < ApplicationController
         @subsections.each_with_index do |subsection, n|
 
           #project subsection s
-          data = data + "#{sprintf("%02d", subsection.ref).to_s}\t#{subsection.text}\t#{subsection.cawssection.ref}\r\n"
+          subsection_code = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.full_code.to_s
+          subsection_title = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.text.to_s
+          section_code = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.method(set_keynote_section_name(project)).call.ref.to_s
 
-          set_clauses(project, subsection)
+          data = data + "#{subsection_code}\t#{subsection_title}\t#{section_code}\r\n"
+
+          set_clauses(project, subsection, @subsection_name)
           @clauses.each_with_index do |clause, m|
             #project clauses
-            data = data + "#{clause.caws_code}\t#{clause.clausetitle.text}\t#{clause.clauseref.subsection.cawssubsection.full_code}\r\n"
+            clause_code = subsection_code + '.' +clause.clauseref_code.to_s
+            data = data + "#{clause_code}\t#{clause.clausetitle.text}\t#{subsection_code}\r\n"
           end
         end
       end
@@ -97,48 +101,18 @@ class KeynotesController < ApplicationController
   end
 
 
-#  def revit_keynote_export(project_id)
-    
-#    @current_project = Project.where(:id => params[:id]).first 
-    ##!!!!!!need to sort out how it renders - i.e. file dounloads and how to file with correct name and extension  
-#    filename = @current_project.code + " specright_keynote"   
-#    @bim_revit_export = CSV.generate(:col_sep => "\t") do |csv|   
-   
-      #for each section 
-#      current_project_sections = Section.joins(:subsections => [:clauserefs => [:clauses => :speclines]]).where('speclines.project_id' => @current_project.id).order('id').uniq        
-#      current_project_sections.each_with_index do |section, i|
-        #project section    
-#        csv << [section.ref, section.text]
-        #for each subsection     
-#        current_project_subsections = Subsection.joins(:clauserefs => [:clauses => :speclines]).includes(:section).where('speclines.project_id' => @current_project.id, :section_id => section.id).order('id').uniq         
-#        current_project_subsections.each_with_index do |subsection, n|
-          #project subsection
-#          csv << [subsection.subsection_code, subsection.text, subsection.section.ref] 
-          #for each clause
-#          current_project_clauses = Clause.joins(:speclines).includes(:clausetitle, :clauseref => [:subsection => :section]).where('speclines.project_id' => @current_project.id, 'clauserefs.subsection_id' => subsection.id, 'clauserefs.clausetype_id' => [2..4]).order('clauserefs.subsection_id, clauserefs.clausetype_id, clauserefs.clause, clauserefs.subclause').uniq        
-#          current_project_clauses.each_with_index do |clause, m|
-            #project clauses 
-#            csv << [clause.clause_code, clause.clausetitle.text, clause.clauseref.subsection.subsection_code] 
-#          end  
-#        end 
-#      end
-#    end  
-#    send_data @bim_revit_export, :type => 'text/plain', :disposition => 'attachment; filename=#{filename}.txt'      
-#  end
-
-
 #  def bentley_keynote(project)
-    
+
 
 #    filename = project.code + " specright_keynote"   
 #    @bim_bentley_export = CSV.generate do |csv|  
-      
+
       #for each section
 #      sections = Cawssection.project_sections(project)
 #      sections.each_with_index do |section, i|
         #project section
 #        csv << [section.ref << ' ' << section.text]
-        
+
         #for each subsection
 
 #        subsections = Cawssubsection.section_subsections(project, section) 
@@ -162,7 +136,7 @@ class KeynotesController < ApplicationController
 
   def cadimage_csv(project)
   
-    #set up for columns, unique identifier column to be set to 'Create Unique IDS'    
+    #set up for columns, unique identifier column to be set to 'Create Unique IDS'
     headers = ['Unique ID', 'Key', 'Title', 'Description', 'Reference', 'Last Edit Time', 'Category']
 
     @cadimage_keynote = CSV.generate do |csv|
@@ -172,13 +146,16 @@ class KeynotesController < ApplicationController
       set_subsections(project)
       @subsections.each_with_index do |subsection, n|
         #project subsection
-        csv << ['', subsection.full_code, subsection.text, '', '', '', '']
+        subsection_code = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.full_code.to_s
+        subsection_title = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.text.to_s
+        csv << ['', subsection_code, subsection_title, '', '', '', '']
 
         #for each clause
-        set_clauses(project, subsection)
+        set_clauses(project, subsection, @subsection_name)
         @clauses.each_with_index do |clause, m|
           #project clauses
-          csv << ['', clause.caws_code, clause.clausetitle.text, '', '', '', subsection.full_code]
+          clause_code = subsection_code + '.' +clause.clauseref_code.to_s
+          csv << ['', clause_code, clause.clausetitle.text, '', '', '', subsection_code]
         end
       end
     end
@@ -190,9 +167,9 @@ class KeynotesController < ApplicationController
 
 
   def cadimage_keynote(project)
-require "rubygems"
-require "nokogiri"
-    
+    require "rubygems"
+    require "nokogiri"
+
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.keynoteAttributes {
         xml.keynoteDatabase {
@@ -201,18 +178,21 @@ require "nokogiri"
           set_subsections(project)
 
           @subsections.each do |subsection|
+            subsection_code = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.full_code.to_s
+            subsection_title = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.text.to_s
             sub_key = subsection.id.to_s+"-0000-00"
             xml.keynote(:key => sub_key, :edit => Time.now.to_formatted_s(:iso8601)) {
-              xml.name subsection.full_code
-              xml.title subsection.text
+              xml.name subsection_code
+              xml.title subsection_title
             }
 
             set_all_clauses(project, subsection)
 
             @clauses.each do |clause|
+            clause_code = subsection_code + '.' +clause.clauseref_code.to_s
             clause_key = subsection.id.to_s+"-"+clause.clauseref_id.to_s+"-00"
             xml.keynote(:key => clause_key, :edit => Time.now.to_formatted_s(:iso8601)) {
-              xml.name clause.caws_code
+              xml.name clause_code
               xml.parent_ sub_key
               xml.title clause.clausetitle.text
               }
@@ -239,63 +219,35 @@ require "nokogiri"
 
   end
 
-  private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_project
       @project = Project.find(params[:id])
     end
 
     def set_sections(project)
-      if project.CAWS?
-        @sections = Cawssection.project_sections(project)#.where.not(:id => 1)
-      else
-        ##
-      end
+        @sections = @section_model.project_sections(project)#.where.not(:id => 1)
     end
 
     def set_subsections(project)
-      if project.CAWS?
-        @subsections = Cawssubsection.project_subsections(project)
-      else
-        ##
-      end
+        @subsections = @subsection_model.project_subsections(project)
     end
 
     def set_section_subsections(project, section)
-      if project.CAWS?
-        @subsections = Cawssubsection.section_subsections(project, section)
-      else
-        ##
-      end
+        @subsections = @subsection_model.section_subsections(project, section)
     end
 
     def set_clauses(project, subsection)
-      if project.CAWS?
-        @clauses = Clause.subsection_clauses(project, subsection)
-      else
-        ##
-      end
+        @clauses = Clause.subsection_clauses(project, subsection, @subsection_name).where('clauserefs.clausetype_id' => [2..5])
     end
 
     def set_all_clauses(project, subsection)
-      if project.CAWS?
-        @clauses = Clause.joins(:speclines
-                        ).includes(:clausetitle, :clauseref => [:subsection => :cawssubsection]
-                        ).where('speclines.project_id' => project.id, 'subsections.cawssubsection_id' => subsection.id
-                        ).order('clauserefs.subsection_id, clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
-                        ).uniq
-      else
-        ##
-      end
+        @clauses = Clause.subsection_clauses(project, subsection, @subsection_name)
     end
-   
+
     def set_lines(project, clause)
-      if project.CAWS?
         #return only lines relating to scope, workmanship, testing and certificates
         @lines = Specline.joins(:clause => :clauseref).where(:project_id => project.id, :clause_id => clause.id, 'clauserefs.clausetype_id' => [6..8])#.order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause, clause_line')
-      else
-        ##
-      end
     end
 
 
@@ -306,4 +258,5 @@ require "nokogiri"
         @revision = Revision.find(params[:revision_id])
       end
     end
+
 end
