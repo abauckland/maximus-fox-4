@@ -19,7 +19,7 @@
     </div>
 
     <div class="float_right">
-        <% if @project_user.manage? || @project_user.edit? %>
+        <% if policy(:specsubsection).manage? %>
             <div>
                 <%= link_to '+/- sections', manage_specsubsection_path(:id => @project.id, :template_id => @project.parent_id), class: "option_button" %>
             </div>
