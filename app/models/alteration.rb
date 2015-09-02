@@ -39,6 +39,12 @@ attr_accessor :clause_line
                                                                 :revision_id => revision
                                                                 )}
 
+#used
+  scope :all_changes, ->(project, revision) { where(:project_id => project.id, :revision_id => revision.id
+                                                 ).group(:id
+                                                 ) }
+
+
 
   scope :changed_caws_all_sections, ->(project, revision) { where(:project_id => project.id, :revision_id => revision.id
                                     ).group(:id
