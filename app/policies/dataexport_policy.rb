@@ -9,8 +9,7 @@ class DataexportPolicy < Struct.new(:user, :help)
   end
 
   def show?
-    false
-    #current_user.owner?
+    current_user.admin?
 #    if user.manage? || user.edit?
 #      project.plan.basic?
 #    end

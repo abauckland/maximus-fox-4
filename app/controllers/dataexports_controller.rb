@@ -26,7 +26,7 @@ class DataexportsController < ApplicationController
         filename = "Clause_data_#{project_details}"
 
         @clauses = Clause.joins(:clauseref, :speclines
-                       ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => 8
+                       ).where('speclines.project_id' => @project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => 8
                        ).uniq
       end
 
@@ -34,7 +34,7 @@ class DataexportsController < ApplicationController
         filename = "Product_data_#{project_details}"
 
         @clauses = Clause.joins(:clauseref, :speclines
-                       ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => 8
+                       ).where('speclines.project_id' => @project.id, 'clauserefs.clausetype_id' => [4], 'speclines.linetype_id' => 8
                        ).uniq
       end
 
@@ -42,7 +42,7 @@ class DataexportsController < ApplicationController
         filename = "Product_&_Accessory_data_#{project_details}"
 
         @clauses = Clause.joins(:clauseref, :speclines
-                       ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => 8
+                       ).where('speclines.project_id' => @project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => 8
                        ).uniq
       end
 
@@ -67,22 +67,25 @@ class DataexportsController < ApplicationController
 
         clauses.each do |clause|
 
-          csv_product_clause_array(@project, clause)
+          csv_product_clause_array(project, clause)
 
+          product_info = []
           @sorted_header_array.each_with_index do |header, i|
 
-            @product_info = []
-            attribute_value = Txt5.joins(:speclines => [:txt4, :clause => [:clauseref]]
-                                 ).where('speclines.project_id' => params[:project_id], 'txt4s.text' => header, 'clauserefs.clausetype_id' => [4,5]
-                                 ).where.not(:id => 1
+            attribute_value = Txt5.joins(:speclines => :txt4
+                                 ).where('speclines.project_id' => project.id, 'speclines.clause_id' => clause.id, 'txt4s.text' => header
                                  ).first
 
-            @product_info[i] = attribute_value.text if attribute_value != nil
+            if attribute_value != nil 
+              product_info[i] = attribute_value.text.to_s
+            else
+              product_info[i] = "n/a"
+            end
 
           end
-          @clause_info + @product_info if @product_info.length > 0
+          @clause_info += product_info
+          csv << @clause_info
         end
-        csv << @clause_info
       end
     end
 
@@ -94,23 +97,22 @@ class DataexportsController < ApplicationController
     end
 
     def attibrute_headers(project)
-      header_hash = Txt4.joins(:speclines => [:clause => :clauseref]
-                       ).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => 8
-                       ).where.not(:id => 1, 'speclines.txt5_id' => 1
-                       ).group(:text).count
- 
+      header_hash = Txt4.joins(:speclines => [:clause => :clauseref]).where('speclines.project_id' => project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => 8).where.not(:id => 1, 'speclines.txt5_id' => 1).group(:text).count
       headers_ordered = header_hash.sort_by{|key, value| value}
       @sorted_header_array = headers_ordered.collect(&:first)
       @sorted_header_array.reverse!
     end
 
     def csv_product_clause_array(project, clause)
-          if project.CAWS?
-            clause_ref = clause.caws_code
-          else
-            ##uniclass code
-          end
-          @clause_info = [clause_ref, clause.clausetitle.text]
+      clause_ref = clause.clauseref.subsection.method(set_data_subsection_name(project)).call.full_code.to_s + '.' +clause.clauseref_code.to_s
+      @clause_info = [clause_ref, clause.clausetitle.text]
+    end
+
+    def set_data_subsection_name(project)
+#TODO change ref system establishment
+      case project.ref_system
+        when "CAWS" ; 'cawssubsection'
+      end
     end
 
 
