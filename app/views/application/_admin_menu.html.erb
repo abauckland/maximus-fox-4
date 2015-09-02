@@ -1,0 +1,29 @@
+<ul class="left_menu">
+
+        <li class="has_sub"><%= link_to "SPECIFICATIONS", projects_path, :class => check_current('projects') %></li>
+        <li class="has_sub"><%= link_to "GUIDANCE NOTES", clauseguides_path, :class => check_current('clauseguides') %></li>
+        <li class="has_sub"><%= link_to "HELP NOTES", helps_path, :class => check_current('helps')  %></li>
+
+</ul>
+
+<!-- mob menu select -->
+<nav class="left_menu_mob_select">MENU</nav>
+
+<ul class="left_menu_mob">
+        <li><p class="mob_menu">SPECIFICATIONS</p>
+            <ul class="sub_menu_mob">
+                <li><%= link_to "Select Project", projects_path %></li>
+            </ul>
+        </li>
+        <li><p class="mob_menu">GUIDANCE NOTES</p>
+            <ul class="sub_menu_mob">
+                <li><%= link_to "Select Project", clauseguides_path %></li>
+            </ul>
+        </li>
+        <li><p class="mob_menu">HELP NOTES</p>
+            <ul class="sub_menu_mob">
+                <li><%= link_to "Select Project", helps_path %></li>
+            </ul>
+        </li>
+
+</ul>
