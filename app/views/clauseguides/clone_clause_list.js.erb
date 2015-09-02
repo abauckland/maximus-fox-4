@@ -1,7 +1,3 @@
-<% if @project.CAWS? %>
-    var updated_clone_guide_clause_select = "<%= escape_javascript(select_tag "clone_guide_clause_id", options_from_collection_for_select(@clauses, :id, :caws_full_title), {:prompt => 'Select Clause'} )%>";
-<% else %>
-    var updated_clone_guide_clause_select = "<%= escape_javascript(select_tag "clone_guide_clause_id", options_from_collection_for_select(@clauses, :id, :uniclass_full_title), {:prompt => 'Select Clause'} )%>";
-<% end %>
+var updated_clone_guide_clause_select = "<%= escape_javascript(select_tag "clone_guide_clause_id", options_from_collection_for_select(@clauses, :id, :caws_full_title), {:prompt => 'Select Clause'} )%>";
 
 $('select#clone_guide_clause_id').replaceWith(updated_clone_guide_clause_select);

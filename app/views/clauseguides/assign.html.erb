@@ -15,7 +15,7 @@
             <!-- form input[select -->
             <div class="no_form_input">
                 <div class="form_tooltip" id="clause_project_template"></div>
-                <label class="label_120">Clause Title Text:</label>
+                <label class="label_80">Search Term:</label>
                 <span>
                     <%= text_field_tag "search_text", @search_term, {:onblur => "window.location='/clauseguides/#{@clauseguide_id}/assign?search_text='+this.value;"} %>
                 </span></br>
@@ -24,11 +24,12 @@
 
                 <%= form_tag(:controller => "clauseguides", :action => "assign_guides") do %>
                     <%= hidden_field_tag(:clauseguide_id, @clauseguide_id) %>
+                    <%= hidden_field_tag(:plan_id, @plan_id) %>
 
                     <fieldset>
                         <!-- form input[select] -->
                         <div class="form_tooltip" id="clause_add_clauses"></div>
-                        <label class="label_80">Clauses:</label>
+                        <label class="label_80">Assign to:</label>
                         <% if @project.CAWS? %>
                         <span>
                             <%= select_tag "clauses", options_from_collection_for_select(@clauses, :id, :caws_full_title), multiple: true, size: 12  %>
@@ -36,13 +37,6 @@
                         <% else %>
                             
                         <% end %>
-
-                        <!-- form input[select] -->
-                        <div class="form_tooltip" id="project_status"></div>
-                        <label class="label_100">Plan No:</label>
-                        <span>
-                            <%= select_tag "plan_id", options_for_select([ 1, 2 ], 1) %>
-                        </span></br>
 
                     </fieldset>
             </div>

@@ -20,18 +20,12 @@
                     <fieldset>
 
                     <!-- form input[select] -->
-                    <label class="label_110"></label>
                     <label class="label_50">Section:</label>
                     <span class="clone_section">
-                    <% if @project.CAWS? %>
                       <%= select_tag "clone_guide_section_id", options_from_collection_for_select(@clone_subsections, :id, :full_code_and_title), {:prompt => 'Select Section'} %>
-                    <% else %>
-                      
-                    <% end %>
                     </span></br>
 
                     <!-- form input[select] -->
-                    <label class="label_110"></label>
                     <label class="label_50">Clause:</label>
                     <span class="clone_clause">
                       <%= select_tag "clone_guide_clause_id", nil, {prompt: 'Select Clause', disabled: true} %>
@@ -42,7 +36,7 @@
 <!-- column footer start--> 
             <div class="row">
                 <div class="form_footer">
-                    <%= submit_tag "add guidance note"%>
+                    <%= submit_tag "clone guidance note"%>
                     <%= link_to "cancel", clauseguides_path %>
                 </div>
                 <% end %>

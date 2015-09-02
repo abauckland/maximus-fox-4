@@ -1,16 +1,17 @@
 class ClauseguidesController < ApplicationController
 
+  before_action :set_clauseguide, only: [:edit, :destroy, :update]
   before_action :set_project, only: [:index, :clone, :clone_clause_list, :assign]
 
-  def index
-      #establish project clauses, subsections & sections    
-      if @project.CAWS?
+  layout "administrations"
 
+  def index
+    authorize :clauseguides, :index?
         #list of all subsections that can be selected
         @subsections = Cawssubsection.project_subsections(@project)
 
         if params[:subsection].blank?
-          @selected_subsection = Cawssubsection.where(:id => @subsections.ids).first
+          @selected_subsection = Cawssubsection.first
         else
           @selected_subsection = Cawssubsection.find(params[:subsection])
         end
@@ -21,9 +22,7 @@ class ClauseguidesController < ApplicationController
         @clauses = Clause.joins(:clauseref => [:subsection]
                         ).where('subsections.cawssubsection_id' => @selected_subsection.id, :id => project_clauses
                         ).order('clauserefs.clause_no, clauserefs.subclause')
-      else
-        ###uniclass code to go here - same as above
-      end
+
     end
 
 
@@ -38,6 +37,7 @@ class ClauseguidesController < ApplicationController
 
     # GET /clauseguides/1/edit
     def edit
+      @clauseguide = Clauseguide.find(params[:id])
       authorize @clauseguide
     end
 
@@ -66,36 +66,31 @@ class ClauseguidesController < ApplicationController
 
     # DELETE /pages/1
     def destroy
+      @clauseguide = Clauseguide.find(params[:id])
       @clauseguide.destroy
       redirect_to clauseguides_url, notice: 'clauseguide item was successfully destroyed.'
     end
 
 
     def clone
-      if @project.CAWS?
-        @clone_subsections = Cawssubsection.joins(:cawssection, :subsections => [:clauserefs => [:clauses => :speclines]]
+
+      @clone_subsections = Cawssubsection.joins(:cawssection, :subsections => [:clauserefs => [:clauses => :speclines]]
                                           ).where('speclines.project_id' => @project.id
                                           ).group('cawssubsections.id'
                                           ).order('cawssections.ref, ref'
                                           )
-      else
-###uniclass code to go here - same as above
-      end#
+
       @clause_id = params[:id]
       @plan_id = params[:plan_id]
       @clauseguide = Clauseguide.new
     end
 
     def clone_clause_list
-        if @project.CAWS?
-          project_clauses = Clause.joins(:speclines).where('speclines.project_id' => @project.id).uniq.ids
-  
-          @clauses = Clause.joins(:clauseguides, :clauseref => [:subsection]
-                          ).where('subsections.cawssubsection_id' => params[:id], :id => project_clauses, 'clauseguides.plan_id' => params[:plan_id]
-                          ).order('clauserefs.clause_no, clauserefs.subclause')
-        else
-  ###uniclass code to go here - same as above
-        end
+
+      @clauses = Clause.joins(:speclines, :clauseref => [:subsection]
+                      ).where('subsections.cawssubsection_id' => params[:id], 'speclines.project_id' => @project.id
+                      ).uniq.order('clauserefs.clause_no, clauserefs.subclause')
+
     end
 
     def create_clone
@@ -112,6 +107,7 @@ class ClauseguidesController < ApplicationController
 
     def assign
       @clauseguide_id = params[:id]
+      @plan_id = params[:plan_id]
 
       if params[:search_text]
         @search_term = params[:search_text]
@@ -148,6 +144,10 @@ class ClauseguidesController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def set_clauseguide
+      @clauseguide = Clauseguide.find(params[:id])
+    end
+
     def set_project
       @project = Project.find(13)
     end
