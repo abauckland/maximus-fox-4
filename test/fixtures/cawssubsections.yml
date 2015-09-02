@@ -1,13 +1,22 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+A10:
+  id: 1
   cawssection_id: 1
-  ref: 1
-  text: MyString
+  ref: 10
+  text: Project Details
   guidepdf_id: 1
 
-two:
-  cawssection_id: 1
-  ref: 1
-  text: MyString
+B10:
+  id: 2
+  cawssection_id: 2
+  ref: 10
+  text: Prefabricated Conservatories
+  guidepdf_id: 1
+
+C10:
+  id: 3
+  cawssection_id: 3
+  ref: 10
+  text: Site Survey
   guidepdf_id: 1

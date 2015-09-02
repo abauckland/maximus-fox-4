@@ -1,37 +1,94 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+admin:
+  id: 1
   company_id: 1
-  first_name: MyString
-  surname: MyString
-  email: MyString
-  role: 1
+  first_name: admin_one
+  surname: sample_surname
+  email: admin_one@gmail.com
+  role: 0
+  state: active
+  ip: MyString 
   api_key: MyString
-  password_hash: MyString
-  password_salt: MyString
-  password_reset_token: MyString
-  password_reset_sent_at: 2014-05-04 21:16:24
+  encrypted_password: admin_one
+  reset_password_token: admin_one_1
+  reset_password_sent_at: 2014-05-04 21:16:24
+  remember_created_at: 2014-05-04 21:16:24
+  sign_in_count: 1
+  current_sign_in_at: 2014-05-04 21:16:24
+  last_sign_in_at: 2014-05-04 21:16:24
+  current_sign_in_ip: MyString
+  last_sign_in_ip: MyString
   failed_attempts: 1
-  locked_at: 1
-  number_times_logged_in: 1
-  active: 1
-  last_sign_in: 2014-05-04 21:16:24
-  ip: MyString
+  unlock_token: admin_one_1
+  locked_at: 2014-05-04 21:16:24
 
-two:
+owner:
+  id: 2
   company_id: 1
-  first_name: MyString
-  surname: MyString
-  email: MyString
+  first_name: owner_one
+  surname: sample_surname
+  email: owner_one@gmail.com
   role: 1
+  state: active
+  ip: MyString 
   api_key: MyString
-  password_hash: MyString
-  password_salt: MyString
-  password_reset_token: MyString
-  password_reset_sent_at: 2014-05-04 21:16:24
+  encrypted_password: owner_one
+  reset_password_token: owner_one_2
+  reset_password_sent_at: 2014-05-04 21:16:24
+  remember_created_at: 2014-05-04 21:16:24
+  sign_in_count: 1
+  current_sign_in_at: 2014-05-04 21:16:24
+  last_sign_in_at: 2014-05-04 21:16:24
+  current_sign_in_ip: MyString
+  last_sign_in_ip: MyString
   failed_attempts: 1
-  locked_at: 1
-  number_times_logged_in: 1
-  active: 1
-  last_sign_in: 2014-05-04 21:16:24
-  ip: MyString
+  unlock_token: owner_one_2
+  locked_at: 2014-05-04 21:16:24
+
+employee_1:
+  id: 3
+  company_id: 1
+  first_name: employee_one
+  surname: sample_surname
+  email: employee_one@gmail.com
+  role: 2
+  state: active
+  ip: MyString 
+  api_key: MyString
+  encrypted_password: employee_one
+  reset_password_token: employee_one_3
+  reset_password_sent_at: 2014-05-04 21:16:24
+  remember_created_at: 2014-05-04 21:16:24
+  sign_in_count: 1
+  current_sign_in_at: 2014-05-04 21:16:24
+  last_sign_in_at: 2014-05-04 21:16:24
+  current_sign_in_ip: MyString
+  last_sign_in_ip: MyString
+  failed_attempts: 1
+  unlock_token: employee_one_3
+  locked_at: 2014-05-04 21:16:24
+  
+
+employee_2:
+  id: 4
+  company_id: 1
+  first_name: employee_two
+  surname: sample_surname
+  email: employee_two@gmail.com
+  role: 2
+  state: active
+  ip: MyString 
+  api_key: MyString
+  encrypted_password: employee_two
+  reset_password_token: employee_two_3
+  reset_password_sent_at: 2014-05-04 21:16:24
+  remember_created_at: 2014-05-04 21:16:24
+  sign_in_count: 1
+  current_sign_in_at: 2014-05-04 21:16:24
+  last_sign_in_at: 2014-05-04 21:16:24
+  current_sign_in_ip: MyString
+  last_sign_in_ip: MyString
+  failed_attempts: 1
+  unlock_token: employee_two_3
+  locked_at: 2014-05-04 21:16:24

@@ -9,6 +9,7 @@ class ClauserefTest < ActiveSupport::TestCase
      assert_respond_to(clauseref, :clauses)
    end
 
+#custom validation
 
 
 end

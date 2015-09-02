@@ -1,11 +1,24 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+#simulate
+
+#section delete
+#section add
+
+#clause delete
+#clause add
+
+#line delete
+#line add
+
+#line change
+  #linetype change
+  #text change
+
 one:
   specline_id: 1
   project_id: 1
   clause_id: 1
-  txt1_id: 1
-  txt2_id: 1
   txt3_id: 1
   txt4_id: 1
   txt5_id: 1
@@ -23,8 +36,6 @@ two:
   specline_id: 1
   project_id: 1
   clause_id: 1
-  txt1_id: 1
-  txt2_id: 1
   txt3_id: 1
   txt4_id: 1
   txt5_id: 1

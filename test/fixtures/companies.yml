@@ -1,27 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+specright:
+  id: 1
   name: MyString
-  tel: 1
-  www: MyString
+  tel: 01612742800
+  www: specright.co.uk
   reg_address: MyString
-  reg_number: 1
+  reg_number: 12354654
   reg_name: MyString
   reg_location: MyString
   read_term: 1
   category: 1
   logo: MyString
-  no_licence: 1
-
-two:
-  name: MyString
-  tel: 1
-  www: MyString
-  reg_address: MyString
-  reg_number: 1
-  reg_name: MyString
-  reg_location: MyString
-  read_term: 1
-  category: 1
-  logo: MyString
-  no_licence: 1
+  no_licence: 3

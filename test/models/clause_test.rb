@@ -11,6 +11,19 @@ class ClauseTest < ActiveSupport::TestCase
      assert_respond_to(clause, :products)
      assert_respond_to(clause, :clauseref)
      assert_respond_to(clause, :clausetitle)
-     assert_respond_to(clause, :guidenote)                              
+     assert_respond_to(clause, :clauseguides)                              
    end
+
+#assign title
+#TODO
+
+#custom validation
+#TODO
+
+#methods
+   test "should return clauseref code" do
+      clause = clauses(:CAWS_A10_1110_title_1)
+      assert_equal "1110", clause.clauseref_code
+   end
+
 end

@@ -1,7 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  text: MyText
+  id: 1
+  text: <p>guide text sample one<p>
 
 two:
-  text: MyText
+  id: 2
+  text: <p>guide text sample two<p>
+
+three:
+  id: 3
+  text: <p>guide text sample three<p>

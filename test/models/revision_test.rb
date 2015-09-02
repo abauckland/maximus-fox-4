@@ -6,5 +6,6 @@ class RevisionTest < ActiveSupport::TestCase
      revision = Revision.new
      assert_respond_to(revision, :project)
      assert_respond_to(revision, :alterations)
+     assert_respond_to(revision, :prints)
    end
 end

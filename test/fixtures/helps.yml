@@ -1,9 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  title: MyString
-  video: MyString
+   item: project_code
+   text: <p>A reference code for the project must be given, please note the project code and title must be unique to your company.</p>
 
 two:
-  title: MyString
-  video: MyString
+   item: project_title
+   text: <p>A title for the project must be given, please note the project cide and title must be unique to your company.</p>
+
+three:
+   item: sections_project_template
+   text: <p>Select the template or project that you would like to copy content from.</p>

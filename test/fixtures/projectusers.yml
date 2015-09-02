@@ -1,11 +1,21 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+manage:
   user_id: 1
-  project_id: 1
-  role: 1
+  project_id: 13
+  role: 0
   
-two:
-  user_id: 1
-  project_id: 1
+edit:
+  user_id: 2
+  project_id: 13
   role: 1
+
+write:
+  user_id: 3
+  project_id: 13
+  role: 2
+
+read:
+  user_id: 4
+  project_id: 13
+  role: 3

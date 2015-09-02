@@ -1,7 +1,33 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  text: MyString
+scope:
+  id: 1
+  text: scope
 
-two:
-  text: MyString
+system:
+  id: 2
+  text: system
+
+performance:
+  id: 3
+  text: performance
+
+products:
+  id: 4
+  text: products
+
+accessories:
+  id: 5
+  text: accessories
+
+workmanship:
+  id: 6
+  text: workmanship
+
+verification:
+  id: 7
+  text: verification
+
+completion:
+  id: 8
+  text: completion

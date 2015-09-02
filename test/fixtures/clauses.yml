@@ -1,13 +1,19 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+CAWS_A10_1110_title_1:
   clauseref_id: 1
   clausetitle_id: 1
   guidenote_id: 1
   project_id: 1
 
-two:
-  clauseref_id: 1
-  clausetitle_id: 1
+CAWS_B10_1110_title_2:
+  clauseref_id: 2
+  clausetitle_id: 2
+  guidenote_id: 1
+  project_id: 1
+
+CAWS_C10_1110_title_3:
+  clauseref_id: 3
+  clausetitle_id: 3
   guidenote_id: 1
   project_id: 1

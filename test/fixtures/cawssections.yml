@@ -1,9 +1,16 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  ref: MyString
-  text: MyString
+A:
+  id: 1
+  ref: A
+  text: Preliminaries
 
-two:
-  ref: MyString
-  text: MyString
+B:
+  id: 2
+  ref: B
+  text: Prefabircated Buildings
+
+C:
+  id: 3
+  ref: C
+  text: Surveys/Repairs

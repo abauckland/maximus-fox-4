@@ -1,13 +1,22 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+CAWS_A10_1110:
+  id: 1
   clausetype_id: 1
-  clause_no: 1
-  subclause: 1
+  clause_no: 11
+  subclause: 0
   subsection_id: 1
 
-two:
-  clausetype_id: 1
-  clause_no: 1
-  subclause: 1
+CAWS_A10_2110:
+  id: 2
+  clausetype_id: 2
+  clause_no: 11
+  subclause: 0
+  subsection_id: 1
+
+CAWS_A10_4110:
+  id: 3
+  clausetype_id: 4
+  clause_no: 11
+  subclause: 0
   subsection_id: 1

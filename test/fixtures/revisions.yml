@@ -1,15 +1,22 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  rev: MyString
+  rev: '-'
   project_status: 1
-  project_id: 1
+  project_id: 13
   user_id: 1
   date: 2014-05-05 20:32:04
 
 two:
-  rev: MyString
+  rev: a
   project_status: 1
-  project_id: 1
+  project_id: 13
+  user_id: 1
+  date: 2014-05-05 20:32:04
+
+three:
+  rev: b
+  project_status: 1
+  project_id: 13
   user_id: 1
   date: 2014-05-05 20:32:04

@@ -2,8 +2,13 @@
 
 one:
   id: 1
-  text: i
+  clause_id: 1
+  guidenote_id: 1
+  plan_id: 1
 
 two:
   id: 2
-  text: ii
+  clause_id: 2
+  guidenote_id: 2
+  plan_id: 1
+

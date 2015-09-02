@@ -1,13 +1,16 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  code: MyString
-  title: MyString
+CAWS_template:
+  id: 13
+  code: S-001
+  title: CAWS Template Project
   parent_id: 1
   company_id: 1
   project_status: 1
   ref_system: 1
-  image: MyString
+  project_image: MyString
+  client_logo: MyString
+  client_name: MyString
 
 two:
   code: MyString
@@ -16,4 +19,6 @@ two:
   company_id: 1
   project_status: 1
   ref_system: 1
-  image: MyString
+  project_image: MyString
+  client_logo: MyString
+  client_name: MyString

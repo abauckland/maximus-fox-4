@@ -9,7 +9,7 @@ class StandardTest < ActiveSupport::TestCase
    
 #methods
    test "should combined ref and title" do
-      standard = Standard.new(:ref => "myref", :title => "mytitle")
-      assert_equal "myref mytitle", standard.ref_and_title
+      standard = standards(:one)
+      assert_equal "MyString MyString", standard.ref_and_title
    end   
 end

@@ -9,21 +9,19 @@ class CawssubsectionTest < ActiveSupport::TestCase
    end
 
 #methods
-
-##NESTED ATTRIBUTES FOR CAWSSECTION NOT WORKING
-#   test "should combined full code" do
-#      cawssubsection = Cawssubsection.new(:ref => 20, :text => "mytitle", :cawssection_id => 1)
-#      assert_equal "MyString20", cawssubsection.full_code
-#   end
+   test "should combined full code" do
+      cawssubsection = cawssubsections(:A10)
+      assert_equal "A10", cawssubsection.full_code
+   end
  
-#   test "should combined full code and title" do
-#      cawssubsection = Cawssubsection.new(:ref => 20, :text => "mytitle", :cawssection_id => 1)
-#      assert_equal "MyString20 mytitle", cawssubsection.full_code_and_title
-#   end
+   test "should combined full code and title" do
+      cawssubsection = cawssubsections(:A10)
+      assert_equal "A10 Project Details", cawssubsection.full_code_and_title
+   end
 
    test "should combined part code and title" do
-      cawssubsection = Cawssubsection.new(:ref => 20, :text => "mytitle")
-      assert_equal "20 mytitle", cawssubsection.part_code_and_title
+      cawssubsection = cawssubsections(:A10)
+      assert_equal "10 Project Details", cawssubsection.part_code_and_title
    end
    
 end
