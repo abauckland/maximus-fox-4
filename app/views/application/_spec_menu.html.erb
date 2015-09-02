@@ -11,10 +11,12 @@
                 <li><%= link_to "Select Project", projects_path %> </li>
                 <li><%= link_to "Create Project", new_project_path %> </li>
                 <% if @project %>
-                  <% unless @project.id == nil %> 
-                    <li><%= link_to "Edit Project Details", edit_project_path(@project.id) %> </li>
+                  <% if policy(:project).edit? %>
+                      <% unless @project.id == nil %> 
+                        <li><%= link_to "Edit Project Details", edit_project_path(@project.id) %> </li>
+                      <% end %>
                   <% end %>
-                  <% if current_user.id == 34 %>
+                  <% if policy(:projectuser).show? %>
                     <li><%= link_to "Manage Project Users", projectuser_path(@project.id) %> </li>
                   <% end %>
                 <% end %>
@@ -27,10 +29,14 @@
             <li class="has_sub"><%= link_to "PUBLISH", print_path(@project.id), :class => check_current('prints') %> 
                 <ul class="sub_menu">
                     <li><%= link_to "Create/Download PDF", print_path(@project.id) %> </li>
-                    <li><%= link_to "Document Settings", edit_printsetting_path(@project.id) %> </li>
-                    <li><%= link_to "Download Keynote Files", keynote_path(@project.id) %> </li>
-                    <% if current_user.id == 34 %>
-                        <li><%= link_to "Download Product Schedule", data_path(@project.id) %> </li>
+                    <% if policy(:printsetting).edit? %>
+                        <li><%= link_to "Document Settings", edit_printsetting_path(@project.id) %> </li>
+                    <% end %>
+                    <% if policy(:keynote).show? %>
+                        <li><%= link_to "Download Keynote Files", keynote_path(@project.id) %> </li>
+                    <% end %>
+                    <% if policy(:dataexport).show? %>
+                        <li><%= link_to "Download Product Schedule", dataexport_path(@project.id) %> </li>
                     <% end %>
                 </ul>
             </li>
@@ -55,10 +61,12 @@
                 <li><%= link_to "Select Project", projects_path %> </li>
                 <li><%= link_to "Create Project", new_project_path %> </li>
                 <% if @project %>
-                  <% unless @project.id == nil %> 
-                    <li><%= link_to "Edit Project Details", edit_project_path(@project.id) %> </li>
+                  <% if policy(:project).edit? %>
+                      <% unless @project.id == nil %> 
+                        <li><%= link_to "Edit Project Details", edit_project_path(@project.id) %> </li>
+                      <% end %>
                   <% end %>
-                  <% if current_user.id == 34 %>
+                  <% if policy(:projectuser).show? %>
                     <li><%= link_to "Manage Project Users", projectuser_path(@project.id) %> </li>
                   <% end %>
                 <% end %>
@@ -79,10 +87,14 @@
             <li><p class="mob_menu">PUBLISH</p>
                 <ul class="sub_menu_mob">
                     <li><%= link_to "Create/Download PDF", print_path(@project.id) %> </li>
-                    <li><%= link_to "Document Settings", edit_printsetting_path(@project.id) %> </li>
-                    <li><%= link_to "Download Keynote Files", keynote_path(@project.id) %> </li>
-                    <% if current_user.id == 34 %>
-                        <li><%= link_to "Download Product Schedule", data_path(@project.id) %> </li>
+                    <% if policy(:printsetting).edit? %>
+                        <li><%= link_to "Document Settings", edit_printsetting_path(@project.id) %> </li>
+                    <% end %>
+                    <% if policy(:keynote).show? %>
+                        <li><%= link_to "Download Keynote Files", keynote_path(@project.id) %> </li>
+                    <% end %>
+                    <% if policy(:dataexport).show? %>
+                        <li><%= link_to "Download Product Schedule", dataexport_path(@project.id) %> </li>
                     <% end %>
                 </ul>
             </li>
