@@ -1,123 +1,54 @@
 class ProjectsController < ApplicationController
-#  before_filter :authenticate
 
-  before_filter :authorise_project_manager, only: [:update]
-  before_action :set_project, only: [:empty_project, :show, :edit, :update]
-  before_action :set_projects, only: [:edit, :update]
+  before_action :set_project, only: [:edit, :update]
+  before_action :set_projects, only: [:index, :edit, :update]
   before_action :set_templates, only: [:edit, :update]
   before_action :set_templates, only: [:edit, :update]
   before_action :set_available_status_array, only: [:edit, :update]
-  before_action :set_project_user, only: [:show, :edit]
-#  before_action :set_project_user, only: [:index]
+  before_action :set_project_user, only: [:index, :edit]
 
-  # GET /projects
-  # GET /projects.json
+
   def index
-  #authenticate that there is a logged in user
-  #user is only shown projects they have access to   
+# => only required where role is placed after project title
+#    @project_roles = policy_scope(Project).each_with_object({ }){ |c, hsh| hsh[c.id] = '#{c.projectcode_and_title} +' '+#{c.projectusers.role}'}
 
-    #list projects user is assigned to
-#changes this to create hash of projects with user access in brackets
-    @projects = Project.user_projects_access(current_user)
-   # @project = @projects.first  
-    @project_user = Projectuser.where(:user_id => current_user.id, :project_id => @projects.first.id).first
-
-    #if user is not assigned to any project
-    #show intro page and option to create a project
-    #render partial 1
-
-    #if user is assigned to projects
-      #if only one project which does not have content - intro page and option to create a project
-      if @projects
-        @check_has_content = Specline.where(:project_id => @projects.first.id).first
-      end 
-      #render partial 1 
-    
-      #if more than one project or single project has content
-      #render partion 2      
-  end
-
-  def show
-    @projects = Project.user_projects(current_user)
+# => only needed if auto creation of demo project is omitted
+#    @check_has_content = Specline.where(:project_id => @projects.ids).first
   end
 
 
-
-  # GET /projects/new
   def new
     @project = Project.new
+#TODO @ref_systems
   end
 
 
-
-  # POST /projects
-  # POST /projects.json
   def create
     @project = Project.new(project_params)
-
-
-      if @project.save
-        Revision.create(:project_id => @project.id, :user_id => current_user.id, :date => Date.today)
-        Printsetting.create(:project_id => @project.id)
-
-        new_project_users =  User.where(:company_id => current_user.company_id)
-        new_project_users.each do |user|
-          Projectuser.create(:project_id => @project.id, :user_id => user.id, :role => "manage")
-        end
-
-        redirect_to specification_path(@project), notice: 'Project was successfully created.'
-      else
-        render :new
-      end
-  end
-
-
-
-  # GET /projects/1/edit
-  def edit
-
-    @project_user = Projectuser.where(:user_id => current_user.id, :project_id => @project.id).first
-    #if project user does not have permission to edit project redirect to project/show
-    if !@project_user.manage?
-      redirect_to project_path(@project.id)
+    if @project.save
+      set_associated_defaults(@project)
+      redirect_to specification_path(@project), notice: 'Project was successfully created.'
+    else
+      render :new
     end
-
   end
 
 
-  # PATCH/PUT /projects/1
-  # PATCH/PUT /projects/1.json
+  def edit
+    authorize :project, :edit?
+  end
+
+
   def update
+    authorize :project, :update?
 
     if @project.update(project_params)
-    #after new project status set, check if status is 'draft' 
-      if @project.project_status != 'Draft'
-        #if status is not draft, check if revisions status has been changed to '-'
-        revision = Revision.where('project_id = ?', @project.id).first
-        #if status has not been changed previously, change to '-' and record project status for revision
-        if revision.rev.blank?
-          revision.update(:project_status => @project.project_status, :rev => '-')
-        #else just update with current project status in last revision record
-        else
-          last_revision = Revision.where('project_id = ?', @project.id).last
-          last_revision.update(:project_status => @project.project_status)
-        end
-      end
-      respond_to do |format|
-        flash.now[:notice] = 'Project details have been updated'
-        format.html { render :edit}
-      end
+      set_revision_status(@project)
+      redirect_to edit_project_path(@project), notice: 'Project details have been updated'
     else
       render :edit
     end
   end
-
-#      respond_to do |format|
-#      #customer error flash set in application controller
-#      flash.now[:custom] = 'A clause with the same reference already exists in this Work Section'
-#        format.html { render :new}
-#        format.xml  { render :xml => @clause.errors, :status => :unprocessable_entity }
-#      end
 
 
   private
@@ -127,23 +58,32 @@ class ProjectsController < ApplicationController
     end
 
     def set_projects
-      @projects = Project.user_projects(current_user)
+      @projects = Project.joins(:projectusers).where('projectusers.user_id' => current_user.id).order("code")
     end
 
     def set_template
       @template = Project.project_template(@project)
     end
 
+    def set_project_user
+      if params[:id]
+        @project_user = Projectuser.where(:user_id => current_user.id, :project_id => params[:id]).first
+      else
+        @project_user = Projectuser.where(:user_id => current_user.id, :project_id => @projects.first.id).first
+      end
+    end
+
+    def pundit_user
+      @project_user
+    end
+
     def set_templates
-      user_project_ids = Specline.joins(:project => :projectusers
-                              ).where('projectusers.user_id' => current_user.id, 'projects.ref_system' => @project.ref_system
-                              ).where.not('projects.id' => params[:id]
-                              ).pluck(:project_id).uniq.sort
-      user_projects = Project.where(:id => user_project_ids)
+#TODO change ref system names
+      user_projects = Project.joins(:projectusers).where('projectusers.user_id' => current_user.id, :ref_system => @project.ref_system).order("code")
+#TODO check ids of template projects
+#TODO change ref system names
       standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system).order("code")
-      template_ids = user_projects + standard_templates
-  
-      @templates = user_projects + standard_templates
+      @templates = standard_templates + user_projects
     end
 
     def set_available_status_array
@@ -154,22 +94,40 @@ class ProjectsController < ApplicationController
       @available_status_array = project_status_array[current_status_index..project_status_array_last_index]
     end
 
-    def set_project_user
-      @project_user = Projectuser.where(:user_id => current_user.id, :project_id => params[:id]).first 
+
+    def set_associated_defaults(project)
+      Revision.create(:project_id => project.id, :user_id => current_user.id, :date => Date.today)
+      Printsetting.create(:project_id => project.id)
+
+#TODO temp code - delete on full implementation of project user code
+      new_project_users =  User.where(:company_id => current_user.company_id)
+      new_project_users.each do |user|
+        Projectuser.create(:project_id => project.id, :user_id => user.id, :role => "manage")
+      end
+#TODO Projectuser.create(:project_id => @project.id, :user_id => user.id, :role => "manage")
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+
+    def set_revision_status(project)
+
+      if project.project_status != 'Draft'
+        #if status is not draft, check if revisions status has been changed to '-'
+        revision = Revision.where(:project_id => project.id).first
+        #if status has not been changed previously, change to '-' and record project status for revision
+        if revision.rev.blank?
+          revision.update(:project_status => project.project_status, :rev => '-')
+        #else just update with current project status in last revision record
+        else
+          last_revision = Revision.where(:project_id => project.id).last
+          last_revision.update(:project_status => project.project_status)
+        end
+      end
+    end
+
+
     def project_params
       params.require(:project).permit(:client_name, :client_logo, :code, :title, :parent_id, :company_id, :project_status, :ref_system, :project_image)
-    end
-
-    def authorise_project_manager
-      set_project_user
-      if @project_user.manage?
-        return @project_user
-      else
-        redirect_to log_out_path  
-      end 
+#TODO params.require(:project).permit(:client_name, :client_logo, :code, :title, :parent_id, :company_id, :project_status, :refsystem_id, :project_image)
     end
 
 end
