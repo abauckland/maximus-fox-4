@@ -1,62 +1,65 @@
 class UsersController < ApplicationController
 
-  before_action :set_user, only: [:show]
+  before_action :set_user, only: [:show, :activate, :deactivate]
+  before_action :set_licenses_used, only: [:index, :activate, :deactivate]
+  before_action :set_licenses_total, only: [:index, :activate, :deactivate]
 
   layout "users"
 
-  def index
-    #company licence management
-    #create new User object for form
-    @users = User.where(:company_id => current_user.company_id) 
 
-    @licences_used = User.where(:company_id => current_user.company_id, :state => "active").count
-    @licences_total = Company.joins(:users).where('users.company_id' => current_user.company_id).pluck(:no_licence).first
+  def index
+    @users = policy_scope(User) 
+    authorize @users
   end
 
   def show
-    #if current_user.company_id == @user.company_id
-#    authorize @user
+    @user = User.where(:id => current_user.id).first
+    authorize @user
   end
 
   def activate
-    @user = User.where(:id => params[:id]).first
+    authorize @user
 
-    no_licences = Company.where(:id => current_user.company_id).pluck(:no_licence).first
-    active_licences = User.where(:company_id => current_user.company_id, :state => "active").length
-
-    if no_licences == active_licences
+    if @licences_used == @licences_total
       respond_to do |format|
         format.js   { render :insufficient_licences, :layout => false }
       end
     else
-#    authorize @user
       @user.activate!
-      @licences_used = User.where(:company_id => current_user.company_id, :state => "active").count
-      @licences_total = Company.joins(:users).where('users.company_id' => current_user.company_id).pluck(:no_licence).first
+      set_licenses_used
+      set_licenses_total
       respond_to do |format|
         format.js   { render :activate, :layout => false }
-      end 
-    end 
+      end
+    end
   end
 
-  def deactivate
 
-    @user = User.where(:id => params[:id]).first
-#    authorize @user
+  def deactivate
+    authorize @user
+
     if @user.deactivate!
-      @licences_used = User.where(:company_id => current_user.company_id, :state => "active").count
-      @licences_total = Company.joins(:users).where('users.company_id' => current_user.company_id).pluck(:no_licence).first
+      set_licenses_used
+      set_licenses_total
       respond_to do |format|
         format.js   { render :deactivate, :layout => false }
-      end 
-    end 
+      end
+    end
   end
 
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.where(:id => current_user.id).first
+      @user = User.where(:id => params[:id]).first
+    end
+
+    def set_licenses_used
+      @licences_used = policy_scope(User).where(:state => "active").count
+    end
+
+    def set_licenses_total
+      @licences_total = Company.joins(:users).where('users.company_id' => current_user.company_id).pluck(:no_licence).first
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
