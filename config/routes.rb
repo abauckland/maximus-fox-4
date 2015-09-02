@@ -22,7 +22,7 @@ Rails.application.routes.draw do
 #  end
 
   resources :dataexports, :only => [:show] do
-    get :download, :on => :member
+    post :download, :on => :member
   end
 
   resources :companies, :only => [:edit, :update]
@@ -109,7 +109,7 @@ Rails.application.routes.draw do
   resources :clauseguides do
     get :clone, :on => :member
     get :clone_clause_list, :on => :member
-    get :create_clone, :on => :member
+    post :create_clone, :on => :member
 
     get :assign, :on => :member
     get :assign_guides, :on => :member
