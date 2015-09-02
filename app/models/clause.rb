@@ -26,15 +26,26 @@ before_validation :custom_validation_1
 before_save :assign_title
 
 #used
-  scope :project_subsection, ->(project, subsection_id, subsection_name) { joins(:clauseref => [:subsection], :speclines => [:project => :projectusers]
+  scope :project_subsection, ->(project, subsection_id, subsection_name, current_user) { joins(:clauseref => [:subsection], :speclines => [:project => :projectusers]
                                   ).where('projectusers.user_id' => current_user.id
                                   ).where('speclines.project_id' => project.id
                                   ).where('subsections.'+subsection_name+'_id' => subsection_id
                                   ).group(:id
                                   ).order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
                                   )}
- 
 
+#used
+  scope :subsection_clauses, ->(project, subsection, subsection_name) { joins(:speclines
+                        ).includes(:clausetitle, :clauseref => [:subsection]
+                        ).where('speclines.project_id' => project.id, 'subsections.'+subsection_name+'_id' => subsection.id
+                        ).order('clauserefs.subsection_id, clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
+                        ).uniq
+                        }
+
+#used
+  scope :ref_subsection_clauses, ->(project_id, subsection_ids, subsection_name) { joins(:speclines, :clauseref => [:subsection]
+                                     ).where('speclines.project_id' => project_id, 'subsections.'+subsection_name+'_id' => subsection_ids
+                                     )}
 
 
   scope :changed_caws_clauses, ->(event, project, revision, subsection) { joins(:alterations, :clauseref => :subsection
@@ -48,21 +59,17 @@ before_save :assign_title
     ).uniq}
 
 
-  scope :subsection_clauses, ->(project, subsection) { joins(:speclines
-                              ).includes(:clausetitle, :clauseref => [:subsection => [:cawssubsection => :cawssection]]
-                              ).where('speclines.project_id' => project.id, 'subsections.cawssubsection_id' => subsection.id, 'clauserefs.clausetype_id' => [2..4]
-                              ).order('clauserefs.subsection_id, clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
-                              ).uniq
-                              } 
-
   scope :cawssubsection_clauses, ->(project_id, cawssubsection_ids) { joins(:speclines, :clauseref => [:subsection]
                                      ).where('speclines.project_id' => project_id, 'subsections.cawssubsection_id' => cawssubsection_ids
                                      )}
 
 
-  scope :ref_subsection_clauses, ->(project_id, subsection_ids, subsection_name) { joins(:speclines, :clauseref => [:subsection]
-                                     ).where('speclines.project_id' => project_id, 'subsections.'+subsection_name+'_id' => subsection_ids
-                                     )}
+
+
+
+  def clauseref_code
+    clauseref.clausetype_id.to_s + sprintf("%02d", clauseref.clause_no).to_s + clauseref.subclause.to_s
+  end
 
 
 
