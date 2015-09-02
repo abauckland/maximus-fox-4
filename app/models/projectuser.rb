@@ -1,8 +1,10 @@
 class Projectuser < ActiveRecord::Base
   belongs_to :user
   belongs_to :project
-  has_many :subsectionusers
+  has_many :subsectionusers, dependent: :destroy
   has_many :subsections, :through => :subsectionusers
+
+#  accepts_nested_attributes_for :subsectionusers
 
   attr_accessor :email
 
