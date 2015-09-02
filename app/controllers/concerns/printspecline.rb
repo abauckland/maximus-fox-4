@@ -1,8 +1,8 @@
 module Printspecline
   
-def specification(project, subsection, revision, pdf)
-#def specification(project, subsection, revision, user_array, print_audit, pdf)
+def specification(project, subsection, revision, issue, pdf)
 
+    user_array = User.joins(:projectusers).where('projectusers.project_id' => project.id).order(:email).ids
     #get array of linetypes that have a prefix
     prefixed_linetypes_array = Linetype.where('txt1 = ?', 1).ids
 
@@ -23,23 +23,20 @@ def specification(project, subsection, revision, pdf)
 
         #if not enough on page start new page
         if pdf.y >= 13.mm
-          pdf.y = y_position      
+          pdf.y = y_position
         else
           page_break(project, line, pdf)
         end
 
         #if first clause of clausetype, insert clause type title
-        if i == 0
-          clausetype_print(project, subsection, clausetype, pdf)
-        end
+        clausetype_print(project, subsection, clausetype, pdf) if i == 0
 
         #print line
+        #print_author(user_array.index?(line.user_id), line.update_at, pdf) if issue == "audit"
         line_print(project, line, pdf)
-        #def line_print(project, line, user_array, print_audit, pdf)
         pdf.move_down(pdf.box_height + 2.mm)
       end
     end
-
 
 end
 
@@ -139,11 +136,14 @@ def clausetype_print(project, subsection, clausetype, pdf)
   clausetype_title_format = font_style_clausetype_code.merge(:width => 155.mm, :overflow => :expand)
 
       pdf.move_down(6.mm)
+#TODO replace ref system code options
+#TODO reset start point to allow for audit and uniclass code width
       if project.CAWS?
         pdf.spec_box subsection.full_code + '.' + clausetype.id.to_s + '000', clausetype_code_format.merge(:at =>[0.mm, pdf.y])
       else
         pdf.spec_box subsection.full_code + '.' + clausetype.id.to_s + '000', clausetype_code_format.merge(:at =>[0.mm, pdf.y])
       end
+#TODO reset start point to allow for audit and uniclass code width
       pdf.spec_box clausetype.text.upcase, clausetype_title_format.merge(:at =>[20.mm, pdf.y])
       pdf.move_down(pdf.box_height)
 end
@@ -155,14 +155,15 @@ def line_draft(line, pdf)
   font_style_clause_title = {:size => 11, :style => :bold}
   font_style_specline = {:size => 10}
 #formating for lines  
+#TODO reset start point to allow for audit and uniclass code width
   clausetitle_format = font_style_clause_title.merge(:width => 155.mm, :overflow => :expand)
   prefixed_specline_format = font_style_specline.merge(:width => 140.mm, :overflow => :expand)
   specline_format = font_style_specline.merge(:width => 149.mm, :overflow => :expand)
 
-
+#TODO reset start point to allow for audit and uniclass code width
     case line.linetype_id
       when 1, 2 ;   draft_linetype_1_helper(line, clausetitle_format, pdf)
-      when 3 ;      pdf.draft_text_box "#{line.txt4.text}: #{line.txt5.text}", prefixed_specline_format.merge(:at =>[30.mm, pdf.y])       
+      when 3 ;      pdf.draft_text_box "#{line.txt4.text}: #{line.txt5.text}", prefixed_specline_format.merge(:at =>[30.mm, pdf.y])
       when 4 ;      pdf.draft_text_box "#{line.txt4.text}", prefixed_specline_format.merge(:at =>[30.mm, pdf.y])
       when 7 ;      pdf.draft_text_box "#{line.txt4.text}", specline_format.merge(:at =>[23.mm, pdf.y])
       when 8 ;      pdf.draft_text_box "#{line.txt4.text}: #{line.txt5.text}", specline_format.merge(:at =>[23.mm, pdf.y])
@@ -173,11 +174,13 @@ def line_draft(line, pdf)
 end
 
 def draft_linetype_1_helper(line, clausetitle_format, pdf)
+#TODO reset start point to allow for audit and uniclass code width
      pdf.move_down(4.mm)
      pdf.draft_text_box "#{line.clause.clausetitle.text}", clausetitle_format.merge(:at =>[20.mm, pdf.y]) 
 end
 
 def draft_linetype_10_helper(line, specline_format, pdf)
+#TODO reset start point to allow for audit and uniclass code width
   if line.identity.identkey.text == "Manufacturer"
       pdf.draft_text_box "#{line.identity.identkey.text}: #{line.identity.identvalue.company.company_address}", specline_format.merge(:at =>[23.mm, pdf.y]) 
   else
@@ -188,7 +191,6 @@ end
 
 
 def line_print(project, line, pdf)
-#def line_print(project, line, user_array, print_audit, pdf)
 
 #font styles for lines
   font_style_clause_title = {:size => 11, :style => :bold}
@@ -196,14 +198,12 @@ def line_print(project, line, pdf)
 
 
 #formating for lines
+#TODO reset start point to allow for audit and uniclass code width
   clausetitle_format = font_style_clause_title.merge(:width => 155.mm,:overflow => :expand)
   specline_prefix_format = font_style_specline.merge(:width => 4.mm)
   prefixed_specline_format = font_style_specline.merge(:width => 140.mm,:overflow => :expand)
   indent_format = font_style_specline.merge(:width => 3.mm) 
   specline_format = font_style_specline.merge(:width => 149.mm,:overflow => :expand)
-
-
-# ref = user_array.index?(line.user_id)
 
     case line.linetype_id
       when 1, 2 ;   print_linetype_1_helper(project, line, clausetitle_format, pdf)
@@ -215,55 +215,42 @@ def line_print(project, line, pdf)
       when 11 ;     print_linetype_11_helper(line, indent_format, specline_format, pdf)
       when 12 ;     print_linetype_12_helper(line, indent_format, specline_format, pdf)
 
-#      when 1, 2 ;   print_linetype_1_helper(project, line, clausetitle_format, ref, print_audit, pdf)
-#      when 3 ;      print_linetype_3_helper(line, specline_prefix_format, prefixed_specline_format, ref, print_audit, pdf)
-#      when 4 ;      print_linetype_4_helper(line, specline_prefix_format, prefixed_specline_format, ref, print_audit, pdf)
-#      when 7 ;      print_linetype_7_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#      when 8 ;      print_linetype_8_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#      when 10 ;     print_linetype_10_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#      when 11 ;     print_linetype_11_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#      when 12 ;     print_linetype_12_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-
     end
 end
 
+#TODO reset start point to allow for audit and uniclass code width
 def print_linetype_1_helper(project, line, specline_format, pdf)
      pdf.move_down(4.mm)
      pdf.spec_box "#{full_clause_code(project, line)}", specline_format.merge(:at =>[0.mm, pdf.y]) 
      pdf.spec_box "#{line.clause.clausetitle.text}", specline_format.merge(:at =>[20.mm, pdf.y]) 
 end
 
+#TODO reset start point to allow for audit and uniclass code width
 def print_linetype_3_helper(line, prefix_format, specline_format, pdf)
-#def print_linetype_3_helper(line, prefix_format, specline_format, ref, print_audit, pdf)
-#    print_line_author(line, ref, print_audit, pdf)
     pdf.spec_box "#{line.txt1.text}.", prefix_format.merge(:at => [26.mm, pdf.y])
     pdf.spec_box "#{line.txt4.text}: #{line.txt5.text}", specline_format.merge(:at =>[30.mm, pdf.y]) 
 end
 
+#TODO reset start point to allow for audit and uniclass code width
 def print_linetype_4_helper(line, prefix_format, specline_format, pdf)
-#def print_linetype_4_helper(line, prefix_format, specline_format, ref, print_audit, pdf)
-#    print_line_author(line, ref, print_audit, pdf)
     pdf.spec_box "#{line.txt1.text}.", prefix_format.merge(:at => [26.mm, pdf.y])
     pdf.spec_box "#{line.txt4.text}", specline_format.merge(:at =>[30.mm, pdf.y]) 
 end
 
+#TODO reset start point to allow for audit and uniclass code width
 def print_linetype_7_helper(line, indent_format, specline_format, pdf)
-#def print_linetype_7_helper(line, prefix_format, specline_format, ref, print_audit, pdf)
-#    print_line_author(line, ref, print_audit, pdf)
     pdf.spec_box '-', indent_format.merge(:at => [20.mm, pdf.y]) 
     pdf.spec_box "#{line.txt4.text}", specline_format.merge(:at =>[23.mm, pdf.y]) 
 end
 
+#TODO reset start point to allow for audit and uniclass code width
 def print_linetype_8_helper(line, indent_format, specline_format, pdf)
-#def print_linetype_8_helper(line, prefix_format, specline_format, ref, print_audit, pdf)
-#    print_line_author(line, ref, print_audit, pdf)
     pdf.spec_box '-', indent_format.merge(:at => [20.mm, pdf.y]) 
     pdf.spec_box "#{line.txt4.text}: #{line.txt5.text}", specline_format.merge(:at =>[23.mm, pdf.y]) 
 end
 
+#TODO reset start point to allow for audit and uniclass code width
 def print_linetype_10_helper(line, indent_format, specline_format, pdf)
-#def print_linetype_10_helper(line, prefix_format, specline_format, ref, print_audit, pdf)
-#    print_line_author(line, ref, print_audit, pdf)
     pdf.spec_box '-', indent_format.merge(:at => [20.mm, pdf.y]) 
     if line.identity.identkey.text == "Manufacturer"  
       pdf.spec_box "#{line.identity.identkey.text}: #{line.identity.identvalue.company.company_name}", specline_format.merge(:at =>[23.mm, pdf.y])  
@@ -272,38 +259,35 @@ def print_linetype_10_helper(line, indent_format, specline_format, pdf)
     end
 end
 
+#TODO reset start point to allow for audit and uniclass code width
 def print_linetype_11_helper(line, indent_format, specline_format, pdf)
-#def print_linetype_11_helper(line, prefix_format, specline_format, ref, print_audit, pdf)
-#    print_line_author(line, ref, print_audit, pdf)
     pdf.spec_box '-', indent_format.merge(:at => [20.mm, pdf.y]) 
     pdf.spec_box "#{line.perform.performkey.text}: #{line.identity.perform.performvalue.full_perform_value}", specline_format.merge(:at =>[23.mm, pdf.y]) 
 end
 
+#TODO reset start point to allow for audit and uniclass code width
 def print_linetype_12_helper(line, indent_format, specline_format, pdf)
-#def print_linetype_12_helper(line, prefix_format, specline_format, ref, print_audit, pdf)
-#    print_line_author(line, ref, print_audit, pdf)
     pdf.spec_box '-', indent_format.merge(:at => [20.mm, pdf.y]) 
     pdf.spec_box "#{line.txt4.text}: #{line.txt5.text}", specline_format.merge(:at =>[23.mm, pdf.y]) 
 end
 
-#def print_line_author(line, ref, print_audit, pdf)
-#  font_style_author = {:size => 8}
-#  line_author_format = font_style_author.merge(:width => 26.mm)
-#  if print_audit == true
-#    pdf.spec_box "#{ref}:#{line.updated_at.strftime("%d/%m/%y")}", line_author_format.merge(:at => [10.mm, pdf.y])
-#  end
-#end
 
+def print_revision_author(ref, date, pdf)
+    pdf.spec_box "#{ref}:#{line.updated_at.strftime("%d/%m/%y")}", {:size => 8, :at => [10.mm, pdf.y], :width => 17.mm}
+end
+
+#TODO reset start point to allow for audit and uniclass code width
 def clausetitle_continued(line, pdf)
      pdf.spec_box 'Clause continued on next page...', :size => 9, :style => :italic, :at =>[20.mm, 16.mm], :width => 155.mm, :overflow => :expand
 end
 
+#TODO reset start point to allow for audit and uniclass code width
 def clausetitle_repeat(project, line, pdf)
      pdf.spec_box full_clause_code(project, line), :size => 10, :style => :bold_italic, :at =>[0.mm, pdf.y], :width => 20.mm, :height => 5.mm
      pdf.spec_box line.clause.clausetitle.text + ' (continued)', :size => 10, :style => :bold_italic, :at =>[20.mm, pdf.y], :width => 155.mm, :overflow => :expand
 end
 
-
+#TODO replace ref system code options
 def full_clause_code(project, line)
   if project.CAWS?
     line.clause.caws_code#clauseref.subsection.cawssubsection.full_code + '.' + line.clause.clauseref.clausetype_id.to_s + sprintf("%02d", line.clause.clauseref.clause).to_s + line.clause.clauseref.subclause.to_s
