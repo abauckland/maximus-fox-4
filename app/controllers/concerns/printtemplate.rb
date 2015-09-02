@@ -10,9 +10,9 @@ module Printtemplate
   include Printsubtitle
   include Printoutline
   include Printnumbers
-#  include Printuserlist
+  include Printuserlist
 
-def print_caws_document(project, revision, issue, pdf)
+def print_document(project, revision, issue, pdf)
 
   settings = Printsetting.where(:project_id => project.id).first
   #array for storing content page numbers
@@ -34,19 +34,12 @@ def print_caws_document(project, revision, issue, pdf)
   pdf.start_new_page
 
 ##USER LIST PAGE
-#if print_audit == true
-##where is list of project_users created?
-#  specline_users = User.joins(:speclines).where('speclines.project_id' => params[:project_id]).order(:email).ids.uniq
-#  alteration_users = User.joins(:alterations).where('alterations.project_id' => params[:project_id]).order(:email).ids.uniq
-#  user_array = specline_users + alteration_users
-#  user_array.uniq!
-
-#print list of authors
-#  page_userlist(user_array, pdf)
-#  pdf.start_new_page
-#  pdf.text "[blank page]", :size => 10
-#  pdf.start_new_page
-
+  if issue == "audit"
+    page_userlist(project, pdf)
+    pdf.start_new_page
+    pdf.text "[blank page]", :size => 10
+    pdf.start_new_page
+  end
 
 ##HEADER START POINT
   header_page_start = pdf.page_number
@@ -60,8 +53,8 @@ def print_caws_document(project, revision, issue, pdf)
 
 ##REVISIONS
 # print revisions - if reported at front of document  
-  if settings.structure == "group revisions"
-  
+#  if settings.structure == "group revisions"
+
 #changed_subections = Cawssubsection.all_subsection_revisions(project, revision)
     #changed_sections = Alteration.changed_caws_all_sections(project, revision)
     changed_sections = Cawssubsection.all_subsection_revisions(project, revision)
@@ -71,52 +64,50 @@ def print_caws_document(project, revision, issue, pdf)
         document_content << ["Document Revisions", (pdf.page_number - document_page_start + 1)]
 
         #cover page
-        if settings.section_cover == "section cover"
-          revision_cover(pdf) 
-          pdf.start_new_page
-          pdf.y = 268.mm
-        else
+       # if settings.section_cover == "section cover"
+       #   revision_cover(pdf) 
+       #   pdf.start_new_page
+       #   pdf.y = 268.mm
+       # else
           section_cover_style = {:size => 14, :style => :bold}
           pdf.move_down(8.mm) 
           pdf.spec_box "Document Revisions", section_cover_style.merge(:at =>[0.mm, pdf.y])
           pdf.move_down(pdf.box_height)
           pdf.move_down(8.mm)
-        end
+       # end
 
         #state if product status has changed
         project_status_change(@previous_status, @current_status, pdf) if @status_change
 
-        changed_sections.each do |subsection|
-          combined_revisions_text(project, subsection, revision, pdf)
-        end
+        section_revisions(project, revision, issue, pdf)
 
         pdf.start_new_page
-      end
-    else
-      if @status_change
+     end
+#  else
+#      if @status_change
 
         ##page nummber record
-        document_content << ["Document Revisions", (pdf.page_number - document_page_start + 1)]
+#        document_content << ["Document Revisions", (pdf.page_number - document_page_start + 1)]
 
         #cover page
-        if settings.section_cover == "section cover"
-          revision_cover(pdf)
-          pdf.start_new_page
-          pdf.y = 268.mm
-        else
-          section_cover_style = {:size => 14, :style => :bold}
-          pdf.move_down(8.mm) 
-          pdf.spec_box "Document Revisions", section_cover_style.merge(:at =>[0.mm, pdf.y])
-          pdf.move_down(pdf.box_height)
-          pdf.move_down(8.mm)
-        end
+#        if settings.section_cover == "section cover"
+#          revision_cover(pdf)
+#          pdf.start_new_page
+#          pdf.y = 268.mm
+#        else
+#          section_cover_style = {:size => 14, :style => :bold}
+#          pdf.move_down(8.mm) 
+#          pdf.spec_box "Document Revisions", section_cover_style.merge(:at =>[0.mm, pdf.y])
+#          pdf.move_down(pdf.box_height)
+#          pdf.move_down(8.mm)
+#        end
 
         #state if product status has changed
-        project_status_change(@previous_status, @current_status, pdf)
+#        project_status_change(@previous_status, @current_status, pdf)
 
-        pdf.start_new_page
-    end
-  end
+#        pdf.start_new_page
+#    end
+#  end
 
 ## SUBSECTIONS
   subsections = Cawssubsection.all_subsections(project)
@@ -131,23 +122,23 @@ def print_caws_document(project, revision, issue, pdf)
           pdf.start_new_page 
         end
 
-        if settings.structure == "revision by section"
-          #revisions for project
-          subsection_revs = Alteration.changed_caws_subsections(project, revision, subsection)
-          if !subsection_revs.blank?
-              #set title based on whether cover is provided to section
-              caws_title_type(settings, subsection, "revision", pdf)
-              revisions_text(project, subsection, revision, pdf)
-
-              pdf.start_new_page
-          end
-        end
+#        if settings.structure == "revision by section"
+#          #revisions for project
+#          subsection_revs = Alteration.changed_caws_subsections(project, revision, subsection)
+#          if !subsection_revs.blank?
+#              #set title based on whether cover is provided to section
+#              caws_title_type(settings, subsection, "revision", pdf)
+#              revisions_text(project, subsection, revision, pdf)
+#
+#              pdf.start_new_page
+#          end
+#        end
 
         #set title based on whether cover is provided to section
         caws_title_type(settings, subsection, "specification", pdf)
         #specline info
         #caws_title(subsection, "specline", pdf)
-        specification(project, subsection, revision, pdf)
+        specification(project, subsection, revision, issue, pdf)
 #        specification(project, subsection, revision, user_array, print_audit, pdf)
 
         pdf.start_new_page
@@ -184,23 +175,6 @@ def print_caws_document(project, revision, issue, pdf)
 
 end
 
-  def combined_revision_info(project, subsection, revision, pdf)
-   # subsections.each do |subsection|
-  #    combined_revision_title(subsection, pdf)
-      combined_revisions_text(project, subsection, revision, pdf)
-  #  end
-  end
-
-
-
-
-  def revision_info(project, subsection, revision, pdf)
-   # subsections.each do |subsection|
-    #  revision_title(subsection, pdf)
-      revisions_text(project, subsection, revision, pdf)
-  #  end
-  end
-
 
   def status_change(project)
 
@@ -212,5 +186,5 @@ end
     @status_changed = true if @current_status != @previous_status
   end
 
-#end of module
+
 end
