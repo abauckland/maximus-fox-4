@@ -48,11 +48,11 @@ module SpecificationsHelper
   end
 
   def prefix_menu(specline)
-  #    if authorise_specline_view(['manage', 'edit', 'write'])
+    if policy(:specification).edit_line?
       "<td class='prefixed_line_space'></td><td class='prefixed_line_menu'>#{specline_move}</td>".html_safe
-  #  else
-  #    "<td class='prefixed_line_space'></td><td class='prefixed_line_menu'></td>".html_safe
-  #  end
+    else
+      "<td class='prefixed_line_space'></td><td class='prefixed_line_menu'></td>".html_safe
+    end
   end
 
   def prefix_menu_data(specline)
@@ -60,11 +60,11 @@ module SpecificationsHelper
   end
 
   def prefix_menu_xref(specline)
-  #  if authorise_specline_view(['manage', 'edit', 'write'])
+    if policy(:specification).edit_line?
       "</td><td class='prefixed_line_menu'>#{specline_move}</td>".html_safe
-  #  else
-  #    "</td><td class='prefixed_line_menu'></td>".html_safe
-  #  end
+    else
+      "</td><td class='prefixed_line_menu'></td>".html_safe
+    end
   end
 
 
@@ -79,86 +79,86 @@ module SpecificationsHelper
 
 
   def txt3(specline)
-  #  if authorise_specline_view(['manage', 'edit', 'write'])
+    if policy(:specification).edit_line?
       "<span id='#{specline.id}' class='editable_text3'>#{specline.txt3.text}</span>".html_safe
-  #  else
-  #    "#{specline.txt3.text}".html_safe
-  #  end
+    else
+      "#{specline.txt3.text}".html_safe
+    end
   end
 
   def txt4(specline)
-  #  if authorise_specline_view(['manage', 'edit', 'write'])
+    if policy(:specification).edit_line?
       "<span id='#{specline.id}' class='editable_text4'>#{specline.txt4.text}</span>".html_safe
-  #  else
-  #    "#{specline.txt4.text}".html_safe
-  #  end
+    else
+      "#{specline.txt4.text}".html_safe
+    end
   end
 
   def txt5(specline)
-  #  if authorise_specline_view(['manage', 'edit', 'write'])
+    if policy(:specification).edit_line?
       "<span id='#{specline.id}' class='editable_text5'>#{specline.txt5.text}</span>".html_safe
-  #  else
-  #    "#{specline.txt5.text}".html_safe
-  #  end
+    else
+      "#{specline.txt5.text}".html_safe
+    end
   end
 
   def txt6(specline)
-  #  if authorise_specline_view(['manage', 'edit', 'write'])
+    if policy(:specification).edit_line?
       "<span id='#{specline.id}' class='editable_text6'>#{specline.txt6.text}</span>".html_safe
-  #  else
-  #    "#{specline.txt6.text}".html_safe
-  #  end
+    else
+      "#{specline.txt6.text}".html_safe
+    end
   end
 
 
   def identity_pair(specline)
-  #  if authorise_specline_view(['manage', 'edit', 'write'])
+    if policy(:specification).edit_line?
       if specline.identity.identkey.text == "Manufacturer"
       "<td class='data_key'><span id='#{specline.id}'class='editable_product_key'>#{specline.identity.identkey.text}</span>: <span id='#{specline.id}'class='editable_product_value'>#{specline.identity.identvalue.company.details}</span></td>".html_safe
       else
       "<td class='data_key'><span id='#{specline.id}'class='editable_product_key'>#{specline.identity.identkey.text}</span>: <span id='#{specline.id}'class='editable_product_value'>#{specline.identity.identvalue.identtxt.text}</span></td>".html_safe  
       end
-  #  else
-  #    if specline.identity.identkey.text == "Manufacturer"
-  #      "<td class='data_key'>#{specline.identity.identkey.text}: #{specline.identity.identvalue.company.details}</td>".html_safe  
-  #    else  
-  #      "<td class='data_key'>#{specline.identity.identkey.text}: #{specline.identity.identvalue.identtxt.text}</td>".html_safe
-  #    end
-  #  end
+    else
+      if specline.identity.identkey.text == "Manufacturer"
+        "<td class='data_key'>#{specline.identity.identkey.text}: #{specline.identity.identvalue.company.details}</td>".html_safe  
+      else  
+        "<td class='data_key'>#{specline.identity.identkey.text}: #{specline.identity.identvalue.identtxt.text}</td>".html_safe
+      end
+    end
   end
 
   def perform_pair(specline) 
-  #  if authorise_specline_view(['manage', 'edit', 'write'])
+    if policy(:specification).edit_line?
       "<td class='text_text'><span id='#{specline.id}'class='editable_product_key'>#{specline.perform.performkey.text}</span>: <span id='#{specline.id}'class='editable_product_value'>#{specline.perform.performvalue.value_with_units}</span></td>".html_safe
-  #  else
-  #    "<td class='text_text'>#{specline.perform.performkey.text}: #{specline.perform.performvalue.full_perform_value}</td>".html_safe    
-  #  end
+    else
+      "<td class='text_text'>#{specline.perform.performkey.text}: #{specline.perform.performvalue.full_perform_value}</td>".html_safe    
+    end
   end
   
   
   def xref(specline)
-  #  if authorise_specline_view(['manage', 'edit', 'write'])
+    if policy(:specification).edit_line?
       "<td class='text_text'><span id='#{specline.id}'class='editable_text4'>#{specline.txt4.text}</span>: <span id='#{specline.id}'class='editable_xref'>#{specline.txt5.text}</span></td>".html_safe
-  #  else
-  #    "<td class='text_text'>#{specline.txt4.text}: #{specline.txt5.text}</td>".html_safe
-  #  end
+    else
+      "<td class='text_text'>#{specline.txt4.text}: #{specline.txt5.text}</td>".html_safe
+    end
   end
 
 
   def suffix_menus(specline)
-  #  if authorise_specline_view(['manage', 'edit', 'write'])
+    if policy(:specification).edit_line?
       "<td class='suffixed_line_menu_mob'>#{specline_mob_spec_menu(specline)}</td>#{specline_links(specline)}</tr><tr class='specline_mob_menu_popup'><td class='mob_line_menu' colspan=3 >#{specline_suffix_menu_mob_spec(specline)}</td>".html_safe
-  #  else
-  #    "<td class='suffixed_line_menu_mob'></td><td class='suffixed_line_menu'></td>".html_safe
-  #  end
+    else
+      "<td class='suffixed_line_menu_mob'></td><td class='suffixed_line_menu'></td>".html_safe
+    end
   end
 
   def suffix_clause_menu(specline)
-  #  if authorise_specline_view(['manage', 'edit', 'write'])
+    if policy(:specification).edit_clause?
       "<td class='suffixed_line_menu_mob'>#{specline_mob_clause_menu(specline)}</td><td class='suffixed_line_menu' width ='120'>#{clause_help_link(specline)}#{clause_delete_link(specline)}#{clause_new_link(specline)}#{specline_line_new_link(specline)}</td></tr><tr class='specline_mob_menu_popup'><td class='mob_line_menu' colspan=2 >#{specline_suffix_menu_mob_clause(specline)}</td></tr>".html_safe
-  #  else
-  #    "<td class='suffixed_line_menu_mob'></td><td class='suffixed_line_menu'></td>".html_safe
-  #  end
+    else
+      "<td class='suffixed_line_menu_mob'></td><td class='suffixed_line_menu'></td>".html_safe
+    end
   end
 
 
@@ -189,11 +189,7 @@ module SpecificationsHelper
 
 
   def spec_clause_ref_text(specline)
-    if @project.ref_system == "CAWS"
-      specline.clause.clauseref.subsection.cawssubsection.cawssection.ref + sprintf("%02d", specline.clause.clauseref.subsection.cawssubsection.ref).to_s<<"."<<specline.clause.clauseref.clausetype_id.to_s<<sprintf("%02d", specline.clause.clauseref.clause_no).to_s<<specline.clause.clauseref.subclause.to_s 
-    else
-      specline.clause.clauseref.subsection.unisubsection.unisection.ref + sprintf("%02d", specline.clause.clauseref.subsection.unisubsection.ref).to_s<<"."<<specline.clause.clauseref.clausetype_id.to_s<<sprintf("%02d", specline.clause.clauseref.clause_no).to_s<<specline.clause.clauseref.subclause.to_s     
-    end
+      line_clause_ref(specline)
   end
 
   def clause_new_link(specline)
@@ -217,14 +213,47 @@ module SpecificationsHelper
     link_to "", delete_specline_specline_path(specline.id), method: :delete, :remote => true, :class => "line_delete_icon", :title => "delete line"
   end
 
-  def clause_help_link(specline)  
+  def clause_help_link(specline)
     if !specline.clause.guidenote.nil?
       link_to "", guidance_specline_path(specline.id), :remote => true, :class => "line_info_icon", :title => "clause guidance"
     end
   end
 
+#  def clause_help_link(specline)
+
+#    #get lower order guidenote if guidenote for project plan not available (no guide shown/available when level== 1)
+#    guidelevel = specline.project.projectplan.guidelevel_id
+#    until guidelevel == 1
+#      clauseguide = Clauseguide.where(:clause_id => specline.clause_id, :guidelevel_id => guidelevel).first
+#      if !clauseguide.blank?
+#        return link_to "", guidance_specline_path(clauseguide.guidenote_id), :remote => true, :class => "line_info_icon", :title => "show clause guidance"
+#      end
+#      guidelevel -= 1
+#    end
+
+#    #option while project plans not in use
+#    clauseguide = Clauseguide.where(:clause_id => specline.clause_id, :guidelevel_id => 2).first
+#    unless clauseguide.blank?
+#      link_to "", guidance_specline_path(clauseguide.guidenote_id), :remote => true, :class => "line_info_icon", :title => "show clause guidance"
+#    end
+#  end
 
   def clause_manufact_link(specline)
   end
+
+
+
+  def set_subsection_name(project_id)
+#TODO change ref system establishment
+    project = Project.find(project_id)
+    case project.ref_system
+      when "CAWS" ; 'cawssubsection'
+    end
+  end
+
+  def line_clause_ref(specline)
+      return specline.clause.clauseref.subsection.method(set_subsection_name(specline.project_id)).call.full_code.to_s + '.' +specline.clause.clauseref_code.to_s
+  end
+
 
 end
