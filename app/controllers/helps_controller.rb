@@ -5,6 +5,7 @@
 
     before_action :set_help, only: [:edit, :update, :create, :destroy]
 
+    layout "administrations"
 
     def index
       @helps = Help.all.order('item')
@@ -31,8 +32,9 @@
       @help = Help.new(help_params)
       authorize @help
       if @help.save
+        redirect_to helps_path, notice: 'Help item was successfully created.'
       else
-        render helps_path
+        render :new
       end
     end
 
@@ -44,7 +46,7 @@
 #on create redirect back to dashbard
         redirect_to helps_path, notice: 'Help item was successfully updated.'
       else
-        render helps_path
+        render :edit
       end
     end
 
