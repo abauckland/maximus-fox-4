@@ -98,8 +98,7 @@ class Cawssubsection < ActiveRecord::Base
                                    ).includes(:cawssection).where('speclines.project_id' => project.id, :cawssection_id => section.id
                                    ).group('cawssubsections.id').sort 
                                    }
-
-                                            
+                               
   def full_code
     return cawssection.ref.to_s + sprintf("%02d", ref).to_s
   end
