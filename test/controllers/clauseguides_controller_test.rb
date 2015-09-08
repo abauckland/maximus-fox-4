@@ -116,7 +116,7 @@ class ClauseguidesControllerTest < ActionController::TestCase
 #create_clone
 #  test "should clone clauseguide to clauses" do
 #    sign_in users(:admin)
-#    post :create_clone, clauseguide: { clause_id: [1,2,3], plan_id: 1, guidenote_id: 1}
+#    post :create_clone, clauseguide: { clause_id: 1, plan_id: 1, guidenote_id: 1}
 
     #redirect to index if saved
 #    assert_redirected_to clauseguides_path
@@ -140,5 +140,9 @@ class ClauseguidesControllerTest < ActionController::TestCase
 #  end
 
 #assign_guides
+#  test "should assign guidenotes to clauses" do
+#    sign_in users(:admin)
+#    post :create_clone, clauseguide: { clause_id: [1,2,3], plan_id: 1, guidenote_id: 1}
+#  end
 
 end
