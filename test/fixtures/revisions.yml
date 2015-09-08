@@ -1,22 +1,39 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+#CAWS
+#CAWS_rev
+#CAWS_template_project
 
-one:
+CAWS_nil:
+  rev:
+  project_status: 0
+  project_id: 1
+  user_id: 1
+  date: 2014-05-05 20:32:04
+
+CAWS_rev_na:
   rev: '-'
   project_status: 1
-  project_id: 13
+  project_id: 2
   user_id: 1
-  date: 2014-05-05 20:32:04
+  date: 2014-05-06 20:32:04
 
-two:
+CAWS_rev_a:
   rev: a
   project_status: 1
-  project_id: 13
+  project_id: 2
   user_id: 1
-  date: 2014-05-05 20:32:04
+  date: 2014-05-07 20:32:04
 
-three:
+CAWS_rev_b:
   rev: b
   project_status: 1
-  project_id: 13
+  project_id: 2
+  user_id: 1
+  date: 2014-05-08 20:32:04
+
+CAWS_template_nil:
+  rev:
+  project_status: 0
+  project_id: 1
   user_id: 1
   date: 2014-05-05 20:32:04

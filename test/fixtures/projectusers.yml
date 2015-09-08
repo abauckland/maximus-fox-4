@@ -1,21 +1,66 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+#CAWS
+#CAWS_rev
+#CAWS_template_project
 
-manage:
+CAWS_manage:
+  user_id: 1
+  project_id: 1
+  role: 0
+  
+CAWS_edit:
+  user_id: 2
+  project_id: 1
+  role: 1
+
+CAWS_write:
+  user_id: 3
+  project_id: 1
+  role: 2
+
+CAWS_read:
+  user_id: 4
+  project_id: 1
+  role: 3
+
+
+CAWS_rev_manage:
+  user_id: 
+  project_id: 2
+  role: 0
+  
+CAWS_rev_edit:
+  user_id: 2
+  project_id: 2
+  role: 1
+
+CAWS_rev_write:
+  user_id: 3
+  project_id: 2
+  role: 2
+
+CAWS_rev_read:
+  user_id: 4
+  project_id: 2
+  role: 3
+
+
+CAWS_template_manage:
   user_id: 1
   project_id: 13
   role: 0
   
-edit:
+CAWS_template_edit:
   user_id: 2
   project_id: 13
   role: 1
 
-write:
+CAWS_template_write:
   user_id: 3
   project_id: 13
   role: 2
 
-read:
+CAWS_template_read:
   user_id: 4
   project_id: 13
   role: 3

@@ -1,39 +1,67 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+#CAWS
+#CAWS_rev
+#CAWS_template_project
 
-one:
-  font_style: 1
-  font_size: 1
-  structure: 1
-  prelim: 1
-  page_number: 1
-  client_detail: 1
-  client_logo: 1
-  project_detail: 1
-  project_image: 1
-  company_detail: 1
-  header_project: 1
-  header_client: 1
-  header_document: 1
-  header_logo: 1
-  footer_detail: 1
-  footer_author: 1
-  footer_date: 1
+CAWS_settings:
+  project_id: 1
+  font_style: Helvetica
+  font_size: medium
+  structure: group revisions
+  prelim: separate sections
+  page_number: by document
+  client_detail: right
+  client_logo: right
+  project_detail: right
+  project_image: right
+  company_detail: right
+  header_project: show
+  header_client: show
+  header_document: show
+  header_logo: none
+  footer_detail: show
+  footer_author: show
+  footer_date: show
+  section_cover: no cover
 
-two:
-  font_style: 1
-  font_size: 1
-  structure: 1
-  prelim: 1
-  page_number: 1
-  client_detail: 1
-  client_logo: 1
-  project_detail: 1
-  project_image: 1
-  company_detail: 1
-  header_project: 1
-  header_client: 1
-  header_document: 1
-  header_logo: 1
-  footer_detail: 1
-  footer_author: 1
-  footer_date: 1
+CAWS__rev_settings:
+  project_id: 2
+  font_style: Helvetica
+  font_size: medium
+  structure: group revisions
+  prelim: separate sections
+  page_number: by document
+  client_detail: right
+  client_logo: right
+  project_detail: right
+  project_image: right
+  company_detail: right
+  header_project: show
+  header_client: show
+  header_document: show
+  header_logo: none
+  footer_detail: show
+  footer_author: show
+  footer_date: show
+  section_cover: no cover
+
+CAWS_template_settings:
+  project_id: 13
+  font_style: Helvetica
+  font_size: medium
+  structure: group revisions
+  prelim: separate sections
+  page_number: by document
+  client_detail: right
+  client_logo: right
+  project_detail: right
+  project_image: right
+  company_detail: right
+  header_project: show
+  header_client: show
+  header_document: show
+  header_logo: none
+  footer_detail: show
+  footer_author: show
+  footer_date: show
+  section_cover: no cover

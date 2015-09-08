@@ -1,20 +1,34 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-CAWS_template:
-  id: 13
+CAWS:
+  id: 1
   code: S-001
-  title: CAWS Template Project
+  title: CAWS Project
   parent_id: 1
   company_id: 1
-  project_status: 1
+  project_status: 0
   ref_system: 1
   project_image: MyString
   client_logo: MyString
   client_name: MyString
 
-two:
-  code: MyString
-  title: MyString
+CAWS_rev:
+  id: 2
+  code: S-002
+  title: CAWS Project Rev
+  parent_id: 1
+  company_id: 1
+  project_status: 2
+  ref_system: 1
+  project_image: MyString
+  client_logo: MyString
+  client_name: MyString
+
+#id is hard coded in clause guidance controller
+CAWS_template:
+  id: 13 
+  code: S-013
+  title: CAWS Template Project
   parent_id: 1
   company_id: 1
   project_status: 1
