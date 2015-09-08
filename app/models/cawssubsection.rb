@@ -3,10 +3,10 @@ class Cawssubsection < ActiveRecord::Base
   has_many :subsections
 
 #used
-  scope :project_subsections, ->(project) { joins(:subsections => [:clauserefs => [:clauses => :speclines]]
+  scope :project_subsections, ->(project) { joins(:cawssection, :subsections => [:clauserefs => [:clauses => :speclines]]
                                            ).where('speclines.project_id' => project.id
                                            ).group('cawssubsections.id'
-                                           ).order('cawssubsections.id'
+                                           ).order('cawssections.ref, cawssubsections.ref'#'cawssubsections.id'
                                            )} 
 
 #  scope :project_user_subsections, ->(project, current_user) { joins(:subsections => [:susbectionusers => [:projectusers], :clauserefs => [:clauses => :speclines]]
@@ -16,10 +16,10 @@ class Cawssubsection < ActiveRecord::Base
 #                                           )}                                             
 
 #used
-  scope :template_subsections, ->(project, template) { joins(:subsections => [:clauserefs => [:clauses => :speclines]]
+  scope :template_subsections, ->(project, template) { joins(('cawssection'.to_sym), :subsections => [:clauserefs => [:clauses => :speclines]]
                                                       ).where('speclines.project_id' => template.id
                                                       ).group('cawssubsections.id'
-                                                      ).order('cawssubsections.id'
+                                                      ).order('cawssections.ref, cawssubsections.ref'#'cawssubsections.id'
                                                       )}
 
 #  scope :template_user_subsections, ->(project, template, current_user) { joins(:subsections => [:susbectionusers => [:projectusers], :clauserefs => [:clauses => :speclines]]
@@ -34,10 +34,10 @@ class Cawssubsection < ActiveRecord::Base
 #                                                      )}
 
 
-  scope :all_subsections, ->(project) { joins(:subsections => [:clauserefs => [:clauses => :speclines]]
+  scope :all_subsections, ->(project) { joins(:cawssection, :subsections => [:clauserefs => [:clauses => :speclines]]
                                          ).where('speclines.project_id' => project.id
                                          ).group('cawssubsections.id'
-                                         ).order('cawssubsections.id'
+                                         ).order('cawssections.ref, cawssubsections.ref'#'cawssubsections.id'
                                          )}
 
 
@@ -48,17 +48,18 @@ class Cawssubsection < ActiveRecord::Base
 #                                         ).order('cawssubsections.id'
 #                                         )}
 
-  scope :subsections, ->(project) { joins(:subsections => [:clauserefs => [:clauses => :speclines]]
+  scope :subsections, ->(project) { joins(:cawssection, :subsections => [:clauserefs => [:clauses => :speclines]]
                                          ).where('speclines.project_id' => project.id
                                          ).where.not(:cawssection_id => 1
                                          ).group('cawssubsections.id'
-                                         ).order('cawssubsections.id'
+                                         ).order('cawssections.ref, cawssubsections.ref'#'cawssubsections.id'
                                          )}
 
 #revisions view
-  scope :all_subsection_revisions, ->(project, revision) { joins(:subsections => [:clauserefs => [:clauses => :alterations]]
+  scope :all_subsection_revisions, ->(project, revision) { joins(:cawssection, :subsections => [:clauserefs => [:clauses => :alterations]]
                                          ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id
                                          ).group('cawssubsections.id'
+                                         ).order('cawssections.ref, cawssubsections.ref'#'cawssubsections.id'
                                          )}
 
 #  scope :prelim_subsection_revisions, ->(project, revision) { joins(:subsections => [:clauserefs => [:clauses => :alterations]]
@@ -87,17 +88,19 @@ class Cawssubsection < ActiveRecord::Base
 #                                         )}
 
 
-  scope :subsection_revisions, ->(project, revision) { joins(:subsections => [:clauserefs => [:clauses => :alterations]]
+  scope :subsection_revisions, ->(project, revision) { joins(:cawssection, :subsections => [:clauserefs => [:clauses => :alterations]]
                                          ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id
                                          ).where.not(:cawssection_id => 1
                                          ).group('cawssubsections.id'
+                                         ).order('cawssections.ref, cawssubsections.ref'
                                          )}
 
 
-  scope :section_subsections, ->(project, section) {joins(:subsections => [:clauserefs => [:clauses => :speclines]]
+  scope :section_subsections, ->(project, section) {joins(:cawssection, :subsections => [:clauserefs => [:clauses => :speclines]]
                                    ).includes(:cawssection).where('speclines.project_id' => project.id, :cawssection_id => section.id
-                                   ).group('cawssubsections.id').sort 
-                                   }
+                                   ).group('cawssubsections.id'
+                                   ).order('cawssections.ref, cawssubsections.ref'
+                                   )}
                                
   def full_code
     return cawssection.ref.to_s + sprintf("%02d", ref).to_s

@@ -28,6 +28,7 @@ class DataexportsController < ApplicationController
         @clauses = Clause.joins(:clauseref, :speclines
                        ).where('speclines.project_id' => @project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => 8
                        ).uniq
+#TODO apply order to result set
       end
 
       if params[:product_data] == 'products'
@@ -36,6 +37,7 @@ class DataexportsController < ApplicationController
         @clauses = Clause.joins(:clauseref, :speclines
                        ).where('speclines.project_id' => @project.id, 'clauserefs.clausetype_id' => [4], 'speclines.linetype_id' => 8
                        ).uniq
+#TODO apply order to result set
       end
 
       if params[:product_data] == 'products_accessories'
@@ -44,6 +46,7 @@ class DataexportsController < ApplicationController
         @clauses = Clause.joins(:clauseref, :speclines
                        ).where('speclines.project_id' => @project.id, 'clauserefs.clausetype_id' => [4,5], 'speclines.linetype_id' => 8
                        ).uniq
+#TODO apply order to result set
       end
 
       send_data product_data_csv(@project, @clauses), filename: filename, :type => "text/csv"

@@ -38,7 +38,7 @@ before_save :assign_title
   scope :subsection_clauses, ->(project, subsection, subsection_name) { joins(:speclines
                         ).includes(:clausetitle, :clauseref => [:subsection]
                         ).where('speclines.project_id' => project.id, 'subsections.'+subsection_name+'_id' => subsection.id
-                        ).order('clauserefs.subsection_id, clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
+                        ).order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
                         ).uniq
                         }
 
@@ -53,7 +53,7 @@ before_save :assign_title
     ).order('clauserefs.subsection_id, clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
     ).uniq}
 
-  scope :changed_caws_clause_content, ->(event, project, revision, subsection) { joins(:alterations, :clauseref => :subsection
+  scope :changed_caws_clause_content, ->(event, project, revision, subsection) { joins(:alterations, :clauseref => [:subsection]
     ).where('alterations.clause_add_delete' => 1, 'alterations.project_id' => project.id, 'alterations.revision_id' => revision.id, 'subsections.cawssubsection_id' => subsection.id
     ).order('clauserefs.subsection_id, clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
     ).uniq}
