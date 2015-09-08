@@ -107,22 +107,26 @@ class ClauseguidesController < ApplicationController
 
     def assign
       @clauseguide_id = params[:id]
-      @plan_id = params[:plan_id]
+      clauseguide = Clauseguide.find(params[:id])
+      
+      @plan_id = clauseguide.plan_id
+      
 
       if params[:search_text]
         @search_term = params[:search_text]
-      else
-        clauseguide = Clauseguide.find(params[:id])
-        
+      else   
         clausetitle = Clausetitle.joins(:clauses).where('clauses.id' => clauseguide.clause_id).first
         @search_term = clausetitle.text
       end
 
       clausetitles = Clausetitle.where('clausetitles.text LIKE ?', "%#{@search_term}%" ).collect{|i| i.id}.uniq
       project_clauses = Clause.joins(:speclines).where('speclines.project_id' => @project.id).collect{|i| i.id}.uniq
+            
+      clause_with_guides_ids = Clauseguide.where(:plan_id => @plan_id).collect{|i| i.clause_id}.uniq
 
         @clauses = Clause.joins(:clausetitle, :speclines, :clauseref => [:subsection]
                     ).where(:clausetitle_id => clausetitles, :id => project_clauses
+                    ).where.not(:id => clause_with_guides_ids
                     ).group(:id).order('subsections.cawssubsection_id, clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause')
 
     end
@@ -134,7 +138,7 @@ class ClauseguidesController < ApplicationController
       clauses = Clause.where(:id => params[:clauses])
 
       clauses.each do |clause|
-        clauseguide = Clauseguide.create(:clause_id => clause.id, :guidenote_id => params[:id], :level => params[:plan_id])
+        clauseguide = Clauseguide.create(:clause_id => clause.id, :guidenote_id => params[:id], :plan_id => params[:plan_id])
       end
 
       redirect_to clauseguides_path

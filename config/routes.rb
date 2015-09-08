@@ -112,7 +112,7 @@ Rails.application.routes.draw do
     post :create_clone, :on => :member
 
     get :assign, :on => :member
-    get :assign_guides, :on => :member
+    post :assign_guides, :on => :member
   end
 
   resources :guidenotes do
