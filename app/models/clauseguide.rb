@@ -4,4 +4,8 @@ class Clauseguide < ActiveRecord::Base
 
   accepts_nested_attributes_for :guidenote
 
+  def clause_title
+    clause.clauseref_code + ' ' + clause.clause_title
+  end
+
 end

@@ -71,6 +71,9 @@ before_save :assign_title
     clauseref.clausetype_id.to_s + sprintf("%02d", clauseref.clause_no).to_s + clauseref.subclause.to_s
   end
 
+  def clause_title
+    clausetitle.text.to_s
+  end
 
 
 def caws_code

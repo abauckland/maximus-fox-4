@@ -87,15 +87,15 @@ class ClauseguidesController < ApplicationController
 
     def clone_clause_list
 
-      @clauses = Clause.joins(:speclines, :clauseref => [:subsection]
+      @clauseguides = Clauseguide.joins(:clause => [:speclines, :clauseref => [:subsection]]
                       ).where('subsections.cawssubsection_id' => params[:id], 'speclines.project_id' => @project.id
                       ).uniq.order('clauserefs.clause_no, clauserefs.subclause')
 
     end
 
     def create_clone
-      @clauseguide = Clauseguide.new(clauseguide_params)
-      authorize @clauseguide
+      @clauseguide = Clauseguide.new(:plan_id => params[:plan_id], :clause_id => params[:clause_id], :guidenote_id => params[:guidenote_id])
+#      authorize @clauseguide
 
       if @clauseguide.save
           redirect_to clauseguides_path, notice: 'Expense was successfully created.'
@@ -154,7 +154,7 @@ class ClauseguidesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def clauseguide_params
-      params.require(:clauseguide).permit({:guidenote_attributes => [:text]}, :id, :clause_id, :guidenote_id, :level)
+      params.require(:clauseguide).permit({:guidenote_attributes => [:text]}, :id, :clause_id, :guidenote_id, :plan_id)
     end
 end
 

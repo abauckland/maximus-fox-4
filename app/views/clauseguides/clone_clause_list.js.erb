@@ -1,3 +1,3 @@
-var updated_clone_guide_clause_select = "<%= escape_javascript(select_tag "clone_guide_clause_id", options_from_collection_for_select(@clauses, :id, :caws_full_title), {:prompt => 'Select Clause'} )%>";
+var updated_clone_guide_clause_select = "<%= escape_javascript(select_tag "guidenote_id", options_from_collection_for_select(@clauseguides, :guidenote_id, :clause_title), {:prompt => 'Select Clause'} )%>";
 
-$('select#clone_guide_clause_id').replaceWith(updated_clone_guide_clause_select);
+$('select#guidenote_id').replaceWith(updated_clone_guide_clause_select);
