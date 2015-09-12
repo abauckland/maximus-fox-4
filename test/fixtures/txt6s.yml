@@ -2,8 +2,8 @@
 
 one:
   id: 1
-  text: test text type six line one
+  text: test1
 
 two:
   id: 2
-  text: test text type six line two
+  text: test2

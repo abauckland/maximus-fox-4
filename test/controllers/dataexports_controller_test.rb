@@ -5,8 +5,15 @@ class DataexportsControllerTest < ActionController::TestCase
   include Devise::TestHelpers
 
   setup do
-    @project = projects(:CAWS_template)
+    @project = projects(:CAWS)
   end
+
+#authorization
+  test "not authenticated should get redirect" do
+    get :show, id: @project
+    assert_response :redirect
+  end
+
 
 #show
   test "should get show" do

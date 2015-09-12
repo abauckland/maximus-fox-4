@@ -11,8 +11,8 @@ one:
   txt4: 1
   txt5: 0
   txt6: 0
-  identity:
-  perform:
+  identity: 0
+  perform: 0
 
 two:
   id: 2
@@ -25,13 +25,13 @@ two:
   txt4: 1
   txt5: 0
   txt6: 0
-  identity:
-  perform:
+  identity: 0
+  perform: 0
 
 three:
   id: 3
   ref: l3
-  description: a)Editable Text: Editable Tex
+  description: a) Editable Text Editable Text
   example: a) All burrs and edges to be made smooth
   txt1: 1
   txt2: 0
@@ -39,9 +39,9 @@ three:
   txt4: 1
   txt5: 1
   txt6: 0
-  identity:
-  perform:
-    
+  identity: 0
+  perform: 0
+
 four:
   id: 4
   ref: l4
@@ -53,75 +53,75 @@ four:
   txt4: 1
   txt5: 0
   txt6: 0
-  identity:
-  perform:
+  identity: 0
+  perform: 0
 
 five:
   id: 5
   ref: l5
-  description: Category: Manufacturer's data
-  example: Category: Manufacturer's data
+  description: Category Manufacturer's data
+  example: Category Manufacturer's data
   txt1: 0
   txt2: 0
   txt3: 1
   txt4: 0
   txt5: 0
   txt6: 1
-  identity:
-  perform:
-    
+  identity: 0
+  perform: 0
+
 six:
   id: 6
   ref: l6
-  description: Category: Editable Text
-  example: Category: Cleaning methods
+  description: Category Editable Text
+  example: Category Cleaning methods
   txt1: 0
   txt2: 0
   txt3: 1
   txt4: 0
   txt5: 1
   txt6: 0
-  identity:
-  perform:
-    
+  identity: 0
+  perform: 0
+
 seven:
   id: 7
   ref: l7
-  description: Category: Manufacturer's data
-  example: Category: Manufacturer's data
+  description: Category Manufacturer's data
+  example: Category Manufacturer's data
   txt1: 0
   txt2: 0
   txt3: 0
   txt4: 1
   txt5: 0
   txt6: 0
-  identity:
-  perform:
-    
+  identity: 0
+  perform: 0
+
 eight:
   id: 8
   ref: l8
-  description: Editable Text: Editable Text
-  example: Cleaning Methods: Ladder
+  description: Editable Text Editable Text
+  example: Cleaning Methods Ladder
   txt1: 0
   txt2: 0
   txt3: 0
   txt4: 1
   txt5: 0
   txt6: 0
-  identity:
-  perform:
-    
+  identity: 0
+  perform: 0
+
 twelve:
   id: 12
   ref: l12
-  description: Editable Text: Clause Reference
-  example: Editable Text: Clause Reference
+  description: Editable Text Clause Reference
+  example: Editable Text Clause Reference
   txt1: 0
   txt2: 0
   txt3: 0
   txt4: 1
   txt5: 0
   txt6: 0
-  identity:
-  perform:
+  identity: 0
+  perform: 0

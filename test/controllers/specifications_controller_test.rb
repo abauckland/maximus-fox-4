@@ -5,17 +5,17 @@ class SpecificationsControllerTest < ActionController::TestCase
   include Devise::TestHelpers
 
   setup do
-    @specline = speclines(:one) #set up dependencies - txt1, txt2, txt3, txt4, txt5, txt6, linetype, clause, clauseref, clausetitle
-    @project = projects(:one)
-    @subsection = subsection(:one) #!???????
-    @clausetype = clausetypes(:one)
+#    @specline = speclines(:one) #set up dependencies - txt1, txt2, txt3, txt4, txt5, txt6, linetype, clause, clauseref, clausetitle
+    @project = projects(:CAWS)
+#    @subsection = subsection(:one) #!???????
+#    @clausetype = clausetypes(:one)
   end
 
 #authorization
-#  test "not authenticated should get redirect" do
-#    get :show, id: @project
-#    assert_response :redirect
-#  end
+  test "not authenticated should get redirect" do
+    get :show, id: @project
+    assert_response :redirect
+  end
 
 #empty_project
 

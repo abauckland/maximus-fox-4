@@ -1,22 +1,68 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-CAWS_A10_1110:
-  id: 1
+DEFAULTS: &DEFAULT
+  clause_no: 11
+  subclause: 0
+
+
+A10_1110:
+  id: 11
   clausetype_id: 1
-  clause_no: 11
-  subclause: 0
+  <<: *DEFAULT
   subsection_id: 1
 
-CAWS_A10_2110:
-  id: 2
+A10_2110:
+  id: 12
   clausetype_id: 2
-  clause_no: 11
-  subclause: 0
+  <<: *DEFAULT
   subsection_id: 1
 
-CAWS_A10_4110:
-  id: 3
-  clausetype_id: 4
-  clause_no: 11
-  subclause: 0
+A10_3110:
+  id: 13
+  clausetype_id: 3
+  <<: *DEFAULT
   subsection_id: 1
+
+A10_4110:
+  id: 14
+  clausetype_id: 4
+  <<: *DEFAULT
+  subsection_id: 1
+
+A10_5110:
+  id: 15
+  clausetype_id: 5
+  <<: *DEFAULT
+  subsection_id: 1
+
+A10_6110:
+  id: 16
+  clausetype_id: 6
+  <<: *DEFAULT
+  subsection_id: 1
+
+A10_7110:
+  id: 17
+  clausetype_id: 7
+  <<: *DEFAULT
+  subsection_id: 1
+
+A10_8110:
+  id: 18
+  clausetype_id: 8
+  <<: *DEFAULT
+  subsection_id: 1
+
+B10_1110:
+  id: 21
+  clausetype_id: 1
+  <<: *DEFAULT
+  subsection_id: 1
+
+C10_1110:
+  id: 31
+  clausetype_id: 1
+  <<: *DEFAULT
+  subsection_id: 1
+
+

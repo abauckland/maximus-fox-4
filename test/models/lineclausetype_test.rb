@@ -1,9 +1,9 @@
 require 'test_helper'
 
-class LineclaustypeTest < ActiveSupport::TestCase
+class LineclausetypeTest < ActiveSupport::TestCase
 #associations
    test "should have associations" do
-     lineclaustype = Lineclaustype.new
+     lineclaustype = Lineclausetype.new
      assert_respond_to(lineclaustype, :clausetype)
      assert_respond_to(lineclaustype, :linetype)
    end

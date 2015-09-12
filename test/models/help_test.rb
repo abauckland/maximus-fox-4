@@ -9,7 +9,8 @@ class HelpTest < ActiveSupport::TestCase
 
   test "Help doesn't save without item parameter" do
     help = Help.create(text: '<p>Test Text</p>')
-    assert_not help.valid?, 'The help record should not be valid when missing item', help.errors.messages[:item]
+    assert_not help.valid?, 'The help record should not be valid when missing item'
+    assert_equal ["can't be blank"], help.errors.messages[:item]
   end
 
   test "Help saves without text parameter" do
@@ -19,11 +20,10 @@ class HelpTest < ActiveSupport::TestCase
 
 
   test "Help with duplicate item name does not save" do
-    help = Help.create( item: 'test_name', text: '<p>Test Text</p>' )
-    help_copy = Help.create( item: 'test_name', text: '<p>Test text of duplication record</p>' )
+    help = Help.create( item: 'project_code', text: '<p>Test Text</p>' )
 
-    assert_not help_copy.valid?, 'The help record should not be valid an existing record with the same item name exists'
-#TODO #check that error message is sent
+    assert_not help.valid?, 'The help record should not be valid an existing record with the same item name exists'
+    assert_equal ["A help item for the same reference already exists"], help.errors.messages[:item]
   end
 
 end

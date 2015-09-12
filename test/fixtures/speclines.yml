@@ -1,144 +1,1295 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-#clause for each clausetype
-#line for each linetype in each clause
-
-#  clause_id: 1
-#    linetype_id: 1,   clause_line: 0
-#    linetype_id: 3,   clause_line: 1
-#    linetype_id: 4,   clause_line: 2
-#    linetype_id: 7,   clause_line: 3
-#    linetype_id: 8,   clause_line: 4
-
-#  clause_id: 2
-#    linetype_id: 1,   clause_line: 0
-#    linetype_id: 3,   clause_line: 1
-#    linetype_id: 4,   clause_line: 2
-#    linetype_id: 7,   clause_line: 3
-#    linetype_id: 8,   clause_line: 4
-#    linetype_id: 12,  clause_line: 5
-
-#  clause_id: 3
-#    linetype_id: 1,   clause_line: 0
-#    linetype_id: 7,   clause_line: 1
-#    linetype_id: 8,   clause_line: 2
-
-#  clause_id: 4  
-#    linetype_id: 1,   clause_line: 0
-#    linetype_id: 7,   clause_line: 1
-#    linetype_id: 8,   clause_line: 2
-
-#  clause_id: 5
-#    linetype_id: 1,   clause_line: 0
-#    linetype_id: 3,   clause_line: 1
-#    linetype_id: 4,   clause_line: 2
-#    linetype_id: 7,   clause_line: 3
-#    linetype_id: 8,   clause_line: 4
-
-#  clause_id: 6
-#    linetype_id: 1,   clause_line: 0
-#    linetype_id: 3,   clause_line: 1
-#    linetype_id: 4,   clause_line: 2
-#    linetype_id: 7,   clause_line: 3
-#    linetype_id: 8,   clause_line: 4
-
-#  clause_id: 7
-#    linetype_id: 1,   clause_line: 0
-#    linetype_id: 3,   clause_line: 1
-#    linetype_id: 4,   clause_line: 2
-#    linetype_id: 7,   clause_line: 3
-#    linetype_id: 8,   clause_line: 4
-
-#  clause_id: 8
-#    linetype_id: 1,   clause_line: 0
-#    linetype_id: 3,   clause_line: 1
-#    linetype_id: 4,   clause_line: 2
-#    linetype_id: 7,   clause_line: 3
-#    linetype_id: 8,   clause_line: 4
-
-#line of each relevant linetype for each clause
-
-
-C1_one:
-  project_id: 13
-  clause_id: 1
-  clause_line: 1
-  txt1_id: 1
+DEFAULTS: &DEFAULT
   txt2_id: 1
   txt3_id: 1
-  txt4_id: 1
-  txt5_id: 1
   txt6_id: 1
   identity_id: 1
   perform_id: 1
-  linetype_id: 1
 
-C1_two:
-  project_id: 13
-  clause_id: 1
-  clause_line: 2
-  txt1_id: 2
-  txt2_id: 2
-  txt3_id: 2
-  txt4_id: 2
-  txt5_id: 2
-  txt6_id: 2
-  identity_id: 1
-  perform_id: 1
-  linetype_id: 1
-
-C2_one:
-  project_id: 13
-  clause_id: 2
-  clause_line: 1
+specline_1:
+  id: 1
+  project_id: 1
+  clause_id: 11
+  clause_line: 0
   txt1_id: 1
-  txt2_id: 1
-  txt3_id: 1
   txt4_id: 1
   txt5_id: 1
-  txt6_id: 1
-  identity_id: 1
-  perform_id: 1
   linetype_id: 1
-  
-C2_two:
-  project_id: 13
-  clause_id: 2
-  clause_line: 2
-  txt1_id: 2
-  txt2_id: 2
-  txt3_id: 2
-  txt4_id: 2
-  txt5_id: 2
-  txt6_id: 2
-  identity_id: 1
-  perform_id: 1
-  linetype_id: 1
-  
-C3_one:
-  project_id: 13
-  clause_id: 3
+  <<: *DEFAULT
+
+specline_2:
+  id: 2
+  project_id: 1
+  clause_id: 11
   clause_line: 1
   txt1_id: 1
-  txt2_id: 1
-  txt3_id: 1
-  txt4_id: 1
+  txt4_id: 2
   txt5_id: 1
-  txt6_id: 1
-  identity_id: 1
-  perform_id: 1
-  linetype_id: 1
-  
-C3_two:
-  project_id: 13
-  clause_id: 3
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_3:
+  id: 3
+  project_id: 1
+  clause_id: 11
   clause_line: 2
-  txt1_id: 2
-  txt2_id: 2
-  txt3_id: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_4:
+  id: 4
+  project_id: 1
+  clause_id: 11
+  clause_line: 3
+  txt1_id: 1
   txt4_id: 2
   txt5_id: 2
-  txt6_id: 2
-  identity_id: 1
-  perform_id: 1
+  linetype_id: 3
+  <<: *DEFAULT
+ 
+specline_5:
+  id: 5
+  project_id: 1
+  clause_id: 11
+  clause_line: 4
+  txt1_id: 2
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_6:
+  id: 6
+  project_id: 1
+  clause_id: 11
+  clause_line: 5
+  txt1_id: 3
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 3
+  <<: *DEFAULT
+
+specline_7:
+  id: 7
+  project_id: 1
+  clause_id: 11
+  clause_line: 6
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_8:
+  id: 8
+  project_id: 1
+  clause_id: 12
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
   linetype_id: 1
+  <<: *DEFAULT
+
+specline_9:
+  id: 9
+  project_id: 1
+  clause_id: 12
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_10:
+  id: 10
+  project_id: 1
+  clause_id: 12
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_11:
+  id: 11
+  project_id: 1
+  clause_id: 12
+  clause_line: 3
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 12
+  <<: *DEFAULT
+
+specline_12:
+  id: 12
+  project_id: 1
+  clause_id: 13
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_13:
+  id: 13
+  project_id: 1
+  clause_id: 13
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_14:
+  id: 14
+  project_id: 1
+  clause_id: 13
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_15:
+  id: 15
+  project_id: 1
+  clause_id: 14
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_16:
+  id: 16
+  project_id: 1
+  clause_id: 14
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_17:
+  id: 17
+  project_id: 1
+  clause_id: 14
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_18:
+  id: 18
+  project_id: 1
+  clause_id: 15
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_19:
+  id: 19
+  project_id: 1
+  clause_id: 15
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_20:
+  id: 20
+  project_id: 1
+  clause_id: 15
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_21:
+  id: 21
+  project_id: 1
+  clause_id: 16
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_22:
+  id: 22
+  project_id: 1
+  clause_id: 16
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_23:
+  id: 23
+  project_id: 1
+  clause_id: 16
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_24:
+  id: 24
+  project_id: 1
+  clause_id: 16
+  clause_line: 3
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 3
+  <<: *DEFAULT
+
+specline_25:
+  id: 25
+  project_id: 1
+  clause_id: 16
+  clause_line: 4
+  txt1_id: 2
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 3
+  <<: *DEFAULT
+
+specline_26:
+  id: 26
+  project_id: 1
+  clause_id: 16
+  clause_line: 5
+  txt1_id: 3
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 3
+  <<: *DEFAULT
+
+specline_27:
+  id: 27
+  project_id: 1
+  clause_id: 17
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_28:
+  id: 28
+  project_id: 1
+  clause_id: 17
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_29:
+  id: 29
+  project_id: 1
+  clause_id: 17
+  clause_line: 2
+  txt1_id: 2
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_30:
+  id: 30
+  project_id: 1
+  clause_id: 17
+  clause_line: 3
+  txt1_id: 3
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_31:
+  id: 31
+  project_id: 1
+  clause_id: 18
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_32:
+  id: 32
+  project_id: 1
+  clause_id: 18
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_33:
+  id: 33
+  project_id: 1
+  clause_id: 18
+  clause_line: 2
+  txt1_id: 2
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_34:
+  id: 34
+  project_id: 1
+  clause_id: 18
+  clause_line: 3
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_35:
+  id: 35
+  project_id: 1
+  clause_id: 18
+  clause_line: 4
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_36:
+  id: 36
+  project_id: 1
+  clause_id: 21
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_37:
+  id: 37
+  project_id: 1
+  clause_id: 21
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_38:
+  id: 38
+  project_id: 1
+  clause_id: 31
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_39:
+  id: 39
+  project_id: 1
+  clause_id: 31
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_40:
+  id: 40
+  project_id: 2
+  clause_id: 11
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_41:
+  id: 41
+  project_id: 2
+  clause_id: 11
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_42:
+  id: 42
+  project_id: 2
+  clause_id: 11
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_43:
+  id: 43
+  project_id: 2
+  clause_id: 11
+  clause_line: 3
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 3
+  <<: *DEFAULT
+
+specline_44:
+  id: 44
+  project_id: 2
+  clause_id: 11
+  clause_line: 4
+  txt1_id: 2
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_45:
+  id: 45
+  project_id: 2
+  clause_id: 11
+  clause_line: 5
+  txt1_id: 3
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 3
+  <<: *DEFAULT
+
+specline_46:
+  id: 46
+  project_id: 2
+  clause_id: 11
+  clause_line: 6
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_47:
+  id: 47
+  project_id: 2
+  clause_id: 12
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_48:
+  id: 48
+  project_id: 2
+  clause_id: 12
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_49:
+  id: 49
+  project_id: 2
+  clause_id: 12
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_50:
+  id: 50
+  project_id: 2
+  clause_id: 12
+  clause_line: 3
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 12
+  <<: *DEFAULT
+
+specline_51:
+  id: 51
+  project_id: 2
+  clause_id: 13
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_52:
+  id: 52
+  project_id: 2
+  clause_id: 13
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_53:
+  id: 53
+  project_id: 2
+  clause_id: 13
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_54:
+  id: 54
+  project_id: 2
+  clause_id: 14
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_55:
+  id: 55
+  project_id: 2
+  clause_id: 14
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_56:
+  id: 56
+  project_id: 2
+  clause_id: 14
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_57:
+  id: 57
+  project_id: 2
+  clause_id: 15
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_58:
+  id: 58
+  project_id: 2
+  clause_id: 15
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_59:
+  id: 59
+  project_id: 2
+  clause_id: 15
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_60:
+  id: 60
+  project_id: 2
+  clause_id: 16
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_61:
+  id: 61
+  project_id: 2
+  clause_id: 16
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_62:
+  id: 62
+  project_id: 2
+  clause_id: 16
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_63:
+  id: 63
+  project_id: 2
+  clause_id: 16
+  clause_line: 3
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 3
+  <<: *DEFAULT
+
+specline_64:
+  id: 64
+  project_id: 2
+  clause_id: 16
+  clause_line: 4
+  txt1_id: 2
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 3
+  <<: *DEFAULT
+
+specline_65:
+  id: 65
+  project_id: 2
+  clause_id: 16
+  clause_line: 5
+  txt1_id: 3
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 3
+  <<: *DEFAULT
+
+specline_66:
+  id: 66
+  project_id: 2
+  clause_id: 17
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_67:
+  id: 67
+  project_id: 2
+  clause_id: 17
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_68:
+  id: 68
+  project_id: 2
+  clause_id: 17
+  clause_line: 2
+  txt1_id: 2
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_69:
+  id: 69
+  project_id: 2
+  clause_id: 17
+  clause_line: 3
+  txt1_id: 3
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_70:
+  id: 70
+  project_id: 2
+  clause_id: 18
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_71:
+  id: 71
+  project_id: 2
+  clause_id: 18
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_72:
+  id: 72
+  project_id: 2
+  clause_id: 18
+  clause_line: 2
+  txt1_id: 2
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_73:
+  id: 73
+  project_id: 2
+  clause_id: 18
+  clause_line: 3
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_74:
+  id: 74
+  project_id: 2
+  clause_id: 18
+  clause_line: 4
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_75:
+  id: 75
+  project_id: 2
+  clause_id: 21
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_76:
+  id: 76
+  project_id: 2
+  clause_id: 21
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_77:
+  id: 77
+  project_id: 2
+  clause_id: 31
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_78:
+  id: 78
+  project_id: 2
+  clause_id: 31
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_79:
+  id: 79
+  project_id: 13
+  clause_id: 11
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_80:
+  id: 80
+  project_id: 13
+  clause_id: 11
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_81:
+  id: 81
+  project_id: 13
+  clause_id: 11
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_82:
+  id: 82
+  project_id: 13
+  clause_id: 11
+  clause_line: 3
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 3
+  <<: *DEFAULT
+
+specline_83:
+  id: 83
+  project_id: 13
+  clause_id: 11
+  clause_line: 4
+  txt1_id: 2
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_84:
+  id: 84
+  project_id: 13
+  clause_id: 11
+  clause_line: 5
+  txt1_id: 3
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 3
+  <<: *DEFAULT
+
+specline_85:
+  id: 85
+  project_id: 13
+  clause_id: 11
+  clause_line: 6
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_86:
+  id: 86
+  project_id: 13
+  clause_id: 12
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_87:
+  id: 87
+  project_id: 13
+  clause_id: 12
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_88:
+  id: 88
+  project_id: 13
+  clause_id: 12
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_89:
+  id: 89
+  project_id: 13
+  clause_id: 12
+  clause_line: 3
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 12
+  <<: *DEFAULT
+
+specline_90:
+  id: 90
+  project_id: 13
+  clause_id: 13
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_91:
+  id: 91
+  project_id: 13
+  clause_id: 13
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_92:
+  id: 92
+  project_id: 13
+  clause_id: 13
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_93:
+  id: 93
+  project_id: 13
+  clause_id: 14
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_94:
+  id: 94
+  project_id: 13
+  clause_id: 14
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_95:
+  id: 95
+  project_id: 13
+  clause_id: 14
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_96:
+  id: 96
+  project_id: 13
+  clause_id: 15
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_97:
+  id: 97
+  project_id: 13
+  clause_id: 15
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_98:
+  id: 98
+  project_id: 13
+  clause_id: 15
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_99:
+  id: 99
+  project_id: 13
+  clause_id: 16
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_100:
+  id: 100
+  project_id: 13
+  clause_id: 16
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_101:
+  id: 101
+  project_id: 13
+  clause_id: 16
+  clause_line: 2
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_102:
+  id: 102
+  project_id: 13
+  clause_id: 16
+  clause_line: 3
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 3
+  <<: *DEFAULT
+
+specline_103:
+  id: 103
+  project_id: 13
+  clause_id: 16
+  clause_line: 4
+  txt1_id: 2
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 3
+  <<: *DEFAULT
+
+specline_104:
+  id: 104
+  project_id: 13
+  clause_id: 16
+  clause_line: 5
+  txt1_id: 3
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 3
+  <<: *DEFAULT
+
+specline_105:
+  id: 105
+  project_id: 13
+  clause_id: 17
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_106:
+  id: 106
+  project_id: 13
+  clause_id: 17
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_107:
+  id: 107
+  project_id: 13
+  clause_id: 17
+  clause_line: 2
+  txt1_id: 2
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_108:
+  id: 108
+  project_id: 13
+  clause_id: 17
+  clause_line: 3
+  txt1_id: 3
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_109:
+  id: 109
+  project_id: 13
+  clause_id: 18
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_110:
+  id: 110
+  project_id: 13
+  clause_id: 18
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_111:
+  id: 111
+  project_id: 13
+  clause_id: 18
+  clause_line: 2
+  txt1_id: 2
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  <<: *DEFAULT
+
+specline_112:
+  id: 112
+  project_id: 13
+  clause_id: 18
+  clause_line: 3
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_113:
+  id: 113
+  project_id: 13
+  clause_id: 18
+  clause_line: 4
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  <<: *DEFAULT
+
+specline_114:
+  id: 114
+  project_id: 13
+  clause_id: 21
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_115:
+  id: 115
+  project_id: 13
+  clause_id: 21
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_116:
+  id: 116
+  project_id: 13
+  clause_id: 31
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_117:
+  id: 117
+  project_id: 13
+  clause_id: 31
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT

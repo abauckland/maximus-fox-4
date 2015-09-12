@@ -4,6 +4,7 @@
 #CAWS_template_project
 
 CAWS_settings:
+  id: 1
   project_id: 1
   font_style: Helvetica
   font_size: medium
@@ -25,6 +26,7 @@ CAWS_settings:
   section_cover: no cover
 
 CAWS__rev_settings:
+  id: 2
   project_id: 2
   font_style: Helvetica
   font_size: medium
@@ -46,6 +48,7 @@ CAWS__rev_settings:
   section_cover: no cover
 
 CAWS_template_settings:
+  id: 3
   project_id: 13
   font_style: Helvetica
   font_size: medium

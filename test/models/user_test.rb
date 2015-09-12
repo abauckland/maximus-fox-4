@@ -4,7 +4,7 @@ class UserTest < ActiveSupport::TestCase
 
 #associations
    test "should be associated with company, projectusers, projects" do
-     user = FactoryGirl.build_stubbed(:user)
+     user = User.new
      assert_respond_to(user, :projectusers)
      assert_respond_to(user, :projects)
      assert_respond_to(user, :company)
@@ -12,63 +12,46 @@ class UserTest < ActiveSupport::TestCase
 
 
 
-#vaildations  
+#vaildations
    test "should not save user without first name" do
-      user = FactoryGirl.build(:user, first_name: "")
+      user = User.create(surname: 'testname')
       assert_not user.valid?
+      assert_equal ["First name cannot be blank", "please enter a valid name"], user.errors.messages[:first_name]
+   end
+
+   test "should not save if first name is not alphanumeric" do
+      user = User.create(first_name: 'test2name', surname: 'testname')
+      assert_not user.valid?
+      assert_equal ["please enter a valid name"], user.errors.messages[:first_name]
    end
 
    test "should not save user without surname" do
-      user = FactoryGirl.build(:user, surname: "")
+      user = User.create(first_name: 'testname')
       assert_not user.valid?
-   end
-   
-   test "should not save user without password" do
-      user = FactoryGirl.build(:user, password: "")
-      assert_not user.valid?
-   end   
-
-   test "should not save user if password less than 8 characters" do
-      user = FactoryGirl.build(:user, password: "my")
-      assert_not user.valid?
-      assert_equal ["Password must be minimum 8 characters long"], user.errors.messages[:password]
-   end 
-
-   test "should not save user without email" do
-      user = FactoryGirl.build(:user, email: "")
-      assert_not user.valid?
+      assert_equal ["Surname cannot be blank", "please enter a valid name"], user.errors.messages[:surname]
    end
 
-   test "should not save user of email not correct format" do
-      user = FactoryGirl.build(:user, email: "mystring@mystring")
+   test "should not save if surname is not alphanumeric" do
+      user = User.create(first_name: 'testname', surname: 'test2name')
       assert_not user.valid?
+      assert_equal ["please enter a valid name"], user.errors.messages[:surname]
    end
-   
-   test "should not save user when email not unique" do
-      user = FactoryGirl.build(:user, email: "mystring@mystring.com")
-      user_copy = user.dup
-      user.save
-      user_copy.save
-      
-      assert_not user_copy.valid?
-      assert_equal ["A user with this email address already exists"], user_copy.errors.messages[:email]
-   end
+
 
 #methods
    test "should combined first and surname" do
-      user = FactoryGirl.build(:user)
-      assert_equal "firstname surname 2", user.name
+      user = users(:admin)
+      assert_equal "Admin_one Sample_surname", user.name
    end
 
-   
    #validate format of email on save
-   
-   #generate token
-   
-   #send_password_reset
-   
-   #self.authenticate(email, password)
-   
-   #encrypt_password 
 
-end   
+   #generate token
+
+   #send_password_reset
+
+   #self.authenticate(email, password)
+
+   #encrypt_password
+
+end

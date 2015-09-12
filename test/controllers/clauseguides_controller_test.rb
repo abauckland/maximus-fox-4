@@ -31,12 +31,12 @@ class ClauseguidesControllerTest < ActionController::TestCase
 
     # admin users can create, delete and edit options
     #number of clauses without guide
-    assert_select ".line_new_icon", count: 1
-    assert_select ".line_insert_icon", count: 1 #link to clone action
+#    assert_select ".line_new_icon", count: 1
+#    assert_select ".line_insert_icon", count: 1 #link to clone action
     #number of clauses with guide
-    assert_select ".line_edit_icon", count: 2
-    assert_select ".line_delete_icon", count: 2
-    assert_select ".line_menu_icon", count: 2 #link to assign action
+#    assert_select ".line_edit_icon", count: 2
+#    assert_select ".line_delete_icon", count: 2
+#    assert_select ".line_menu_icon", count: 2 #link to assign action
   end
 
 

@@ -1,50 +1,186 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-#simulate
-
-#section delete
-#section add
-
-#clause delete
-#clause add
-
-#line delete
-#line add
-
-#line change
-  #linetype change
-  #text change
-
-one:
-  specline_id: 1
-  project_id: 1
-  clause_id: 1
+DEFAULTS: &DEFAULT
+  project_id: 2
+  revision_id: 2
   txt3_id: 1
-  txt4_id: 1
-  txt5_id: 1
   txt6_id: 1
   identity_id: 1
   perform_id: 1
-  linetype_id: 1
-  event: MyString
-  clause_add_delete: 1
-  revision_id: 1
-  print_change: 1
   user_id: 1
 
-two:
-  specline_id: 1
-  project_id: 1
-  clause_id: 1
-  txt3_id: 1
+alteration_1:
+  id: 1
+  specline_id: 118
+  clause_id: 41
   txt4_id: 1
   txt5_id: 1
-  txt6_id: 1
-  identity_id: 1
-  perform_id: 1
   linetype_id: 1
-  event: MyString
+  event: deleted
+  clause_add_delete: 3
+  <<: *DEFAULT
+
+alteration_2:
+  id: 2
+  specline_id: 119
+  clause_id: 41
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  event: deleted
+  clause_add_delete: 3
+  <<: *DEFAULT
+
+alteration_3:
+  id: 3
+  specline_id: 77
+  clause_id: 31
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  event: new
+  clause_add_delete: 3
+  <<: *DEFAULT
+
+alteration_4:
+  id: 4
+  specline_id: 78
+  clause_id: 31
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  event: new
+  clause_add_delete: 3
+  <<: *DEFAULT
+
+alteration_5:
+  id: 5
+  specline_id: 120
+  clause_id: 22
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  event: deleted
+  clause_add_delete: 2
+  <<: *DEFAULT
+
+alteration_6:
+  id: 6
+  specline_id: 121
+  clause_id: 22
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  event: deleted
+  clause_add_delete: 2
+  <<: *DEFAULT
+
+alteration_7:
+  id: 7
+  specline_id: 122
+  clause_id: 22
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  event: deleted
+  clause_add_delete: 2
+  <<: *DEFAULT
+
+alteration_8:
+  id: 8
+  specline_id: 123
+  clause_id: 22
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  event: deleted
+  clause_add_delete: 2
+  <<: *DEFAULT
+
+alteration_9:
+  id: 9
+  specline_id: 70
+  clause_id: 18
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  event: new
+  clause_add_delete: 2
+  <<: *DEFAULT
+
+alteration_10:
+  id: 10
+  specline_id: 71
+  clause_id: 18
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  event: new
+  clause_add_delete: 2
+  <<: *DEFAULT
+
+alteration_11:
+  id: 11
+  specline_id: 72
+  clause_id: 18
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 4
+  event: new
+  clause_add_delete: 2
+  <<: *DEFAULT
+
+alteration_12:
+  id: 12
+  specline_id: 73
+  clause_id: 18
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  event: new
+  clause_add_delete: 2
+  <<: *DEFAULT
+
+alteration_13:
+  id: 13
+  specline_id: 74
+  clause_id: 18
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  event: new
+  clause_add_delete: 2
+  <<: *DEFAULT
+
+alteration_14:
+  id: 14
+  specline_id: 124
+  clause_id: 11
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  event: deleted
   clause_add_delete: 1
-  revision_id: 1
-  print_change: 1
-  user_id: 1
+  <<: *DEFAULT
+
+alteration_15:
+  id: 15
+  specline_id: 46
+  clause_id: 11
+  txt4_id: 2
+  txt5_id: 2
+  linetype_id: 8
+  event: new
+  clause_add_delete: 1
+  <<: *DEFAULT
+
+alteration_16:
+  id: 16
+  specline_id: 41
+  clause_id: 11
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 7
+  event: changed
+  clause_add_delete: 1
+  <<: *DEFAULT

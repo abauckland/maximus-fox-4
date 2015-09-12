@@ -2,13 +2,13 @@
 
 one:
   id: 1
-  clause_id: 1
+  clause_id: 11
   guidenote_id: 1
   plan_id: 1
 
 two:
   id: 2
-  clause_id: 2
+  clause_id: 21
   guidenote_id: 2
   plan_id: 1
 

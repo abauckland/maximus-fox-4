@@ -1,19 +1,66 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-CAWS_A10_1110_title_1:
-  clauseref_id: 1
-  clausetitle_id: 1
+DEFAULTS: &DEFAULT
   guidenote_id: 1
   project_id: 1
+
+
+CAWS_A10_1110_title_1:
+  id: 11
+  clauseref_id: 11
+  clausetitle_id: 1
+  <<: *DEFAULT
+
+CAWS_A10_2110_title_1:
+  id: 12
+  clauseref_id: 12
+  clausetitle_id: 1
+  <<: *DEFAULT
+
+CAWS_A10_3110_title_1:
+  id: 13
+  clauseref_id: 13
+  clausetitle_id: 1
+  <<: *DEFAULT
+
+CAWS_A10_4110_title_1:
+  id: 14
+  clauseref_id: 14
+  clausetitle_id: 1
+  <<: *DEFAULT
+
+CAWS_A10_5110_title_1:
+  id: 15
+  clauseref_id: 15
+  clausetitle_id: 1
+  <<: *DEFAULT
+
+CAWS_A10_6110_title_1:
+  id: 16
+  clauseref_id: 16
+  clausetitle_id: 1
+  <<: *DEFAULT
+
+CAWS_A10_7110_title_1:
+  id: 17
+  clauseref_id: 17
+  clausetitle_id: 1
+  <<: *DEFAULT
+
+CAWS_A10_8110_title_1:
+  id: 18
+  clauseref_id: 18
+  clausetitle_id: 1
+  <<: *DEFAULT
 
 CAWS_B10_1110_title_2:
-  clauseref_id: 2
+  id: 21
+  clauseref_id: 21
   clausetitle_id: 2
-  guidenote_id: 1
-  project_id: 1
+  <<: *DEFAULT
 
 CAWS_C10_1110_title_3:
-  clauseref_id: 3
+  id: 31
+  clauseref_id: 31
   clausetitle_id: 3
-  guidenote_id: 1
-  project_id: 1
+  <<: *DEFAULT

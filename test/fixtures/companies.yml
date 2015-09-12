@@ -2,8 +2,8 @@
 
 specright:
   id: 1
-  name: MyString
-  tel: 01612742800
+  name: specright
+  tel: 1612742800
   www: specright.co.uk
   reg_address: MyString
   reg_number: 12354654

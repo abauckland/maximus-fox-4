@@ -4,29 +4,29 @@ class SpecclausesControllerTest < ActionController::TestCase
 
   include Devise::TestHelpers
 
-#  setup do
-#    @project = projects(:CAWS_template)
-#    @subsection = subsections(:CAWS_template)
-#  end
+  setup do
+    @project = projects(:CAWS)
+    @subsection = subsections(:CAWS_A10)
+  end
 
 #authorization
-#  test "not authenticated should get redirect" do
-#    get :manage
-#    assert_response :redirect
-#  end
+  test "not authenticated should get redirect" do
+    get :manage, id: @project.id, template_id: @project.parent_id, subsection: @subsection.id
+    assert_response :redirect
+  end
 
 #  test "if user role is read should get redirect" do
 #    sign_in users(:employee_2)
 
-#    get :manage
+#    get :manage, id: @project.id, template_id: @project.parent_id, subsection: @subsection.id
 #    assert_response 403
 #  end
 
 #manage
 #  test "should show project and template clauses" do
-#    sign_in users(:manage)
+#    sign_in users(:owner)
 
-#    get :manage, id: @project.id, subsection_id: @subsection.id
+#    get :manage, id: @project.id, template_id: @project.parent_id, subsection: @subsection.id
 #    assert_response :success
 
 #    assert_not_nil assigns(:template)

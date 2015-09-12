@@ -4,10 +4,9 @@ class SpeclinesControllerTest < ActionController::TestCase
 
   include Devise::TestHelpers
 
-#  setup do
-#    @specline = speclines(:one) #belongs to project where revisions are not being recorded
-#    @specline_rev = speclines(:one) #belongs to project where revisions being recorded
-#  end
+  setup do
+    @specline = speclines(:specline_1)
+  end
 
 #new_specline
 #  test "should add new line" do
@@ -15,6 +14,27 @@ class SpeclinesControllerTest < ActionController::TestCase
     #check clauseline ref
     #check prefix
 #  end
+
+#  test "should create clauseguide" do
+#    sign_in users(:owner)
+#    assert_difference('Specline.count') do
+#      post :create, specline: {}
+#    end
+    #redirect to index if saved
+#    assert_redirected_to clauseguides_path
+#  end
+
+
+  test "should destroy specline" do
+    sign_in users(:admin)
+    assert_difference('Specline.count', -1) do
+      delete :delete_specline, id: @specline
+    end
+
+#    assert_redirected_to clauseguides_path
+  end
+
+
 
 #  test "should add new line and alteration record" do
     #add line

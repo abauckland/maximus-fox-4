@@ -10,7 +10,7 @@ class CawssectionTest < ActiveSupport::TestCase
 #methods
    test "should combine ref and title" do
       cawssection = cawssections(:A)
-      assert_equal "A Preliminaries", cawssection.full_code_and_title
+      assert_equal "A Preliminaries", cawssection.code_and_title
    end
    
 end

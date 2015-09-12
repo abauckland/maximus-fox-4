@@ -4,39 +4,39 @@ class SpecsubsectionsControllerTest < ActionController::TestCase
 
   include Devise::TestHelpers
 
-#  setup do
-#    @project = projects(:CAWS_template)
-#  end
+  setup do
+    @project = projects(:CAWS)
+  end
 
 #authorization
-#  test "not authenticated should get redirect" do
-#    get :manage
-#    assert_response :redirect
-#  end
+  test "not authenticated should get redirect" do
+    get :manage, id: @project.id, template_id: @project.parent_id
+    assert_response :redirect
+  end
 
-#  test "if user role is read should get redirect" do
-#    sign_in users(:employee_2)
+  test "if user role is read should get redirect" do
+    sign_in users(:employee_2)
 
-#    get :manage
-#    assert_response 403
-#  end
+    get :manage, id: @project.id, template_id: @project.parent_id
+    assert_response 403
+  end
 
 #manage
-#  test "should show project and template sections" do
-#    sign_in users(:manage)
+  test "should show project and template sections" do
+    sign_in users(:owner)
 
-#    get :manage, id: @project.id
-#    assert_response :success
+    get :manage, id: @project.id, template_id: @project.parent_id
+    assert_response :success
 
-#    assert_not_nil assigns(:template)
-#    assert_not_nil assigns(:templates)
+    assert_not_nil assigns(:template)
+    assert_not_nil assigns(:templates)
 #    assert_not_nil assigns(:project_subsections)
 #    assert_not_nil assigns(:template_subsections)
-#  end
+  end
 
 
 #add_clauses
-#  test "should add clauses" do
+#  test "should add subsections" do
 #    sign_in users(:manage)
 
 #    assert_difference('Specline.count') do
@@ -49,7 +49,7 @@ class SpecsubsectionsControllerTest < ActionController::TestCase
 
 
 #delete_clauses
-#  test "should remove clauses" do
+#  test "should remove subsections" do
 #    sign_in users(:manage)
 
 #    assert_difference('Specline.count', -1) do
