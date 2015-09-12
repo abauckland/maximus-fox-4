@@ -1,7 +1,8 @@
 class PrintsettingsController < ApplicationController
 
-  before_action :set_project
+  before_action :set_project, only: [:edit]
   before_action :set_printsetting, only: [:edit]
+  before_action :set_project_update, only: [:update]
   before_action :set_variables, only: [:edit]
 
   include ProjectuserDetails
@@ -36,6 +37,11 @@ class PrintsettingsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_project
       @project = Project.find(params[:id])
+    end
+
+    def set_project_update
+      @printsetting = Printsetting.find(params[:id])
+      @project = Project.find(@printsetting.project_id)
     end
 
     def set_printsetting
