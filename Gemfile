@@ -40,10 +40,6 @@ gem 'prawn-table'
 
 gem "gibbon", "~> 1.0.4"
 
-group :development, :test do
-  gem 'factory_girl_rails'
-end
-
 group :development do
   gem 'capistrano', '~> 3.1'
   gem 'capistrano-rails', '~> 1.1'
