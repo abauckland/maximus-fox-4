@@ -1,7 +1,6 @@
 class ClausesController < ApplicationController
 
   before_action :set_project
-  before_action :set_project_user, only: [:new, :create]
 
   include ProjectuserDetails
   include RefsystemSettings
