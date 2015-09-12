@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
 
   before_action :set_project, only: [:edit, :update]
   before_action :set_projects, only: [:index, :edit, :update]
-  before_action :set_templates, only: [:edit, :update]
+  before_action :set_template, only: [:edit, :update]
   before_action :set_templates, only: [:edit, :update]
   before_action :set_available_status_array, only: [:edit, :update]
   before_action :set_project_user, only: [:index, :edit]
