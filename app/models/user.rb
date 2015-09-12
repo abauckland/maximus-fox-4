@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
       format: { with: NAME_REGEXP, message: "please enter a valid name" }
 
     validates :surname,
-      :presence => {:message => "First name cannot be blank"},
+      :presence => {:message => "Surname cannot be blank"},
       format: { with: NAME_REGEXP, message: "please enter a valid name" }
  
   def custom_validation_check_field
