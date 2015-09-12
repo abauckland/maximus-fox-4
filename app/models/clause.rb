@@ -63,7 +63,9 @@ before_save :assign_title
                                      ).where('speclines.project_id' => project_id, 'subsections.cawssubsection_id' => cawssubsection_ids
                                      )}
 
-
+  def clause_code
+    caws_code
+  end
 
 
 
@@ -100,7 +102,7 @@ def part_ref_title
 end
 
 def clause_code_title_in_brackets
-  return '('+ clausetitle.text = ')'
+  return '('+ clausetitle.text + ')'
 end
 
 
