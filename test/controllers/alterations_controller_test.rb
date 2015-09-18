@@ -43,4 +43,12 @@ class AlterationsControllerTest < ActionController::TestCase
 
 #print_setting
 
+#  test "should post my action" do
+#    post :my_action, { 'param' => "value" }, :format => "json"
+#    assert_response :success
+#    body = JSON.parse(response.body)
+#    assert_equal "Some returned value", body["str"]
+#  end
+
+
 end

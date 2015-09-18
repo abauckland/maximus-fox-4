@@ -512,9 +512,9 @@ end
       @array_of_lines_deleted = []
       #required for js response
       @clause_title_to_delete = @specline.id
+      dup_specline = @specline.dup
 
-
-      speclines_to_delete = Specline.where(:project_id => @specline.project_id, :clause_id => @specline.clause_id).order('clause_line')  
+      speclines_to_delete = Specline.where(:project_id => @specline.project_id, :clause_id => @specline.clause_id).order('clause_line')
       revision = Revision.where(:project_id => @project.id).where.not(:rev => nil).order('created_at').last
       if revision
         speclines_to_delete.each_with_index do |specline, i|
@@ -533,29 +533,22 @@ end
 
       @array_of_lines_deleted.compact
 
-#TODO seporate into separate method
-      if @project.CAWS?
-        #find if any clauses are in current subsection after changes
-        get_valid_spline_ref = Specline.cawssubsection_speclines(@project.id, params[:subsection_id]).last
+      #find if any clauses are in current subsection after changes
+      get_valid_spline_ref = Specline.joins(:clause => [:clauseref]
+                                    ).where(:project_id => @project.id, 'clauserefs.subsection_id' => dup_specline.clause.clauseref.subsection_id
+                                    ).last
 
+#TODO if no clauses in subsection redirect to subsection manager
+      if get_valid_spline_ref.blank?
+        #update all alteration records for section so event_type = 3
+        previous_alterations = Alterations.all_changes(@project, @revision
+                                         ).joins(:clause => [:clauseref]
+                                         ).where('clauserefs.subsection_id' => dup_specline.clause.clauseref.subsection_id)
 
-        #if no clauses in subsection redirect to subsection manager
-        if get_valid_spline_ref.blank?
-          #update all alteration records so event_type = 3
-          @subsection = Subsection.where('subsections.cawssubsection_id'=> params[:subsection_id]).first
-  
-          #update all alteration records for section so event_type = 3
-          previous_alterations = Alteration.joins(:clause => [:clauseref => :subsection]
-                                          ).where(:event => 'deleted', :clause_add_delete => 2, :project_id => project.id, :revision_id => @revision.id
-                                          ).where(:subsection => @susbection.id
-                                          )
 #TODO this needs to update all reocrds as per delete section - check this is correct
-          previous_alterations.each do |alteration|
-            alteration.update(:clause_add_delete => 3)
-          end
+        previous_alterations.each do |alteration|
+          alteration.update(:clause_add_delete => 3)
         end
-      else
-  ###uniclass code to go here - same as above 
       end
 
     #selected_clause_title.destroy

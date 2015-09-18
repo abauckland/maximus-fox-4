@@ -106,13 +106,11 @@ class SpecclausesController < ApplicationController
 
 #TODO seporate into separate method
     #find if any clauses are in current subsection after changes
-    get_valid_spline_ref = Specline.subsection_speclines(@project.id, params[:subsection_id], @subsection_name).last
+    get_valid_spline_ref = Specline.subsection_speclines(@project.id, @subsection.id, @subsection_name).last
     if get_valid_spline_ref.blank?
       #update all alteration records for section so event_type = 3
-      previous_alterations = Alteration.joins(:clause => [:clauseref => :subsection]
-                                      ).where(:event => 'deleted', :clause_add_delete => 2, :project_id => project.id, :revision_id => @revision.id
-                                      ).where(:subsection => @susbection.id
-                                      )
+      previous_alterations = Alteration.subsection_changes(@project.id, @revision.id, @subsection.id, @subsection_name)
+
 #TODO this needs to update all reocrds as per delete section - check this is correct
       previous_alterations.each do |alteration|
         alteration.update(:clause_add_delete => 3)

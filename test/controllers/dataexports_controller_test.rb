@@ -25,10 +25,19 @@ class DataexportsControllerTest < ActionController::TestCase
 
 
 #download, products and accessories
-#  test "should download csv file" do
-#    get :download, id: @project, product_data: 'products_accessories'
-#    assert_response :success
-#  end
+  test "should download csv file" do
+    sign_in users(:admin) #fixture set as manage role
+
+    get :download, format: :csv, id: @project, product_data: 'products_accessories'
+    assert_response :success
+    assert_equal "text/csv", response.content_type
+
+#  csv = CSV.parse response.body # Let raise if invalid CSV
+#  assert csv
+#  assert_equal 6, csv.size
+#  assert_equal "Joe Smith", csv[3][4]
+
+  end
 
 
 #download, products

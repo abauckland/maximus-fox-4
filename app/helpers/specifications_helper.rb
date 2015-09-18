@@ -242,18 +242,12 @@ module SpecificationsHelper
   end
 
 
-
-  def set_subsection_name(project_id)
-#TODO change ref system establishment
-    project = Project.find(project_id)
-    case project.ref_system
-      when "CAWS" ; 'cawssubsection'
+  def line_clause_ref(specline)
+    case specline.project.ref_system
+          when 1 ; specline.clause.clauseref.subsection.cawssubsection.call.full_code.to_s + '.' +specline.clause.clauseref_code.to_s
     end
   end
 
-  def line_clause_ref(specline)
-      return specline.clause.clauseref.subsection.method(set_subsection_name(specline.project_id)).call.full_code.to_s + '.' +specline.clause.clauseref_code.to_s
-  end
 
 
 end

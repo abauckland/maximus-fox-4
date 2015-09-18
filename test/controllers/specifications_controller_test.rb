@@ -19,32 +19,32 @@ class SpecificationsControllerTest < ActionController::TestCase
 
 #empty_project
 
-#  test "should get empty project" do
-#    sign_in users(:employee_2)
+  test "should get empty project" do
+    sign_in users(:employee_2)
 
-#    get :empty_project, id: @project
-#    assert_response :success
-#  end
+    get :empty_project, id: @project
+    assert_response :success
+  end
 
 
 
 #show
-#  test "should get show" do
-#    sign_in users(:employee_2)
+  test "should get show" do
+    sign_in users(:employee_2)
 
-#    get :show, id: @project
-#    assert_response :success
+    get :show, id: @project
+    assert_response :success
 
 #    assert_not_nil assigns(:subsections)
 #    assert_not_nil assigns(:revision)
-#  end
+  end
 
 
 #show_tab_content
 #  test "should get content for tab" do
 #    sign_in users(:employee_2)
 
-#    get :show_tab_content, id: @project, subsection_id: ????, clausetype_id: ????
+#    xhr :get, :show_tab_content, format: :js, id: @project, subsection_id: 1, clausetype_id: 2
 #    assert_response :success
 #  end
 

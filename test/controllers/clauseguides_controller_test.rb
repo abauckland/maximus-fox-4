@@ -106,11 +106,14 @@ class ClauseguidesControllerTest < ActionController::TestCase
   end
 
 #clone clause list
-#test "should return clauses via js"
-#get :clone_clause, id: 
-#    assert_response :success
-#assert_not_nil assigns(:clauses)
-#end
+  test "should return clauses" do
+    sign_in users(:admin)
+
+    @subsection = cawssubsections(:A10)
+    xhr :get, :clone_clause_list, format: :js, id: @subsection.id
+
+    assert_response :success
+  end
 
 
 #create_clone

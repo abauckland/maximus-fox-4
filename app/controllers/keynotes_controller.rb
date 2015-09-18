@@ -45,8 +45,8 @@ private
       set_subsections(project)
       @subsections.each_with_index do |subsection, n|
         #project subsection
-        subsection_code = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.full_code.to_s
-        subsection_title = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.text.to_s
+        subsection_code = subsection.full_code.to_s
+        subsection_title = subsection.text.to_s
         csv << [subsection_code, subsection_title]
 
         #for each clause
@@ -257,6 +257,10 @@ private
       else
         @revision = Revision.find(params[:revision_id])
       end
+    end
+
+    def set_keynote_subsection_name(project)
+      @subsection_name
     end
 
 end

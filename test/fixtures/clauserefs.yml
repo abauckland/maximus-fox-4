@@ -57,12 +57,22 @@ B10_1110:
   id: 21
   clausetype_id: 1
   <<: *DEFAULT
-  subsection_id: 1
+  subsection_id: 2
+
+B10_1110:
+  id: 22
+  clausetype_id: 2
+  <<: *DEFAULT
+  subsection_id: 2
 
 C10_1110:
   id: 31
   clausetype_id: 1
   <<: *DEFAULT
-  subsection_id: 1
+  subsection_id: 3
 
-
+C10_1110:
+  id: 41
+  clausetype_id: 2
+  <<: *DEFAULT
+  subsection_id: 3

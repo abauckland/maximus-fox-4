@@ -24,7 +24,7 @@ specline_2:
   clause_id: 11
   clause_line: 1
   txt1_id: 1
-  txt4_id: 2
+  txt4_id: 1
   txt5_id: 1
   linetype_id: 7
   <<: *DEFAULT
@@ -453,7 +453,7 @@ specline_41:
   clause_id: 11
   clause_line: 1
   txt1_id: 1
-  txt4_id: 2
+  txt4_id: 1
   txt5_id: 1
   linetype_id: 7
   <<: *DEFAULT

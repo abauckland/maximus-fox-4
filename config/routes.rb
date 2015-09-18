@@ -93,7 +93,6 @@ Rails.application.routes.draw do
 
   resources :prints, :only => [:show] do
     get :print_project, :on => :member
-    get :rint_download, :on => :member
   end
 
 

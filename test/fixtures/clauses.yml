@@ -59,8 +59,20 @@ CAWS_B10_1110_title_2:
   clausetitle_id: 2
   <<: *DEFAULT
 
+CAWS_B10_1110_title_2:
+  id: 22
+  clauseref_id: 22
+  clausetitle_id: 2
+  <<: *DEFAULT
+
 CAWS_C10_1110_title_3:
   id: 31
   clauseref_id: 31
+  clausetitle_id: 3
+  <<: *DEFAULT
+
+CAWS_C10_1110_title_3:
+  id: 41
+  clauseref_id: 41
   clausetitle_id: 3
   <<: *DEFAULT

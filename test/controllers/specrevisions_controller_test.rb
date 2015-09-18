@@ -6,9 +6,7 @@ class SpecrevisionsControllerTest < ActionController::TestCase
 
   setup do
 #    @specline = speclines(:one) #set up dependencies - txt1, txt2, txt3, txt4, txt5, txt6, linetype, clause, clauseref, clausetitle
-    @project = projects(:CAWS)
-#    @subsection = subsection(:one) #!???????
-#    @clausetype = clausetypes(:one)
+    @project = projects(:CAWS_rev)
   end
 
 
@@ -20,24 +18,24 @@ class SpecrevisionsControllerTest < ActionController::TestCase
 
 
 #show
-#  test "should get show" do
-#    sign_in users(:employee_2)
+  test "should get show" do
+    sign_in users(:employee_2)
 
-#    get :show, id: @project
-#    assert_response :success
+    get :show, id: @project
+    assert_response :success
 
-#    assert_not_nil assigns(:revisions)
-#    assert_not_nil assigns(:subsections)
-#    assert_not_nil assigns(:subsection)
-#  end
+    assert_not_nil assigns(:revisions)
+    assert_not_nil assigns(:subsections)
+ #   assert_not_nil assigns(:subsection)
+  end
 
 
 #show_tab_content
-#  test "should get content for tab" do
-#    sign_in users(:employee_2)
+  test "should get content for tab" do
+    sign_in users(:employee_2)
 
-#    get :show_tab_content, id: @project, subsection_id: ????
-#    assert_response :success
-#  end
+    xhr :get, :show_rev_tab_content, format: :js, id: @project, subsection_id: 2
+    assert_response :success
+  end
 
 end

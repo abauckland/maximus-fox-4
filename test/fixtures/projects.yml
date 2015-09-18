@@ -7,7 +7,7 @@ CAWS:
   parent_id: 1
   company_id: 1
   project_status: 0
-  ref_system: 1
+  ref_system: 0
   project_image: MyString
   client_logo: MyString
   client_name: MyString
@@ -19,7 +19,7 @@ CAWS_rev:
   parent_id: 1
   company_id: 1
   project_status: 2
-  ref_system: 1
+  ref_system: 0
   project_image: MyString
   client_logo: MyString
   client_name: MyString
@@ -32,7 +32,7 @@ CAWS_template:
   parent_id: 1
   company_id: 1
   project_status: 1
-  ref_system: 1
+  ref_system: 0
   project_image: MyString
   client_logo: MyString
   client_name: MyString

@@ -291,7 +291,7 @@ end
 def full_clause_code(project, line)
   if project.CAWS?
     line.clause.caws_code#clauseref.subsection.cawssubsection.full_code + '.' + line.clause.clauseref.clausetype_id.to_s + sprintf("%02d", line.clause.clauseref.clause).to_s + line.clause.clauseref.subclause.to_s
-  else
+#  else
     #line.clause.clauseref.subsection.section.ref + sprintf("%02d", line.clause.clauseref.subsection.ref).to_s + '.' + line.clause.clauseref.clausetype_id.to_s + sprintf("%02d", line.clause.clauseref.clause).to_s + line.clause.clauseref.subclause.to_s    
   end  
 end

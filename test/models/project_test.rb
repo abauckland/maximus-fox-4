@@ -11,7 +11,7 @@ class ProjectTest < ActiveSupport::TestCase
      assert_respond_to(project, :revisions)
      assert_respond_to(project, :alterations)
      assert_respond_to(project, :printsettings)
-     assert_respond_to(project, :prints)
+#     assert_respond_to(project, :prints)
    end
 
 #mounted uploaders

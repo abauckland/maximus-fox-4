@@ -44,6 +44,9 @@ attr_accessor :clause_line
                                                  ).group(:id
                                                  ) }
 
+  scope :subsection_changes, ->(project_id, revision_id, subsection_id, subsection_name) { joins(:clause => [:clauseref => :subsection]
+                                     ).where(:project_id => project_id, :revision_id => revision_id, 'subsections.'+subsection_name+'_id' => subsection_id
+                                     ).order('clauserefs.clause_no, clauserefs.subclause, clause_line')}
 
 
   scope :changed_caws_all_sections, ->(project, revision) { where(:project_id => project.id, :revision_id => revision.id
@@ -73,7 +76,7 @@ attr_accessor :clause_line
 
   scope :changed_caws_subsections_show, ->(project, revision, subsection) { joins(:clause => [:clauseref => :subsection]
                                     ).where(:project_id => project.id, 'subsections.cawssubsection_id' => subsection.id, :revision_id => revision.id
-                                    ).first
+                                    )
                                     }
   
 end

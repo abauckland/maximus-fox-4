@@ -4,6 +4,7 @@
 #CAWS_template_project
 
 CAWS_nil:
+  id: 1
   rev:
   project_status: 0
   project_id: 1
@@ -11,13 +12,15 @@ CAWS_nil:
   date: 2014-05-05 20:32:04
 
 CAWS_rev_na:
-  rev: '-'
+  id: 2
+  rev: "-"
   project_status: 1
   project_id: 2
   user_id: 1
   date: 2014-05-06 20:32:04
 
 CAWS_rev_a:
+  id: 3
   rev: a
   project_status: 1
   project_id: 2
@@ -25,6 +28,7 @@ CAWS_rev_a:
   date: 2014-05-07 20:32:04
 
 CAWS_rev_b:
+  id: 4
   rev: b
   project_status: 1
   project_id: 2
@@ -32,6 +36,7 @@ CAWS_rev_b:
   date: 2014-05-08 20:32:04
 
 CAWS_template_nil:
+  id: 5
   rev:
   project_status: 0
   project_id: 1

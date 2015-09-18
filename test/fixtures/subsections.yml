@@ -3,14 +3,14 @@
 CAWS_A10:
   id: 1
   cawssubsection_id: 1
-  unisubsection_id:
+  unisubsection_id: 1
 
 CAWS_B10:
   id: 2
   cawssubsection_id: 2
-  unisubsection_id:
+  unisubsection_id: 1
 
 CAWS_C10:
   id: 3
   cawssubsection_id: 3
-  unisubsection_id:
+  unisubsection_id: 1

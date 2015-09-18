@@ -25,7 +25,7 @@ class SpecificationsController < ApplicationController
     else
 
       #establish project clauses, subsections & sections
-      if @project.CAWS?
+#      if @project.CAWS?
 
         #list of all subsections that can be selected - for small screen
         #filtered by users role and subsectionusers for projectusers
@@ -36,25 +36,12 @@ class SpecificationsController < ApplicationController
           @project_subsections = Cawssubsection.project_subsections(@project)
         end
 
-        array_project_section_ids = @project_subsections.pluck('cawssubsections.cawssection_id').uniq.sort
-        #list of all sections that can be selected - for large screen
-        @project_sections = Cawssection.where(:id => array_project_section_ids)
-
         #estabish current value for selected section and subsection menues
-        if params[:section].blank?
-          if params[:subsection].blank?
-              @selected_section = @project_sections.first
-              @selected_subsection = Cawssubsection.where(:id => @project_subsections.ids, :cawssection_id => @selected_section.id).first
-          else         
-              @selected_subsection = Cawssubsection.find(params[:subsection])
-              @selected_section = Cawssection.select('id').where(:id => @selected_subsection.cawssection_id).first
-          end
+        if params[:subsection].blank?
+            @selected_subsection = @project_subsections.first
         else
-              @selected_section = Cawssection.select('id').where(:id => params[:section]).first
-              @selected_subsection = Cawssubsection.where(:id => @project_subsections.ids, :cawssection_id => @selected_section.id).first
+            @selected_subsection = Cawssubsection.find(params[:subsection])
         end
-        #list of subsection with in currently selected section - for large screen
-        @selected_section_subsections = Cawssubsection.where(:id => @project_subsections.ids, :cawssection_id => @selected_section.id)
 
         #get list of clausetypes in selected subsection
         @clausetypes = Clausetype.joins(:clauserefs => [:subsection, :clauses => [:speclines]]
@@ -63,13 +50,13 @@ class SpecificationsController < ApplicationController
 
         #get all speclines in selected subsection
         @selected_specline_lines = Specline.show_cawssubsection_speclines(@project.id, @selected_subsection.id, @clausetypes.first.id)
-      else    
+#      else    
   ###uniclass code to go here - same as above       
-      end 
+#      end 
 
 
       if params[:clausetype].blank?
-        @current_clausetype = @clausetypes.first 
+        @current_clausetype = @clausetypes.first
       else
         @current_clausetype = Clausetype.where(:id => params[:clausetype]).first 
       end

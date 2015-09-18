@@ -1,463 +1,376 @@
 module Printrevision
 
-def combined_revisions_text(project, subsection, revision, pdf)
+def section_revisions(project, revision, issue, pdf)
 
-  if project.CAWS?
-    altered_subsection = Alteration.changed_caws_subsections(project, revision, subsection).first
-      if altered_subsection.clause_add_delete == 3
-        if altered_subsection.event == 'new' 
-          subsection_ref_action(subsection, "added", pdf)
-        else #altered_subsection.event == 'deleted'
-          subsection_ref_action(subsection, "deleted", pdf)
-        end  
-      else
-          subsection_ref_action(subsection, "changed", pdf)
-    end
+  subsections = Subsection.joins(:clauserefs => [:clauses => :alterations]
+                      ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id)
 
-    added_clauses = Clause.changed_caws_clauses('new', project, revision, subsection)
-    if !added_clauses.blank?
-      clauses_title("added", pdf)
+  subsections_with_index.each do |subsection, i|
 
-      added_clauses.each do |clause|
-      rev_clause(clause, "added", pdf)
+    alteration = Alteration.joins(:clauses => :clauserefs
+                                 ).where(:project_id => project.id, :revision_id => revision.id, :clause_add_delete => 3, 'clauserefs.subsection_id' => subsection.id
+                                 ).where.not(:event => 'changed'
+                                 ).first
+
+    if alteration
+      #check space available
+      check_height = (section_title_height + section_action_height)
+      #unless space
+      if min_y >= (pdf.y - check_height)
+        pdf.start_new_page
+        pdf.y = top_y
       end
-    end
-
-    deleted_clauses = Clause.changed_caws_clauses('deleted', project, revision, subsection)
-    if !deleted_clauses.blank?
-      clauses_title("deleted", pdf)
-
-      deleted_clauses.each do |clause|
-        rev_clause(clause, "deleted", pdf)
-      end
-    end
-
-    changed_clauses = Clause.changed_caws_clause_content('changed', project, revision, subsection)
-    if !changed_clauses.blank?
-
-      clauses_title("changed", pdf)
-
-      changed_clauses.each do |clause|
-
-        rev_clause(clause, "changed", pdf)
-
-        #get deleted lines
-        deleted_lines = Alteration.where(:event => 'deleted', :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
-        if !deleted_lines.blank?
-          lines_title("deleted", pdf)
-          deleted_lines.each do |line|
-            rev_line(clause, line, "deleted", pdf)
-          end
-        end
-
-        #get added lines
-        added_lines = Alteration.where(:event => 'new', :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
-        if !added_lines.blank?
-        lines_title("added", pdf)
-          added_lines.each do |line|
-            rev_line(clause, line, "added", pdf)
-          end
-        end
-
-        #get changed lins
-        changed_lines = Alteration.where(:event => 'changed', :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
-        if !changed_lines.blank?
-          lines_title("changed", pdf)
-          changed_lines.each do |line|
-            rev_changed_line(clause, line, "changed", pdf)
-          end
-        end
-      end
-    end
-  end
-end
-
-def revisions_text(project, subsection, revision, pdf)
-
-#get all revisions for subsection
-#return list of changes
-  if project.CAWS?
-
-    altered_subsection = Alteration.changed_caws_subsections(project, revision, subsection).first
-   # altered_subsections.each do |altered_subsection|
-      
-      if altered_subsection.clause_add_delete == 3
-        if altered_subsection.event == 'new'
-          subsection_action("added", pdf)
-        else #altered_subsection.event == 'deleted'
-          subsection_action("deleted", pdf)
-        end
-      else
-          subsection_action("changed", pdf)
-          added_clauses = Clause.changed_caws_clauses('new', project, revision, subsection)
-          if added_clauses
-            clauses_title("added", pdf)
-
-            added_clauses.each do |clause|
-              rev_clause(clause, "added", pdf)
-            end
-          end
-
-          deleted_clauses = Clause.changed_caws_clauses('deleted', project, revision, subsection)
-          if deleted_clauses
-            clauses_title("deleted", pdf)
-
-            deleted_clauses.each do |clause|
-              rev_clause(clause, "deleted", pdf)
-            end
-          end
-
-          changed_clauses = Clause.changed_caws_clause_content('changed', project, revision, subsection)
-          if changed_clauses
-            clauses_title("changed", pdf)
-
-            changed_clauses.each do |clause|
-
-             rev_clause(clause, "changed", pdf) 
-
-             #get deleted lines
-             deleted_lines = Alteration.where(:event => 'deleted', :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
-             if deleted_lines
-               lines_title("deleted", pdf)
-               deleted_lines.each do |line|
-                 rev_line(clause, line, "deleted", pdf)
-               end
-             end
- 
-             #get added lines
-             added_lines = Alteration.where(:event => 'new', :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
-             if added_lines
-               lines_title("added", pdf)
-               added_lines.each do |line|
-                 rev_line(clause, line, "added", pdf)
-               end
-             end
-
-             #get changed lins 
-             changed_lines = Alteration.where(:event => 'changed', :project_id => project.id, :clause_id => clause.id, :revision_id => revision.id)
-             if changed_lines
-               lines_title("changed", pdf)
-               changed_lines.each do |line|
-                 rev_changed_line(clause, line, "changed", pdf)
-               end
-             end
-             
-            end
-     #     end
-    end
-      end
-  else
-#uniclass code here
-  end
-end
-
-
-def subsection_action(action, pdf)  
-  rev_subsection_style = {:size => 12, :style => :bold_italic}
-
-  pdf.move_down(2.mm)  
-  pdf.spec_box "Subsection #{action}", rev_subsection_style.merge(:at => [0.mm, pdf.y])
-  pdf.move_down(pdf.box_height + 2.mm)
-end
-
-def subsection_ref_action(subsection, action, pdf)  
-  rev_subsection_style = {:size => 12, :style => :bold_italic}
-
-  pdf.move_down(2.mm)  
-  pdf.spec_box "Subsection #{subsection.full_code_and_title} #{action}", rev_subsection_style.merge(:at => [0.mm, pdf.y])
-  pdf.move_down(pdf.box_height + 2.mm)
-end
-
-
-def clauses_title(action, pdf)
-  rev_clause_style = {:size => 11, :style => :bold_italic}
-
-  y_position = pdf.y
-
-  pdf.move_down(2.mm)
-  pdf.draft_text_box "Clauses deleted:", rev_clause_style.merge(:at => [10.mm, pdf.y])
-  pdf.move_down(pdf.draft_box_height + 2.mm)
-
-  if pdf.y <= 24.mm
-    pdf.start_new_page
-    pdf.y = 268.mm
-  else
-    pdf.y = y_position
-  end
-
-  pdf.move_down(2.mm)
-  pdf.spec_box "Clauses #{action}:", rev_clause_style.merge(:at => [10.mm, pdf.y])
-  pdf.move_down(pdf.box_height + 2.mm)
-end
-
-
-def rev_clause(clause, action, pdf)
-    rev_clause_code_title_style = {:size => 11, :style => :bold, :overflow => :expand}
-
-    y_position = pdf.y
-
-    pdf.draft_text_box "#{clause.clausetitle.text}", rev_clause_code_title_style.merge( :at => [35.mm, pdf.y])
-    pdf.move_down(pdf.draft_box_height + 2.mm)
-
-    if pdf.y <= 16.mm
-
-      pdf.spec_box 'List of clauses continued on next page...', :size => 9, :style => :italic, :at =>[20.mm, 14.mm]      
-      pdf.start_new_page
-      pdf.y = 268.mm
-      pdf.spec_box "Clauses #{action} continued:", :size => 11, :style => :bold_italic, :at => [10.mm, pdf.y]
-
-    else
-      pdf.y = y_position
-    end
-
-    pdf.spec_box "#{clause.caws_code}", rev_clause_code_title_style.merge(:at => [15.mm, pdf.y])
-    pdf.spec_box "#{clause.clausetitle.text}", rev_clause_code_title_style.merge( :at => [35.mm, pdf.y])
-    pdf.move_down(pdf.box_height + 2.mm)
-end
-
-
-
-def lines_title(action, pdf)
-  rev_line_action_style = {:size => 9, :style => :bold_italic}
-
-  y_position = pdf.y
-
-  pdf.move_down(2.mm)
-  pdf.draft_text_box "Text #{action}:", rev_line_action_style.merge(:at => [35.mm, pdf.y])
-  pdf.move_down(pdf.draft_box_height + 1.mm)
-
-  if pdf.y <= 24.mm
-    pdf.start_new_page
-    pdf.y = 268.mm
-  else
-    pdf.y = y_position
-  end
-
-  pdf.move_down(2.mm)
-  pdf.spec_box "Text #{action}:", rev_line_action_style.merge(:at => [35.mm, pdf.y])
-  pdf.move_down(pdf.box_height + 1.mm)
-end
-
-
-def rev_line(clause, line, action, pdf)
-#def rev_line(clause, line, action, user_array, print_audit, pdf)
-    y_position = pdf.y
-
-    rev_line_draft(line, pdf)
-    pdf.move_down(pdf.box_height + 2.mm)
-
-    if pdf.y <= 16.mm
-
-      pdf.spec_box 'List of#{action} lines continued on next page...', :size => 9, :style => :italic, :at =>[20.mm, 14.mm]      
-      pdf.start_new_page
-      pdf.y = 268.mm
-      pdf.spec_box "Lines #{action} in #{clause.clause_code} continued:", :size => 11, :style => :bold_italic, :at => [10.mm, pdf.y]
-
-    else
-      pdf.y = y_position
-    end
-
-    rev_line_print(line, pdf)
-#def rev_line_print(line, user_array, print_audit, pdf)
-    pdf.move_down(pdf.box_height + 2.mm)
-end
-
-
-
-def rev_changed_line(clause, line, action, pdf)
-#def rev_changed_line(clause, line, action, user_array, print_audit, pdf)
-
-    line_sub_action_style = {:size => 8, :style => :italic}
-    line_rev_limited_style = {:size => 10, :style => :italic, :overflow => :expand}
-
-    current_line = Specline.find(line.specline_id) 
-
-    y_position = pdf.y
-
-    if line.print_change?
-
-      pdf.move_down(2.mm)
-      pdf.draft_text_box "From:", line_sub_action_style.merge(:at =>[35.mm, pdf.y])
-      pdf.move_down(pdf.box_height)
-
-      rev_line_draft(line, pdf)
-      pdf.move_down(pdf.draft_box_height)
-
-      pdf.move_down(2.mm)
-      pdf.draft_text_box "To:", line_sub_action_style.merge(:at =>[35.mm, pdf.y])
-      pdf.move_down(pdf.box_height)
-
-      rev_line_draft(current_line, pdf)
-      pdf.move_down(pdf.draft_box_height + 2.mm)
-    else
-      pdf.draft_text_box "Spelling/grammatical correction to line #{current_line.clause_line}", line_rev_limited_style.merge(:at =>[35.mm, pdf.y])
-      pdf.move_down(pdf.draft_box_height + 2.mm)
-    end
-
-
-
-    if pdf.y <= 16.mm
-
-      pdf.spec_box 'List of #{action} lines continued on next page...', :size => 9, :style => :italic, :at =>[20.mm, 14.mm]      
-      pdf.start_new_page
-      pdf.y = 268.mm      
-      pdf.spec_box "Lines #{action} in #{clause.caws_code} continued:", :size => 11, :style => :bold_italic, :at => [10.mm, pdf.y]
-
-    else
-      pdf.y = y_position
-    end
-
-
-    if line.print_change?
-              
-      pdf.move_down(2.mm)
-      pdf.spec_box "From:", line_sub_action_style.merge(:at =>[35.mm, pdf.y])
-      pdf.move_down(pdf.box_height)
-
-      rev_line_print(line, pdf)
-#def rev_line_print(line, user_array, print_audit, pdf)
-      pdf.move_down(pdf.box_height)
-
-      pdf.move_down(2.mm)
-      pdf.spec_box "To:", line_sub_action_style.merge(:at =>[35.mm, pdf.y])
-      pdf.move_down(pdf.box_height)
-
-      rev_line_print(current_line, pdf)
-#def rev_line_print(line, user_array, print_audit, pdf)
-      pdf.move_down(pdf.box_height + 2.mm)
-
-    else
-      pdf.spec_box "Spelling/grammatical correction to line #{current_line.clause_line}", line_rev_limited_style.merge(:at =>[35.mm, pdf.y])
-      pdf.move_down(pdf.box_height + 2.mm) 
-    end
-end
-
-
-
-
-def rev_line_draft(line, pdf)
-#font styles for lines
-  font_style_rev_line = {:size => 10}
-#formating for lines  
-  rev_line_format = font_style_rev_line.merge(:width => 134.mm, :overflow => :expand)
-
-    case line.linetype_id       
-      when 3 ; pdf.draft_text_box "#{line.txt4.text}", rev_line_format.merge(:at =>[40.mm, pdf.y])
-      when 4 ; pdf.draft_text_box "#{line.txt4.text}: #{line.txt5.text}", rev_line_format.merge(:at =>[40.mm, pdf.y])
-      when 7 ; pdf.draft_text_box "#{line.txt4.text}", rev_line_format.merge(:at =>[40.mm, pdf.y]) 
-      when 8 ; pdf.draft_text_box "#{line.txt4.text}: #{line.txt5.text}", rev_line_format.merge(:at =>[40.mm, pdf.y])
-      when 10 ; rev_draft_linetype_10_helper(line, rev_line_format, pdf) 
-      when 11 ; pdf.draft_text_box "#{line.perform.performkey.text}: #{line.identity.perform.performvalue.full_perform_value}", rev_line_format.merge(:at =>[40.mm, pdf.y])
-      when 12 ; pdf.draft_text_box "#{line.txt4.text}: #{line.txt5.text}", rev_line_format.merge(:at =>[40.mm, pdf.y])
-    end
-end
-
-
-def rev_draft_linetype_10_helper(line, rev_line_format, pdf) 
-  if line.identity.identkey.text == "Manufacturer"
-     pdf.draft_text_box "#{line.identity.identkey.text}: #{line.identity.identvalue.company.company_name}", rev_line_format.merge(:at =>[40.mm, pdf.y])
-  else
-     pdf.draft_text_box "#{line.identity.identkey.text}: #{line.identity.identvalue.identtxt.text}", rev_line_format.merge(:at =>[40.mm, pdf.y])
-  end
-end
-
-
-
-def rev_line_print(line, pdf)
-#def rev_line_print(line, user_array, print_audit, pdf)
-  font_style_specline = {:size => 10}
-
-  indent_format = font_style_specline.merge(:width => 3.mm) 
-  specline_format = font_style_specline.merge(:width => 134.mm, :overflow => :expand)
-
-# ref = user_array.index?(line.user_id)
-
-  case line.linetype_id
-    when 1, 2 then print_linetype_1_helper(line, pdf) 
-    when 3 then rev_print_linetype_3_helper(line, indent_format, specline_format, pdf)
-    when 4 then rev_print_linetype_4_helper(line, indent_format, specline_format, pdf)
-    when 7 then rev_print_linetype_7_helper(line, indent_format, specline_format, pdf)
-    when 8 then rev_print_linetype_8_helper(line, indent_format, specline_format, pdf)
-    when 10 then rev_print_linetype_8_helper(line, indent_format, specline_format, pdf)
-    when 11 then rev_print_linetype_8_helper(line, indent_format, specline_format, pdf)
-    when 12 then rev_print_linetype_8_helper(line, indent_format, specline_format, pdf)
-
-
-#    when 1, 2 then print_linetype_1_helper(line, pdf) 
-#    when 3 then rev_print_linetype_3_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#    when 4 then rev_print_linetype_4_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#    when 7 then rev_print_linetype_7_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#    when 8 then rev_print_linetype_8_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#    when 10 then rev_print_linetype_8_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#    when 11 then rev_print_linetype_8_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#    when 12 then rev_print_linetype_8_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-
-
-  end
-end
-
-
-def rev_print_linetype_3_helper(line, indent_format, specline_format, pdf)
-#def rev_print_linetype_3_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#  print_revision_author(line, ref, print_audit, pdf)
-  pdf.spec_box '-', indent_format.merge(:at => [37.mm, pdf.y])
-  pdf.spec_box "#{line.txt4.text}: #{line.txt5.text}", specline_format.merge(:at =>[40.mm, pdf.y])
-end
-
-def rev_print_linetype_4_helper(line, indent_format, specline_format, pdf)
-#def rev_print_linetype_4_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#  print_revision_author(line, ref, print_audit, pdf)
-  pdf.spec_box '-', indent_format.merge(:at => [37.mm, pdf.y])
-    pdf.spec_box "#{line.txt4.text}", specline_format.merge(:at =>[40.mm, pdf.y])
-end
-
-def rev_print_linetype_7_helper(line, indent_format, specline_format, pdf)
-#def rev_print_linetype_7_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#  print_revision_author(line, ref, print_audit, pdf)
-  pdf.spec_box '-', indent_format.merge(:at => [37.mm, pdf.y])
-  pdf.spec_box "#{line.txt4.text}", specline_format.merge(:at =>[40.mm, pdf.y])
-end
-
-def rev_print_linetype_8_helper(line, indent_format, specline_format, pdf)
-#def rev_print_linetype_8_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#  print_revision_author(line, ref, print_audit, pdf)
-  pdf.spec_box '-', indent_format.merge(:at => [37.mm, pdf.y])
-  pdf.spec_box "#{line.txt4.text}: #{line.txt5.text}", specline_format.merge(:at =>[40.mm, pdf.y])
-end
-
-def rev_print_linetype_10_helper(line, indent_format, specline_format, pdf)
-#def rev_print_linetype_10_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#  print_revision_author(line, ref, print_audit, pdf)
-  pdf.spec_box '-', indent_format.merge(:at => [37.mm, pdf.y])
-  if line.identity.identkey.text == "Manufacturer"
-    pdf.spec_box "#{line.identity.identkey.text}: #{line.identity.identvalue.company.company_name}", specline_format.merge(:at =>[40.mm, pdf.y])
-  else
-    pdf.spec_box "#{line.identity.identkey.text}: #{line.identity.identvalue.identtxt.text}", specline_format.merge(:at =>[40.mm, pdf.y])
-  end
-end
-
-def rev_print_linetype_11_helper(line, indent_format, specline_format, pdf)
-#def rev_print_linetype_11_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#  print_revision_author(line, ref, print_audit, pdf)
-  pdf.spec_box '-', indent_format.merge(:at => [37.mm, pdf.y])
-  pdf.spec_box "#{line.perform.performkey.text}: #{line.identity.perform.performvalue.full_perform_value}", specline_format.merge(:at =>[40.mm, pdf.y])
-end
-
-def rev_print_linetype_12_helper(line, indent_format, specline_format, pdf)
-#def rev_print_linetype_12_helper(line, indent_format, specline_format, ref, print_audit, pdf)
-#  print_revision_author(line, ref, print_audit, pdf)
-  pdf.spec_box '-', indent_format.merge(:at => [37.mm, pdf.y])
-  pdf.spec_box "#{line.txt4.text}: #{line.txt5.text}", specline_format.merge(:at =>[40.mm, pdf.y])
-end
-
-
-#def print_revision_author(line, ref, print_audit, pdf)
-#  font_style_author = {:size => 8}
-#  line_author_format = font_style_author.merge(:width => 26.mm)
-#  if print_audit == true
-#    pdf.spec_box "#{ref}:#{line.updated_at.strftime("%d/%m/%y")}", line_author_format.merge(:at => [10.mm, pdf.y])
-#  end
+      #end
+      print_section_title(subsection, project, pdf)
+#if print_audit == true
+#  ref = user_array.index?(alteration.user_id)
+#  print_revision_author(ref, date, print_audit, pdf)
 #end
+      print_section_action(alteration, pdf)
+
+    else
+      clause_revisions(subsection, project, revision, i, pdf)
+    end
+  end
 
 end
 
+
+
+def clause_revisions(subsection, project, revision, i)
+
+  clauses = Clause.joins(:alterations, :clauserefs
+                      ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id, 'clauserefs.subsection_id' => subsection.id)
+
+  clauses.each_with_index do |clause, n|
+
+    alteration = Alteration.where(:project_id => project.id, :revision_id => revision.id, :clause_id => clause.id, :clause_add_delete => 2 
+                             ).where.not(:event => 'changed'
+                             ).first
+
+    if alteration
+      #check space available with title
+      check_height = (clause_title_height + clause_action_height)
+      check_height += section_title_height if n == 1
+      #unless space
+      if min_y >= (pdf.y - check_height)
+        pdf.start_new_page
+        pdf.y = top_y
+      end
+      #end
+      print_section_title(subsection, project, pdf) if n == 1
+      print_clause_title(clause, project, pdf)
+#if print_audit == true
+#  ref = user_array.index?(alteration.user_id)
+#  print_revision_author(ref, date, print_audit, pdf)
+#end
+      print_clause_action(alteration, pdf)
+
+    else
+      #print changed clauses
+      line_revisions(clause, project, revision, n)
+    end
+  end
+
+end
+
+
+
+def line_revisions(clause, project, revision, section_count, n)
+
+  new_lines = Alteration.where(:project_id => project.id, :revision_id => revision.id, :clause_id => clause.id, :clause_add_delete => 1 
+                       ).where(:event => 'new')
+
+  if new_lines
+    #print title
+    new_lines.each_with_index do |line, m|
+
+    no_previous_line_revs = true
+
+    check_height = check_text_height(line) + 5
+    check_height += line_title_height if m == 1
+    check_height += clause_title_height if n == 1 && no_previous_line_revs
+    check_height += section_title_height if i == 1 && no_previous_line_revs
+
+
+    if (y.position - check_height) < ??
+      continue_text() if n !=1 && i != 1 && m != 1
+      start_page 
+      set_y
+      continuation_text() if n !=1 && i != 1 && m != 1
+    end
+
+    print_section_title(subsection, project, pdf) if i == 1 && no_previous_line_revs
+    print_clause_title(clause, project, pdf) if n == 1 && no_previous_line_revs
+    print_clause_line_action(line) if m == 1
+#if print_audit == true
+#  ref = user_array.index?(line.user_id)
+#  print_revision_author(ref, date, print_audit, pdf)
+#end
+    print_line_text
+
+    end
+  end
+
+
+  deleted_lines = Alteration.where(:project_id => project.id, :revision_id => revision.id, :clause_id => clause.id, :clause_add_delete => 1 
+                           ).where(:event => 'deleted')
+
+  if deleted_lines
+    #print title
+    deleted_lines.each_with_index do |line, m|
+      no_previous_line_revs = true
+
+      check_height = check_text_height(line) + 5
+      check_height += line_title_height if m == 1
+      check_height += clause_title_height if n == 1 && no_previous_line_revs
+      check_height += section_title_height if i == 1 && no_previous_line_revs
+
+
+      if (y.position - check_height) < ??
+        continue_text() if n !=1 && i != 1 && m != 1
+        start_page 
+        set_y
+        continuation_text() if n !=1 && i != 1 && m != 1
+      end
+
+      print_section_title(subsection, project, pdf) if i == 1 && no_previous_line_revs
+      print_clause_title(clause, project, pdf) if n == 1 && no_previous_line_revs
+      print_clause_line_action(line) if m == 1
+#if print_audit == true
+#  ref = user_array.index?(line.user_id)
+#  print_revision_author(ref, date, print_audit, pdf)
+#end
+      print_line_text
+
+      end
+    end
+  end
+
+
+  changed_lines = Alteration.where(:project_id => project.id, :revision_id => revision.id, :clause_id => clause.id, :clause_add_delete => 1 
+                           ).where(:event => 'changed')
+
+  if changed_lines
+    #print title
+    changed_lines.each_with_index do |line, m|
+
+      no_previous_line_revs = true
+      current_line = Specline.find(line.specline_id)
+
+      check_height = check_text_change_height(line) + 5
+      check_height += check_text_change_height(current_line)
+      check_height += line_title_height if m == 1
+      check_height += clause_title_height if n == 1 && no_previous_line_revs
+      check_height += section_title_height if i == 1 && no_previous_line_revs
+
+
+      if (y.position - check_height) < ??
+        continue_text() if n !=1 && i != 1 && m != 1
+        start_page 
+        set_y
+        continuation_text() if n !=1 && i != 1 && m != 1
+      end
+
+      print_section_title(subsection, project, pdf) if i == 1 && no_previous_line_revs
+      print_clause_title(clause, project, pdf) if n == 1 && no_previous_line_revs
+      print_clause_line_action(line) if m == 1
+
+#if print_audit == true
+#  ref = user_array.index?(line.user_id)
+#  print_revision_author(ref, date, print_audit, pdf)
+#end
+      clause_line_state_from
+      changed_line_text_from(line)
+      clause_line_state_to
+      changed_line_text_from(current_line)
+
+      end
+  end
+
+
+#draft lines heights
+  def section_title_height
+    return 12 #12.mm
+  end
+
+  def section_action_height
+    return 8 #8.mm
+  end
+
+  def clause_title_height #could be wider than page width
+    return 9 #9.mm
+  end
+
+  def clause_action_height
+    return 8 #8.mm
+  end
+
+  def line_action_height
+    return 8 #8.mm
+  end
+
+  def check_text_height(line)
+
+    style = {:size => 10, :width => 134.mm, :overflow => :expand}
+
+    case line.linetype_id
+      when 3, 7 then pdf.draft_text_box "#{line.txt4.text}", style
+      when 4, 8 then pdf.draft_text_box "#{line.txt4.text}: #{line.txt5.text}", style
+    end
+  end
+
+  def check_text_change_height(line)
+
+    style = {:size => 10, :width => 124.mm, :overflow => :expand}
+
+    case line.linetype_id
+      when 3, 7 then pdf.draft_text_box "#{line.txt4.text}", style
+      when 4, 8 then pdf.draft_text_box "#{line.txt4.text}: #{line.txt5.text}", style
+    end
+  end
+
+
+  def print_section_title(section)
+    rev_section_title_style = {:size => 12, :style => :bold}
+
+    pdf.move_down(8.mm) if i != 1
+    pdf.spec_box section.code, rev_section_title_style.merge(:at => [0.mm, pdf.y])
+    pdf.spec_box section.title, rev_section_title_style.merge(:at => [10.mm, pdf.y])
+    pdf.move_down(pdf.box_height)
+  end
+
+
+  def print_section_action(line)
+    rev_text_style = {:size => 10, :overflow => :expand}
+
+    section_action = case line.clause_add_delete
+      when 1 then "Section added"
+      when 2 then "Section deleted"
+    end
+
+    pdf.move_down(4.mm)
+    pdf.spec_box section_action, rev_text_style.merge(:at => [10.mm, pdf.y])
+    pdf.move_down(pdf.box_height)
+  end
+
+
+  def print_clause_title(clause)
+    rev_clause_title_style = {:size => 11, :style => :bold, :overflow => :expand}
+
+    if n == 1
+      pdf.move_down(4.mm)
+    else
+      pdf.move_down(6.mm)
+    end
+    pdf.spec_box clause.code, rev_clause_title_style.merge(:at => [10.mm, pdf.y])
+    pdf.spec_box clause.title, rev_clause_title_style.merge(:at => [27.mm, pdf.y])
+    pdf.move_down(pdf.box_height)
+  end
+
+
+  def print_clause_action(line)
+    rev_text_style = {:size => 10, :overflow => :expand}
+
+    clause_action = case line.clause_add_delete
+      when 1 then "Clause added"
+      when 2 then "Clause deleted"
+    end
+
+    pdf.move_down(4.mm)
+    pdf.spec_box clause_action, rev_text_style.merge(:at => [27.mm, pdf.y])
+    pdf.move_down(pdf.box_height)
+  end
+
+
+  def print_clause_line_action(line)
+    rev_line_style = {:size => 10, :style => :underline}
+
+    line_action = case line.clause_add_delete
+      when 1 then "Text added"
+      when 2 then "Text deleted"
+      when 3 then "Text changed"
+    end
+
+    pdf.move_down(4.mm)
+    pdf.spec_box line_action, rev_line_style.merge(:at => [27.mm, pdf.y])
+    pdf.move_down(pdf.box_height)
+  end
+
+
+  def clause_line_state_from
+    rev_state_style = {:size => 10, :style => :italic}
+
+    pdf.move_down(5.mm)
+    pdf.spec_box "From:", rev_state_style.merge(:at => [34.mm, pdf.y])
+    pdf.move_down(pdf.box_height)
+  end
+
+
+  def clause_line_state_to
+    rev_state_style = {:size => 10, :style => :italic}
+
+    pdf.move_down(2.mm)
+    pdf.spec_box "To:", rev_state_style.merge(:at => [34.mm, pdf.y])
+    pdf.move_down(pdf.box_height)
+  end
+
+
+  def line_text(line)
+    rev_text_style = {:size => 10, :overflow => :expand}
+
+    pdf.move_down(5.mm)
+  #  pdf.spec_box '-', indent_format.merge(:at => [32.mm, pdf.y])
+    rev_text_style = rev_text_style.merge(:at => [34.mm, pdf.y], :width => 134.mm)
+    rev_line_print(line, rev_text_style, pdf)
+    pdf.move_down(pdf.box_height)
+  end
+
+
+  def changed_line_text_from(line)
+    rev_text_style = {:size => 10, :overflow => :expand}
+
+    pdf.move_down(5.mm)
+    rev_text_style = rev_text_style.merge(:at => [44.mm, pdf.y], :width => 124.mm)
+    rev_line_print(line, rev_text_style, pdf)
+    pdf.move_down(pdf.box_height)
+  end
+
+
+  def changed_line_text_to(line)
+    rev_text_style = {:size => 10, :overflow => :expand}
+
+    pdf.move_down(2.mm)
+    style = rev_text_style.merge(:at => [44.mm, pdf.y], :width => 124.mm)
+    rev_line_print(line, rev_text_style, pdf)
+    pdf.move_down(pdf.box_height)
+  end
+
+
+  def rev_line_print(line, style, pdf)
+
+    case line.linetype_id
+      when 3, 7 then pdf.spec_box "#{line.txt4.text}: #{line.txt5.text}", style
+      when 4, 8, 10, 11, 12 then pdf.spec_box "#{line.txt4.text}", style
+    end
+
+  end
+
+  #def rev_print_linetype_10_helper(line, style, pdf)
+  #  if line.identity.identkey.text == "Manufacturer"
+  #    pdf.spec_box "#{line.identity.identkey.text}: #{line.identity.identvalue.company.company_name}", style
+  #  else
+  #    pdf.spec_box "#{line.identity.identkey.text}: #{line.identity.identvalue.identtxt.text}", style
+  #  end
+  #end
+
+  #def rev_print_linetype_11_helper(line, style, pdf)
+  #  pdf.spec_box "#{line.perform.performkey.text}: #{line.identity.perform.performvalue.full_perform_value}", style
+  #end
+
+
+  def print_revision_author(ref, date, pdf)
+      pdf.spec_box "#{ref}:#{date.strftime("%d/%m/%y")}", {:size => 8, :at => [10.mm, pdf.y], :width => 17.mm}
+  end
+
+end
