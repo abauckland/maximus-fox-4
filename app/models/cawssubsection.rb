@@ -101,11 +101,14 @@ class Cawssubsection < ActiveRecord::Base
                                    ).group('cawssubsections.id'
                                    ).order('cawssections.ref, cawssubsections.ref'
                                    )}
-                               
+
   def full_code
     return cawssection.ref.to_s + sprintf("%02d", ref).to_s
   end
 
+  def title
+    return text.to_s
+  end
 
   def full_code_and_title
     return cawssection.ref.to_s + sprintf("%02d", ref).to_s+' '+text.to_s
