@@ -12,7 +12,7 @@ module RefsystemSettings
       @subsection_name = 'cawssubsection'
       @subsection_model = @subsection_name.classify.constantize
       @section_name = 'cawssection'
-      @section_model = @subsection_name.classify.constantize
+      @section_model = @section_name.classify.constantize
 #    end
   end
 
