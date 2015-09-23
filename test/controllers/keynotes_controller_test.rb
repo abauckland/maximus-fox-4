@@ -33,7 +33,7 @@ class KeynotesControllerTest < ActionController::TestCase
 
 
 #keynote_export: csv_keynote
-  test "should download document" do
+  test "should download csv" do
     sign_in users(:owner)
 
     get :keynote_export, format: :csv, id: @project, cad_product: 'csv'
@@ -48,19 +48,27 @@ class KeynotesControllerTest < ActionController::TestCase
   end
 
 #keynote_export: revit
-#  test "should download document" do
-#    sign_in users(:owner)
+  test "should download revit keynotes" do
+    sign_in users(:owner)
 
-#    get :keynote_export, id: @project, cad_product: 'revit'
-#    assert_response :success
-#  end
+    get :keynote_export, format: :txt, id: @project, cad_product: 'revit'
+    assert_response :success
+  end
 
 #keynote_export: cadimage_keynote
-#  test "should download document" do
-#    sign_in users(:owner)
+  test "should download  cadimage csv" do
+    sign_in users(:owner)
 
-#    get :keynote_export, id: @project, cad_product: 'cadimage_keynote'
-#    assert_response :success
-#  end
+    get :keynote_export, format: :csv, id: @project, cad_product: 'cadimage'
+    assert_response :success
+  end
+
+#keynote_export: cadimage_keynote
+  test "should download  cadimage keynotes" do
+    sign_in users(:owner)
+
+    get :keynote_export, format: :xml, id: @project, cad_product: 'cadimage_keynote'
+    assert_response :success
+  end
 
 end
