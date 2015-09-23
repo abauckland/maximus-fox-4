@@ -50,7 +50,7 @@ private
         csv << [subsection_code, subsection_title]
 
         #for each clause
-        set_clauses(project, subsection)
+        set_clauses(project, subsection, @subsection_name)
         @clauses.each_with_index do |clause, m|
 
           clause_code = subsection_code + '.' +clause.clauseref_code.to_s
@@ -83,9 +83,9 @@ private
         @subsections.each_with_index do |subsection, n|
 
           #project subsection s
-          subsection_code = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.full_code.to_s
-          subsection_title = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.text.to_s
-          section_code = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.method(set_keynote_section_name(project)).call.ref.to_s
+          subsection_code = subsection.full_code.to_s#clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.full_code.to_s
+          subsection_title = subsection.text.to_s#clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.text.to_s
+          section_code = subsection.cawssection.ref.to_s#clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.method(set_keynote_section_name(project)).call.ref.to_s
 
           data = data + "#{subsection_code}\t#{subsection_title}\t#{section_code}\r\n"
 
@@ -146,8 +146,8 @@ private
       set_subsections(project)
       @subsections.each_with_index do |subsection, n|
         #project subsection
-        subsection_code = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.full_code.to_s
-        subsection_title = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.text.to_s
+        subsection_code = subsection.full_code.to_s
+        subsection_title = subsection.text.to_s
         csv << ['', subsection_code, subsection_title, '', '', '', '']
 
         #for each clause
@@ -178,15 +178,15 @@ private
           set_subsections(project)
 
           @subsections.each do |subsection|
-            subsection_code = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.full_code.to_s
-            subsection_title = clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.text.to_s
+            subsection_code = subsection.full_code.to_s#clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.full_code.to_s
+            subsection_title = subsection.text.to_s#clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.text.to_s
             sub_key = subsection.id.to_s+"-0000-00"
             xml.keynote(:key => sub_key, :edit => Time.now.to_formatted_s(:iso8601)) {
               xml.name subsection_code
               xml.title subsection_title
             }
 
-            set_all_clauses(project, subsection)
+            set_all_clauses(project, subsection, @subsection_name)
 
             @clauses.each do |clause|
             clause_code = subsection_code + '.' +clause.clauseref_code.to_s
@@ -237,12 +237,12 @@ private
         @subsections = @subsection_model.section_subsections(project, section)
     end
 
-    def set_clauses(project, subsection)
-        @clauses = Clause.subsection_clauses(project, subsection, @subsection_name).where('clauserefs.clausetype_id' => [2..5])
+    def set_clauses(project, subsection, subsection_name)
+        @clauses = Clause.subsection_clauses(project, subsection, subsection_name).where('clauserefs.clausetype_id' => [2..5])
     end
 
-    def set_all_clauses(project, subsection)
-        @clauses = Clause.subsection_clauses(project, subsection, @subsection_name)
+    def set_all_clauses(project, subsection, subsection_name)
+        @clauses = Clause.subsection_clauses(project, subsection, subsection_name)
     end
 
     def set_lines(project, clause)
