@@ -20,3 +20,17 @@ C10:
   ref: 10
   text: Site Survey
   guidepdf_id: 1
+
+D10:
+  id: 4
+  cawssection_id: 4
+  ref: 10
+  text: Ground Works
+  guidepdf_id: 1
+
+E10:
+  id: 5
+  cawssection_id: 5
+  ref: 10
+  text: Foundation Works
+  guidepdf_id: 1

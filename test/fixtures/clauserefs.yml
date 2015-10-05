@@ -71,8 +71,20 @@ C10_1110:
   <<: *DEFAULT
   subsection_id: 3
 
-C10_1110:
+D10_1110:
   id: 41
+  clausetype_id: 1
+  <<: *DEFAULT
+  subsection_id: 4
+
+E10_1110:
+  id: 51
+  clausetype_id: 1
+  <<: *DEFAULT
+  subsection_id: 5
+
+E10_2110:
+  id: 52
   clausetype_id: 2
   <<: *DEFAULT
-  subsection_id: 3
+  subsection_id: 5

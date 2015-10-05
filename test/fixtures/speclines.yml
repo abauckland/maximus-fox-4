@@ -1293,3 +1293,47 @@ specline_117:
   txt5_id: 1
   linetype_id: 7
   <<: *DEFAULT
+
+specline_118:
+  id: 118
+  project_id: 13
+  clause_id: 51
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_119:
+  id: 119
+  project_id: 13
+  clause_id: 51
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT
+
+specline_120:
+  id: 120
+  project_id: 13
+  clause_id: 52
+  clause_line: 0
+  txt1_id: 1
+  txt4_id: 1
+  txt5_id: 1
+  linetype_id: 1
+  <<: *DEFAULT
+
+specline_121:
+  id: 121
+  project_id: 13
+  clause_id: 52
+  clause_line: 1
+  txt1_id: 1
+  txt4_id: 2
+  txt5_id: 1
+  linetype_id: 7
+  <<: *DEFAULT

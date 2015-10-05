@@ -23,6 +23,19 @@ class SpecsubsectionsControllerTest < ActionController::TestCase
     assert_response 403
   end
 
+  test "should not add section but redirect if user role is read" do
+    sign_in users(:employee_2)
+    post :add, id: @project.id, template_id: 13, template_sections: [5]
+    assert_response 403
+  end
+
+  test "should not delete section but redirect if user role is read" do
+    sign_in users(:employee_2)
+    post :delete, id: @project.id, project_sections: [2]
+    assert_response 403
+  end
+
+
 #manage
   test "should show project and template sections" do
     sign_in users(:owner)
@@ -38,21 +51,30 @@ class SpecsubsectionsControllerTest < ActionController::TestCase
 
 
 #add_subsections
-#TODO add D10 & E10 subsetion to project_template to copy into project
-#  test "should add subsections" do
-#    sign_in users(:owner)
+  test "should add subsections" do
+    sign_in users(:owner)
 
-#    assert_difference('Specline.count') do
-#      post :add, id: @project.id, template_id: @project_template.id, template_sections: [1,2]
-#    end
+    assert_difference('Specline.count', +4) do
+      post :add, id: @project.id, template_id: 13, template_sections: [5]
+    end
 
 #    #redirect to index if saved
-#    assert_redirected_to manage_specsubsection_path(id: @project.id, template_id: @project.parent_id)
-#  end
+    assert_redirected_to manage_specsubsection_path(id: @project.id, template_id: 13)
+  end
 
-#add subsections with revision tracking on
-# => test 'should add alterations'
-# => end
+  test "should add subsections but not alterations" do
+    sign_in users(:owner)
+    assert_no_difference('Alteration.count') do
+      post :add, id: @project.id, template_id: 13, template_sections: [5]
+    end
+  end
+
+  test "should add subsections and alterations" do
+    sign_in users(:owner)
+    assert_difference('Alteration.count', +4) do
+      post :add, id: @project_rev.id, template_id: 13, template_sections: [5]
+    end
+  end
 
 
 
@@ -60,8 +82,8 @@ class SpecsubsectionsControllerTest < ActionController::TestCase
   test "should remove subsections" do
     sign_in users(:owner)
 
-    assert_difference('Specline.count', -37) do
-      post :delete, id: @project.id, project_sections: [1,2]
+    assert_difference('Specline.count', -4) do
+      post :delete, id: @project.id, project_sections: [2,3]
     end
 
 #    #redirect to index if saved
@@ -69,18 +91,19 @@ class SpecsubsectionsControllerTest < ActionController::TestCase
   end
 
 #delete subsections with revision tracking on
-  test 'should add alterations' do
+  test 'should remove subsections but not alterations' do
     sign_in users(:owner)
+    assert_no_difference('Alteration.count') do
+      post :delete, id: @project.id, project_sections: [2]
+    end
+  end
 
+#delete subsections with revision tracking on
+  test 'should remove subsections and add alterations' do
+    sign_in users(:owner)
     assert_difference('Alteration.count', +2) do
       post :delete, id: @project_rev.id, project_sections: [2]
     end
-
-#    #redirect to index if saved
-    assert_redirected_to manage_specsubsection_path(id: @project_rev.id)
   end
-
-
-
 
 end

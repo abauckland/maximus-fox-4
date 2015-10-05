@@ -43,6 +43,30 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal "Project was successfully created.", flash[:notice]
   end
 
+  test "should not create project if duplicate code and title" do
+    sign_in users(:owner)
+
+    assert_no_difference('Project.count') do
+      post :create, project: { code: @project.code, title: @project.title, parent_id: @project.parent_id, company_id: @project.company_id, project_status: @project.project_status, ref_system: @project.ref_system, project_image: @project.project_image, client_name: @project.client_name, client_logo: @project.client_logo}
+    end
+  end
+
+  test "should not create project if duplicate title only" do
+    sign_in users(:owner)
+
+    assert_difference('Project.count') do
+      post :create, project: { code: "Test_2", title: @project.title, parent_id: @project.parent_id, company_id: @project.company_id, project_status: @project.project_status, ref_system: @project.ref_system, project_image: @project.project_image, client_name: @project.client_name, client_logo: @project.client_logo}
+    end
+  end
+
+  test "should not create project if duplicate code only" do
+    sign_in users(:owner)
+
+    assert_difference('Project.count') do
+      post :create, project: { code: @project.code, title: "Test title 2", parent_id: @project.parent_id, company_id: @project.company_id, project_status: @project.project_status, ref_system: @project.ref_system, project_image: @project.project_image, client_name: @project.client_name, client_logo: @project.client_logo}
+    end
+  end
+
 #edit
 #  test "if user project role is not manage should redirect" do
 #    sign_in users(:employee_2)

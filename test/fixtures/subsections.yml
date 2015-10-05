@@ -14,3 +14,13 @@ CAWS_C10:
   id: 3
   cawssubsection_id: 3
   unisubsection_id: 1
+
+CAWS_D10:
+  id: 4
+  cawssubsection_id: 4
+  unisubsection_id: 1
+
+CAWS_E10:
+  id: 5
+  cawssubsection_id: 5
+  unisubsection_id: 1

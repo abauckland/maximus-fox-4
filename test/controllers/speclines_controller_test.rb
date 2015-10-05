@@ -97,7 +97,7 @@ class SpeclinesControllerTest < ActionController::TestCase
 #  test "should move line up one clause" do
 #  end
 
-#  test "should move line up one clause and record change" do
+#  test "should move line up one clause and record change (+2)" do
 #  end
 
 
@@ -215,8 +215,22 @@ class SpeclinesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-#  test "should remove lines and alteration record" do
-#  end
+  test "should remove lines but no alterations" do
+    sign_in users(:owner)
+    @clause_line = speclines(:specline_1)
+    assert_no_difference('Alteration.count') do #number of fixture lines in clause
+      xhr :delete, :delete_clause, format: :js, id: @clause_line.id
+    end
+  end
+
+  test "should remove lines and record alterations" do
+    sign_in users(:owner)
+    @clause_line = speclines(:specline_75)
+    assert_difference('Alteration.count', +2) do #number of fixture lines in clause
+      xhr :delete, :delete_clause, format: :js, id: @clause_line.id
+    end
+  end
+
 
 
 #delete_specline
@@ -228,14 +242,23 @@ class SpeclinesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test "should remove line and do not record alteration" do
+    sign_in users(:owner)
+    assert_no_difference('Alteration.count') do
+      xhr :delete, :delete_specline, format: :js, id: @specline.id
+    end
+    assert_response :success
+  end
+
+
 #no previous changes to line
-#  test "should remove line and add alteration record" do
-#    sign_in users(:owner)
-#    assert_difference('Alteration.count', +1) do
-#      xhr :delete, :delete_specline, format: :js, id: @specline_rev.id
-#    end
-#    assert_response :success
-#  end
+  test "should remove line and add alteration record" do
+    sign_in users(:owner)
+    assert_difference('Alteration.count', +1) do
+      xhr :delete, :delete_specline, format: :js, id: 76 #specline_id
+    end
+    assert_response :success
+  end
 
 #if previous new line record
 #TODO add matching record to alterations table

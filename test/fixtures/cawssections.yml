@@ -14,3 +14,13 @@ C:
   id: 3
   ref: C
   text: Surveys/Repairs
+
+D:
+  id: 4
+  ref: D
+  text: Ground Works
+
+E:
+  id: 5
+  ref: E
+  text: Foundations

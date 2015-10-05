@@ -4,45 +4,23 @@ class AlterationsControllerTest < ActionController::TestCase
 
   include Devise::TestHelpers
 
-#  setup do
-#    @alteration_line = alterations(:line)
-#    @alteration_clause = alterations(:clause)
-#  end
-
-#index
-#  test "not authenticated should get redirect" do
-#    get :index
-#    assert_response :redirect
-#  end
-
-#  test "if user role is not admin should get redirect" do
-#    sign_in users(:manage)
-
-#    get :index
-#    assert_response 403
-#  end
-
-
 #clause_change_info
-#  test "should show clause edit info" do
-#    sign_in users(:manage)
-
-#    get :edit, id: @alteration_clause
-#    assert_response :success
-#  end
+  test "should show clause edit info" do
+    sign_in users(:employee_2)
+    xhr :get, :clause_change_info, format: :js, id: 2, rev_id: 2, clause_id: 22
+    assert_response :success
+  end
 
 
 #line_change_info
-#  test "should show line edit info" do
-#    sign_in users(:manage)
-
-#    get :edit, id: @alteration_line
-#    assert_response :success
-#  end
+  test "should show line edit info" do
+    sign_in users(:employee_2)
+    xhr :get, :line_change_info, format: :js, id: 14
+    assert_response :success
+  end
 
 
 #print_setting
-
 #  test "should post my action" do
 #    post :my_action, { 'param' => "value" }, :format => "json"
 #    assert_response :success
