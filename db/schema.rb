@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150728161054) do
+ActiveRecord::Schema.define(version: 20150930200004) do
+
+  create_table "abouts", force: true do |t|
+  end
 
   create_table "alterations", force: true do |t|
     t.integer  "specline_id",                                 null: false
@@ -295,17 +298,19 @@ ActiveRecord::Schema.define(version: 20150728161054) do
   end
 
   create_table "projects", force: true do |t|
-    t.string   "code",           limit: 45,              null: false
-    t.string   "title",          limit: 200,             null: false
-    t.integer  "parent_id",                              null: false
-    t.integer  "company_id",                             null: false
-    t.integer  "project_status", limit: 1,   default: 0, null: false
-    t.integer  "ref_system",     limit: 1,   default: 0
+    t.string   "code",            limit: 45,              null: false
+    t.string   "title",           limit: 200,             null: false
+    t.integer  "parent_id",                               null: false
+    t.integer  "company_id",                              null: false
+    t.integer  "project_status",  limit: 1,   default: 0, null: false
+    t.integer  "ref_system",      limit: 1,   default: 0
     t.string   "project_image"
     t.string   "client_logo"
     t.string   "client_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "refsystem_id"
+    t.string   "printsetting_id"
   end
 
   add_index "projects", ["company_id"], name: "COMPANY", using: :btree
@@ -320,6 +325,15 @@ ActiveRecord::Schema.define(version: 20150728161054) do
 
   add_index "projectusers", ["project_id"], name: "PROJECT", using: :btree
   add_index "projectusers", ["user_id"], name: "USER", using: :btree
+
+  create_table "refsystems", force: true do |t|
+    t.integer  "name"
+    t.integer  "subsection"
+    t.integer  "section"
+    t.integer  "group"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "revisions", force: true do |t|
     t.string   "rev",            limit: 2
