@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 1
+  valuetype_id: 1
+  performtxt_id: 1
+
+two:
+  id: 2
+  valuetype_id: 1
+  performtxt_id: 2
+
+three:
+  id: 3
+  valuetype_id: 2
+  performtxt_id: 2
+
+four:
+  id: 4
+  valuetype_id: 3
+  performtxt_id: 2

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+mm:
+  id: 1
+  text: mm
+
+cm:
+  id: 2
+  text: cm
+
+m:
+  id: 3
+  text: m

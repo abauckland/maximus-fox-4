@@ -1,7 +1,7 @@
 class Standard < ActiveRecord::Base
-has_many :valuetypes
+  has_many :valuetypes
 
   def ref_and_title
-    return ref+' '+title
+    ref+' '+title
   end
 end

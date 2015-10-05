@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 1
+  text: Blue
+
+two:
+  id: 2
+  text: "200"
+
+three:
+  id: 3
+  text: Green

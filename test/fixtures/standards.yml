@@ -1,0 +1,6 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+BS8000:
+  id: 1
+  ref: BS8000
+  title: British Standard Title Text
