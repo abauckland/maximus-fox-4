@@ -268,23 +268,12 @@ end
       end   
   end
 
-  def clause_ref(project, specline)
-    case project.ref_system
-          when 1 ; specline.clause.clauseref.subsection.cawssubsection.call.full_code.to_s + '.' +specline.clause.clauseref_code.to_s
-    end
+  def clause_ref(project, clause)
+    clause.clauseref.subsection.method(set_subsection_name(@project)).call.full_code.to_s + '.' +clause.clauseref_code.to_s
   end
 
-
-#  def set_subsection_name(project_id)
-##TODO change ref system establishment
-#    project = Project.find(project_id)
-#    case project.ref_system
-#      when "CAWS" ; 'cawssubsection'
-#    end
-#  end
-
-#  def clause_ref(project, clause)
-#      return clause.clauseref.subsection.method(set_subsection_name(project.id)).call.full_code.to_s + '.' +clause.clauseref_code.to_s
-#  end
+  def set_subsection_name(project)
+    @subsection_name
+  end
 
 end

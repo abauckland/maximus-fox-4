@@ -9,7 +9,7 @@ class ClausesController < ApplicationController
 
 
   def new
-
+    authorize :clause, :new?
     @clause = Clause.new
     clausetitle = @clause.build_clausetitle
     clauseref = @clause.build_clauseref
@@ -20,6 +20,7 @@ class ClausesController < ApplicationController
 
 
   def create
+    authorize :clause, :create?
     @clause = Clause.new(clause_params)
 
     current_clauseref = Specline.joins(:clause => :clauseref
@@ -146,12 +147,14 @@ class ClausesController < ApplicationController
 
 
   def new_clone_project_list
+#TODO ref system
     #projects must contain something
     user_projects = Specline.joins(:project => :projectusers
                             ).where('projectusers.user_id' => current_user.id, 'projects.ref_system' => @project.ref_system
                             ).pluck(:project_id).uniq.sort
-#    user_projects = Project.user_projects_access(current_user).ref_system(@project).order("code").ids
+#    user_projects = Project.user_projects(current_user).ref_system(@project).order("code").ids
     standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system).order("code").ids
+#    standard_templates = Project.ref_system(@project).where(:id => [1..10]).order("code").ids
     template_ids = user_projects + standard_templates
 
     @projects = Project.where(:id => template_ids)
@@ -159,8 +162,6 @@ class ClausesController < ApplicationController
   end
 
   def new_clone_subsection_list
-
-      if @project.CAWS?
         #if user is identified as having access to only some subsections return list of subsections
         #if user has access to all, return all subsections for project
         subsectionuser_ids = Subsectionuser.joins(:projectuser
@@ -170,30 +171,20 @@ class ClausesController < ApplicationController
         if subsectionuser_ids.blank?
           clone_subsection_ids = @subsection_model.project_subsections(@project).order("id").ids.uniq
         else
-#TODO allow for include/join table name
           clone_subsection_ids = @subsection_model.joins(:subsections => :subsectionusers
-                                            ).where('subsectionusers.id' => subsectionuser_ids 
-                                            ).ids.uniq
+                                                 ).where('subsectionusers.id' => subsectionuser_ids 
+                                                 ).ids.uniq
         end
-#TODO allow for include/join table name
-        @clone_subsections = @subsection_model.includes(:cawssection).where(:id => clone_subsection_ids).order('cawssections.ref, cawssubsections.ref')
-      else
-###uniclass code to go here - same as above
-      end
+        @clone_subsections = @subsection_model.ordered_subsections(clone_subsection_ids)
+
   end
 
+
   def new_clone_clause_list
-      if @project.CAWS?
-#TODO allow for include/join table name
-        clone_clause_ids = Clause.joins(:speclines, :clauseref => [:subsection]
-                              ).where('speclines.project_id' => @project.id, 'subsections.cawssubsection_id' => params[:subsection]
-                              ).ids.uniq
-#TODO allow for include/join table name
-        @clone_clauses = Clause.includes(:clausetitle, :clauseref => [:subsection => [:cawssubsection => :cawssection]]).where(:id => clone_clause_ids).order('clauserefs.subsection_id', 'clauserefs.clausetype_id', 'clauserefs.clause_no', 'clauserefs.subclause')          
-      else
-###uniclass code to go here - same as above 
-      end
+        clone_clause_ids = Clause.subsection_clause_ids(@project, params[:subsection], @subsection_name)
+        @clone_clauses = Clause.clause_ids(clone_clause_ids, @subsection_name, @section_name)
   end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

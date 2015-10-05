@@ -81,6 +81,8 @@ end
     end
 
     def set_subsections(project)
+#TODO ref_system
+#       table_name = @project.refsystem.subsection
        table_name = @project.ref_system.subsection_name
        model = table_name.classify.constantize
        @subsections = model.project_subsections(@project)

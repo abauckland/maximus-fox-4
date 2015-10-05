@@ -287,13 +287,9 @@ def clausetitle_repeat(project, line, pdf)
      pdf.spec_box line.clause.clausetitle.text + ' (continued)', :size => 10, :style => :bold_italic, :at =>[20.mm, pdf.y], :width => 155.mm, :overflow => :expand
 end
 
-#TODO replace ref system code options
+
 def full_clause_code(project, line)
-  if project.CAWS?
-    line.clause.caws_code#clauseref.subsection.cawssubsection.full_code + '.' + line.clause.clauseref.clausetype_id.to_s + sprintf("%02d", line.clause.clauseref.clause).to_s + line.clause.clauseref.subclause.to_s
-#  else
-    #line.clause.clauseref.subsection.section.ref + sprintf("%02d", line.clause.clauseref.subsection.ref).to_s + '.' + line.clause.clauseref.clausetype_id.to_s + sprintf("%02d", line.clause.clauseref.clause).to_s + line.clause.clauseref.subclause.to_s    
-  end  
+    line.clause.clauseref.subsection.method(set_subsection_name(project)).call.full_code + '.' + line.clause.clauseref_code
 end
 
 end

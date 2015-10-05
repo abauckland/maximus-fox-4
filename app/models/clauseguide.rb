@@ -4,6 +4,12 @@ class Clauseguide < ActiveRecord::Base
 
   accepts_nested_attributes_for :guidenote
 
+  scope :project_guides, ->(project, subsection_id, subsection_name) {
+                            joins(:clause => [:speclines, :clauseref => [:subsection]]
+                          ).where('subsections.'+subsection_name+'_id' => subsection_id, 'speclines.project_id' => project.id
+                          ).uniq.order('clauserefs.clause_no, clauserefs.subclause'
+                          )}
+
   def clause_title
     clause.clauseref_code + ' ' + clause.clause_title
   end

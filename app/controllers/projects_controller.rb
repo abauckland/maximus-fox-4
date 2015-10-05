@@ -79,9 +79,11 @@ class ProjectsController < ApplicationController
 
     def set_templates
 #TODO change ref system names
+#      user_projects = Project.user_projects(current_user).ref_system(@project).order("code")
       user_projects = Project.joins(:projectusers).where('projectusers.user_id' => current_user.id, :ref_system => @project.ref_system).order("code")
 #TODO check ids of template projects
 #TODO change ref system names
+#      standard_templates = Project.ref_system(@project).where(:id => [1..10]).order("code")
       standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system).order("code")
       @templates = standard_templates + user_projects
     end

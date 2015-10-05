@@ -83,9 +83,9 @@ private
         @subsections.each_with_index do |subsection, n|
 
           #project subsection s
-          subsection_code = subsection.full_code.to_s#clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.full_code.to_s
-          subsection_title = subsection.text.to_s#clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.text.to_s
-          section_code = subsection.cawssection.ref.to_s#clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.method(set_keynote_section_name(project)).call.ref.to_s
+          subsection_code = subsection.full_code.to_s
+          subsection_title = subsection.text.to_s
+          section_code = subsection.method(set_section_name(project)).call.ref.to_s
 
           data = data + "#{subsection_code}\t#{subsection_title}\t#{section_code}\r\n"
 
@@ -178,8 +178,8 @@ private
           set_subsections(project)
 
           @subsections.each do |subsection|
-            subsection_code = subsection.full_code.to_s#clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.full_code.to_s
-            subsection_title = subsection.text.to_s#clause.clauseref.subsection.method(set_keynote_subsection_name(project)).call.text.to_s
+            subsection_code = subsection.full_code.to_s
+            subsection_title = subsection.text.to_s
             sub_key = subsection.id.to_s+"-0000-00"
             xml.keynote(:key => sub_key, :edit => Time.now.to_formatted_s(:iso8601)) {
               xml.name subsection_code
@@ -259,8 +259,5 @@ private
       end
     end
 
-    def set_keynote_subsection_name(project)
-      @subsection_name
-    end
 
 end

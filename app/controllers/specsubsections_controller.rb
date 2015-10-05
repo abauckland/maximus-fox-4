@@ -17,7 +17,7 @@ class SpecsubsectionsController < ApplicationController
 
     @project_subsections = @subsection_model.project_subsections(@project)
 #TODO both named scopes are the same
-    @template_subsections = @subsection_model.template_subsections(@project, @template).where.not(:id => @project_subsections.ids)
+    @template_subsections = @subsection_model.template_subsections(@template).where.not(:id => @project_subsections.ids)
 
   end
 
@@ -122,12 +122,16 @@ class SpecsubsectionsController < ApplicationController
     def set_templates(project)
 #TODO change ref system names
 #TODO check that only lists projects that user is a proejct_user for
+#      user_projects = Project.user_projects(current_user).ref_system(@project
+#                            ).where.not(:id => project.id
+#                            ).order("code")
       user_projects = Project.joins(:projectusers
                             ).where('projectusers.user_id' => current_user.id, :ref_system => project.ref_system
                             ).where.not(:id => project.id
                             ).order("code")
 #TODO check ids of template projects
 #TODO change ref system names
+#      standard_templates = Project.ref_system(@project).where(:id => [1..10]).order("code")
       standard_templates = Project.where(:id => [1..10], :ref_system => project.ref_system).order("code")
       @templates = standard_templates + user_projects
     end

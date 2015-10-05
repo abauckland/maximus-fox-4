@@ -17,25 +17,35 @@ class SpecclausesController < ApplicationController
 
       #list of projects where project user has subsections assigned to them other than current
 #TODO check that this returns correct projects
+#      user_projects_no_access_ids = Project.user_projects(current_user).ref_system(@project
+#                                          ).joins(:projectusers => :subsectionusersd
+#                                          ).where.not('subsectionusers.subsection_id' => @subsection.id
+#                                          ).ids
       user_projects_no_access_ids = Project.joins(:projectusers => :subsectionusers
-                                      ).where('projectusers.user_id' => current_user.id
-                                      ).where(:ref_system => @project.ref_system
-                                      ).where.not('subsectionusers.subsection_id' => @subsection.id
-                                      ).ids
+                                          ).where('projectusers.user_id' => current_user.id
+                                          ).where(:ref_system => @project.ref_system
+                                          ).where.not('subsectionusers.subsection_id' => @subsection.id
+                                          ).ids
 
 #TODO change ref system names
-      user_projects = Project.joins(:projectusers).where('projectusers.user_id' => current_user.id, :ref_system => @project.ref_system
-                                          ).where.not(:id => @project.id
-                                          ).where.not(:id => user_projects_no_access_ids
-                                          ).order("code")
+#      user_projects = Project.user_projects(current_user).ref_system(@project
+#                            ).where.not(:id => @project.id
+#                            ).where.not(:id => user_projects_no_access_ids
+#                            ).order("code")
+      user_projects = Project.joins(:projectusers
+                            ).where('projectusers.user_id' => current_user.id, :ref_system => @project.ref_system
+                            ).where.not(:id => @project.id
+                            ).where.not(:id => user_projects_no_access_ids
+                            ).order("code")
+
 #TODO check ids of template projects
 #TODO change ref system names
+#      standard_templates = Project.ref_system(@project).where(:id => [1..10]).order("code")
       standard_templates = Project.where(:id => [1..10], :ref_system => @project.ref_system).order("code")
       @templates = standard_templates + user_projects
 
       @current_project_clauses = Clause.project_subsection(@project, params[:subsection_id], @subsection_name, current_user)
-      @template_project_clauses = Clause.where.not(:id => @current_project_clauses.ids
-                                       ).project_subsection(@template, params[:subsection_id], @subsection_name, current_user)
+      @template_project_clauses = Clause.project_subsection(@template, params[:subsection_id], @subsection_name, current_user).where.not(:id => @current_project_clauses.ids)
 
   end
 

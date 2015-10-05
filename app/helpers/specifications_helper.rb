@@ -243,11 +243,11 @@ module SpecificationsHelper
 
 
   def line_clause_ref(specline)
-    case specline.project.ref_system
-          when 1 ; specline.clause.clauseref.subsection.cawssubsection.call.full_code.to_s + '.' +specline.clause.clauseref_code.to_s
-    end
+    specline.clause.clauseref.subsection.method(set_subsection_name(@project)).call.full_code.to_s + '.' +specline.clause.clauseref_code.to_s
   end
 
-
+  def set_subsection_name(project)
+    @subsection_name
+  end
 
 end

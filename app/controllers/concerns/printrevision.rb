@@ -236,8 +236,8 @@ end
     rev_section_title_style = {:size => 12, :style => :bold}
 
     pdf.move_down(8.mm) if i != 1
-    pdf.spec_box section.cawssubsection.full_code, rev_section_title_style.merge(:at => [0.mm, pdf.y])
-    pdf.spec_box section.cawssubsection.title, rev_section_title_style.merge(:at => [10.mm, pdf.y])
+    pdf.spec_box section.method(set_subsection_name(@project)).call.full_code, rev_section_title_style.merge(:at => [0.mm, pdf.y])
+    pdf.spec_box section.method(set_subsection_name(@project)).call.title, rev_section_title_style.merge(:at => [10.mm, pdf.y])
     pdf.move_down(pdf.box_height)
   end
 
@@ -264,7 +264,7 @@ end
     else
       pdf.move_down(6.mm)
     end
-    pdf.spec_box clause.clause_code, rev_clause_title_style.merge(:at => [10.mm, pdf.y])
+    pdf.spec_box clause_code(clause), rev_clause_title_style.merge(:at => [10.mm, pdf.y])
     pdf.spec_box clause.clause_title, rev_clause_title_style.merge(:at => [27.mm, pdf.y])
     pdf.move_down(pdf.box_height)
   end
@@ -380,6 +380,10 @@ end
 
   def print_revision_author(ref, date, pdf)
       pdf.spec_box "#{ref}:#{date.strftime("%d/%m/%y")}", {:size => 8, :at => [10.mm, pdf.y], :width => 17.mm}
+  end
+
+  def clause_code(clause)
+      clause.clauseref.subsection.method(set_subsection_name(@project)).call.full_code + '.' + clause.clauseref_code
   end
 
 end

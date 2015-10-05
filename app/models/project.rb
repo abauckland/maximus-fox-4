@@ -6,7 +6,7 @@ class Project < ActiveRecord::Base
   has_many :clauses, :through => :speclines
   has_many :revisions
   has_many :alterations
-#TODO belongs_to :printsettings - need to amend database
+#TODO belongs_to :printsetting - need to amend database
   has_many :printsettings
   has_many :prints
 #TODO  belongs_to :refsystem

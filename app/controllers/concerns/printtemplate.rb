@@ -57,7 +57,7 @@ def print_document(project, revision, issue, pdf)
 
 #changed_subections = Cawssubsection.all_subsection_revisions(project, revision)
     #changed_sections = Alteration.changed_caws_all_sections(project, revision)
-    changed_sections = Cawssubsection.all_subsection_revisions(project, revision)
+    changed_sections = @subsection_model.all_subsection_revisions(project, revision)
     if !changed_sections.blank?
 
         ##page nummber record
@@ -110,7 +110,7 @@ def print_document(project, revision, issue, pdf)
 #  end
 
 ## SUBSECTIONS
-  subsections = Cawssubsection.all_subsections(project)
+  subsections = @subsection_model.all_subsections(project)
   unless subsections.blank?
     subsections.each do |subsection|
   ##page nummber record

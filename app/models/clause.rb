@@ -42,6 +42,33 @@ before_save :assign_title
                         ).uniq
                         }
 
+  scope :subsection_clause_ids, ->(project, subsection_id, subsection_name) { joins(:speclines
+                        ).includes(:clausetitle, :clauseref => [:subsection]
+                        ).where('speclines.project_id' => project.id, 'subsections.'+subsection_name+'_id' => subsection_id
+                        ).order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
+                        ).uniq.ids
+                        }
+
+  scope :clause_ids, ->(clone_clause_ids, subsection_name, section_name) { joins(:speclines
+                        ).includes(:clausetitle, :clauseref => [:subsection => [(subsection_name.to_sym) => (section_name.to_sym)]]
+                        ).where(:id => clone_clause_ids
+                        ).order('clauserefs.subsection_id', 'clauserefs.clausetype_id', 'clauserefs.clause_no', 'clauserefs.subclause'
+                        ).uniq
+                        }
+
+  scope :project_clauses, ->(project_clauses, subsection, subsection_name) {
+                          joins(:clauseref => [:subsection]
+                        ).where('subsections.'+subsection_name+'_id' => subsection, :id => project_clauses
+                        ).order('clauserefs.clause_no, clauserefs.subclause'
+                        )}
+
+
+
+
+
+
+
+
 #used
   scope :ref_subsection_clauses, ->(project_id, subsection_ids, subsection_name) { joins(:speclines, :clauseref => [:subsection]
                                      ).where('speclines.project_id' => project_id, 'subsections.'+subsection_name+'_id' => subsection_ids

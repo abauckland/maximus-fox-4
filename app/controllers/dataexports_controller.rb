@@ -4,7 +4,7 @@ class DataexportsController < ApplicationController
   before_action :set_revision
 
   include ProjectuserDetails
-
+  include RefsystemSettings
 
   layout "projects", :except => [:download]
 
@@ -107,16 +107,8 @@ class DataexportsController < ApplicationController
     end
 
     def csv_product_clause_array(project, clause)
-      clause_ref = clause.clauseref.subsection.method(set_data_subsection_name(project)).call.full_code.to_s + '.' +clause.clauseref_code.to_s
+      clause_ref = clause.clauseref.subsection.method(set_subsection_name(project)).call.full_code.to_s + '.' +clause.clauseref_code.to_s
       @clause_info = [clause_ref, clause.clausetitle.text]
     end
-
-    def set_data_subsection_name(project)
-#TODO change ref system establishment
-      case project.ref_system
-        when "CAWS" ; 'cawssubsection'
-      end
-    end
-
 
 end

@@ -308,13 +308,7 @@ class SpeclinesController < ApplicationController
 
       reference_clause = Clause.where(:id => c).first
 
-
-#if project.CAWS?
-      code = reference_clause.caws_code
-#else
-#end
-#      code_title = c.clause_code_title_in_brackets
-      code_title = reference_clause.caws_code + ' (' + reference_clause.clausetitle.text.to_s + ')'
+      code_title = reference_clause.clause_code + ' (' + reference_clause.clausetitle.text.to_s + ')'
       @reference_options[code] = code_title
     end
     #identify which is currently selected option - txt5 value
@@ -346,26 +340,22 @@ def update_product_key
     #get possible products for identity and perform pairs
     if product_identity_pairs.empty?
       if product_perform_pairs.empty?
-        possible_products = Product.joins(:clauseproducts).where(
-          'clauseproducts.clause_id' => @sub_clause_ids)  
+        possible_products = Product.joins(:clauseproducts
+                                  ).where('clauseproducts.clause_id' => @sub_clause_ids)
       else
-        possible_products = Product.joins(:clauseproducts, :instances => :charcs).where(
-          'clauseproducts.clause_id' => @sub_clause_ids,
-          'charcs.perform_id'=>  product_perform_pairs)
+        possible_products = Product.joins(:clauseproducts, :instances => :charcs
+                                  ).where('clauseproducts.clause_id' => @sub_clause_ids,'charcs.perform_id'=>  product_perform_pairs)
       end
     else
       if product_perform_pairs.empty?
-        possible_products = Product.joins(:clauseproducts, :descripts).where(
-          'clauseproducts.clause_id' => @sub_clause_ids,
-          'descripts.identity_id'=> product_identity_pairs) 
+        possible_products = Product.joins(:clauseproducts, :descripts
+                                  ).where('clauseproducts.clause_id' => @sub_clause_ids,'descripts.identity_id'=> product_identity_pairs) 
       else
-        possible_products = Product.joins(:clauseproducts, :descripts, :instances => :charcs).where(
-          'clauseproducts.clause_id' => @sub_clause_ids,
-          'descripts.identity_id'=> product_identity_pairs,
-          'charcs.perform_id'=> product_perform_pairs)
+        possible_products = Product.joins(:clauseproducts, :descripts, :instances => :charcs
+                                  ).where('clauseproducts.clause_id' => @sub_clause_ids,'descripts.identity_id'=> product_identity_pairs,'charcs.perform_id'=> product_perform_pairs)
       end
     end
-    possible_product_ids = possible_products.collect{|x| x.id}.uniq    
+    possible_product_ids = possible_products.collect{|x| x.id}.uniq
 
   #establish type of key - identity or perform key
   #check possible identity keys possible products
@@ -394,7 +384,7 @@ def update_product_key
     else
       #save or create identkey with 'not specified' value for specline
       check_identity = Identity.where(:identvalue_id => 1, :identkey_id => check_identkey_exist.id).first_or_create
-      update_identity_id = check_identity.id     
+      update_identity_id = check_identity.id
     end
     @specline.update(:identity_id => update_identity_id)
     #@specline_update.identity_id = update_identity_id
@@ -496,7 +486,7 @@ end
     old_linetype_array = [old_linetype.txt3, old_linetype.txt4, old_linetype.txt5, old_linetype.txt6]
     new_linetype_array = [new_linetype.txt3, new_linetype.txt4, new_linetype.txt5, new_linetype.txt6]
     if new_linetype_array != old_linetype_array
-      record_change(old_specline, @specline)  
+      record_change(old_specline, @specline)
     end
         #if new linetype is for product data set identity and perform value pairs to 'not specified'
     if [10,11].include?(params[:specline][:linetype_id])

@@ -3,7 +3,7 @@ module Printcontent
   def draft_content_page_count(project, revision, settings, pdf)
     content_list_length = 0
 
-    project_revisions = Alteration.changed_caws_all_sections(project, revision)
+    project_revisions = Alteration.all_changes(project, revision)
     unless project_revisions.blank?
       if settings.structure == "group revisions"
         content_list_length = content_list_length + 1
@@ -13,7 +13,7 @@ module Printcontent
 #    if settings.prelim == "single section" 
 #      prelim_subsections = Cawssubsection.prelim_subsections(project)
 #      if !prelim_subsections.blank?
-    content_list_length = content_list_length + 1
+    #content_list_length = content_list_length + 1
 #      end
 #    else
 #      prelim_subsections = Cawssubsection.prelim_subsections(project)
@@ -22,7 +22,7 @@ module Printcontent
 #      end
 #    end
 
-    subsections = Cawssubsection.subsections(project)
+    subsections = @subsection_model.all_subsections(project)
     content_list_length = content_list_length + subsections.length unless subsections.blank?
 
     pages = (content_list_length*9)/180

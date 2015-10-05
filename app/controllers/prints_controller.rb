@@ -4,7 +4,7 @@ class PrintsController < ApplicationController
   before_action :set_revision, only: [:show, :print_project]
 
   include ProjectuserDetails
-
+  include RefsystemSettings
 
   layout "projects", :except => [:print_project]
 
