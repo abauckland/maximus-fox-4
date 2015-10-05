@@ -3,7 +3,7 @@ class AlterationsController < ApplicationController
 
 
   def clause_change_info
-      @clause_change_info = Alteration.includes(:user).where('project_id = ? AND clause_id = ? AND revision_id =?', params[:id], params[:clause_id], params[:rev_id]).last
+      @clause_change_info = Alteration.includes(:user).where(:project_id => params[:id], :clause_id => params[:clause_id], :revision_id => params[:rev_id]).last
       @clause_id = params[:clause_id]
       respond_to do |format|
         format.js   { render :clause_change_info, :layout => false }
@@ -13,7 +13,7 @@ class AlterationsController < ApplicationController
   def line_change_info
       @line_change_info = Alteration.includes(:user).where(:id => params[:id]).first
       @line_id = params[:id]
-      
+
       respond_to do |format|
         format.js   { render :line_change_info, :layout => false }
       end
@@ -32,10 +32,10 @@ class AlterationsController < ApplicationController
       @rev_print_image = 'print_rev.png'
     end
     @change.save
-        
+
     respond_to do |format|
       format.js   { render :layout => false }
-    end    
+    end
   end
 
 
