@@ -213,13 +213,13 @@ module SpecificationsHelper
     link_to "", delete_specline_specline_path(specline.id), method: :delete, :remote => true, :class => "line_delete_icon", :title => "delete line"
   end
 
-  def clause_help_link(specline)
-    if !specline.clause.guidenote.nil?
-      link_to "", guidance_specline_path(specline.id), :remote => true, :class => "line_info_icon", :title => "clause guidance"
-    end
-  end
-
 #  def clause_help_link(specline)
+#    if !specline.clause.guidenote.nil?
+#      link_to "", guidance_specline_path(specline.id), :remote => true, :class => "line_info_icon", :title => "clause guidance"
+#    end
+#  end
+
+  def clause_help_link(specline)
 
 #    #get lower order guidenote if guidenote for project plan not available (no guide shown/available when level== 1)
 #    guidelevel = specline.project.projectplan.guidelevel_id
@@ -232,11 +232,17 @@ module SpecificationsHelper
 #    end
 
 #    #option while project plans not in use
-#    clauseguide = Clauseguide.where(:clause_id => specline.clause_id, :guidelevel_id => 2).first
-#    unless clauseguide.blank?
-#      link_to "", guidance_specline_path(clauseguide.guidenote_id), :remote => true, :class => "line_info_icon", :title => "show clause guidance"
-#    end
-#  end
+    clauseguide = Clauseguide.where(:clause_id => specline.clause_id, :guidelevel_id => 2).first
+    if clauseguide.blank?
+      clauseguide_1 = Clauseguide.where(:clause_id => specline.clause_id, :guidelevel_id => 1).first
+      unless clauseguide_1.blank?
+        link_to "", guidance_specline_path(clauseguide_1.guidenote_id), :remote => true, :class => "line_info_icon", :title => "show clause guidance"
+      end
+    else
+      link_to "", guidance_specline_path(clauseguide.guidenote_id), :remote => true, :class => "line_info_icon", :title => "show clause guidance"
+    end
+
+  end
 
   def clause_manufact_link(specline)
   end

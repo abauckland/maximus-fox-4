@@ -615,11 +615,9 @@ end
 
 
   def guidance
-    
-    @guidenote = Guidenote.joins(:clauses => :speclines).where('speclines.id' => @specline.id).first
-    #@guide_sponsors = Sponsor.includes(:supplier).where(:subsection_id => clause.clauseref.subsection_id)
-    #@guide_sponsors = Sponsor.all
-    
+
+    @guidenote = Guidenote.find(parmas[:id])
+
     respond_to do |format|
         format.js   { render :guidance, :layout => false}
     end
