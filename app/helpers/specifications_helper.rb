@@ -232,9 +232,9 @@ module SpecificationsHelper
 #    end
 
 #    #option while project plans not in use
-    clauseguide = Clauseguide.where(:clause_id => specline.clause_id, :guidelevel_id => 2).first
+    clauseguide = Clauseguide.where(:clause_id => specline.clause_id, :plan_id => 2).first
     if clauseguide.blank?
-      clauseguide_1 = Clauseguide.where(:clause_id => specline.clause_id, :guidelevel_id => 1).first
+      clauseguide_1 = Clauseguide.where(:clause_id => specline.clause_id, :plan_id => 1).first
       unless clauseguide_1.blank?
         link_to "", guidance_specline_path(clauseguide_1.guidenote_id), :remote => true, :class => "line_info_icon", :title => "show clause guidance"
       end
