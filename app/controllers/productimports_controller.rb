@@ -1,7 +1,5 @@
 class ProductimportsController < ApplicationController
 
-before_filter :require_user
-
 layout "products"
 
   def new
