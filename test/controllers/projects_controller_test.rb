@@ -20,6 +20,11 @@ class ProjectsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:projects)
+
+    # admin users can create, delete and edit options
+    assert_select "#primary_project", count: 1
+    assert_select "#sub_select_project", count: 1
+    assert_select "#sub_new_project", count: 1
   end
 
 

@@ -7,13 +7,14 @@ class ProjectuserPolicy < Struct.new(:user, :projectuser)
     end
   end
 
-  def current_user
-    User.find(user.user_id)
-  end
+#  def current_user
+#    User.find(user.user_id)
+#  end
 
   def show?
-    false
-    #true
+#    active_user = User.where(:id => 1).first
+#    active_user.admin?
+    true
   end
 
   def new?

@@ -27,6 +27,22 @@ class SpecrevisionsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:revisions)
     assert_not_nil assigns(:subsections)
  #   assert_not_nil assigns(:subsection)
+
+    # admin users can create, delete and edit options
+    assert_select "#primary_project",     count: 1
+    assert_select "#sub_select_project",  count: 1
+    assert_select "#sub_new_project",     count: 1
+    assert_select "#sub_edit_project",    count: 1
+    assert_select "#sub_project_users",   count: 0
+
+    assert_select "#primary_document",    count: 1
+    assert_select "#primary_revisions",   count: 1
+    assert_select "#primary_publish",     count: 1
+    assert_select "#sub_print",           count: 1
+    assert_select "#sub_printsetting",    count: 1
+    assert_select "#sub_keynote",         count: 1
+    assert_select "#sub_data_export",     count: 0
+
   end
 
 

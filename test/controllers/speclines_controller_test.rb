@@ -290,5 +290,15 @@ class SpeclinesControllerTest < ActionController::TestCase
 #update_product_key
 #update_product_value
 #guidance
+  test "should return clause guidance notes" do
+    sign_in users(:owner)
+
+    xhr :get, :guidance, format: :js, id: 1 #guidenote_id
+
+    assert_response :success
+  end
+
+
+
 
 end

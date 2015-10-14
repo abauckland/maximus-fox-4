@@ -38,7 +38,51 @@ class SpecificationsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:selected_subsection)
     assert_not_nil assigns(:selected_specline_lines)
     assert_not_nil assigns(:project)
+
+    # admin users can create, delete and edit options
+    assert_select "#primary_project",     count: 1
+    assert_select "#sub_select_project",  count: 1
+    assert_select "#sub_new_project",     count: 1
+    assert_select "#sub_edit_project",    count: 1
+    assert_select "#sub_project_users",   count: 0
+
+    assert_select "#primary_document",    count: 1
+    assert_select "#primary_revisions",   count: 1
+    assert_select "#primary_publish",     count: 1
+    assert_select "#sub_print",           count: 1
+    assert_select "#sub_printsetting",    count: 1
+    assert_select "#sub_keynote",         count: 1
+    assert_select "#sub_data_export",     count: 0
+
+    assert_select "#manage_section_link", count: 0
+
   end
+
+  test "should get show for admin" do
+    sign_in users(:admin)
+
+    get :show, id: @project
+    assert_response :success
+
+    # admin users can create, delete and edit options
+    assert_select "#primary_project",     count: 1
+    assert_select "#sub_select_project",  count: 1
+    assert_select "#sub_new_project",     count: 1
+    assert_select "#sub_edit_project",    count: 1
+    assert_select "#sub_project_users",   count: 1
+
+    assert_select "#primary_document",    count: 1
+    assert_select "#primary_revisions",   count: 1
+    assert_select "#primary_publish",     count: 1
+    assert_select "#sub_print",           count: 1
+    assert_select "#sub_printsetting",    count: 1
+    assert_select "#sub_keynote",         count: 1
+    assert_select "#sub_data_export",     count: 1
+
+    assert_select "#manage_section_link", count: 1
+  end
+
+
 
 
 #show_tab_content

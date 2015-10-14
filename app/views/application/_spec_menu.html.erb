@@ -1,42 +1,42 @@
 <ul class="left_menu">
     <% if request.path_parameters[:action] == "new"%>
-        <li class="has_sub"><%= link_to "PROJECTS", projects_path, :class => check_current('projects') %>
+        <li class="has_sub" id="primary_project"><%= link_to "PROJECTS", projects_path, :class => check_current('projects') %>
             <ul class="sub_menu">
-                <li><%= link_to "Select Project", projects_path %></li>
+                <li><%= link_to "Select Project", projects_path, id: 'sub_select_project' %></li>
             </ul>
         </li>
     <% else %>
-        <li class="has_sub"><%= link_to "PROJECTS", projects_path, :class => check_current('projects') %>
+        <li class="has_sub" id="primary_project"><%= link_to "PROJECTS", projects_path, :class => check_current('projects') %>
             <ul class="sub_menu">
-                <li><%= link_to "Select Project", projects_path %> </li>
-                <li><%= link_to "Create Project", new_project_path %> </li>
+                <li><%= link_to "Select Project", projects_path, id: 'sub_select_project' %> </li>
+                <li><%= link_to "Create Project", new_project_path, id: 'sub_new_project' %> </li>
                 <% if @project %>
                   <% if policy(:project).edit? %>
                       <% unless @project.id == nil %> 
-                        <li><%= link_to "Edit Project Details", edit_project_path(@project.id) %> </li>
+                        <li><%= link_to "Edit Project Details", edit_project_path(@project.id), id: 'sub_edit_project' %> </li>
                       <% end %>
                   <% end %>
-                  <% if policy(:projectuser).show? %>
-                    <li><%= link_to "Manage Project Users", projectuser_path(@project.id) %> </li>
+                  <% if current_user.admin? %>
+                    <li><%= link_to "Manage Project Users", projectuser_path(@project.id), id: 'sub_project_users' %> </li>
                   <% end %>
                 <% end %>
             </ul>
         </li>
         <% if @project %>
         <% unless @project.id == nil %>
-            <li><%= link_to "DOCUMENT", specification_path(@project.id), :class => check_current('specifications') %></li>
-            <li><%= link_to "REVISIONS", specrevision_path(@project.id), :class => check_current('revisions') %></li>
-            <li class="has_sub"><%= link_to "PUBLISH", print_path(@project.id), :class => check_current('prints') %> 
+            <li id="primary_document"><%= link_to "DOCUMENT", specification_path(@project.id), :class => check_current('specifications') %></li>
+            <li id="primary_revisions"><%= link_to "REVISIONS", specrevision_path(@project.id), :class => check_current('revisions') %></li>
+            <li class="has_sub" id="primary_publish"><%= link_to "PUBLISH", print_path(@project.id), :class => check_current('prints') %> 
                 <ul class="sub_menu">
-                    <li><%= link_to "Create/Download PDF", print_path(@project.id) %> </li>
+                    <li><%= link_to "Create/Download PDF", print_path(@project.id), id: 'sub_print' %> </li>
                     <% if policy(:printsetting).edit? %>
-                        <li><%= link_to "Document Settings", edit_printsetting_path(@project.id) %> </li>
+                        <li><%= link_to "Document Settings", edit_printsetting_path(@project.id), id: 'sub_printsetting' %> </li>
                     <% end %>
                     <% if policy(:keynote).show? %>
-                        <li><%= link_to "Download Keynote Files", keynote_path(@project.id) %> </li>
+                        <li><%= link_to "Download Keynote Files", keynote_path(@project.id), id: 'sub_keynote' %> </li>
                     <% end %>
                     <% if policy(:dataexport).show? %>
-                        <li><%= link_to "Download Product Schedule", dataexport_path(@project.id) %> </li>
+                        <li><%= link_to "Download Product Schedule", dataexport_path(@project.id), id: 'sub_data_export' %> </li>
                     <% end %>
                 </ul>
             </li>
@@ -62,11 +62,11 @@
                 <li><%= link_to "Create Project", new_project_path %> </li>
                 <% if @project %>
                   <% if policy(:project).edit? %>
-                      <% unless @project.id == nil %> 
+                      <% unless @project.id == nil %>
                         <li><%= link_to "Edit Project Details", edit_project_path(@project.id) %> </li>
                       <% end %>
                   <% end %>
-                  <% if policy(:projectuser).show? %>
+                  <%  if current_user.admin? %>
                     <li><%= link_to "Manage Project Users", projectuser_path(@project.id) %> </li>
                   <% end %>
                 <% end %>
