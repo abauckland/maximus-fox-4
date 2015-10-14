@@ -10,6 +10,7 @@ class Company < ActiveRecord::Base
   enum category: [:client, :designer, :contractor, :supplier]
 
 before_create :set_default_values
+#after_create :send_welcome_mail
 
 #  before_validation :custom_validation_check_field, on: :create
 
@@ -31,12 +32,14 @@ before_create :set_default_values
 #    end
 #  end
 
-def set_default_values
-    self.no_licence = 2
-    self.category = 1
-end
+  def set_default_values
+      self.no_licence = 2
+      self.category = 1
+  end
 
-
+#  def send_welcome_mail
+#    UserMailer.welcome.deliver
+#  end
 
   def details
   #this needs to be sorted, unclear what is going on
