@@ -1,0 +1,16 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 1
+  performkey_id: 1
+  performvalue_id: 1
+
+two:
+  id: 2
+  performkey_id: 2
+  performvalue_id: 2
+
+three:
+  id: 3
+  performkey_id: 3
+  performvalue_id: 3
