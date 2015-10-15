@@ -284,10 +284,10 @@ end
 #      when 2 then "Clause deleted"
 #    end
 
-    clause_action_text = "Clause "+ line.event
+#    clause_action_text = "Clause "+ line.event
 
     pdf.move_down(4.mm)
-    pdf.spec_box clause_action_text, {:at => [27.mm, pdf.y], :size => 10, :style => :underline}
+    pdf.spec_box "Clause #{line.event}", {:at => [27.mm, pdf.y], :size => 10, :style => :underline}
     pdf.move_down(pdf.box_height)
   end
 
@@ -301,10 +301,10 @@ end
 #      when 3 then "Text changed"
 #    end
 
-    line_action_text = "Text "+ line.event
+#    line_action_text = "Text #{line.event}"+ 
 
     pdf.move_down(4.mm)
-    pdf.spec_box line_action_text, {:at => [27.mm, pdf.y], :size => 10, :style => :underline}
+    pdf.spec_box "Text #{line.event}", {:at => [27.mm, pdf.y], :size => 10, :style => :underline}
     pdf.move_down(pdf.box_height)
   end
 
