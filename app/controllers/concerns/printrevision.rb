@@ -252,10 +252,10 @@ end
     rev_text_style = {:size => 10, :overflow => :expand}
 
     pdf.move_down(4.mm)
-    if line.clause_add_delete == 1
+    if line.event == "new"
       pdf.spec_box "Section added", rev_text_style.merge(:at => [10.mm, pdf.y])
     end
-    if line.clause_add_delete == 2
+    if line.event == "deleted"
       pdf.spec_box "Section deleted", rev_text_style.merge(:at => [10.mm, pdf.y])
     end
     pdf.move_down(pdf.box_height)
