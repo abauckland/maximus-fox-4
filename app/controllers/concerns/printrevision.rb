@@ -287,7 +287,7 @@ end
     clause_action_text = "Clause "+ line.event
 
     pdf.move_down(4.mm)
-    pdf.spec_box clause_action_text, rev_text_style.merge(:at => [27.mm, pdf.y])
+    pdf.spec_box clause_action_text, {:at => [27.mm, pdf.y], :size => 10, :style => :underline}
     pdf.move_down(pdf.box_height)
   end
 
@@ -304,7 +304,7 @@ end
     line_action_text = "Text "+ line.event
 
     pdf.move_down(4.mm)
-    pdf.spec_box "Text changed", {:size => 8, :at => [10.mm, pdf.y], :width => 17.mm}
+    pdf.spec_box line_action_text, {:at => [27.mm, pdf.y], :size => 10, :style => :underline}
     pdf.move_down(pdf.box_height)
   end
 
