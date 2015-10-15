@@ -90,7 +90,7 @@ def line_revisions(clause, subsection, project, revision, i, n, pdf)
       no_previous_line_revs = true
 
       check_height = check_text_height(line, pdf) + 5.mm
-      check_height += line_title_height #if m == 1
+      check_height += line_title_height if m == 1
       check_height += clause_title_height if m == 1 && no_previous_line_revs
       check_height += section_title_height if n == 1 && no_previous_line_revs
 
@@ -104,7 +104,7 @@ def line_revisions(clause, subsection, project, revision, i, n, pdf)
 
       print_section_title(subsection, i, pdf) if n == 1 && no_previous_line_revs
       print_clause_title(clause, n, pdf) if m == 1 && no_previous_line_revs
-      print_clause_line_action(line, pdf) #if m == 1
+      print_clause_line_action(line, pdf) if m == 1
 #if print_audit == true
 #  ref = user_array.index?(line.user_id)
 #  print_revision_author(ref, date, print_audit, pdf)
@@ -124,9 +124,9 @@ def line_revisions(clause, subsection, project, revision, i, n, pdf)
       no_previous_line_revs = true
 
       check_height = check_text_height(line, pdf) + 5.mm
-      check_height += line_title_height# if m == 1
-      check_height += clause_title_height if n == 1 && no_previous_line_revs
-      check_height += section_title_height if i == 1 && no_previous_line_revs
+      check_height += line_title_height if m == 1
+      check_height += clause_title_height if m == 1 && no_previous_line_revs
+      check_height += section_title_height if n == 1 && no_previous_line_revs
 
       y_position = pdf.y
       if (y_position - check_height) < 13.mm
@@ -136,9 +136,9 @@ def line_revisions(clause, subsection, project, revision, i, n, pdf)
         continuation_text(pdf) if n !=1 && i != 1 && m != 1
       end
 
-      print_section_title(subsection, i, pdf) if i == 1 && no_previous_line_revs
-      print_clause_title(clause, n, pdf) if n == 1 && no_previous_line_revs
-      print_clause_line_action(line, pdf)# if m == 1
+      print_section_title(subsection, i, pdf) if n == 1 && no_previous_line_revs
+      print_clause_title(clause, n, pdf) if m == 1 && no_previous_line_revs
+      print_clause_line_action(line, pdf) if m == 1
 #if print_audit == true
 #  ref = user_array.index?(line.user_id)
 #  print_revision_author(ref, date, print_audit, pdf)
@@ -161,9 +161,9 @@ def line_revisions(clause, subsection, project, revision, i, n, pdf)
 
       check_height = check_text_change_height(line, pdf) + 5.mm
       check_height += check_text_change_height(current_line, pdf)
-      check_height += line_title_height# if m == 1
-      check_height += clause_title_height if n == 1 && no_previous_line_revs
-      check_height += section_title_height if i == 1 && no_previous_line_revs
+      check_height += line_title_height if m == 1
+      check_height += clause_title_height if m == 1 && no_previous_line_revs
+      check_height += section_title_height if n == 1 && no_previous_line_revs
 
       y_position = pdf.y
       if (y_position - check_height) < 13.mm
@@ -173,9 +173,9 @@ def line_revisions(clause, subsection, project, revision, i, n, pdf)
         continuation_text(pdf) if n !=1 && i != 1 && m != 1
       end
 
-      print_section_title(subsection, i, pdf) if i == 1 && no_previous_line_revs
-      print_clause_title(clause, n, pdf) if n == 1 && no_previous_line_revs
-      print_clause_line_action(line, pdf)# if m == 1
+      print_section_title(subsection, i, pdf) if n == 1 && no_previous_line_revs
+      print_clause_title(clause, n, pdf) if m == 1 && no_previous_line_revs
+      print_clause_line_action(line, pdf) if m == 1
 
 #if print_audit == true
 #  ref = user_array.index?(line.user_id)
@@ -301,7 +301,7 @@ end
 
     pdf.move_down(5.mm)
     pdf.spec_box "From:", rev_state_style.merge(:at => [34.mm, pdf.y])
-    pdf.move_up(pdf.box_height + 1.mm)
+    pdf.move_up(pdf.box_height + 2.mm)
   end
 
 
@@ -310,7 +310,7 @@ end
 
     pdf.move_down(2.mm)
     pdf.spec_box "To:", rev_state_style.merge(:at => [34.mm, pdf.y])
-    pdf.move_up(pdf.box_height + 1.mm)
+    pdf.move_up(pdf.box_height + 2.mm)
   end
 
 
