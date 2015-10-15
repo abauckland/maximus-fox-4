@@ -22,7 +22,7 @@ def specification(project, subsection, revision, issue, pdf)
         print_line_space_check(line, i, clausetype_speclines, prefixed_linetypes_array, pdf)
 
         #if not enough on page start new page
-        if pdf.y >= 13.mm
+        if pdf.y >= 14.mm
           pdf.y = y_position
         else
           page_break(project, line, pdf)
