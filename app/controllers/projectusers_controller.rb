@@ -1,7 +1,7 @@
 class ProjectusersController < ApplicationController
 
-  before_action :set_project_user
-  before_action :set_project
+  before_action :set_project_user, only: [:new, :edit]
+  before_action :set_project, only: [:new, :edit]
   before_action :set_subsections, only: [:new, :edit]
 
   layout "projects"
@@ -9,6 +9,7 @@ class ProjectusersController < ApplicationController
 
   def show
     authorize :projectuser, :show?
+    @project = Project.find(params[:id])
     @projectusers = Projectuser.includes(:user, :project).where(:project_id => params[:id]).order(:role)
   end
 
@@ -76,7 +77,7 @@ end
     end
 
     def set_project
-#      set_projectuser
+#      set_project_user
       @project = Project.find(@projectuser.project_id)
     end
 
