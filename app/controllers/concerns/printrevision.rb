@@ -19,7 +19,7 @@ def section_revisions(project, revision, issue, pdf)
       y_position = pdf.y
       if (y_position - check_height) < 13.mm
         pdf.start_new_page
-        pdf.y = 168.mm
+        pdf.y = 268.mm
       end
       #end
       print_section_title(subsection, i, pdf)
@@ -57,7 +57,7 @@ def clause_revisions(subsection, project, revision, i, pdf)
       y_position = pdf.y
       if (y_position - check_height) < 13.mm
         pdf.start_new_page
-        pdf.y = 168.mm
+        pdf.y = 268.mm
       end
       #end
       print_section_title(subsection, i, pdf) if n == 1
@@ -263,7 +263,7 @@ end
 
 
   def print_clause_title(clause, n, pdf)
-    rev_clause_title_style = {:size => 11, :style => :bold, :overflow => :expand}
+    rev_clause_title_style = {:size => 10, :style => :bold, :overflow => :expand}
 
     if n == 1
       pdf.move_down(4.mm)
@@ -271,7 +271,7 @@ end
       pdf.move_down(6.mm)
     end
     pdf.spec_box clause_code(clause), rev_clause_title_style.merge(:at => [10.mm, pdf.y])
-    pdf.spec_box clause.clause_title, rev_clause_title_style.merge(:at => [27.mm, pdf.y])
+    pdf.spec_box clause.clause_title, rev_clause_title_style.merge(:at => [28.mm, pdf.y])
     pdf.move_down(pdf.box_height)
   end
 
@@ -301,6 +301,7 @@ end
 
     pdf.move_down(5.mm)
     pdf.spec_box "From:", rev_state_style.merge(:at => [34.mm, pdf.y])
+    pdf.move_up(pdf.box_height)
   end
 
 
@@ -309,6 +310,7 @@ end
 
     pdf.move_down(2.mm)
     pdf.spec_box "To:", rev_state_style.merge(:at => [34.mm, pdf.y])
+    pdf.move_up(pdf.box_height)
   end
 
 
