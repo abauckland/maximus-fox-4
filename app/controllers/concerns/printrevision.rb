@@ -279,13 +279,15 @@ end
   def print_clause_action(line, pdf)
     rev_text_style = {:size => 10, :overflow => :expand}
 
-    clause_action = case line.clause_add_delete
-      when 1 then "Clause added"
-      when 2 then "Clause deleted"
-    end
+#    clause_action = case line.event
+#      when 1 then "Clause added"
+#      when 2 then "Clause deleted"
+#    end
+
+    clause_action_text = "Clause "+ line.event
 
     pdf.move_down(4.mm)
-    pdf.spec_box clause_action, rev_text_style.merge(:at => [27.mm, pdf.y])
+    pdf.spec_box clause_action_text, rev_text_style.merge(:at => [27.mm, pdf.y])
     pdf.move_down(pdf.box_height)
   end
 
@@ -293,14 +295,16 @@ end
   def print_clause_line_action(line, pdf)
     rev_line_style = {:size => 10, :style => :underline}
 
-    line_action = case line.clause_add_delete
-      when 1 then "Text added"
-      when 2 then "Text deleted"
-      when 3 then "Text changed"
-    end
+#    line_action = case line.event
+#      when 1 then "Text added"
+#      when 2 then "Text deleted"
+#      when 3 then "Text changed"
+#    end
+
+    line_action_text = "Text "+ line.event
 
     pdf.move_down(4.mm)
-    pdf.spec_box line_action, rev_line_style.merge(:at => [27.mm, pdf.y])
+    pdf.spec_box line_action_text, rev_line_style.merge(:at => [27.mm, pdf.y])
     pdf.move_down(pdf.box_height)
   end
 
