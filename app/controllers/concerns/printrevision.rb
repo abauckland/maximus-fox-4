@@ -95,8 +95,8 @@ def line_revisions(clause, subsection, project, revision, i, n, pdf)
 
       check_height = check_text_height(line, pdf) + 5.mm
       check_height += line_title_height if m == 1
-      check_height += clause_title_height if m == 1 && no_previous_line_revs
-      check_height += section_title_height if n == 1 && no_previous_line_revs
+      check_height += clause_title_height if m == 1# && no_previous_line_revs
+      check_height += section_title_height if n == 1# && no_previous_line_revs
 
       y_position = pdf.y
       if (y_position - check_height) < 13.mm
@@ -106,8 +106,8 @@ def line_revisions(clause, subsection, project, revision, i, n, pdf)
         continuation_text(pdf) if n !=1 && i != 1 && m != 1
       end
 
-      print_section_title(subsection, i, pdf) if n == 1 && no_previous_line_revs
-      print_clause_title(clause, n, pdf) if m == 1 && no_previous_line_revs
+      print_section_title(subsection, i, pdf) if n == 1# && no_previous_line_revs
+      print_clause_title(clause, n, pdf) if m == 1# && no_previous_line_revs
       print_clause_line_action(line, pdf) if m == 1
 #if print_audit == true
 #  ref = user_array.index?(line.user_id)
@@ -129,8 +129,8 @@ def line_revisions(clause, subsection, project, revision, i, n, pdf)
 
       check_height = check_text_height(line, pdf) + 5.mm
       check_height += line_title_height if m == 1
-      check_height += clause_title_height if m == 1 && no_previous_line_revs
-      check_height += section_title_height if n == 1 && no_previous_line_revs
+      check_height += clause_title_height if m == 1# && no_previous_line_revs
+      check_height += section_title_height if n == 1# && no_previous_line_revs
 
       y_position = pdf.y
       if (y_position - check_height) < 13.mm
@@ -140,8 +140,8 @@ def line_revisions(clause, subsection, project, revision, i, n, pdf)
         continuation_text(pdf) if n !=1 && i != 1 && m != 1
       end
 
-      print_section_title(subsection, i, pdf) if n == 1 && no_previous_line_revs
-      print_clause_title(clause, n, pdf) if m == 1 && no_previous_line_revs
+      print_section_title(subsection, i, pdf) if n == 1# && no_previous_line_revs
+      print_clause_title(clause, n, pdf) if m == 1# && no_previous_line_revs
       print_clause_line_action(line, pdf) if m == 1
 #if print_audit == true
 #  ref = user_array.index?(line.user_id)
@@ -166,8 +166,8 @@ def line_revisions(clause, subsection, project, revision, i, n, pdf)
       check_height = check_text_change_height(line, pdf) + 5.mm
       check_height += check_text_change_height(current_line, pdf)
       check_height += line_title_height if m == 1
-      check_height += clause_title_height if m == 1 && no_previous_line_revs
-      check_height += section_title_height if n == 1 && no_previous_line_revs
+      check_height += clause_title_height if m == 1# && no_previous_line_revs
+      check_height += section_title_height if n == 1 #&& no_previous_line_revs
 
       y_position = pdf.y
       if (y_position - check_height) < 13.mm
@@ -177,8 +177,8 @@ def line_revisions(clause, subsection, project, revision, i, n, pdf)
         continuation_text(pdf) if n !=1 && i != 1 && m != 1
       end
 
-      print_section_title(subsection, i, pdf) if n == 1 && no_previous_line_revs
-      print_clause_title(clause, n, pdf) if m == 1 && no_previous_line_revs
+      print_section_title(subsection, i, pdf) if n == 1 #&& no_previous_line_revs
+      print_clause_title(clause, n, pdf) if m == 1 #&& no_previous_line_revs
       print_clause_line_action(line, pdf) if m == 1
 
 #if print_audit == true
