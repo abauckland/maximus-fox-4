@@ -301,7 +301,6 @@ end
 
     pdf.move_down(5.mm)
     pdf.spec_box "From:", rev_state_style.merge(:at => [34.mm, pdf.y])
-    pdf.move_down(pdf.box_height)
   end
 
 
@@ -310,7 +309,6 @@ end
 
     pdf.move_down(2.mm)
     pdf.spec_box "To:", rev_state_style.merge(:at => [34.mm, pdf.y])
-    pdf.move_down(pdf.box_height)
   end
 
 
