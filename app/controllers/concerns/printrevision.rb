@@ -304,7 +304,7 @@ end
 #    line_action_text = "Text #{line.event}"+ 
 
     pdf.move_down(4.mm)
-    pdf.spec_box "Text changed"#, {:at => [27.mm, pdf.y], :size => 10, :style => :underline}
+    pdf.spec_box "Text changed", {:size => 8, :at => [10.mm, pdf.y], :width => 17.mm}
     pdf.move_down(pdf.box_height)
   end
 
