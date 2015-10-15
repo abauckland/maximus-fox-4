@@ -1,0 +1,32 @@
+@import "table_headers";
+
+$lrg_menu: 1300px;
+$tab_lrg_menu: 940px;
+$tab_sml_menu: 780px;
+$mob_menu: 520px;
+
+//index table 
+.projectuser_email  {display: table-cell;}
+.projectuser_name   {@include name}
+.projectuser_company{@include name}
+.projectuser_role   {@include role}
+.projectuser_date   {@include date}
+.projectuser_date   {@include date}
+
+@media screen and (max-width: $lrg_menu) {
+
+}
+
+@media screen and (max-width: $tab_lrg_menu) {
+  .business_issue_date{display: none}
+}
+  
+@media screen and (max-width: $tab_sml_menu) {
+  .projectuser_name{display: none}
+  .projectuser_company{display: none}
+}
+
+@media screen and (max-width: $mob_menu) {
+  .projectuser_name{display: none}
+}
+

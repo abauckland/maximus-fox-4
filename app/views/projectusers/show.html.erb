@@ -35,7 +35,8 @@
 		                    <td class="projectuser_name"><%=h projectuser.user.name %></td>
 		                    <td class="projectuser_company"><%=h projectuser.user.company.name %></td>
 		                    <td class="projectuser_role"><%=h projectuser.role %></td>
-
+                            <td class="projectuser_date"></td>
+                            <td class="projectuser_date"></td>
 		                    <td id="<%= projectuser.id %>_links" class="row_button no_buttons_2">
 			                    <% if projectuser.manage? %>
 									<%= link_to "", projectuser_path(projectuser), method: :delete, class: 'line_delete_icon', title: "cancel user access" %>
