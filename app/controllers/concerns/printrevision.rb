@@ -221,7 +221,7 @@ end
 
   def check_text_height(line, pdf)
 
-    style = {:size => 10, :width => 134.mm, :overflow => :expand}
+    style = {:size => 10, :width => 154.mm, :overflow => :expand}
 
     case line.linetype_id
       when 4, 7 then pdf.draft_text_box "#{line.txt4.text}", style
@@ -232,7 +232,7 @@ end
 
   def check_text_change_height(line, pdf)
 
-    style = {:size => 10, :width => 124.mm, :overflow => :expand}
+    style = {:size => 10, :width => 144.mm, :overflow => :expand}
 
     case line.linetype_id
       when 4, 7 then pdf.draft_text_box "#{line.txt4.text}", style
@@ -323,7 +323,7 @@ end
 
     pdf.move_down(5.mm)
   #  pdf.spec_box '-', indent_format.merge(:at => [32.mm, pdf.y])
-    rev_text_style = rev_text_style.merge(:at => [34.mm, pdf.y], :width => 134.mm)
+    rev_text_style = rev_text_style.merge(:at => [34.mm, pdf.y], :width => 154.mm)
     rev_line_print(line, rev_text_style, pdf)
     pdf.move_down(pdf.box_height)
   end
@@ -333,7 +333,7 @@ end
     rev_text_style = {:size => 10, :overflow => :expand}
 
     pdf.move_down(5.mm)
-    rev_text_style = rev_text_style.merge(:at => [45.mm, pdf.y], :width => 124.mm)
+    rev_text_style = rev_text_style.merge(:at => [45.mm, pdf.y], :width => 144.mm)
     rev_line_print(line, rev_text_style, pdf)
     pdf.move_down(pdf.box_height)
   end
