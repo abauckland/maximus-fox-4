@@ -4,7 +4,7 @@ def section_revisions(project, revision, issue, pdf)
 
   subsections = Subsection.joins(:clauserefs => [:clauses => :alterations]
                       ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id
-                      ).order(:subsection_id
+                      ).order(:id
                       ).uniq
 
   subsections.each_with_index do |subsection, i|
