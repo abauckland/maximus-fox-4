@@ -309,7 +309,8 @@ class SpeclinesController < ApplicationController
       reference_clause = Clause.where(:id => c).first
 
       code_title = reference_clause.clause_code + ' (' + reference_clause.clausetitle.text.to_s + ')'
-      @reference_options['code'] = code_title
+      code = reference_clause.clause_code
+      @reference_options[code] = code_title
     end
     #identify which is currently selected option - txt5 value
     @reference_options['selected'] = current_text.text
