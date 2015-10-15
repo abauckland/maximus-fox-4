@@ -89,7 +89,7 @@ def line_revisions(clause, subsection, project, revision, i, n, pdf)
 
       no_previous_line_revs = true
 
-      check_height = check_text_height(line, pdf) + 5
+      check_height = check_text_height(line, pdf) + 5.mm
       check_height += line_title_height if m == 1
       check_height += clause_title_height if n == 1 && no_previous_line_revs
       check_height += section_title_height if i == 1 && no_previous_line_revs
@@ -123,7 +123,7 @@ def line_revisions(clause, subsection, project, revision, i, n, pdf)
     deleted_lines.each_with_index do |line, m|
       no_previous_line_revs = true
 
-      check_height = check_text_height(line, pdf) + 5
+      check_height = check_text_height(line, pdf) + 5.mm
       check_height += line_title_height if m == 1
       check_height += clause_title_height if n == 1 && no_previous_line_revs
       check_height += section_title_height if i == 1 && no_previous_line_revs
@@ -159,7 +159,7 @@ def line_revisions(clause, subsection, project, revision, i, n, pdf)
       no_previous_line_revs = true
       current_line = Specline.find(line.specline_id)
 
-      check_height = check_text_change_height(line, pdf) + 5
+      check_height = check_text_change_height(line, pdf) + 5.mm
       check_height += check_text_change_height(current_line, pdf)
       check_height += line_title_height if m == 1
       check_height += clause_title_height if n == 1 && no_previous_line_revs
@@ -219,6 +219,7 @@ end
       when 3, 7 then pdf.draft_text_box "#{line.txt4.text}", style
       when 4, 8 then pdf.draft_text_box "#{line.txt4.text}: #{line.txt5.text}", style
     end
+    return pdf.draft_box_height
   end
 
   def check_text_change_height(line, pdf)
@@ -229,6 +230,7 @@ end
       when 3, 7 then pdf.draft_text_box "#{line.txt4.text}", style
       when 4, 8 then pdf.draft_text_box "#{line.txt4.text}: #{line.txt5.text}", style
     end
+    return pdf.draft_box_height
   end
 
 
