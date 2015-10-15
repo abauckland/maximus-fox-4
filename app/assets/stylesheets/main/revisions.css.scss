@@ -149,7 +149,6 @@
 
 .rev_line_menu{
   display: table-cell;
-  visibility: hidden;
   text-align: right;
   width: 80px;
   vertical-align: middle;
@@ -163,8 +162,7 @@
 }
   @media screen and (max-width: $tablet-protrait) {
     .rev_line_menu{
-      display: none;
-      visibility:hidden; 
+      display: none; 
     } 
   }
   
