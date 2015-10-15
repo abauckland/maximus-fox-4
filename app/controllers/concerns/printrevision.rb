@@ -274,8 +274,8 @@ end
     else
       pdf.move_down(6.mm)
     end
-    pdf.spec_box clause_code(clause), rev_clause_title_style.merge(:at => [10.mm, pdf.y])
-    pdf.spec_box clause.clause_title, rev_clause_title_style.merge(:at => [28.mm, pdf.y])
+    pdf.spec_box clause_code(clause), rev_clause_title_style.merge(:at => [20.mm, pdf.y])
+    pdf.spec_box clause.clause_title, rev_clause_title_style.merge(:at => [38.mm, pdf.y])
     pdf.move_down(pdf.box_height)
   end
 
