@@ -192,23 +192,27 @@ end
 
 #draft lines heights
   def section_title_height
-    return 12 #12.mm
+    return 12.mm
   end
 
   def section_action_height
-    return 8 #8.mm
+    return 8.mm
   end
 
   def clause_title_height #could be wider than page width
-    return 9 #9.mm
+    return 9.mm
   end
 
   def clause_action_height
-    return 8 #8.mm
+    return 8.mm
+  end
+
+  def line_title_height
+    return 8.mm
   end
 
   def line_action_height
-    return 8 #8.mm
+    return 8.mm
   end
 
   def check_text_height(line, pdf)
