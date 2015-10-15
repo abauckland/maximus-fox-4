@@ -224,8 +224,8 @@ end
     style = {:size => 10, :width => 134.mm, :overflow => :expand}
 
     case line.linetype_id
-      when 3, 7 then pdf.draft_text_box "#{line.txt4.text}", style
-      when 4, 8, 12 then pdf.draft_text_box "#{line.txt4.text}: #{line.txt5.text}", style
+      when 4, 7 then pdf.draft_text_box "#{line.txt4.text}", style
+      when 3, 8, 12 then pdf.draft_text_box "#{line.txt4.text}: #{line.txt5.text}", style
     end
     return pdf.draft_box_height
   end
@@ -235,8 +235,8 @@ end
     style = {:size => 10, :width => 124.mm, :overflow => :expand}
 
     case line.linetype_id
-      when 3, 7 then pdf.draft_text_box "#{line.txt4.text}", style
-      when 4, 8, 12 then pdf.draft_text_box "#{line.txt4.text}: #{line.txt5.text}", style
+      when 4, 7 then pdf.draft_text_box "#{line.txt4.text}", style
+      when 3, 8, 12 then pdf.draft_text_box "#{line.txt4.text}: #{line.txt5.text}", style
     end
     return pdf.draft_box_height
   end
@@ -352,8 +352,8 @@ end
   def rev_line_print(line, style, pdf)
 
     case line.linetype_id
-      when 3, 7 then pdf.spec_box "#{line.txt4.text}: #{line.txt5.text}", style
-      when 4, 8, 10, 11, 12 then pdf.spec_box "#{line.txt4.text}", style
+      when 4, 7 then pdf.spec_box "#{line.txt4.text}", style
+      when 3, 8, 10, 11, 12 then pdf.spec_box "#{line.txt4.text}: #{line.txt5.text}", style
     end
 
   end
