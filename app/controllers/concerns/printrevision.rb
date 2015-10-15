@@ -3,7 +3,9 @@ module Printrevision
 def section_revisions(project, revision, issue, pdf)
 
   subsections = Subsection.joins(:clauserefs => [:clauses => :alterations]
-                      ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id).uniq
+                      ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id
+                      ).order(:subsection_id
+                      ).uniq
 
   subsections.each_with_index do |subsection, i|
 
@@ -41,7 +43,9 @@ end
 def clause_revisions(subsection, project, revision, i, pdf)
 
   clauses = Clause.joins(:alterations, :clauseref
-                      ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id, 'clauserefs.subsection_id' => subsection.id).uniq
+                      ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id, 'clauserefs.subsection_id' => subsection.id
+                      ).order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
+                      ).uniq
 
   clauses.each_with_index do |clause, n|
 
