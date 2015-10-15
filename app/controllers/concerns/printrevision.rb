@@ -257,10 +257,10 @@ end
 
     pdf.move_down(4.mm)
     if line.event == "new"
-      pdf.spec_box "Section added", rev_text_style.merge(:at => [10.mm, pdf.y])
+      pdf.spec_box "Section added", rev_text_style.merge(:at => [20.mm, pdf.y])
     end
     if line.event == "deleted"
-      pdf.spec_box "Section deleted", rev_text_style.merge(:at => [10.mm, pdf.y])
+      pdf.spec_box "Section deleted", rev_text_style.merge(:at => [20.mm, pdf.y])
     end
     pdf.move_down(pdf.box_height)
   end
