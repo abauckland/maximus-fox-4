@@ -41,7 +41,7 @@ end
 def clause_revisions(subsection, project, revision, i, pdf)
 
   clauses = Clause.joins(:alterations, :clauseref
-                      ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id, 'clauserefs.subsection_id' => subsection.id)
+                      ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id, 'clauserefs.subsection_id' => subsection.id).uniq
 
   clauses.each_with_index do |clause, n|
 
@@ -81,7 +81,7 @@ end
 def line_revisions(clause, subsection, project, revision, i, n, pdf)
 
   new_lines = Alteration.where(:project_id => project.id, :revision_id => revision.id, :clause_id => clause.id, :clause_add_delete => 1 
-                       ).where(:event => 'new')
+                       ).where(:event => 'new').uniq
 
   if new_lines
     #print title
