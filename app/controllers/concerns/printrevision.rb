@@ -82,117 +82,102 @@ end
 
 
 
-def line_revisions(clause, subsection, project, revision, i, n, pdf)
+  def line_revisions(clause, subsection, project, revision, i, n, pdf)
 
-  new_lines = Alteration.where(:project_id => project.id, :revision_id => revision.id, :clause_id => clause.id, :clause_add_delete => 1 
-                       ).where(:event => 'new').uniq
+    @previous_lines = false
 
-  if new_lines
-    #print title
+    new_lines = Alteration.where(:project_id => project.id, :revision_id => revision.id, :clause_id => clause.id, :clause_add_delete => 1 
+                         ).where(:event => 'new').uniq
+
     new_lines.each_with_index do |line, m|
 
-      no_previous_line_revs = true
-
       check_height = check_text_height(line, pdf) + 5.mm
-      check_height += line_title_height if m == 1
-      check_height += clause_title_height if m == 1# && no_previous_line_revs
-      check_height += section_title_height if n == 1# && no_previous_line_revs
+      check_titles_height(check_height, m, n, @previous_lines, pdf)
 
-      y_position = pdf.y
-      if (y_position - check_height) < 13.mm
-        continue_text(pdf) if n !=1 && i != 1 && m != 1
-        pdf.start_new_page 
-        pdf.y = 268.mm
-        continuation_text(pdf) if n !=1 && i != 1 && m != 1
-      end
+      check_page_position(check_height, m, pdf)
 
-      print_section_title(subsection, i, pdf) if n == 1# && no_previous_line_revs
-      print_clause_title(clause, n, pdf) if m == 1# && no_previous_line_revs
-      print_clause_line_action(line, pdf) if m == 1
-#if print_audit == true
-#  ref = user_array.index?(line.user_id)
-#  print_revision_author(ref, date, print_audit, pdf)
-#end
+      print_clause_rev_titles(subsection, clause, line, m, n, @previous_lines, pdf)
+#      if print_audit == true
+#        ref = user_array.index?(line.user_id)
+#        print_revision_author(ref, date, print_audit, pdf)
+#      end
       line_text(line, pdf)
-
     end
-  end
+    @previous_lines = true if !new_lines.blank?
 
 
-  deleted_lines = Alteration.where(:project_id => project.id, :revision_id => revision.id, :clause_id => clause.id, :clause_add_delete => 1 
-                           ).where(:event => 'deleted')
+    deleted_lines = Alteration.where(:project_id => project.id, :revision_id => revision.id, :clause_id => clause.id, :clause_add_delete => 1 
+                             ).where(:event => 'deleted').uniq
 
-  if deleted_lines
-    #print title
     deleted_lines.each_with_index do |line, m|
-      no_previous_line_revs = true
 
       check_height = check_text_height(line, pdf) + 5.mm
-      check_height += line_title_height if m == 1
-      check_height += clause_title_height if m == 1# && no_previous_line_revs
-      check_height += section_title_height if n == 1# && no_previous_line_revs
+      check_titles_height(check_height, m, n, @previous_lines, pdf)
 
-      y_position = pdf.y
-      if (y_position - check_height) < 13.mm
-        continue_text(pdf) if n !=1 && i != 1 && m != 1
-        pdf.start_new_page 
-        pdf.y = 268.mm
-        continuation_text(pdf) if n !=1 && i != 1 && m != 1
-      end
+      check_page_position(check_height, m, pdf)
 
-      print_section_title(subsection, i, pdf) if n == 1# && no_previous_line_revs
-      print_clause_title(clause, n, pdf) if m == 1# && no_previous_line_revs
-      print_clause_line_action(line, pdf) if m == 1
-#if print_audit == true
-#  ref = user_array.index?(line.user_id)
-#  print_revision_author(ref, date, print_audit, pdf)
-#end
+      print_clause_rev_titles(subsection, clause, line, m, n, @previous_lines, pdf)
+#      if print_audit == true
+#        ref = user_array.index?(line.user_id)
+#        print_revision_author(ref, date, print_audit, pdf)
+#      end
       line_text(line, pdf)
-
     end
-  end
+    @previous_lines = true if !deleted_lines.blank?
 
 
-  changed_lines = Alteration.where(:project_id => project.id, :revision_id => revision.id, :clause_id => clause.id, :clause_add_delete => 1 
-                           ).where(:event => 'changed')
+    changed_lines = Alteration.where(:project_id => project.id, :revision_id => revision.id, :clause_id => clause.id, :clause_add_delete => 1 
+                             ).where(:event => 'changed').uniq
 
-  if changed_lines
-    #print title
     changed_lines.each_with_index do |line, m|
 
-      no_previous_line_revs = true
       current_line = Specline.find(line.specline_id)
 
-      check_height = check_text_change_height(line, pdf) + 5.mm
+      check_height = check_text_height(line, pdf) + 5.mm
       check_height += check_text_change_height(current_line, pdf)
-      check_height += line_title_height if m == 1
-      check_height += clause_title_height if m == 1# && no_previous_line_revs
-      check_height += section_title_height if n == 1 #&& no_previous_line_revs
+      check_titles_height(check_height, m, n, @previous_lines, pdf)
 
-      y_position = pdf.y
-      if (y_position - check_height) < 13.mm
-        continue_text(pdf) if n !=1 && i != 1 && m != 1
-        pdf.start_new_page 
-        pdf.y = 268.mm
-        continuation_text(pdf) if n !=1 && i != 1 && m != 1
-      end
+      check_page_position(check_height, m, pdf)
 
-      print_section_title(subsection, i, pdf) if n == 1 #&& no_previous_line_revs
-      print_clause_title(clause, n, pdf) if m == 1 #&& no_previous_line_revs
-      print_clause_line_action(line, pdf) if m == 1
-
-#if print_audit == true
-#  ref = user_array.index?(line.user_id)
-#  print_revision_author(ref, date, print_audit, pdf)
-#end
+      print_clause_rev_titles(subsection, clause, line, m, n, @previous_lines, pdf)
+#      if print_audit == true
+#        ref = user_array.index?(line.user_id)
+#        print_revision_author(ref, date, print_audit, pdf)
+#      end
       clause_line_state_from(pdf)
       changed_line_text_from(line, pdf)
       clause_line_state_to(pdf)
       changed_line_text_from(current_line, pdf)
-
-      end
+    end
   end
-end
+
+
+  def check_titles_height(check_height, m, n, previous_lines, pdf)
+    if m ==1
+      check_height += clause_title_height if previous_lines == false
+      check_height += section_title_height if n == 1
+      check_height += line_title_height
+    end
+  end
+
+  def check_page_position(check_height, m, pdf)
+    y_position = pdf.y
+    if (y_position - check_height) < 13.mm
+      continue_text(pdf) if m !=1
+      pdf.start_new_page 
+      pdf.y = 268.mm
+      continuation_text(pdf) if m !=1
+    end
+  end
+
+  def print_clause_rev_titles(subsection, clause, line, m, n, previous_lines, pdf)
+    if m ==1
+      print_section_title(subsection, i, pdf) if n == 1
+      print_clause_title(clause, n, pdf) if previous_lines == false
+      print_clause_line_action(line, pdf)
+    end
+  end
+
 
 #draft lines heights
   def section_title_height
