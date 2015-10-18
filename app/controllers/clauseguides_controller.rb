@@ -97,11 +97,11 @@ class ClauseguidesController < ApplicationController
 
 
     def assign
-      @clauseguide_id = params[:id]
+
       clauseguide = Clauseguide.find(params[:id])
       
       @plan_id = clauseguide.plan_id
-      
+      @guidenote_id = clauseguide.guidenote_id
 
       if params[:search_text]
         @search_term = params[:search_text]
@@ -125,11 +125,10 @@ class ClauseguidesController < ApplicationController
 
     def assign_guides
 
-      clauseguide_id = params[:id]
       clauses = Clause.where(:id => params[:clauses])
 
       clauses.each do |clause|
-        clauseguide = Clauseguide.create(:clause_id => clause.id, :guidenote_id => params[:id], :plan_id => params[:plan_id])
+        clauseguide = Clauseguide.create(:clause_id => clause.id, :guidenote_id => params[:guidenote_id], :plan_id => params[:plan_id])
       end
 
       redirect_to clauseguides_path

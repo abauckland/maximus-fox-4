@@ -23,8 +23,8 @@
 
 
                 <%= form_tag(:controller => "clauseguides", :action => "assign_guides") do %>
-                    <%= hidden_field_tag(:clauseguide_id, @clauseguide_id) %>
                     <%= hidden_field_tag(:plan_id, @plan_id) %>
+                    <%= hidden_field_tag(:guidenote_id, @guidenote_id) %>
 
                     <fieldset>
                         <!-- form input[select] -->
