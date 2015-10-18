@@ -59,7 +59,7 @@ before_save :assign_title
   scope :project_clauses, ->(project_clauses, subsection, subsection_name) {
                           joins(:clauseref => [:subsection]
                         ).where('subsections.'+subsection_name+'_id' => subsection, :id => project_clauses
-                        ).order('clauserefs.clause_no, clauserefs.subclause'
+                        ).order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
                         )}
 
 
