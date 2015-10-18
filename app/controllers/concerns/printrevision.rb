@@ -96,7 +96,7 @@ end
 
       check_page_position(check_height, m, pdf)
 
-      print_clause_rev_titles(subsection, clause, line, m, n, @previous_lines, pdf)
+      print_clause_rev_titles(subsection, clause, line, i, m, n, @previous_lines, pdf)
 #      if print_audit == true
 #        ref = user_array.index?(line.user_id)
 #        print_revision_author(ref, date, print_audit, pdf)
@@ -116,7 +116,7 @@ end
 
       check_page_position(check_height, m, pdf)
 
-      print_clause_rev_titles(subsection, clause, line, m, n, @previous_lines, pdf)
+      print_clause_rev_titles(subsection, clause, line, i, m, n, @previous_lines, pdf)
 #      if print_audit == true
 #        ref = user_array.index?(line.user_id)
 #        print_revision_author(ref, date, print_audit, pdf)
@@ -139,7 +139,7 @@ end
 
       check_page_position(check_height, m, pdf)
 
-      print_clause_rev_titles(subsection, clause, line, m, n, @previous_lines, pdf)
+      print_clause_rev_titles(subsection, clause, line, i, m, n, @previous_lines, pdf)
 #      if print_audit == true
 #        ref = user_array.index?(line.user_id)
 #        print_revision_author(ref, date, print_audit, pdf)
@@ -170,7 +170,7 @@ end
     end
   end
 
-  def print_clause_rev_titles(subsection, clause, line, m, n, previous_lines, pdf)
+  def print_clause_rev_titles(subsection, clause, line, i, m, n, previous_lines, pdf)
     if m ==1
       print_section_title(subsection, i, pdf) if n == 1
       print_clause_title(clause, n, pdf) if previous_lines == false
