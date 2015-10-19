@@ -54,6 +54,7 @@ class ClauseguidesController < ApplicationController
 
     # PATCH/PUT /clauseguides/1
     def update
+#TODO does change occur to all related clauses or just selected clause
       authorize @clauseguide
       if @clauseguide.update(clauseguide_params)
 #on create redirect back to dashbard
@@ -143,7 +144,7 @@ class ClauseguidesController < ApplicationController
     end
 
     def set_project
-      @project = Project.find(13)
+      @project = Project.find(2)
     end
 
     # Only allow a trusted parameter "white list" through.
