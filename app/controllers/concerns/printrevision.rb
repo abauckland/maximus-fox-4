@@ -2,9 +2,10 @@ module Printrevision
 
 def section_revisions(project, revision, issue, pdf)
 
-  subsections = Subsection.joins(:clauserefs => [:clauses => :alterations]
+#TODO change out caws refrences
+  subsections = Subsection.joins(:cawssubsection => [:cawssection], :clauserefs => [:clauses => :alterations]
                       ).where('alterations.project_id' => project.id, 'alterations.revision_id' => revision.id
-                      ).order(:id
+                      ).order('cawssections.ref, cawssubsections.ref'
                       ).uniq
 
   subsections.each_with_index do |subsection, i|
@@ -153,9 +154,9 @@ end
 
 
   def check_titles_height(check_height, m, n, previous_lines, pdf)
-    if m ==1
+    if m ==0
       check_height += clause_title_height if previous_lines == false
-      check_height += section_title_height if n == 1
+      check_height += section_title_height if n == 0
       check_height += line_title_height
     end
   end
@@ -163,16 +164,16 @@ end
   def check_page_position(check_height, m, pdf)
     y_position = pdf.y
     if (y_position - check_height) < 13.mm
-      continue_text(pdf) if m !=1
+      continue_text(pdf) if m !=0
       pdf.start_new_page 
       pdf.y = 268.mm
-      continuation_text(pdf) if m !=1
+      continuation_text(pdf) if m !=0
     end
   end
 
   def print_clause_rev_titles(subsection, clause, line, i, m, n, previous_lines, pdf)
-    if m ==1
-      print_section_title(subsection, i, pdf) if n == 1
+    if m ==0
+      print_section_title(subsection, i, pdf) if n == 0
       print_clause_title(clause, n, pdf) if previous_lines == false
       print_clause_line_action(line, pdf)
     end
@@ -230,7 +231,7 @@ end
   def print_section_title(section, i, pdf)
     rev_section_title_style = {:size => 12, :style => :bold}
 
-    pdf.move_down(8.mm) if i != 1
+    pdf.move_down(8.mm) if i != 0
     pdf.spec_box section.method(set_subsection_name(@project)).call.full_code, rev_section_title_style.merge(:at => [10.mm, pdf.y])
     pdf.spec_box section.method(set_subsection_name(@project)).call.title, rev_section_title_style.merge(:at => [20.mm, pdf.y])
     pdf.move_down(pdf.box_height)
@@ -254,7 +255,7 @@ end
   def print_clause_title(clause, n, pdf)
     rev_clause_title_style = {:size => 10, :style => :bold, :overflow => :expand}
 
-    if n == 1
+    if n == 0
       pdf.move_down(4.mm)
     else
       pdf.move_down(6.mm)
