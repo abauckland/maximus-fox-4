@@ -272,7 +272,7 @@ end
 
     clause_action_text = "Clause "+ line.event
 
-    pdf.move_down(4.mm)
+    pdf.move_down(2.mm)
     pdf.spec_box clause_action_text, {:at => [27.mm, pdf.y], :size => 10, :style => :italic, :overflow => :expand}
     pdf.move_down(pdf.box_height)
   end
@@ -293,7 +293,7 @@ end
 
     pdf.move_down(2.mm)
     pdf.spec_box "from:", rev_state_style.merge(:at => [34.mm, pdf.y])
-    pdf.move_up(pdf.box_height)
+    pdf.move_up(pdf.box_height + 2.mm)
   end
 
 
@@ -302,7 +302,7 @@ end
 
     pdf.move_down(2.mm)
     pdf.spec_box "to:", rev_state_style.merge(:at => [34.mm, pdf.y])
-    pdf.move_up(pdf.box_height)
+    pdf.move_up(pdf.box_height + 2.mm)
   end
 
 
