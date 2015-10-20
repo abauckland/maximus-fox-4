@@ -293,7 +293,7 @@ end
 
     pdf.move_down(2.mm)
     pdf.spec_box "From:", rev_state_style.merge(:at => [34.mm, pdf.y])
-    pdf.move_up(pdf.box_height + 2.mm)
+#    pdf.move_up(pdf.box_height + 2.mm)
   end
 
 
@@ -302,7 +302,7 @@ end
 
     pdf.move_down(2.mm)
     pdf.spec_box "To:", rev_state_style.merge(:at => [34.mm, pdf.y])
-    pdf.move_up(pdf.box_height + 2.mm)
+#    pdf.move_up(pdf.box_height + 2.mm)
   end
 
 
@@ -322,7 +322,7 @@ end
 
     pdf.move_down(2.mm)
     rev_text_style = rev_text_style.merge(:at => [45.mm, pdf.y], :width => 139.mm)
-    rev_line_print(line, rev_text_style, pdf)
+    rev_change_line_print(line, rev_text_style, pdf)
     pdf.move_down(pdf.box_height)
   end
 
