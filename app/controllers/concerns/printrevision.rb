@@ -104,6 +104,7 @@ end
 #      end
       line_text(line, pdf)
     end
+    pdf.move_down(1.mm)
     @previous_lines = true if !new_lines.blank?
 
 
@@ -124,6 +125,7 @@ end
 #      end
       line_text(line, pdf)
     end
+    pdf.move_down(1.mm)
     @previous_lines = true if !deleted_lines.blank?
 
 
@@ -272,7 +274,7 @@ end
 
     clause_action_text = "Clause "+ line.event
 
-    pdf.move_down(2.mm)
+    pdf.move_down(1.mm)
     pdf.spec_box clause_action_text, {:at => [27.mm, pdf.y], :size => 10, :style => :italic, :overflow => :expand}
     pdf.move_down(pdf.box_height)
   end
@@ -291,18 +293,18 @@ end
   def clause_line_state_from(pdf)
     rev_state_style = {:size => 10, :style => :italic}
 
-    pdf.move_down(2.mm)
+#    pdf.move_down(2.mm)
     pdf.spec_box "from:", rev_state_style.merge(:at => [34.mm, pdf.y])
-    pdf.move_up(pdf.box_height + 2.mm)
+#    pdf.move_up(pdf.box_height + 2.mm)
   end
 
 
   def clause_line_state_to(pdf)
     rev_state_style = {:size => 10, :style => :italic}
 
-    pdf.move_down(2.mm)
+#    pdf.move_down(2.mm)
     pdf.spec_box "to:", rev_state_style.merge(:at => [34.mm, pdf.y])
-    pdf.move_up(pdf.box_height + 2.mm)
+#    pdf.move_up(pdf.box_height + 2.mm)
   end
 
 
@@ -323,7 +325,7 @@ end
 #    pdf.move_down(2.mm)
     rev_text_style = rev_text_style.merge(:at => [45.mm, pdf.y], :width => 139.mm)
     rev_change_line_print(line, rev_text_style, pdf)
-    pdf.move_down(pdf.box_height)
+#    pdf.move_down(pdf.box_height)
   end
 
 
@@ -333,12 +335,12 @@ end
 #    pdf.move_down(2.mm)
     style = rev_text_style.merge(:at => [45.mm, pdf.y], :width => 124.mm)
     rev_change_line_print(line, rev_text_style, pdf)
-    pdf.move_down(pdf.box_height)
+#    pdf.move_down(pdf.box_height)
   end
 
 
   def rev_line_print(line, style, pdf)
-    pdf.spec_box "-", {:at => [34.mm, pdf.y], :width => 3.mm}
+    pdf.spec_box '-', {:at => [34.mm, pdf.y], :width => 3.mm}
     case line.linetype_id
       when 4, 7 then pdf.spec_box "#{line.txt4.text}", style.merge(:at => [37.mm, pdf.y], :width => 147.mm)
       when 3, 8, 10, 11, 12 then pdf.spec_box "#{line.txt4.text}: #{line.txt5.text}", style.merge(:at => [37.mm, pdf.y], :width => 147.mm)
