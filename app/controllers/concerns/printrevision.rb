@@ -291,7 +291,7 @@ end
   def clause_line_state_from(pdf)
     rev_state_style = {:size => 10, :style => :italic}
 
-    pdf.move_down(5.mm)
+    pdf.move_down(2.mm)
     pdf.spec_box "From:", rev_state_style.merge(:at => [34.mm, pdf.y])
     pdf.move_up(pdf.box_height + 2.mm)
   end
@@ -338,9 +338,10 @@ end
 
 
   def rev_line_print(line, style, pdf)
+    pdf.spec_box "-", {:at => [31.mm, pdf.y], :width => 3.mm}
     case line.linetype_id
-      when 4, 7 then pdf.spec_box "- #{line.txt4.text}", style
-      when 3, 8, 10, 11, 12 then pdf.spec_box "- #{line.txt4.text}: #{line.txt5.text}", style
+      when 4, 7 then pdf.spec_box "#{line.txt4.text}", style
+      when 3, 8, 10, 11, 12 then pdf.spec_box "#{line.txt4.text}: #{line.txt5.text}", style
     end
   end
 
