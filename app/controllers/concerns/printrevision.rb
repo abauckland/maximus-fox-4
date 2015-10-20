@@ -292,8 +292,8 @@ end
     rev_state_style = {:size => 10, :style => :italic}
 
     pdf.move_down(2.mm)
-    pdf.spec_box "From:", rev_state_style.merge(:at => [34.mm, pdf.y])
-#    pdf.move_up(pdf.box_height + 2.mm)
+    pdf.spec_box "from:", rev_state_style.merge(:at => [34.mm, pdf.y])
+    pdf.move_up(pdf.box_height)
   end
 
 
@@ -301,8 +301,8 @@ end
     rev_state_style = {:size => 10, :style => :italic}
 
     pdf.move_down(2.mm)
-    pdf.spec_box "To:", rev_state_style.merge(:at => [34.mm, pdf.y])
-#    pdf.move_up(pdf.box_height + 2.mm)
+    pdf.spec_box "to:", rev_state_style.merge(:at => [34.mm, pdf.y])
+    pdf.move_up(pdf.box_height)
   end
 
 
@@ -320,7 +320,7 @@ end
   def changed_line_text_from(line, pdf)
     rev_text_style = {:size => 10, :overflow => :expand}
 
-    pdf.move_down(2.mm)
+#    pdf.move_down(2.mm)
     rev_text_style = rev_text_style.merge(:at => [45.mm, pdf.y], :width => 139.mm)
     rev_change_line_print(line, rev_text_style, pdf)
     pdf.move_down(pdf.box_height)
@@ -330,7 +330,7 @@ end
   def changed_line_text_to(line, pdf)
     rev_text_style = {:size => 10, :overflow => :expand}
 
-    pdf.move_down(2.mm)
+#    pdf.move_down(2.mm)
     style = rev_text_style.merge(:at => [45.mm, pdf.y], :width => 124.mm)
     rev_change_line_print(line, rev_text_style, pdf)
     pdf.move_down(pdf.box_height)
@@ -338,10 +338,10 @@ end
 
 
   def rev_line_print(line, style, pdf)
-    pdf.spec_box "-", {:at => [31.mm, pdf.y], :width => 3.mm}
+    pdf.spec_box "-", {:at => [34.mm, pdf.y], :width => 3.mm}
     case line.linetype_id
-      when 4, 7 then pdf.spec_box "#{line.txt4.text}", style
-      when 3, 8, 10, 11, 12 then pdf.spec_box "#{line.txt4.text}: #{line.txt5.text}", style
+      when 4, 7 then pdf.spec_box "#{line.txt4.text}", style.merge(:at => [37.mm, pdf.y], :width => 147.mm)
+      when 3, 8, 10, 11, 12 then pdf.spec_box "#{line.txt4.text}: #{line.txt5.text}", style.merge(:at => [37.mm, pdf.y], :width => 147.mm)
     end
   end
 
