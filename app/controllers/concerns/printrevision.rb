@@ -293,7 +293,7 @@ end
   def clause_line_state_from(pdf)
     rev_state_style = {:size => 10, :style => :italic}
 
-#    pdf.move_down(2.mm)
+    pdf.move_down(2.mm)
     pdf.spec_box "from:", rev_state_style.merge(:at => [34.mm, pdf.y])
 #    pdf.move_up(pdf.box_height + 2.mm)
   end
@@ -325,7 +325,7 @@ end
 #    pdf.move_down(2.mm)
     rev_text_style = rev_text_style.merge(:at => [45.mm, pdf.y], :width => 139.mm)
     rev_change_line_print(line, rev_text_style, pdf)
-#    pdf.move_down(pdf.box_height)
+    pdf.move_down(pdf.box_height)
   end
 
 
@@ -335,7 +335,7 @@ end
 #    pdf.move_down(2.mm)
     style = rev_text_style.merge(:at => [45.mm, pdf.y], :width => 124.mm)
     rev_change_line_print(line, rev_text_style, pdf)
-#    pdf.move_down(pdf.box_height)
+    pdf.move_down(pdf.box_height)
   end
 
 
