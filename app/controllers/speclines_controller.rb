@@ -299,7 +299,7 @@ class SpeclinesController < ApplicationController
     reference_clause_ids = Clause.joins(:speclines, :clauseref
                                 ).where('speclines.project_id' => @specline.project_id, 'clauserefs.subsection_id' => @specline.clause.clauseref.subsection_id, 'clauserefs.clausetype_id' => permissible_clausetypes
                                 ).order('clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause'
-                                ).pluck(:id).uniq.sort 
+                                ).pluck(:id).uniq
 
     #create hash of options
     @reference_options = {}
