@@ -92,7 +92,7 @@ end
 
     new_lines.each_with_index do |line, m|
 
-      check_height = check_text_height(line, pdf) + 5.mm
+      check_height = check_text_height(line, pdf) + 2.mm
       check_titles_height(check_height, m, n, @previous_lines, pdf)
 
       check_page_position(check_height, m, pdf)
@@ -112,7 +112,7 @@ end
 
     deleted_lines.each_with_index do |line, m|
 
-      check_height = check_text_height(line, pdf)
+      check_height = check_text_height(line, pdf) + 2.mm
       check_titles_height(check_height, m, n, @previous_lines, pdf)
 
       check_page_position(check_height, m, pdf)
@@ -135,7 +135,7 @@ end
 
       current_line = Specline.find(line.specline_id)
 
-      check_height = check_text_height(line, pdf) + 5.mm
+      check_height = check_text_height(line, pdf) + 2.mm
       check_height += check_text_change_height(current_line, pdf)
       check_titles_height(check_height, m, n, @previous_lines, pdf)
 
@@ -156,8 +156,8 @@ end
 
   def check_titles_height(check_height, m, n, previous_lines, pdf)
     if m ==0
+      check_height += section_title_height if n == 0 && previous_lines == false
       check_height += clause_title_height if previous_lines == false
-      check_height += section_title_height if n == 0
       check_height += line_title_height
     end
   end
@@ -174,7 +174,7 @@ end
 
   def print_clause_rev_titles(subsection, clause, line, i, m, n, previous_lines, pdf)
     if m ==0
-      print_section_title(subsection, i, pdf) if n == 0
+      print_section_title(subsection, i, pdf) if n == 0 && previous_lines == false
       print_clause_title(clause, n, pdf) if previous_lines == false
       print_clause_line_action(line, pdf)
     end
@@ -308,6 +308,7 @@ end
   def line_text(line, pdf)
     rev_text_style = {:size => 10, :overflow => :expand}
 
+    pdf.move_down(2.mm)
   #  pdf.spec_box '-', indent_format.merge(:at => [32.mm, pdf.y])
     rev_text_style = rev_text_style.merge(:at => [34.mm, pdf.y], :width => 149.mm)
     rev_line_print(line, rev_text_style, pdf)
@@ -338,8 +339,8 @@ end
   def rev_line_print(line, style, pdf)
 
     case line.linetype_id
-      when 4, 7 then pdf.spec_box "#{line.txt4.text}", style
-      when 3, 8, 10, 11, 12 then pdf.spec_box "#{line.txt4.text}: #{line.txt5.text}", style
+      when 4, 7 then pdf.spec_box "- #{line.txt4.text}", style
+      when 3, 8, 10, 11, 12 then pdf.spec_box "- #{line.txt4.text}: #{line.txt5.text}", style
     end
 
   end
