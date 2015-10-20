@@ -112,7 +112,7 @@ end
 
     deleted_lines.each_with_index do |line, m|
 
-      check_height = check_text_height(line, pdf) + 5.mm
+      check_height = check_text_height(line, pdf)
       check_titles_height(check_height, m, n, @previous_lines, pdf)
 
       check_page_position(check_height, m, pdf)
@@ -124,6 +124,7 @@ end
 #      end
       line_text(line, pdf)
     end
+    pdf.move_down(5.mm)
     @previous_lines = true if !deleted_lines.blank?
 
 
@@ -307,7 +308,6 @@ end
   def line_text(line, pdf)
     rev_text_style = {:size => 10, :overflow => :expand}
 
-    pdf.move_down(5.mm)
   #  pdf.spec_box '-', indent_format.merge(:at => [32.mm, pdf.y])
     rev_text_style = rev_text_style.merge(:at => [34.mm, pdf.y], :width => 149.mm)
     rev_line_print(line, rev_text_style, pdf)
