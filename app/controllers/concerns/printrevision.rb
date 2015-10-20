@@ -124,7 +124,6 @@ end
 #      end
       line_text(line, pdf)
     end
-    pdf.move_down(5.mm)
     @previous_lines = true if !deleted_lines.blank?
 
 
@@ -150,6 +149,8 @@ end
       changed_line_text_from(line, pdf)
       clause_line_state_to(pdf)
       changed_line_text_from(current_line, pdf)
+
+      pdf.move_down(2.mm)
     end
   end
 
@@ -319,7 +320,7 @@ end
   def changed_line_text_from(line, pdf)
     rev_text_style = {:size => 10, :overflow => :expand}
 
-    pdf.move_down(5.mm)
+    pdf.move_down(2.mm)
     rev_text_style = rev_text_style.merge(:at => [45.mm, pdf.y], :width => 139.mm)
     rev_line_print(line, rev_text_style, pdf)
     pdf.move_down(pdf.box_height)
@@ -331,18 +332,23 @@ end
 
     pdf.move_down(2.mm)
     style = rev_text_style.merge(:at => [45.mm, pdf.y], :width => 124.mm)
-    rev_line_print(line, rev_text_style, pdf)
+    rev_change_line_print(line, rev_text_style, pdf)
     pdf.move_down(pdf.box_height)
   end
 
 
   def rev_line_print(line, style, pdf)
-
     case line.linetype_id
       when 4, 7 then pdf.spec_box "- #{line.txt4.text}", style
       when 3, 8, 10, 11, 12 then pdf.spec_box "- #{line.txt4.text}: #{line.txt5.text}", style
     end
+  end
 
+  def rev_change_line_print(line, style, pdf)
+    case line.linetype_id
+      when 4, 7 then pdf.spec_box "#{line.txt4.text}", style
+      when 3, 8, 10, 11, 12 then pdf.spec_box "#{line.txt4.text}: #{line.txt5.text}", style
+    end
   end
 
   def continue_text(pdf)
