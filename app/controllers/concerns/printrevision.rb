@@ -325,7 +325,7 @@ end
 #    pdf.move_down(2.mm)
     rev_text_style = rev_text_style.merge(:at => [45.mm, pdf.y], :width => 139.mm)
     rev_change_line_print(line, rev_text_style, pdf)
-    pdf.move_down(pdf.box_height)
+    pdf.move_down(pdf.box_height + 1.mm)
   end
 
 
