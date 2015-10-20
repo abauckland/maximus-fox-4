@@ -211,7 +211,7 @@ end
 
   def check_text_height(line, pdf)
 
-    style = {:size => 10, :width => 149.mm, :overflow => :expand}
+    style = {:size => 10, :width => 147.mm, :overflow => :expand}
 
     case line.linetype_id
       when 4, 7 then pdf.draft_text_box "#{line.txt4.text}", style
@@ -260,9 +260,9 @@ end
     rev_clause_title_style = {:size => 10, :style => :bold, :overflow => :expand}
 
     if n == 0
-      pdf.move_down(4.mm)
+      pdf.move_down(3.mm)
     else
-      pdf.move_down(6.mm)
+      pdf.move_down(3.mm)
     end
     pdf.spec_box clause_code(clause), rev_clause_title_style.merge(:at => [20.mm, pdf.y])
     pdf.spec_box clause.clause_title, rev_clause_title_style.merge(:at => [38.mm, pdf.y])
