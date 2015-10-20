@@ -618,7 +618,7 @@ end
 
   def guidance
 
-    @guidenote = Guidenote.find(params[:id])
+    @guidenote = Guidenote.find(params[:clauseguide_id])
 
     respond_to do |format|
         format.js   { render :guidance, :layout => false}

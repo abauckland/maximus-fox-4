@@ -236,10 +236,10 @@ module SpecificationsHelper
     if clauseguide.blank?
       clauseguide_1 = Clauseguide.where(:clause_id => specline.clause_id, :plan_id => 1).first
       unless clauseguide_1.blank?
-        link_to "", guidance_specline_path(clauseguide_1.guidenote_id), :remote => true, :class => "line_info_icon", :title => "show clause guidance"
+        link_to "", guidance_specline_path(:id => specline.id, :clauseguide_id => clauseguide_1.guidenote_id), :remote => true, :class => "line_info_icon", :title => "show clause guidance"
       end
     else
-      link_to "", guidance_specline_path(clauseguide.guidenote_id), :remote => true, :class => "line_info_icon", :title => "show clause guidance"
+      link_to "", guidance_specline_path(:id => specline.id, :clauseguide_id => clauseguide.guidenote_id), :remote => true, :class => "line_info_icon", :title => "show clause guidance"
     end
 
   end

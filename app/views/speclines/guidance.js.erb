@@ -8,18 +8,18 @@ var p = $('table#<%=@specline.id%>').children('tbody').children('tr.specline_row
 var position_b = p.offset();
 
 if ($('.suffixed_line_menu_mob').css('display') == 'none'){
-	var position = position_a;
+	var position_top = position_a.top;
 }else{
-	var position = position_b;
+	var position_top = position_b.top;
 };
 
-var p_top = position.top
+
 
 var notes = "<div class='guide' class='ui.draggable'><%= escape_javascript(render 'guide') %></div>";
 
-$('body').after(notes);
+$('body').after(notes); 
 
-$('.guide').css({top: p_top});
+$('.guide').css({top: 120});
 
 $('.guide').draggable();
 
