@@ -104,7 +104,7 @@ end
 #      end
       line_text(line, pdf)
     end
-    pdf.move_down(1.mm)
+    pdf.move_down(2.mm)
     @previous_lines = true if !new_lines.blank?
 
 
@@ -125,7 +125,7 @@ end
 #      end
       line_text(line, pdf)
     end
-    pdf.move_down(1.mm)
+    pdf.move_down(2.mm)
     @previous_lines = true if !deleted_lines.blank?
 
 
@@ -274,7 +274,7 @@ end
 
     clause_action_text = "Clause "+ line.event
 
-    pdf.move_down(1.mm)
+    pdf.move_down(2.mm)
     pdf.spec_box clause_action_text, {:at => [27.mm, pdf.y], :size => 10, :style => :italic, :overflow => :expand}
     pdf.move_down(pdf.box_height)
   end
@@ -284,7 +284,7 @@ end
 
     line_action_text = "Text " + line.event
 
-    pdf.move_down(4.mm)
+    pdf.move_down(2.mm)
     pdf.spec_box line_action_text, {:at => [27.mm, pdf.y], :size => 10, :style => :italic}
     pdf.move_down(pdf.box_height)
   end
