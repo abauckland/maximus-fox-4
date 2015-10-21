@@ -6,12 +6,16 @@ def specification(project, subsection, revision, issue, pdf)
     #get array of linetypes that have a prefix
     prefixed_linetypes_array = Linetype.where('txt1 = ?', 1).ids
 
-    clausetypes = Clausetype.includes(:clauserefs => [:clauses => :speclines]).where('speclines.project_id' => project, 'clauserefs.subsection_id' => subsection.id).order('clausetypes.id')
+    clausetypes = Clausetype.includes(:clauserefs => [:clauses => :speclines]
+                           ).where('speclines.project_id' => project, 'clauserefs.subsection_id' => subsection.id
+                           ).order('clausetypes.id')
+
     clausetypes.each do |clausetype|
 
-
       #get all speclines for each clausetype    
-      clausetype_speclines = Specline.includes(:clause => [:clauseref]).where(:project_id => project, 'clauserefs.subsection_id' => subsection.id, 'clauserefs.clausetype_id' => clausetype.id).order('clauserefs.clause_no, clauserefs.subclause, clause_line');
+      clausetype_speclines = Specline.includes(:clause => [:clauseref]
+                                    ).where(:project_id => project, 'clauserefs.subsection_id' => subsection.id, 'clauserefs.clausetype_id' => clausetype.id
+                                    ).order('clauserefs.clause_no, clauserefs.subclause, clause_line')
 
       clausetype_speclines.each_with_index do |line, i|
 
