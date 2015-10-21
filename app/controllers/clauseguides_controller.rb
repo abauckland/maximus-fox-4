@@ -146,7 +146,7 @@ class ClauseguidesController < ApplicationController
 
       @clauses = Clause.joins(:clauseguides, :speclines, :clauseref => [:subsection]
                       ).where('clauserefs.subsection_id' => subsection_id, 'speclines.project_id' => @project.id
-                      ).where.not('clauseguides.plan_id' => @plan_id
+#                      ).where.not('clauseguides.plan_id' => @plan_id
                       ).group(:id).order('subsections.cawssubsection_id, clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause')
     end
 
