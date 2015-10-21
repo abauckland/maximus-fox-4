@@ -113,7 +113,7 @@ class ClauseguidesController < ApplicationController
 
       clausetitles = Clausetitle.where('clausetitles.text LIKE ?', "%#{@search_term}%" ).collect{|i| i.id}.uniq
       project_clauses = Clause.joins(:speclines).where('speclines.project_id' => @project.id).collect{|i| i.id}.uniq
-            
+
       clause_with_guides_ids = Clauseguide.where(:plan_id => @plan_id).collect{|i| i.clause_id}.uniq
 
         @clauses = Clause.joins(:clausetitle, :speclines, :clauseref => [:subsection]
@@ -144,10 +144,16 @@ class ClauseguidesController < ApplicationController
 
       subsection_id = clauseguide.clause.clauseref.subsection_id
 
-      @clauses = Clause.joins(:clauseguides, :speclines, :clauseref => [:subsection]
-                      ).where('clauserefs.subsection_id' => subsection_id, 'speclines.project_id' => @project.id
-#                      ).where.not('clauseguides.plan_id' => @plan_id
-                      ).group(:id).order('subsections.cawssubsection_id, clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause')
+      project_clauses = Clause.joins(:speclines).where('speclines.project_id' => @project.id).collect{|i| i.id}.uniq
+
+      clause_with_guides_ids = Clauseguide.where(:plan_id => @plan_id).collect{|i| i.clause_id}.uniq
+
+        @clauses = Clause.joins(:speclines, :clauseref => [:subsection]
+                    ).where('clauserefs.subsection_id' => subsection_id, :id => project_clauses
+                    ).where.not(:id => clause_with_guides_ids
+                    ).group(:id).order('subsections.cawssubsection_id, clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause')
+
+
     end
 
     def duplicate_guides
