@@ -1,7 +1,7 @@
 class ClauseguidesController < ApplicationController
 
   before_action :set_clauseguide, only: [:edit, :destroy, :update]
-  before_action :set_project, only: [:index, :clone, :clone_clause_list, :assign]
+  before_action :set_project, only: [:index, :clone, :clone_clause_list, :assign, :duplicate]
 
   include RefsystemSettings
 
@@ -100,7 +100,7 @@ class ClauseguidesController < ApplicationController
     def assign
 
       clauseguide = Clauseguide.find(params[:id])
-      
+
       @plan_id = clauseguide.plan_id
       @guidenote_id = clauseguide.guidenote_id
 
@@ -136,6 +136,29 @@ class ClauseguidesController < ApplicationController
     end
 
 
+    def duplicate
+      clauseguide = Clauseguide.find(params[:id])
+
+      @plan_id = clauseguide.plan_id
+      @guidenote_id = clauseguide.guidenote_id
+
+      subsection_id = clauseguide.clause.clauseref.subsection_id
+
+      @clauses = Clause.joins(:clauseguides, :speclines, :clauseref => [:subsection]
+                      ).where('clauserefs.subsection_id' => subsection_id, 'speclines.project_id' => @project.id
+                      ).where.not('clauseguides.plan_id' => @plan_id
+                      ).group(:id).order('subsections.cawssubsection_id, clauserefs.clausetype_id, clauserefs.clause_no, clauserefs.subclause')
+    end
+
+    def duplicate_guides
+      clauses = Clause.where(:id => params[:clauses])
+
+      clauses.each do |clause|
+        clauseguide = Clauseguide.create(:clause_id => clause.id, :guidenote_id => params[:guidenote_id], :plan_id => params[:plan_id])
+      end
+
+      redirect_to clauseguides_path
+    end
 
   private
     # Use callbacks to share common setup or constraints between actions.

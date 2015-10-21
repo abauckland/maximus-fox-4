@@ -112,6 +112,9 @@ Rails.application.routes.draw do
 
     get :assign, :on => :member
     post :assign_guides, :on => :member
+
+    get :duplicate, :on => :member
+    post :duplicate_guides, :on => :member
   end
 
   resources :guidenotes do

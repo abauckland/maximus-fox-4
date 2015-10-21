@@ -1,0 +1,51 @@
+<div class="row title_band">
+    <div class="page_title">
+        <h1>Add/Delete Guidance Note to Clauses</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-1-3 column_1">
+        <div class="border">
+
+<!-- form column start-->
+            <div class="row">
+
+
+            <!-- form input[select -->
+
+                <%= form_tag(:controller => "clauseguides", :action => "duplicate_guides") do %>
+                    <%= hidden_field_tag(:plan_id, @plan_id) %>
+                    <%= hidden_field_tag(:guidenote_id, @guidenote_id) %>
+
+                    <fieldset>
+                        <!-- form input[select] -->
+                        <div class="form_tooltip" id="clause_add_clauses"></div>
+                        <label class="label_80">Assign to:</label>
+                        <span>
+                            <%= select_tag "clauses", options_from_collection_for_select(@clauses, :id, :clauseref_code), multiple: true, size: 12  %>
+                        </span></br>
+
+                    </fieldset>
+            </div>
+
+<!-- column footer start-->
+            <div class="row">
+                <div class="form_footer">
+                    <%= submit_tag "add guidance note"%>
+                    <%= link_to "cancel", clauseguides_path %>
+                </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-1-3 column_2">
+        <div class="border blank_column"></div>
+    </div>
+
+    <div class="col-1-3 column_3">
+        <div class="border blank_column"></div>
+    </div>
+</div>
