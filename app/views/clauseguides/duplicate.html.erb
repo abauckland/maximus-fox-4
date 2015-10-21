@@ -23,7 +23,7 @@
                         <div class="form_tooltip" id="clause_add_clauses"></div>
                         <label class="label_80">Assign to:</label>
                         <span>
-                            <%= select_tag "clauses", options_from_collection_for_select(@clauses, :id, :clauseref_code), multiple: true, size: 12  %>
+                            <%= select_tag "clauses", options_from_collection_for_select(@clauses, :id, :part_ref_title), multiple: true, size: 12  %>
                         </span></br>
 
                     </fieldset>
