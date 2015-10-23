@@ -110,6 +110,11 @@ Rails.application.routes.draw do
     get :clone_clause_list, :on => :member
     post :create_clone, :on => :member
 
+    get :edit_all, :on => :member
+    member do
+      put :update_all
+    end
+
     get :assign, :on => :member
     post :assign_guides, :on => :member
 

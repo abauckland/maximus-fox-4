@@ -41,6 +41,14 @@ class ClauseguidesController < ApplicationController
       authorize @clauseguide
     end
 
+    # GET /clauseguides/1/edit
+    def edit_all
+      @clauseguide = Clauseguide.find(params[:id])
+      authorize @clauseguide
+    end
+
+
+
     # POST /pages
     def create
       @clauseguide = Clauseguide.new(clauseguide_params)
@@ -53,17 +61,40 @@ class ClauseguidesController < ApplicationController
       end
     end
 
-    # PATCH/PUT /clauseguides/1
+
     def update
-#TODO does change occur to all related clauses or just selected clause
       authorize @clauseguide
-      if @clauseguide.update(clauseguide_params)
-#on create redirect back to dashbard
+
+      text_exist = Guidenote.where(:text => params[:text]).first
+      if text_exist.blank?
+        guidenote = Guidenote.create(:text => params[:text])
+      else
+        guidenote = text_exist
+      end
+
+      @clauseguide.guidenote_id = guidenote.id
+      if @clauseguide.save
         redirect_to clauseguides_path(:subsection_id => @subsection_id), notice: 'clauseguide item was successfully updated.'
       else
         render :edit
       end
     end
+
+
+    # PATCH/PUT /clauseguides/1
+    def update_all
+      authorize @clauseguide
+
+      guidenote = Guidenote.find(@clauseguide.guidenote_id)
+      guidenote.text = params[:clauseguide][:guidenote][:text]
+
+      if guidenote.save
+        redirect_to clauseguides_path(:subsection_id => @subsection_id), notice: 'clauseguide item was successfully updated.'
+      else
+        render :edit
+      end
+    end
+
 
     # DELETE /pages/1
     def destroy
