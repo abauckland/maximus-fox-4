@@ -29,6 +29,7 @@
 
 <!-- form column start-->
             <div class="row">
+                <%= hidden_field_tag :subsection, @subsection_id %>
                 <%= form_for @clauseguide do |f| %>
                     <%= f.hidden_field :plan_id, :value => @plan_id %>
                     <%= f.hidden_field :clause_id, :value => @clause_id %>
