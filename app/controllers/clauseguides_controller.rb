@@ -2,6 +2,7 @@ class ClauseguidesController < ApplicationController
 
   before_action :set_clauseguide, only: [:edit, :destroy, :update]
   before_action :set_project, only: [:index, :clone, :clone_clause_list, :assign, :duplicate]
+  before_action :set_subsection
 
   include RefsystemSettings
 
@@ -12,15 +13,15 @@ class ClauseguidesController < ApplicationController
         #list of all subsections that can be selected
         @subsections = @subsection_model.project_subsections(@project)
 
-        if params[:subsection].blank?
+        if params[:subsection_id].blank?
           @selected_subsection = @subsection_model.first
         else
-          @selected_subsection = @subsection_model.find(params[:subsection])
+          @selected_subsection = @subsection_model.find(params[:subsection_id])
         end
 
         #get list of clausetypes in selected subsection
         project_clauses = Clause.joins(:speclines).where('speclines.project_id' => @project.id).uniq.ids
-        @clauses = Clause.project_clauses(project_clauses, params[:subsection], @subsection_name)
+        @clauses = Clause.project_clauses(project_clauses, params[:subsection_id], @subsection_name)
 
     end
 
@@ -46,7 +47,7 @@ class ClauseguidesController < ApplicationController
       authorize @clauseguide
 
       if @clauseguide.save
-          redirect_to clauseguides_path, notice: 'Expense was successfully created.'
+          redirect_to clauseguides_path(:subsection_id => @subsection_id), notice: 'Expense was successfully created.'
       else
         render :new
       end
@@ -58,7 +59,7 @@ class ClauseguidesController < ApplicationController
       authorize @clauseguide
       if @clauseguide.update(clauseguide_params)
 #on create redirect back to dashbard
-        redirect_to clauseguides_path, notice: 'clauseguide item was successfully updated.'
+        redirect_to clauseguides_path(:subsection_id => @subsection_id), notice: 'clauseguide item was successfully updated.'
       else
         render :edit
       end
@@ -90,7 +91,7 @@ class ClauseguidesController < ApplicationController
 #      authorize @clauseguide
 
       if @clauseguide.save
-          redirect_to clauseguides_path, notice: 'Expense was successfully created.'
+          redirect_to clauseguides_path(:subsection_id => @subsection_id), notice: 'Expense was successfully created.'
       else
         render :new
       end
@@ -132,7 +133,7 @@ class ClauseguidesController < ApplicationController
         clauseguide = Clauseguide.create(:clause_id => clause.id, :guidenote_id => params[:guidenote_id], :plan_id => params[:plan_id])
       end
 
-      redirect_to clauseguides_path
+      redirect_to clauseguides_path(:subsection_id => @subsection_id)
     end
 
 
@@ -163,7 +164,7 @@ class ClauseguidesController < ApplicationController
         clauseguide = Clauseguide.create(:clause_id => clause.id, :guidenote_id => params[:guidenote_id], :plan_id => params[:plan_id])
       end
 
-      redirect_to clauseguides_path
+      redirect_to clauseguides_path(:subsection_id => @subsection_id)
     end
 
   private
@@ -174,6 +175,10 @@ class ClauseguidesController < ApplicationController
 
     def set_project
       @project = Project.find(2)
+    end
+
+    def set_subsection
+      @subsection_id = params[:subsection_id]
     end
 
     # Only allow a trusted parameter "white list" through.

@@ -36,7 +36,7 @@
             <div class="row">
                 <div class="form_footer">
                     <%= f.submit "save"%>
-                    <%= link_to "cancel", clauseguides_path %>
+                    <%= link_to "cancel", clauseguides_path(:subsection_id => @subsection_id) %>
                 </div>
                 <% end %>
             </div>

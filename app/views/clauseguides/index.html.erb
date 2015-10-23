@@ -10,7 +10,7 @@
     <div>
         <div>
             <label class="select_2">Subsection:</label>
-            <span><%= select_tag "section", options_from_collection_for_select(@subsections, :id, :full_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/clauseguides/?subsection='+this.value;"} %></span>
+            <span><%= select_tag "section", options_from_collection_for_select(@subsections, :id, :full_code_and_title, @selected_subsection.id), {:class => 'document_selectBox_1', :onchange => "window.location='/clauseguides/?subsection_id='+this.value;"} %></span>
         </div>
     </div>
 </div>
@@ -42,24 +42,24 @@
                             <td class="mob_cell"><%= clause.clausetitle.text %></td>
                             <td class="row_button no_buttons_4">
                               <% if has_guide(clause.id, 1) %>
-                                <%= link_to '', duplicate_clauseguide_path(@clauseguide.id), class: 'line_menu_icon', title: "duplicate guidance note to other clauses in section" %>
-                                <%= link_to '', assign_clauseguide_path(@clauseguide.id), class: 'line_menu_icon', title: "assign guidance note to other clauses" %>
-                                <%= link_to '', clauseguide_path(@clauseguide), method: :delete, class: 'line_delete_icon', title: "remove guidance note" %>
-                                <%= link_to '', edit_clauseguide_path(@clauseguide), class: 'line_edit_icon', title: "edit guidance note" %>
+                                <%= link_to '', duplicate_clauseguide_path(:id => @clauseguide.id, :subsection_id => @selected_subsection.id), class: 'line_menu_icon', title: "duplicate guidance note to other clauses in section" %>
+                                <%= link_to '', assign_clauseguide_path(:id => @clauseguide.id, :subsection_id => @selected_subsection.id), class: 'line_menu_icon', title: "assign guidance note to other clauses" %>
+                                <%= link_to '', clauseguide_path(:id => @clauseguide, :subsection_id => @selected_subsection.id), method: :delete, class: 'line_delete_icon', title: "remove guidance note" %>
+                                <%= link_to '', edit_clauseguide_path(:id => @clauseguide, :subsection_id => @selected_subsection.id), class: 'line_edit_icon', title: "edit guidance note" %>
                               <% else %>
-                                <%= link_to '', clone_clauseguide_path(:id => clause.id, :plan_id => 1), class: 'line_insert_icon', title: "clone guidance from another clause" %>
-                                <%= link_to '', new_clauseguide_path(:clause_id => clause.id, :plan_id => 1), class: 'line_new_icon', title: "add guidance note" %>
+                                <%= link_to '', clone_clauseguide_path(:id => clause.id, :plan_id => 1, :subsection_id => @selected_subsection.id), class: 'line_insert_icon', title: "clone guidance from another clause" %>
+                                <%= link_to '', new_clauseguide_path(:clause_id => clause.id, :plan_id => 1, :subsection_id => @selected_subsection.id), class: 'line_new_icon', title: "add guidance note" %>
                               <% end %>
                             </td>
                             <td class="row_button no_buttons_4">
                               <% if has_guide(clause.id, 2) %>
-                                <%= link_to '', duplicate_clauseguide_path(@clauseguide.id), class: 'line_menu_icon', title: "duplicate guidance note to other clauses in section" %>
-                                <%= link_to '', assign_clauseguide_path(@clauseguide.id), class: 'line_menu_icon', title: "assign guidance note to other clauses" %>
-                                <%= link_to '', clauseguide_path(@clauseguide), method: :delete, class: 'line_delete_icon', title: "remove guidance note" %>
-                                <%= link_to '', edit_clauseguide_path(@clauseguide), class: 'line_edit_icon', title: "edit guidance note" %>
+                                <%= link_to '', duplicate_clauseguide_path(:id => @clauseguide.id, :subsection_id => @selected_subsection.id), class: 'line_menu_icon', title: "duplicate guidance note to other clauses in section" %>
+                                <%= link_to '', assign_clauseguide_path(:id => @clauseguide.id, :subsection_id => @selected_subsection.id), class: 'line_menu_icon', title: "assign guidance note to other clauses" %>
+                                <%= link_to '', clauseguide_path(:id => @clauseguide, :subsection_id => @selected_subsection.id), method: :delete, class: 'line_delete_icon', title: "remove guidance note" %>
+                                <%= link_to '', edit_clauseguide_path(:id => @clauseguide, :subsection_id => @selected_subsection.id), class: 'line_edit_icon', title: "edit guidance note" %>
                               <% else %>
-                                <%= link_to '', clone_clauseguide_path(:id => clause.id, :plan_id => 2), class: 'line_insert_icon', title: "clone guidance from another clause" %>
-                                <%= link_to '', new_clauseguide_path(:clause_id => clause.id, :plan_id => 2), class: 'line_new_icon', title: "add guidance note" %>
+                                <%= link_to '', clone_clauseguide_path(:id => clause.id, :plan_id => 2, :subsection_id => @selected_subsection.id), class: 'line_insert_icon', title: "clone guidance from another clause" %>
+                                <%= link_to '', new_clauseguide_path(:clause_id => clause.id, :plan_id => 2, :subsection_id => @selected_subsection.id), class: 'line_new_icon', title: "add guidance note" %>
                               <% end %>
                             </td>
                         </tr>
