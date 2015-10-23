@@ -25,6 +25,10 @@ class ClauseguidesController < ApplicationController
 
     end
 
+    def show
+      @clauseguide = Clauseguide.find(params[:id])
+      authorize @clauseguide
+    end
 
     def new
       @clauseguide = Clauseguide.new
@@ -75,12 +79,11 @@ class ClauseguidesController < ApplicationController
       if @clauseguide.update(:guidenote_id => guidenote.id)
         redirect_to clauseguides_path(:subsection_id => @subsection_id), notice: 'clauseguide item was successfully updated.'
       else
-        render :edit
+        redirect_to clauseguides_path(:subsection_id => @subsection_id)
       end
     end
 
 
-    # PATCH/PUT /clauseguides/1
     def update_all
       authorize @clauseguide
 
@@ -90,7 +93,7 @@ class ClauseguidesController < ApplicationController
       if guidenote.save
         redirect_to clauseguides_path(:subsection_id => @subsection_id), notice: 'clauseguide item was successfully updated.'
       else
-        render :edit
+        redirect_to clauseguides_path(:subsection_id => @subsection_id)
       end
     end
 

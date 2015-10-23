@@ -5,7 +5,7 @@ class ClauseguidePolicy < Struct.new(:user, :clauseguide)
     end
 
     def show?
-      true
+      index?
     end
 
     def new?

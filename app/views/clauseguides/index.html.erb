@@ -49,6 +49,7 @@
                                 <% if associated_clauses(@clauseguide) %>
                                     <%= link_to '', edit_all_clauseguide_path(:id => @clauseguide, :subsection_id => @selected_subsection.id), class: 'line_edit_icon', title: "edit all guidance notes" %>
                                 <% end %>
+                                <%= link_to '', clauseguide_path(:id => @clauseguide.id, :subsection_id => @selected_subsection.id), class: 'line_show_icon', title: "show clause guide" %>
                               <% else %>
                                 <%= link_to '', clone_clauseguide_path(:id => clause.id, :plan_id => 1, :subsection_id => @selected_subsection.id), class: 'line_insert_icon', title: "clone guidance from another clause" %>
                                 <%= link_to '', new_clauseguide_path(:clause_id => clause.id, :plan_id => 1, :subsection_id => @selected_subsection.id), class: 'line_new_icon', title: "add guidance note" %>
@@ -63,6 +64,7 @@
                                 <% if associated_clauses(@clauseguide) %>
                                     <%= link_to '', edit_all_clauseguide_path(:id => @clauseguide, :subsection_id => @selected_subsection.id), class: 'line_edit_icon', title: "edit all guidance notes" %>
                                 <% end %>
+                                <%= link_to '', clauseguide_path(:id => @clauseguide.id, :subsection_id => @selected_subsection.id), class: 'line_show_icon', title: "show clause guide" %>
                               <% else %>
                                 <%= link_to '', clone_clauseguide_path(:id => clause.id, :plan_id => 2, :subsection_id => @selected_subsection.id), class: 'line_insert_icon', title: "clone guidance from another clause" %>
                                 <%= link_to '', new_clauseguide_path(:clause_id => clause.id, :plan_id => 2, :subsection_id => @selected_subsection.id), class: 'line_new_icon', title: "add guidance note" %>
