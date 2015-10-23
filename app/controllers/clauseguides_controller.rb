@@ -65,15 +65,14 @@ class ClauseguidesController < ApplicationController
     def update
       authorize @clauseguide
 
-      text_exist = Guidenote.where(:text => params[:text]).first
+      text_exist = Guidenote.where(:text => params[:clauseguide][:guidenote_attributes][:text]).first
       if text_exist.blank?
-        guidenote = Guidenote.create(:text => params[:text])
+        guidenote = Guidenote.create(:text => params[:clauseguide][:guidenote_attributes][:text])
       else
         guidenote = text_exist
       end
 
-      @clauseguide.guidenote_id = guidenote.id
-      if @clauseguide.save
+      if @clauseguide.update(:guidenote_id => guidenote.id)
         redirect_to clauseguides_path(:subsection_id => @subsection_id), notice: 'clauseguide item was successfully updated.'
       else
         render :edit
@@ -86,7 +85,7 @@ class ClauseguidesController < ApplicationController
       authorize @clauseguide
 
       guidenote = Guidenote.find(@clauseguide.guidenote_id)
-      guidenote.text = params[:clauseguide][:guidenote][:text]
+      guidenote.text = params[:clauseguide][:guidenote_attributes][:text]
 
       if guidenote.save
         redirect_to clauseguides_path(:subsection_id => @subsection_id), notice: 'clauseguide item was successfully updated.'
