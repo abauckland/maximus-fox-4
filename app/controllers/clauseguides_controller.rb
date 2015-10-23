@@ -21,7 +21,7 @@ class ClauseguidesController < ApplicationController
 
         #get list of clausetypes in selected subsection
         project_clauses = Clause.joins(:speclines).where('speclines.project_id' => @project.id).uniq.ids
-        @clauses = Clause.project_clauses(project_clauses, params[:subsection_id], @subsection_name)
+        @clauses = Clause.project_clauses(project_clauses, @selected_subsection.id, @subsection_name)
 
     end
 
