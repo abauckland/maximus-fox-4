@@ -99,15 +99,15 @@ class ClauseguidesController < ApplicationController
 
     def assign
 
-      clauseguide = Clauseguide.find(params[:id])
+      @clauseguide = Clauseguide.find(params[:id])
 
-      @plan_id = clauseguide.plan_id
-      @guidenote_id = clauseguide.guidenote_id
+      @plan_id = @clauseguide.plan_id
+      @guidenote_id = @clauseguide.guidenote_id
 
       if params[:search_text]
         @search_term = params[:search_text]
       else   
-        clausetitle = Clausetitle.joins(:clauses).where('clauses.id' => clauseguide.clause_id).first
+        clausetitle = Clausetitle.joins(:clauses).where('clauses.id' => @clauseguide.clause_id).first
         @search_term = clausetitle.text
       end
 
