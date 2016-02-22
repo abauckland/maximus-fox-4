@@ -1,6 +1,6 @@
 # config valid only for Capistrano 3.1
 
-lock '3.3.5'
+lock '3.4.0'
 
 set :application, 'maximus-fox'
 set :repo_url, 'git@github.com:abauckland/maximus-fox-4.git'
