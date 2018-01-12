@@ -13,7 +13,7 @@ set :use_sudo, false
 
 set :ssh_options, {
   port: 63369,
-#  keys: ["C:/Users/Andrew/.ssh/myhq.ppk"],
+  keys: ["C:\Users\abauc\.ssh\karaka_key\specright-1_privatekey.ppk"],
   forward_agent: true,
 }
 
