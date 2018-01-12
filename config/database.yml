@@ -27,7 +27,9 @@ production:
   adapter: mysql2
   encoding: utf8
   pool: 5
-  username: manager
-  host: specmysql
+  username: root
+  password: specright1707
+  host: localhost
+#  host: specmysql
   database: specification_prod
-  password: ~specright~!&)&
+#  password: ~specright~!&)&
