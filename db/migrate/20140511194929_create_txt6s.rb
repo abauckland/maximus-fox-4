@@ -1,7 +1,7 @@
 class CreateTxt6s < ActiveRecord::Migration
   def change
     create_table :txt6s do |t|
-      t.text :text
+      t.string :text
 
       t.timestamps
     end

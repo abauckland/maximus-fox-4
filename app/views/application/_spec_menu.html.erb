@@ -1,42 +1,42 @@
 <ul class="left_menu">
     <% if request.path_parameters[:action] == "new"%>
-        <li class="has_sub" id="primary_project"><%= link_to "PROJECTS", projects_path, :class => check_current('projects') %>
+        <li class="has_sub" id="primary_project"><%= link_to "PROJECTS", nil, :class => check_current('projects') %>
             <ul class="sub_menu">
-                <li><%= link_to "Select Project", projects_path, id: 'sub_select_project' %></li>
+                <li><%= link_to "Select Project", nil, id: 'sub_select_project' %></li>
             </ul>
         </li>
     <% else %>
-        <li class="has_sub" id="primary_project"><%= link_to "PROJECTS", projects_path, :class => check_current('projects') %>
+        <li class="has_sub" id="primary_project"><%= link_to "PROJECTS", nil, :class => check_current('projects') %>
             <ul class="sub_menu">
-                <li><%= link_to "Select Project", projects_path, id: 'sub_select_project' %> </li>
-                <li><%= link_to "Create Project", new_project_path, id: 'sub_new_project' %> </li>
+                <li><%= link_to "Select Project", nil, id: 'sub_select_project' %> </li>
+                <li><%= link_to "Create Project", nil, id: 'sub_new_project' %> </li>
                 <% if @project %>
                   <% if policy(:project).edit? %>
                       <% unless @project.id == nil %> 
-                        <li><%= link_to "Edit Project Details", edit_project_path(@project.id), id: 'sub_edit_project' %> </li>
+                        <li><%= link_to "Edit Project Details", nil, id: 'sub_edit_project' %> </li>
                       <% end %>
                   <% end %>
                   <% if current_user.admin? %>
-                    <li><%= link_to "Manage Project Users", projectuser_path(@project.id), id: 'sub_project_users' %> </li>
+                    <li><%= link_to "Manage Project Users", nil, id: 'sub_project_users' %> </li>
                   <% end %>
                 <% end %>
             </ul>
         </li>
         <% if @project %>
         <% unless @project.id == nil %>
-            <li id="primary_document"><%= link_to "DOCUMENT", specification_path(@project.id), :class => check_current('specifications') %></li>
-            <li id="primary_revisions"><%= link_to "REVISIONS", specrevision_path(@project.id), :class => check_current('revisions') %></li>
-            <li class="has_sub" id="primary_publish"><%= link_to "PUBLISH", print_path(@project.id), :class => check_current('prints') %> 
+            <li id="primary_document"><%= link_to "DOCUMENT", nil, :class => check_current('specifications') %></li>
+            <li id="primary_revisions"><%= link_to "REVISIONS", nil, :class => check_current('revisions') %></li>
+            <li class="has_sub" id="primary_publish"><%= link_to "PUBLISH", nil, :class => check_current('prints') %> 
                 <ul class="sub_menu">
-                    <li><%= link_to "Create/Download PDF", print_path(@project.id), id: 'sub_print' %> </li>
+                    <li><%= link_to "Create/Download PDF", nil, id: 'sub_print' %> </li>
                     <% if policy(:printsetting).edit? %>
-                        <li><%= link_to "Document Settings", edit_printsetting_path(@project.id), id: 'sub_printsetting' %> </li>
+                        <li><%= link_to "Document Settings", nil, id: 'sub_printsetting' %> </li>
                     <% end %>
                     <% if policy(:keynote).show? %>
-                        <li><%= link_to "Download Keynote Files", keynote_path(@project.id), id: 'sub_keynote' %> </li>
+                        <li><%= link_to "Download Keynote Files", nil, id: 'sub_keynote' %> </li>
                     <% end %>
                     <% if policy(:dataexport).show? %>
-                        <li><%= link_to "Download Product Schedule", dataexport_path(@project.id), id: 'sub_data_export' %> </li>
+                        <li><%= link_to "Download Product Schedule", nil, id: 'sub_data_export' %> </li>
                     <% end %>
                 </ul>
             </li>
@@ -52,22 +52,22 @@
     <% if request.path_parameters[:action] == "new" %>
         <li><p class="mob_menu">PROJECTS</p>
             <ul class="sub_menu_mob">
-                <li><%= link_to "Select Project", projects_path %></li>
+                <li><%= link_to "Select Project", nil %></li>
             </ul>
         </li>
     <% else %>
         <li><p class="mob_menu">PROJECTS</p>
             <ul class="sub_menu_mob">
-                <li><%= link_to "Select Project", projects_path %> </li>
-                <li><%= link_to "Create Project", new_project_path %> </li>
+                <li><%= link_to "Select Project", nil %> </li>
+                <li><%= link_to "Create Project", nil %> </li>
                 <% if @project %>
                   <% if policy(:project).edit? %>
                       <% unless @project.id == nil %>
-                        <li><%= link_to "Edit Project Details", edit_project_path(@project.id) %> </li>
+                        <li><%= link_to "Edit Project Details", nil %> </li>
                       <% end %>
                   <% end %>
                   <%  if current_user.admin? %>
-                    <li><%= link_to "Manage Project Users", projectuser_path(@project.id) %> </li>
+                    <li><%= link_to "Manage Project Users", nil %> </li>
                   <% end %>
                 <% end %>
             </ul>
@@ -76,25 +76,25 @@
         <% unless @project.id == nil %>
             <li><p class="mob_menu">DOCUMENT</p>
             	<ul class="sub_menu_mob">
-                	<li><%= link_to "Edit Document", specification_path(@project.id) %></li>
+                	<li><%= link_to "Edit Document", nil %></li>
             	</ul>
             </li>
             <li><p class="mob_menu">REVISIONS</p>
             	<ul class="sub_menu_mob">
-                	<li><%= link_to "Document Revisions", specrevision_path(@project.id) %></li>
+                	<li><%= link_to "Document Revisions", nil %></li>
             	</ul>
             </li>
             <li><p class="mob_menu">PUBLISH</p>
                 <ul class="sub_menu_mob">
-                    <li><%= link_to "Create/Download PDF", print_path(@project.id) %> </li>
+                    <li><%= link_to "Create/Download PDF", nil %> </li>
                     <% if policy(:printsetting).edit? %>
-                        <li><%= link_to "Document Settings", edit_printsetting_path(@project.id) %> </li>
+                        <li><%= link_to "Document Settings", nil %> </li>
                     <% end %>
                     <% if policy(:keynote).show? %>
-                        <li><%= link_to "Download Keynote Files", keynote_path(@project.id) %> </li>
+                        <li><%= link_to "Download Keynote Files", nil %> </li>
                     <% end %>
                     <% if policy(:dataexport).show? %>
-                        <li><%= link_to "Download Product Schedule", dataexport_path(@project.id) %> </li>
+                        <li><%= link_to "Download Product Schedule", nil %> </li>
                     <% end %>
                 </ul>
             </li>

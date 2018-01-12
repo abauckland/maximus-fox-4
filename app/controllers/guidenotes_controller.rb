@@ -14,8 +14,9 @@
 #    # GET /guidenotes/1
 #    def show
 #      @guidenote = Guidenote.where(:id => params[:id]).first
-#      render :text=> @guidenote.text 
+#      render :text=> @guidenote.text
 #    end
+
 
     def new
       @guidenote = Guidenote.new

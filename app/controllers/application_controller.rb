@@ -515,8 +515,8 @@ end
 #    end
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :role, :company_id, :check_field, :state, :company_attributes => [:name, :read_term]) }
-    devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:first_name, :surname, :email, :password, :password_confirmation, :current_password, :role, :state, :company_id, :company_attributes => [:name]) }
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :surname, :email, :password, :password_confirmation, :role, :company_id, :check_field, :state, :company_attributes => [:name, :read_term]])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:first_name, :surname, :email, :password, :password_confirmation, :current_password, :role, :state, :company_id, :company_attributes => [:name]])
   end
 
   def layout_by_resource

@@ -1,5 +1,5 @@
 class CreateAlterations < ActiveRecord::Migration
-  def changa
+  def change
     create_table :alterations do |t|
       t.integer :specline_id
       t.integer :project_id

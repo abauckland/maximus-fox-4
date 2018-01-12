@@ -11,26 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150930200004) do
-
-  create_table "abouts", force: true do |t|
-  end
+ActiveRecord::Schema.define(version: 20160327215510) do
 
   create_table "alterations", force: true do |t|
-    t.integer  "specline_id",                                 null: false
-    t.integer  "project_id",        limit: 2,                 null: false
-    t.integer  "clause_id",         limit: 2,                 null: false
-    t.integer  "txt3_id",           limit: 2,                 null: false
-    t.integer  "txt4_id",           limit: 2,                 null: false
-    t.integer  "txt5_id",           limit: 2,                 null: false
-    t.integer  "txt6_id",           limit: 2,                 null: false
-    t.integer  "identity_id",       limit: 2,                 null: false
-    t.integer  "perform_id",        limit: 2,                 null: false
-    t.integer  "linetype_id",       limit: 1,                 null: false
-    t.string   "event",             limit: 10,                null: false
-    t.integer  "clause_add_delete", limit: 2,  default: 1,    null: false
-    t.integer  "revision_id",       limit: 2,                 null: false
-    t.boolean  "print_change",                 default: true, null: false
+    t.integer  "specline_id"
+    t.integer  "project_id"
+    t.integer  "clause_id"
+    t.integer  "txt3_id"
+    t.integer  "txt4_id"
+    t.integer  "txt5_id"
+    t.integer  "txt6_id"
+    t.integer  "identity_id"
+    t.integer  "perform_id"
+    t.integer  "linetype_id"
+    t.string   "event"
+    t.integer  "clause_add_delete", default: 1, null: false
+    t.integer  "revision_id"
+    t.integer  "print_change",      default: 1, null: false
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -40,17 +37,17 @@ ActiveRecord::Schema.define(version: 20150930200004) do
   add_index "alterations", ["revision_id", "project_id"], name: "PROJECT", using: :btree
 
   create_table "cawssections", force: true do |t|
-    t.string   "ref",        null: false
-    t.string   "text",       null: false
+    t.string   "ref"
+    t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "cawssubsections", force: true do |t|
-    t.integer  "ref",            limit: 1,   null: false
-    t.string   "text",           limit: 200, null: false
-    t.integer  "cawssection_id", limit: 1,   null: false
-    t.string   "guidepdf_id",    limit: 50
+    t.integer  "cawssection_id"
+    t.integer  "ref"
+    t.string   "text"
+    t.integer  "guidepdf_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -74,20 +71,20 @@ ActiveRecord::Schema.define(version: 20150930200004) do
   end
 
   create_table "clauseproducts", force: true do |t|
+    t.integer  "clause_id"
     t.integer  "product_id"
-    t.integer  "clause_id",  limit: 2
     t.datetime "created_at"
-    t.datetime "update_at"
+    t.datetime "updated_at"
   end
 
   add_index "clauseproducts", ["clause_id"], name: "CLAUSE", using: :btree
   add_index "clauseproducts", ["product_id"], name: "PRODUCT", using: :btree
 
   create_table "clauserefs", force: true do |t|
-    t.integer  "subsection_id", limit: 2, default: 0, null: false
-    t.integer  "clausetype_id", limit: 2, default: 0, null: false
-    t.integer  "clause_no",     limit: 2, default: 0, null: false
-    t.integer  "subclause",     limit: 2, default: 0, null: false
+    t.integer  "clausetype_id"
+    t.integer  "clause_no"
+    t.integer  "subclause"
+    t.integer  "subsection_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -97,10 +94,10 @@ ActiveRecord::Schema.define(version: 20150930200004) do
   add_index "clauserefs", ["subsection_id"], name: "SUBSECTION", using: :btree
 
   create_table "clauses", force: true do |t|
-    t.integer  "clauseref_id",                         null: false
-    t.integer  "clausetitle_id", limit: 2,             null: false
+    t.integer  "clauseref_id"
+    t.integer  "clausetitle_id"
     t.integer  "guidenote_id"
-    t.integer  "project_id",               default: 1, null: false
+    t.integer  "project_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -109,34 +106,34 @@ ActiveRecord::Schema.define(version: 20150930200004) do
   add_index "clauses", ["project_id"], name: "PROJECT", using: :btree
 
   create_table "clausetitles", force: true do |t|
-    t.string   "text",       limit: 250, null: false
+    t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "clausetypes", force: true do |t|
-    t.string   "text",       limit: 50, null: false
+    t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "companies", force: true do |t|
-    t.string   "name",         limit: 200, null: false
-    t.string   "tel",          limit: 20
+    t.string   "name"
+    t.string   "tel"
     t.string   "www"
     t.string   "reg_address"
     t.string   "reg_number"
     t.string   "reg_name"
     t.string   "reg_location"
-    t.string   "logo"
     t.integer  "read_term"
     t.integer  "category"
-    t.integer  "no_licence",   limit: 1
+    t.string   "logo"
+    t.integer  "no_licence"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "companies", ["name"], name: "company_name", using: :btree
+  add_index "companies", ["name"], name: "COMPANY_NAME", using: :btree
 
   create_table "descripts", force: true do |t|
     t.integer  "identity_id"
@@ -162,8 +159,10 @@ ActiveRecord::Schema.define(version: 20150930200004) do
   end
 
   create_table "helps", force: true do |t|
-    t.string "item"
-    t.text   "text"
+    t.string   "item"
+    t.text     "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "identities", force: true do |t|
@@ -177,20 +176,20 @@ ActiveRecord::Schema.define(version: 20150930200004) do
   add_index "identities", ["identvalue_id"], name: "VALUE", using: :btree
 
   create_table "identkeys", force: true do |t|
-    t.string   "text",       limit: 45
+    t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "identtxts", force: true do |t|
-    t.string   "text",       limit: 45
+    t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "identvalues", force: true do |t|
-    t.integer  "company_id"
     t.integer  "identtxt_id"
+    t.integer  "company_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -200,7 +199,7 @@ ActiveRecord::Schema.define(version: 20150930200004) do
 
   create_table "instances", force: true do |t|
     t.integer  "product_id"
-    t.string   "code",       limit: 45
+    t.string   "code"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -208,36 +207,36 @@ ActiveRecord::Schema.define(version: 20150930200004) do
   add_index "instances", ["product_id"], name: "PRODUCT", using: :btree
 
   create_table "lineclausetypes", force: true do |t|
-    t.integer  "linetype_id",   limit: 1, default: 0
-    t.integer  "clausetype_id", limit: 1, default: 0
+    t.integer  "clausetype_id"
+    t.integer  "linetype_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "linetypes", force: true do |t|
-    t.string   "ref",         limit: 50, null: false
-    t.string   "description", limit: 50, null: false
-    t.string   "example",     limit: 50, null: false
-    t.integer  "txt1",                   null: false
-    t.integer  "txt2",                   null: false
-    t.integer  "txt3",                   null: false
-    t.integer  "txt4",                   null: false
-    t.integer  "txt5",                   null: false
-    t.integer  "txt6",                   null: false
-    t.integer  "identity",               null: false
-    t.integer  "perform",                null: false
+    t.string   "ref"
+    t.string   "description"
+    t.string   "example"
+    t.integer  "txt1"
+    t.integer  "txt2"
+    t.integer  "txt3"
+    t.integer  "txt4"
+    t.integer  "txt5"
+    t.integer  "txt6"
+    t.integer  "identity"
+    t.integer  "perform"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "performkeys", force: true do |t|
-    t.string   "text",       limit: 45
+    t.string   "text"
     t.datetime "created_at"
-    t.datetime "update_at"
+    t.datetime "updated_at"
   end
 
   create_table "performs", force: true do |t|
-    t.integer  "performkey_id",   limit: 2
+    t.integer  "performkey_id"
     t.integer  "performvalue_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -246,64 +245,64 @@ ActiveRecord::Schema.define(version: 20150930200004) do
   add_index "performs", ["performkey_id"], name: "PERFORMKEY", using: :btree
 
   create_table "performtxts", force: true do |t|
-    t.string   "text",       limit: 45
+    t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "performvalues", force: true do |t|
-    t.integer  "performtxt_id", limit: 3
-    t.integer  "valuetype_id",  limit: 2
+    t.integer  "valuetype_id"
+    t.integer  "performtxt_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "prints", force: true do |t|
     t.integer  "project_id"
-    t.integer  "revision_id", limit: 1
+    t.integer  "revision_id"
     t.integer  "user_id"
-    t.string   "print",       limit: 1
+    t.string   "print"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "printsettings", force: true do |t|
     t.integer  "project_id"
-    t.string   "font_style",      limit: 45
-    t.string   "font_size",       limit: 45
-    t.string   "structure",       limit: 45
-    t.string   "prelim",          limit: 45
-    t.string   "page_number",     limit: 45
-    t.string   "client_detail",   limit: 45
-    t.string   "client_logo",     limit: 45
-    t.string   "project_detail",  limit: 45
-    t.string   "project_image",   limit: 45
-    t.string   "company_detail",  limit: 45
-    t.string   "header_project",  limit: 45
-    t.string   "header_client",   limit: 45
-    t.string   "header_document", limit: 45
-    t.string   "header_logo",     limit: 45
-    t.string   "footer_detail",   limit: 45
-    t.string   "footer_author",   limit: 45
-    t.string   "footer_date",     limit: 45
-    t.string   "section_cover",   limit: 45
+    t.string   "font_style"
+    t.string   "font_size"
+    t.string   "structure"
+    t.string   "prelim"
+    t.string   "page_number"
+    t.string   "client_detail"
+    t.string   "client_logo"
+    t.string   "project_detail"
+    t.string   "project_image"
+    t.string   "company_detail"
+    t.string   "header_project"
+    t.string   "header_client"
+    t.string   "header_document"
+    t.string   "header_logo"
+    t.string   "footer_detail"
+    t.string   "footer_author"
+    t.string   "footer_date"
+    t.string   "section_cover"
     t.datetime "created_at"
-    t.datetime "update_at"
+    t.datetime "updated_at"
   end
 
   create_table "products", force: true do |t|
-    t.integer  "producttype_id", limit: 2
+    t.integer  "producttype_id"
     t.datetime "created_at"
-    t.datetime "update_at"
+    t.datetime "updated_at"
   end
 
   create_table "projects", force: true do |t|
-    t.string   "code",            limit: 45,              null: false
-    t.string   "title",           limit: 200,             null: false
-    t.integer  "parent_id",                               null: false
-    t.integer  "company_id",                              null: false
-    t.integer  "project_status",  limit: 1,   default: 0, null: false
-    t.integer  "ref_system",      limit: 1,   default: 0
+    t.string   "code"
+    t.string   "title"
+    t.integer  "parent_id"
+    t.integer  "company_id"
+    t.integer  "project_status"
+    t.integer  "ref_system"
     t.string   "project_image"
     t.string   "client_logo"
     t.string   "client_name"
@@ -316,9 +315,9 @@ ActiveRecord::Schema.define(version: 20150930200004) do
   add_index "projects", ["company_id"], name: "COMPANY", using: :btree
 
   create_table "projectusers", force: true do |t|
-    t.integer  "user_id",    null: false
-    t.integer  "project_id", null: false
-    t.integer  "role",       null: false
+    t.integer  "user_id"
+    t.integer  "project_id"
+    t.integer  "role"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -336,30 +335,30 @@ ActiveRecord::Schema.define(version: 20150930200004) do
   end
 
   create_table "revisions", force: true do |t|
-    t.string   "rev",            limit: 2
-    t.string   "project_status", limit: 15
-    t.integer  "project_id",                null: false
+    t.string   "rev"
+    t.string   "project_status"
+    t.integer  "project_id"
     t.integer  "user_id"
-    t.date     "date"
-    t.datetime "updated_at"
+    t.datetime "date"
     t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "revisions", ["project_id"], name: "PROJECT", using: :btree
 
   create_table "speclines", force: true do |t|
-    t.integer  "project_id",  limit: 2,             null: false
-    t.integer  "clause_id",   limit: 2,             null: false
-    t.integer  "clause_line", limit: 1,             null: false
-    t.integer  "txt1_id",     limit: 1, default: 1, null: false
-    t.integer  "txt2_id",     limit: 1, default: 1, null: false
-    t.integer  "txt3_id",     limit: 2, default: 1, null: false
-    t.integer  "txt4_id",     limit: 2, default: 1, null: false
-    t.integer  "txt5_id",     limit: 2, default: 1, null: false
-    t.integer  "txt6_id",     limit: 2, default: 1, null: false
-    t.integer  "identity_id", limit: 2, default: 1, null: false
-    t.integer  "perform_id",  limit: 2, default: 1, null: false
-    t.integer  "linetype_id", limit: 1,             null: false
+    t.integer  "project_id"
+    t.integer  "clause_id"
+    t.integer  "clause_line"
+    t.integer  "txt1_id",     default: 1
+    t.integer  "txt2_id",     default: 1
+    t.integer  "txt3_id",     default: 1
+    t.integer  "txt4_id",     default: 1
+    t.integer  "txt5_id",     default: 1
+    t.integer  "txt6_id",     default: 1
+    t.integer  "identity_id", default: 1
+    t.integer  "perform_id",  default: 1
+    t.integer  "linetype_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -367,16 +366,28 @@ ActiveRecord::Schema.define(version: 20150930200004) do
   add_index "speclines", ["id"], name: "id_UNIQUE", unique: true, using: :btree
   add_index "speclines", ["project_id", "clause_id"], name: "SPEC", using: :btree
 
-  create_table "standards", force: true do |t|
-    t.string   "ref",        limit: 20
-    t.string   "title",      limit: 150
+  create_table "standardkeys", force: true do |t|
+    t.integer  "standard_id"
+    t.integer  "performkey_id"
+    t.string   "type"
+    t.string   "verification"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  create_table "standards", force: true do |t|
+    t.string   "ref"
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "year"
+    t.string   "status"
+    t.string   "type"
+  end
+
   create_table "subsections", force: true do |t|
-    t.integer  "cawssubsection_id", limit: 2
-    t.integer  "unisubsection_id",  limit: 2
+    t.integer  "cawssubsection_id"
+    t.integer  "unisubsection_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -386,7 +397,7 @@ ActiveRecord::Schema.define(version: 20150930200004) do
 
   create_table "subsectionusers", force: true do |t|
     t.integer  "projectuser_id"
-    t.integer  "subsection_id",  limit: 1
+    t.integer  "subsection_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -395,118 +406,121 @@ ActiveRecord::Schema.define(version: 20150930200004) do
   add_index "subsectionusers", ["subsection_id"], name: "SUBSECTION", using: :btree
 
   create_table "termcats", force: true do |t|
-    t.string "text"
+    t.string   "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "terms", force: true do |t|
-    t.integer "termcat_id"
-    t.text    "text"
+    t.integer  "termcat_id"
+    t.text     "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "txt1s", force: true do |t|
-    t.string   "text",       limit: 2, null: false
+    t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "txt2s", force: true do |t|
-    t.string   "text",       limit: 2, null: false
+    t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "txt3s", force: true do |t|
-    t.string   "text",       null: false
+    t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "txt3s", ["id"], name: "id_UNIQUE", unique: true, using: :btree
-  add_index "txt3s", ["text"], name: "text_UNIQUE", unique: true, length: {"text"=>5}, using: :btree
+  add_index "txt3s", ["text"], name: "text_UNIQUE", unique: true, using: :btree
 
   create_table "txt4s", force: true do |t|
-    t.text     "text",       null: false
+    t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "txt4s", ["id"], name: "id_UNIQUE", unique: true, using: :btree
-  add_index "txt4s", ["text"], name: "text_UNIQUE", unique: true, length: {"text"=>5}, using: :btree
+  add_index "txt4s", ["text"], name: "text_UNIQUE", unique: true, using: :btree
 
   create_table "txt5s", force: true do |t|
-    t.text     "text",       null: false
+    t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "txt5s", ["id"], name: "id_UNIQUE", unique: true, using: :btree
-  add_index "txt5s", ["text"], name: "text_UNIQUE", unique: true, length: {"text"=>5}, using: :btree
+  add_index "txt5s", ["text"], name: "text_UNIQUE", unique: true, using: :btree
 
   create_table "txt6s", force: true do |t|
-    t.string   "text",       null: false
+    t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "txt6s", ["id"], name: "id_UNIQUE", unique: true, using: :btree
-  add_index "txt6s", ["text"], name: "text_UNIQUE", unique: true, length: {"text"=>5}, using: :btree
+  add_index "txt6s", ["text"], name: "text_UNIQUE", unique: true, using: :btree
 
-  create_table "unisections", force: true do |t|
-    t.string   "ref",        null: false
-    t.string   "text",       null: false
+  create_table "unissections", force: true do |t|
+    t.string   "ref"
+    t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "unisubsections", force: true do |t|
-    t.integer  "ref",           limit: 1,   null: false
-    t.string   "text",          limit: 200, null: false
-    t.integer  "unisection_id", limit: 1,   null: false
-    t.string   "guidepdf_id",   limit: 50
+    t.integer  "ref"
+    t.string   "text"
+    t.integer  "unisection_id"
+    t.integer  "guidepdf_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "units", force: true do |t|
-    t.string   "text",       limit: 10
+    t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|
-    t.string   "email"
     t.integer  "company_id"
-    t.string   "first_name",             limit: 50
-    t.string   "surname",                limit: 50
-    t.integer  "role",                   limit: 1
-    t.string   "state"
+    t.string   "first_name"
+    t.string   "surname"
+    t.integer  "role"
     t.string   "ip"
     t.string   "api_key"
-    t.string   "encrypted_password",                default: "", null: false
+    t.string   "state"
+    t.integer  "active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                     default: 0,  null: false
+    t.integer  "sign_in_count",          default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.integer  "failed_attempts",                   default: 0,  null: false
+    t.integer  "failed_attempts",        default: 0,  null: false
     t.string   "unlock_token"
-    t.integer  "locked_at",              limit: 1
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "locked_at"
   end
 
-  add_index "users", ["company_id"], name: "index_users_on_company_id", using: :btree
-  add_index "users", ["email"], name: "email", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
   create_table "valuetypes", force: true do |t|
-    t.integer  "unit_id",     limit: 2
-    t.integer  "standard_id", limit: 2
+    t.integer  "unit_id"
+    t.integer  "standard_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

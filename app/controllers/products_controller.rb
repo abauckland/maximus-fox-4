@@ -155,6 +155,28 @@ end
 
 
  def product_keys
+
+#API CALL START
+#{item_id: id, selected_key:text, content: [{line_1: {key:text, value:text},{line_1: {key:text, value:text}]}
+
+# item_id = get clasueref - map to item
+#    item_id = Item.where(:clause_id => line.clause_id).first
+# selected_key = get speclines from jquery call back - get text value
+#    selected_key = Txt3.joins(:speclines).where('speclines.id' => params[:id]).first
+# array of key/values pairs for clause.
+  #get clause_id for specline
+  #get all speclines of certain linetype in clause
+  #for each specline get k/v pairs
+  
+#  content = Speclines.where(:linetype_id => 4, :clause_id => line.clause_id, :project_id => line.project
+#                    ).not.where(:id => line.id
+#                    ).collect{|i| i.txt3.text i.txt6.text}
+
+
+#    @product_key_options = Product.find(item_id, selected_key, content)
+#    render :json => @product_key_options 
+
+#API CALL END
     #get possible keys for product clause
     #get selected specline
     specline = Specline.where(:id => params[:id]).first

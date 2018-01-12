@@ -22,7 +22,14 @@ def print_document(project, revision, issue, pdf)
   status_change(project)
 
 #set common document settings
-  pdf.font settings.font_style
+ # pdf.font settings.font_style
+  
+    pdf.font_families.update("Helvetica" => {
+    :normal => Rails.root.join("app/assets/fonts/OpenSans-Regular.ttf"),
+    :italic => Rails.root.join("app/assets/fonts/OpenSans-Regular.ttf"),
+    :bold => Rails.root.join("app/assets/fonts/OpenSans-Regular.ttf"),
+    :bold_italic => Rails.root.join("app/assets/fonts/OpenSans-Regular.ttf")
+  })
 
 ##COVER
   cover(project, revision, settings, pdf)

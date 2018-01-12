@@ -22,7 +22,7 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
-gem 'mysql2'
+gem 'mysql2', '~> 0.4.2'
 
 gem 'jquery-datatables-rails'
 
@@ -33,6 +33,7 @@ gem 'devise'
 gem 'pundit'
 gem 'aasm'
 gem 'nokogiri'
+gem "httparty"
 #gem 'bcrypt', :require => 'bcrypt'
 
 gem 'prawn'
@@ -61,4 +62,4 @@ gem 'bugsnag'
 gem 'newrelic_rpm'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin]
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]

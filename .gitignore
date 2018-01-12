@@ -20,3 +20,7 @@
 
 # Ignor secrets
 /config/secrets.yml
+
+#Ignor gemfiles
+/Gemfile
+/Gemfile.lock
